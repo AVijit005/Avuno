@@ -1,9 +1,0 @@
-- name: GLM 5.2 (TokenRouter)
-    provider: openai
-    model: z-ai/glm-5.2-free
-    apiBase: https://api.tokenrouter.com/v1
-    apiKey: "sk-VP0BIhXt2IYHPyzeRZ3ycJ1JWDT7MuMkcGPPkYuInWWrROpa"
-    roles:
-      - chat
-      - edit
-      - apply
