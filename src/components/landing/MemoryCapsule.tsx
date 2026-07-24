@@ -2,19 +2,19 @@ import { motion } from "motion/react";
 
 const MEMORIES = [
   {
-    media: { id: "interstellar", title: "Interstellar", backdrop: "https://image.tmdb.org/t/p/w1280/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", poster: "" },
+    media: { id: "interstellar", title: "Interstellar", backdrop: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)", poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)" },
     moment: "Late 2017 · Studio City",
     note: "Watched alone at 2 AM. Felt small in the best way.",
     mood: "Awe",
   },
   {
-    media: { id: "elden-ring", title: "Elden Ring", backdrop: "https://images.igdb.com/igdb/image/upload/t_1080p/ar16b.jpg", poster: "" },
+    media: { id: "elden-ring", title: "Elden Ring", backdrop: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)", poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)" },
     moment: "Winter 2021 · Long flight",
     note: "12 hours, one save file. Lost track of time entirely.",
     mood: "Immersed",
   },
   {
-    media: { id: "dark-side", title: "The Dark Side of the Moon", backdrop: "https://images.unsplash.com/photo-1614613535308-eb5fbd3d2c17?q=80&w=1280", poster: "" },
+    media: { id: "dark-side", title: "The Dark Side of the Moon", backdrop: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)", poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)" },
     moment: "Spring 2019 · Roadtrip",
     note: "On loop crossing Arizona. Still tastes like that summer.",
     mood: "Wistful",
@@ -49,7 +49,7 @@ export function MemoryCapsule() {
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <img
                 src={m.media.backdrop ?? m.media.poster}
-                alt=""
+                alt={m.media.title}
                 className="h-full w-full object-cover blur-[1px] scale-105"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />

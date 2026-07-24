@@ -149,6 +149,10 @@
     0 18px 44px -18px oklch(0 0 0 / 0.7), 0 0 28px -6px oklch(0.72 0.18 255 / 0.5);
   --shadow-ghost-hover: 0 18px 44px -22px oklch(0 0 0 / 0.6);
 
+  --shadow-card: 0 12px 24px oklch(0 0 0 / 0.3);
+  --glass-highlight: oklch(1 0 0 / 0.08);
+  --glass-highlight-strong: oklch(1 0 0 / 0.25);
+
   /* Library status tints — additive, subtle, never saturated. */
   --status-completed: oklch(0.72 0.13 160);
   --status-planning: oklch(0.72 0.14 240);

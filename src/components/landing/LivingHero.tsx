@@ -8,7 +8,7 @@ import { MagneticButton } from "./MagneticButton";
 const heroCards = [
   {
     id: "movie",
-    item: { title: "Interstellar", kind: "movie", poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" },
+    item: { title: "Interstellar", kind: "movie", poster: "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)" },
     x: -36,
     y: -8,
     rot: -8,
@@ -16,7 +16,7 @@ const heroCards = [
   },
   {
     id: "anime",
-    item: { title: "One Piece", kind: "anime", poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/fcNd3l6aK3vN73LzGIf9Yd4rPum.jpg" },
+    item: { title: "One Piece", kind: "anime", poster: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" },
     x: -14,
     y: 18,
     rot: 4,
@@ -24,7 +24,7 @@ const heroCards = [
   },
   {
     id: "book",
-    item: { title: "Harry Potter", kind: "book", poster: "https://covers.openlibrary.org/b/id/10521270-L.jpg" },
+    item: { title: "Harry Potter", kind: "book", poster: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)" },
     x: 14,
     y: -14,
     rot: -3,
@@ -32,7 +32,7 @@ const heroCards = [
   },
   {
     id: "game",
-    item: { title: "Elden Ring", kind: "game", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.png" },
+    item: { title: "Elden Ring", kind: "game", poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)" },
     x: 36,
     y: 10,
     rot: 6,

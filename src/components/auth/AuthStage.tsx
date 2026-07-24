@@ -229,21 +229,21 @@ export function AuthStage() {
             >
               {items.map((p, i) => {
                 const MOCK_POSTERS: Record<string, string> = {
-                  "succession": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/7bMGiBXwaqcKU9XWdNKtbP8z3T4.jpg",
-                  "harry-potter": "https://covers.openlibrary.org/b/id/10521270-L.jpg",
+                  "succession": "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+                  "harry-potter": "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
                   "dark-side": "https://i.scdn.co/image/ab67616d0000b273ea7caaff71dea1051d49b2fe",
                   "lex": "https://i.scdn.co/image/ab6765630000ba8aa3b02ce859ce87391807d919",
                   "mkbhd": "https://yt3.googleusercontent.com/ytc/AIdro_m_LwQ6ZpWbE2O5zZ_Yt3o4yP5a0O_L7V9mF6wK7w=s900-c-k-c0x00ffffff-no-rj",
-                  "chainsaw-man": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/npDBpuLlFFcgqsqEb0ebn4B48Vj.jpg",
-                  "interstellar": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
-                  "one-piece": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/fcNd3l6aK3vN73LzGIf9Yd4rPum.jpg",
-                  "elden-ring": "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.png",
-                  "dune": "https://image.tmdb.org/t/p/w600_and_h900_bestv2/d5NXSklXo0qyIYkgV94XAgMIckC.jpg",
-                  "cyberpunk": "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7f.png"
+                  "chainsaw-man": "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
+                  "interstellar": "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
+                  "one-piece": "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
+                  "elden-ring": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+                  "dune": "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
+                  "cyberpunk": "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)"
                 };
                 const media = {
                   title: p.id,
-                  poster: MOCK_POSTERS[p.id] || "https://image.tmdb.org/t/p/w600_and_h900_bestv2/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg",
+                  poster: MOCK_POSTERS[p.id] || "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
                   rating: 5
                 };
                 const blur =

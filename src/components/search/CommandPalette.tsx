@@ -13,7 +13,6 @@ import {
   Layers,
   NotebookPen,
   Settings as SettingsIcon,
-  Pin,
   Clock,
   Command as CmdKey,
 } from "lucide-react";

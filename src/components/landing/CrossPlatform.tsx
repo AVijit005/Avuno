@@ -1,9 +1,9 @@
 import { motion } from "motion/react";
 
 export function CrossPlatform() {
-  const desktop = { id: "interstellar", title: "Interstellar", creator: "Christopher Nolan", kind: "movie", progress: 68, backdrop: "https://image.tmdb.org/t/p/w1280/rAiYTfKGqDCRIIqo664sY9XZIvQ.jpg", poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg" };
-  const tablet = { id: "elden-ring", title: "Elden Ring", creator: "FromSoftware", kind: "game", progress: 75, backdrop: "https://images.igdb.com/igdb/image/upload/t_1080p/ar16b.jpg", poster: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4jni.png" };
-  const mobile = { id: "one-piece", title: "One Piece", creator: "Eiichiro Oda", kind: "anime", progress: 42, backdrop: "https://image.tmdb.org/t/p/w1280/2rmK7mnchw9Xr3XdiTFSxTTLXqv.jpg", poster: "https://image.tmdb.org/t/p/w600_and_h900_bestv2/fcNd3l6aK3vN73LzGIf9Yd4rPum.jpg" };
+  const desktop = { id: "interstellar", title: "Interstellar", creator: "Christopher Nolan", kind: "movie", progress: 68, backdrop: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)", poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)" };
+  const tablet = { id: "elden-ring", title: "Elden Ring", creator: "FromSoftware", kind: "game", progress: 75, backdrop: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)", poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)" };
+  const mobile = { id: "one-piece", title: "One Piece", creator: "Eiichiro Oda", kind: "anime", progress: 42, backdrop: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)", poster: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" };
 
   return (
     <div className="relative grid grid-cols-12 items-center gap-6">

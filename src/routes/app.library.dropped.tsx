@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { RotateCcw } from "lucide-react";
 import { StatusPageShell } from "@/components/library/StatusPageShell";
 import { dropped, metaOf } from "@/lib/library";
@@ -25,7 +25,7 @@ function DroppedPage() {
             <div key={m.id} className="glass flex items-center gap-4 rounded-2xl p-3">
               <img
                 src={m.poster || undefined}
-                alt=""
+                alt={m.title}
                 className="h-20 w-14 shrink-0 rounded-md object-cover"
                 loading="lazy"
               />

@@ -91,7 +91,7 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
           {/* Rating chip */}
           {rating > 0 && (
             <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] backdrop-blur-md">
-              <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" /> {rating.toFixed(1)}
+              <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" /> {rating.toFixed(1)}
             </div>
           )}
 

@@ -4,6 +4,7 @@ import type { Response } from 'express';
 import { ConflictException, NotFoundException } from '../common';
 import { AuthRepository } from './auth.repository';
 import { AuthResponseDto, LoginDto, RegisterDto, UserResponseDto } from './dto';
+import { RedisService } from '../redis/redis.service';
 import {
   CookieService,
   EmailVerificationService,
@@ -13,10 +14,11 @@ import {
   SessionService,
 } from './services';
 
+const MAX_LOGIN_ATTEMPTS = 5;
+const LOCKOUT_MINUTES = 15;
+
 @Injectable()
 export class AuthService {
-  private readonly loginAttempts = new Map<string, { count: number; lockedUntil: number }>();
-
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly passwordService: PasswordService,
@@ -26,6 +28,7 @@ export class AuthService {
     private readonly cookieService: CookieService,
     private readonly emailVerificationService: EmailVerificationService,
     private readonly config: ConfigService,
+    private readonly redis: RedisService,
   ) {}
 
   async register(
@@ -51,26 +54,29 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string, response?: Response): Promise<AuthResponseDto> {
-    this.cleanupExpiredLoginAttempts();
-    const emailKey = dto.email.toLowerCase().trim();
-    const attempt = this.loginAttempts.get(emailKey);
-    if (attempt && attempt.lockedUntil > Date.now()) {
-      throw new ForbiddenException('Account temporarily locked due to too many failed attempts');
+    const emailKey = `auth:attempts:${dto.email.toLowerCase().trim()}`;
+    const redisClient = this.redis.getClient();
+    
+    const attempts = parseInt((await redisClient.get(emailKey)) || '0', 10);
+    if (attempts >= MAX_LOGIN_ATTEMPTS) {
+      const ttl = await redisClient.ttl(emailKey);
+      const minutes = Math.ceil(ttl / 60);
+      throw new ForbiddenException(`Account temporarily locked. Try again in ${minutes} minutes.`);
     }
 
     const user = await this.authRepository.findByEmail(dto.email);
     if (!user || !user.passwordHash) {
-      this.recordFailedAttempt(emailKey, attempt);
+      await this.recordFailedAttempt(emailKey);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const valid = await this.passwordService.compare(dto.password, user.passwordHash);
     if (!valid) {
-      this.recordFailedAttempt(emailKey, attempt);
+      await this.recordFailedAttempt(emailKey);
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    this.loginAttempts.delete(emailKey);
+    await redisClient.del(emailKey);
 
     const verificationRequired = String(this.config.get('emailVerification.required')) !== 'false';
     if (verificationRequired && !user.emailVerified) {
@@ -232,21 +238,14 @@ export class AuthService {
     };
   }
 
-  private recordFailedAttempt(email: string, attempt?: { count: number; lockedUntil: number }) {
-    const current = attempt || { count: 0, lockedUntil: 0 };
-    current.count += 1;
-    if (current.count >= 5) {
-      current.lockedUntil = Date.now() + 15 * 60 * 1000; // 15 minutes lockout
+  private async recordFailedAttempt(key: string): Promise<void> {
+    const redisClient = this.redis.getClient();
+    const attempts = await redisClient.incr(key);
+    if (attempts === 1) {
+      await redisClient.expire(key, LOCKOUT_MINUTES * 60);
     }
-    this.loginAttempts.set(email, current);
-  }
-
-  private cleanupExpiredLoginAttempts(): void {
-    const now = Date.now();
-    for (const [key, attempt] of this.loginAttempts.entries()) {
-      if (attempt.lockedUntil < now) {
-        this.loginAttempts.delete(key);
-      }
+    if (attempts >= MAX_LOGIN_ATTEMPTS) {
+      await redisClient.expire(key, LOCKOUT_MINUTES * 60);
     }
   }
 }

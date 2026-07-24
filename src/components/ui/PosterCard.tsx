@@ -99,7 +99,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
         )}
         {/* rating chip */}
         <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-background/50 px-2 py-0.5 text-[10px] text-foreground/90 backdrop-blur">
-          <Star className="h-2.5 w-2.5 fill-amber-400 text-amber-400" />
+          <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" />
           {(item.rating ?? 0).toFixed(1)}
         </div>
         {/* metadata */}
@@ -136,7 +136,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
         className="focus-ring absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-black/45 text-white/80 opacity-0 backdrop-blur transition duration-[var(--dur-normal)] ease-[var(--ease-out)] group-hover:opacity-100 hover:scale-110 hover:text-rose-400 md:h-7 md:w-7"
       >
         <Heart
-          className={`h-3.5 w-3.5 transition-transform duration-[var(--dur-normal)] ease-[var(--ease-out)] ${fav ? "fill-rose-400 text-rose-400 motion-safe:animate-pulse" : ""}`}
+          className={`h-3.5 w-3.5 transition-transform duration-[var(--dur-normal)] ease-[var(--ease-out)] ${fav ? "fill-[var(--status-dropped)] text-[var(--status-dropped)] motion-safe:animate-pulse" : ""}`}
         />
       </button>
     </motion.div>

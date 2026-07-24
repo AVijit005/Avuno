@@ -37,8 +37,8 @@ function writem(list: SavedItem[]) {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.setItem(KEY, JSON.stringify(list));
-  } catch {
-    /* ignore */
+  } catch (e) {
+    console.error('Failed to save items', e);
   }
 }
 

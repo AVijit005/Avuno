@@ -28,7 +28,7 @@ const TYPES: {
     tagline: "Films that stayed with you.",
     icon: Film,
     poster:
-      "https://images.unsplash.com/photo-1485846234645-a62644f84728?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
     tilt: -3,
     offset: "md:mt-0",
   },
@@ -38,7 +38,7 @@ const TYPES: {
     tagline: "Long arcs, longer memories.",
     icon: Sparkles,
     poster:
-      "https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
     tilt: 2,
     offset: "md:mt-10",
   },
@@ -48,7 +48,7 @@ const TYPES: {
     tagline: "Stories told in seasons.",
     icon: Tv,
     poster:
-      "https://images.unsplash.com/photo-1480714378408-67cf0d13bc1b?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
     tilt: -2,
     offset: "md:mt-4",
   },
@@ -58,7 +58,7 @@ const TYPES: {
     tagline: "The ones that changed you.",
     icon: BookOpen,
     poster:
-      "https://images.unsplash.com/photo-1500673922987-e212871fec22?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
     tilt: 3,
     offset: "md:mt-16",
   },
@@ -68,7 +68,7 @@ const TYPES: {
     tagline: "Panels you keep returning to.",
     icon: BookOpen,
     poster:
-      "https://images.unsplash.com/photo-1611673025387-78f3fb1cb56e?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
     tilt: -2,
     offset: "md:mt-2",
   },
@@ -78,7 +78,7 @@ const TYPES: {
     tagline: "Worlds you lived inside.",
     icon: Gamepad2,
     poster:
-      "https://images.unsplash.com/photo-1538481199705-c710c4e965fc?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
     tilt: 3,
     offset: "md:mt-12",
   },
@@ -88,7 +88,7 @@ const TYPES: {
     tagline: "Albums you wore out.",
     icon: Music2,
     poster:
-      "https://images.unsplash.com/photo-1470225620780-dba8ba36b745?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     tilt: -3,
     offset: "md:mt-6",
   },
@@ -98,7 +98,7 @@ const TYPES: {
     tagline: "Voices you walked with.",
     icon: Mic,
     poster:
-      "https://images.unsplash.com/photo-1478737270239-2f02b77fc618?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
     tilt: 2,
     offset: "md:mt-14",
   },
@@ -108,7 +108,7 @@ const TYPES: {
     tagline: "Skills, season by season.",
     icon: GraduationCap,
     poster:
-      "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
     tilt: -2,
     offset: "md:mt-2",
   },
@@ -118,7 +118,7 @@ const TYPES: {
     tagline: "Long-watched, well-loved.",
     icon: PlaySquare,
     poster:
-      "https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?auto=format&fit=crop&w=600&h=900&q=80",
+      "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
     tilt: 3,
     offset: "md:mt-10",
   },

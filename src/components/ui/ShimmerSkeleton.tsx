@@ -15,7 +15,7 @@ export function ShimmerSkeleton({ className, variant = "glass" }: Props) {
     chart: "h-40 rounded-3xl",
   };
   return (
-    <div className={cn(base, shapes[variant], className)}>
+    <div role="status" aria-label="Loading" className={cn(base, shapes[variant], className)}>
       {!reduced && (
         <span
           aria-hidden

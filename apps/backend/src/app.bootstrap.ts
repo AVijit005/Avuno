@@ -47,8 +47,10 @@ export async function createApp(): Promise<INestApplication> {
   app.enableCors({
     origin: process.env.CORS_ORIGIN 
       ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
-      : 'http://localhost:5173',
+      : (process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173'),
     credentials: true,
+    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id'],
   });
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());

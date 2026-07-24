@@ -235,7 +235,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
   // Style per variant
   const wrap = cn(
     variant === "overlay" &&
-      "flex w-full items-center justify-between gap-1 rounded-full glass-subtle bg-black/40 p-1.5 shadow-[0_20px_40px_-10px_oklch(0_0_0/0.8)] ring-1 ring-white/10",
+      "flex w-full items-center justify-between gap-1 rounded-full glass-subtle bg-black/40 p-1.5 shadow-[var(--shadow-glass)] ring-1 ring-white/10",
     variant === "hero" && "flex flex-wrap items-center gap-2",
     variant === "inline" && "flex items-center gap-1.5",
     className,

@@ -272,7 +272,7 @@ function TimelinePage() {
         <ZoneHeading eyebrow="Journey" title="The numbers behind it" />
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
-            { l: "Stories tracked", v: timelineEvents?.length || 0 },
+            { l: "Stories tracked", v: allEvents?.length || 0 },
             { l: "Life chapters", v: LIFE_CHAPTERS?.length || 0 },
             { l: "Journal entries", v: 0 },
             { l: "Achievements", v: 0 },

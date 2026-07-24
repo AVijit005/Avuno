@@ -5,6 +5,7 @@ import { ConfigModule } from '../config/config.module';
 import { ConfigService } from '@nestjs/config';
 import { PrismaModule } from '../prisma/prisma.module';
 import { SharedModule } from '../shared';
+import { RedisModule } from '../redis/redis.module';
 import { AuthController } from './auth.controller';
 import { GoogleOAuthController, EmailVerificationController } from './controllers';
 import { AuthService } from './auth.service';
@@ -33,6 +34,7 @@ import {
     ConfigModule,
     PrismaModule,
     SharedModule,
+    RedisModule,
     PassportModule.register({ defaultStrategy: 'google' }),
     JwtModule.register({}),
   ],

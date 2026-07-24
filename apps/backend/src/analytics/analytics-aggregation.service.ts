@@ -179,7 +179,14 @@ export class AnalyticsAggregationService {
       };
     });
 
-    const activeDates = months.flatMap((m) => Object.keys(m.dayHits || {}));
+    const activeDates = months.flatMap((m) => {
+      const dates: string[] = [];
+      for (let day = 1; day <= 31; day++) {
+        const key = `${year}-${String(m.month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+        if (raw.journalCounts[key] || raw.completedCounts[key]) dates.push(key);
+      }
+      return dates;
+    });
     const longestStreak = this.calculateLongestStreak(activeDates);
 
     const heatmap = Array.from({ length: 52 }, (_, week) =>

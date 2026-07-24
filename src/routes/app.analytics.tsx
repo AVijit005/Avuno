@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { motion, useReducedMotion } from "motion/react";
 import { useState, useMemo } from "react";

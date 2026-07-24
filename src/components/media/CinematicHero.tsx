@@ -13,7 +13,7 @@ export function CinematicHero({ item }: { item: MediaItem }) {
       style={{ boxShadow: "0 40px 100px -30px oklch(0 0 0 / 0.6)" }}
     >
       <div className="relative h-[58vh] min-h-[420px] w-full">
-        <img src={(item.backdrop ?? item.poster) || undefined} alt="" className="h-full w-full object-cover" />
+        <img src={(item.backdrop ?? item.poster) || undefined} alt={item.title} className="h-full w-full object-cover" />
         <div
           className="absolute inset-0"
           style={{

@@ -28,7 +28,7 @@ function RewatchingPage() {
             >
               <img
                 src={m.poster || undefined}
-                alt=""
+                alt={m.title}
                 className="h-20 w-14 shrink-0 rounded-md object-cover"
                 loading="lazy"
               />

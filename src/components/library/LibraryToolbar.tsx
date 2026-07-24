@@ -76,7 +76,7 @@ export function LibraryToolbar(p: Props) {
             aria-pressed={p.favOnly}
             className={cn(
               "press-scale inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs",
-              p.favOnly ? "bg-amber-300/15 text-amber-200" : "glass-subtle text-muted-foreground",
+              p.favOnly ? "bg-[var(--status-favorite)]/15 text-[var(--status-favorite)]" : "glass-subtle text-muted-foreground",
             )}
           >
             <Heart className="h-3 w-3" /> Favorites
@@ -94,6 +94,7 @@ export function LibraryToolbar(p: Props) {
           <select
             value={p.sort}
             onChange={(e) => p.onSort(e.target.value as SortKey)}
+            aria-label="Sort by"
             className="glass-subtle rounded-full bg-transparent px-3 py-1.5 text-xs"
           >
             {SORTS.map((s) => (
