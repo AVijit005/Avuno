@@ -4,16 +4,18 @@ import { CurrentUser, JwtAuthGuard } from '../auth';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import { WrappedService } from './wrapped.service';
 import type { WrappedDto, WrappedSummaryDto, WrappedShareDto } from './dto';
+import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
 
 @ApiTags('Wrapped')
 @Controller('wrapped')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, ThrottlerGuard)
 @ApiBearerAuth()
 export class WrappedController {
   constructor(private readonly wrappedService: WrappedService) {}
 
   @Post('generate')
   @ApiOperation({ summary: 'Generate a wrapped recap for a year' })
+  @Throttle({ default: { limit: 2, ttl: 60000 } })
   async generate(@CurrentUser() user: AccessTokenPayload, @Body('year') year: number): Promise<WrappedDto> {
     return this.wrappedService.generate(user.sub, year);
   }
@@ -32,6 +34,7 @@ export class WrappedController {
 
   @Post(':year/regenerate')
   @ApiOperation({ summary: 'Regenerate a wrapped recap' })
+  @Throttle({ default: { limit: 2, ttl: 60000 } })
   async regenerate(@CurrentUser() user: AccessTokenPayload, @Param('year') year: string): Promise<WrappedDto> {
     return this.wrappedService.regenerate(user.sub, parseInt(year, 10));
   }

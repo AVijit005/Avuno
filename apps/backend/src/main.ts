@@ -1,7 +1,18 @@
 import { ConfigService } from '@nestjs/config';
 import { createApp } from './app.bootstrap';
+import * as Sentry from '@sentry/nestjs';
+import { nodeProfilingIntegration } from '@sentry/profiling-node';
 
 async function bootstrap(): Promise<void> {
+  if (process.env.SENTRY_DSN) {
+    Sentry.init({
+      dsn: process.env.SENTRY_DSN,
+      integrations: [nodeProfilingIntegration()],
+      tracesSampleRate: 1.0,
+      profilesSampleRate: 1.0,
+    });
+  }
+
   const app = await createApp();
   const config = app.get(ConfigService);
 

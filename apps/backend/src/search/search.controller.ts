@@ -1,5 +1,6 @@
 import { Controller, Delete, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { CurrentUser, JwtAuthGuard } from '../auth';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import { SearchService } from './search.service';
@@ -8,19 +9,21 @@ import type { SearchResponseDto, SuggestionsResponseDto, TrendingItemDto, Filter
 
 @ApiTags('Search')
 @Controller('search')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, ThrottlerGuard)
 @ApiBearerAuth()
 export class SearchController {
   constructor(private readonly searchService: SearchService) {}
 
   @Get()
   @ApiOperation({ summary: 'Global search across all content' })
+  @Throttle({ default: { limit: 30, ttl: 60000 } })
   async search(@CurrentUser() user: AccessTokenPayload, @Query() query: SearchQueryDto): Promise<SearchResponseDto> {
     return this.searchService.search(user.sub, query);
   }
 
   @Get('suggestions')
   @ApiOperation({ summary: 'Search suggestions / autocomplete' })
+  @Throttle({ default: { limit: 30, ttl: 60000 } })
   async suggestions(
     @CurrentUser() user: AccessTokenPayload,
     @Query('q') q: string,
