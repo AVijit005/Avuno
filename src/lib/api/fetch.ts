@@ -97,6 +97,7 @@ export async function apiFetch<T>(
 
     try {
       const headers = new Headers(fetchOptions.headers);
+      headers.set('ngrok-skip-browser-warning', 'true');
 
       if (!skipAuth) {
         const token = await getValidToken();
