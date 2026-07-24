@@ -49,6 +49,14 @@ export default () => ({
     failureUrl: process.env.EMAIL_VERIFICATION_FAILURE_URL || 'http://localhost:5173/auth/email-verification-failed',
   },
   storage: {
+    driver: process.env.STORAGE_DRIVER || 'local', // 'local' or 's3'
     uploadRoot: process.env.UPLOAD_ROOT || './uploads',
+    s3: {
+      endpoint: process.env.S3_ENDPOINT,
+      region: process.env.S3_REGION || 'auto',
+      bucket: process.env.S3_BUCKET,
+      accessKeyId: process.env.S3_ACCESS_KEY_ID,
+      secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
+    }
   },
 });
