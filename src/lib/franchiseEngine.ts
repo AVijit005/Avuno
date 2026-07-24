@@ -10,50 +10,7 @@ export interface Franchise {
   mediaIds: string[];
 }
 
-export const FRANCHISES: Franchise[] = [
-  {
-    id: "nolan",
-    name: "Christopher Nolan",
-    description: "Time, space, and the weight of a single choice.",
-    cover: "",
-    mediaIds: ["interstellar", "inception", "dunkirk", "tenet", "oppenheimer"],
-  },
-  {
-    id: "one-piece",
-    name: "One Piece",
-    description: "The grandest voyage ever put to page or screen.",
-    cover: "",
-    mediaIds: ["one-piece"],
-  },
-  {
-    id: "dune",
-    name: "Dune",
-    description: "Spice, sand, and prophecy.",
-    cover: "",
-    mediaIds: ["dune", "dune-part-two"],
-  },
-  {
-    id: "harry-potter",
-    name: "Harry Potter",
-    description: "The boy who lived, and the world that lived with him.",
-    cover: "",
-    mediaIds: ["harry-potter"],
-  },
-  {
-    id: "elden-ring",
-    name: "Elden Ring",
-    description: "A shattered world, waiting to be reforged.",
-    cover: "",
-    mediaIds: ["elden-ring"],
-  },
-  {
-    id: "cyberpunk",
-    name: "Cyberpunk",
-    description: "High-tech, low-life. Neon and chrome.",
-    cover: "",
-    mediaIds: ["cyberpunk-2077", "edgerunners"],
-  },
-];
+export const FRANCHISES: Franchise[] = [];
 
 export function getFranchiseCovers(_items: MediaItem[]): Record<string, string> {
   return {};
