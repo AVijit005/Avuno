@@ -1,6 +1,6 @@
-export const API_BASE_URL = import.meta.env.SSR 
-  ? (import.meta.env.VITE_API_URL || 'http://api:3000/api')
-  : '/api';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || (import.meta.env.SSR 
+  ? 'http://api:3000/api'
+  : '/api');
 
 export const API_TIMEOUT_MS = 30_000;
 
