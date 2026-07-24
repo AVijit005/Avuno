@@ -14,7 +14,7 @@ export function RelationshipPanel({ kind = "media", id, title }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Related {kind} in your library</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Explore how this {kind} connects to others in your Chronicle — shared themes, creators, and narrative threads.
+        Explore how this {kind} connects to others in your Memora — shared themes, creators, and narrative threads.
       </p>
     </PremiumGlass>
   );

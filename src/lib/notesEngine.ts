@@ -1,5 +1,5 @@
 // Universal notes — localStorage-backed, SSR-safe.
-const KEY = "chronicle:notes:v1";
+const KEY = "memora:notes:v1";
 
 export type NoteEntityKind =
   | "media"

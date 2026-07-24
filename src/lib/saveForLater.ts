@@ -1,5 +1,5 @@
 // Global Save For Later queue — localStorage-backed, SSR-safe.
-const KEY = "chronicle:save-for-later:v1";
+const KEY = "memora:save-for-later:v1";
 
 export type SaveKind =
   | "media"

@@ -15,7 +15,7 @@ export class S3StorageService implements StorageService {
     const endpoint = this.configService.get<string>('storage.s3.endpoint');
     const accessKeyId = this.configService.get<string>('storage.s3.accessKeyId');
     const secretAccessKey = this.configService.get<string>('storage.s3.secretAccessKey');
-    this.bucket = this.configService.get<string>('storage.s3.bucket') || 'chronicle';
+    this.bucket = this.configService.get<string>('storage.s3.bucket') || 'memora';
 
     if (!accessKeyId || !secretAccessKey) {
       this.logger.warn('S3StorageService is missing AWS credentials. Uploads may fail.');

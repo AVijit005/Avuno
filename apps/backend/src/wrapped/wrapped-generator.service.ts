@@ -176,7 +176,7 @@ export class WrappedGeneratorService {
     if (totalItems > 0) parts.push(`tracked ${totalItems} total`);
     if (journalCount > 0) parts.push(`wrote ${journalCount} journal entries`);
 
-    if (parts.length === 0) return `Your ${year} Chronicle Wrapped is ready.`;
+    if (parts.length === 0) return `Your ${year} Memora Wrapped is ready.`;
     return `In ${year}, you ${parts.join(', ')}.`;
   }
 }

@@ -90,8 +90,8 @@ function CaptureFab() {
   return (
     <button
       onClick={openAdd}
-      aria-label="Add to Chronicle"
-      title="Add to Chronicle (⌘N)"
+      aria-label="Add to Memora"
+      title="Add to Memora (⌘N)"
       className="group press-scale fixed bottom-24 right-5 z-40 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 ease-out lg:bottom-10 lg:right-10
       bg-background/80 backdrop-blur-xl 
       ring-1 ring-border

@@ -19,13 +19,13 @@ import { MagneticButton } from "@/components/landing/MagneticButton";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Chronicle — Every story you finish becomes part of your story" },
+      { title: "Memora — Every story you finish becomes part of your story" },
       {
         name: "description",
         content:
           "A cinematic personal media journal for movies, anime, books, games, music and more. Beautifully organized, gently remembered.",
       },
-      { property: "og:title", content: "Chronicle" },
+      { property: "og:title", content: "Memora" },
       { property: "og:description", content: "Every story you finish becomes part of your story." },
     ],
   }),
@@ -60,7 +60,7 @@ function Landing() {
             <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
               <span className="font-display text-base leading-none">C</span>
             </div>
-            <span className="font-display text-lg leading-none">Chronicle</span>
+            <span className="font-display text-lg leading-none">Memora</span>
           </Link>
           <nav className="hidden items-center gap-1 rounded-2xl px-1 py-1 text-sm md:flex">
             {[
@@ -120,7 +120,7 @@ function Landing() {
         eyebrow="Continue your story"
         align="center"
         title={<>A cinematic command center.</>}
-        intro="Chronicle greets you with the story you're already in the middle of — themed to whatever you're watching, reading or playing right now."
+        intro="Memora greets you with the story you're already in the middle of — themed to whatever you're watching, reading or playing right now."
       >
         <DashboardShowcase />
       </SceneSection>
@@ -138,7 +138,7 @@ function Landing() {
         eyebrow="Analytics"
         align="center"
         title={<>The patterns you didn't notice.</>}
-        intro="Hours, streaks, genres, monthly rhythm — visualized as gently as the rest of Chronicle, never as a productivity dashboard."
+        intro="Hours, streaks, genres, monthly rhythm — visualized as gently as the rest of Memora, never as a productivity dashboard."
       >
         <AnalyticsPreview />
       </SceneSection>
@@ -161,7 +161,7 @@ function Landing() {
 
       <SceneSection
         eyebrow="Everywhere you are"
-        title={<>The same Chronicle, beautifully adapted.</>}
+        title={<>The same Memora, beautifully adapted.</>}
         intro="Desktop, tablet, phone. The same atmosphere, the same calm typography, the same memories — wherever your story finds you."
       >
         <CrossPlatform />
@@ -198,7 +198,7 @@ function Landing() {
                 to="/auth"
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-4 text-sm font-medium text-black press-scale animate-pulse-glow"
               >
-                Enter Chronicle <ArrowRight className="h-4 w-4" />
+                Enter Memora <ArrowRight className="h-4 w-4" />
               </Link>
             </MagneticButton>
             <MagneticButton strength={0.18}>
@@ -220,10 +220,10 @@ function Landing() {
             <div className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-primary to-secondary text-primary-foreground">
               <span className="font-display text-xs leading-none">C</span>
             </div>
-            <span>Chronicle © {new Date().getFullYear()}</span>
+            <span>Memora © {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-5">
-            <a href="mailto:press@chronicle.app" className="hover:text-foreground">
+            <a href="mailto:press@memora.app" className="hover:text-foreground">
               Press
             </a>
             <Link to="/privacy" className="hover:text-foreground">

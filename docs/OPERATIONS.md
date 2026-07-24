@@ -1,4 +1,4 @@
-# Operations Guide — Chronicle Backend v1.0.0
+# Operations Guide — Memora Backend v1.0.0
 
 ## Daily Operations
 
@@ -37,8 +37,8 @@ BullMQ queues are managed automatically. To inspect:
 
 \`\`\`bash
 # Redis queue inspection
-redis-cli keys 'chronicle:*'
-redis-cli llen chronicle:notification:wait
+redis-cli keys 'memora:*'
+redis-cli llen memora:notification:wait
 \`\`\`
 
 ## Incident Response

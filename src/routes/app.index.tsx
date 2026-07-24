@@ -39,9 +39,9 @@ export const Route = createFileRoute("/app/")({
   component: Home,
   head: () => ({
     meta: [
-      { title: "Dashboard — Chronicle" },
+      { title: "Dashboard — Memora" },
       { name: "description", content: "Your personal media headquarters. Continue stories, track progress, and discover what to watch next." },
-      { property: "og:title", content: "Chronicle Dashboard" },
+      { property: "og:title", content: "Memora Dashboard" },
       { property: "og:description", content: "Your personal media headquarters." },
     ],
   }),
@@ -234,7 +234,7 @@ function Home() {
 function OnboardingGuide() {
   const navigate = useNavigate();
   const STEPS = [
-    { number: "01", title: "Add your first story", description: "Search for any movie, book, game, or show and add it to your library. That's how Chronicle starts knowing you.", icon: Plus, action: "Open library", to: "/app/library" },
+    { number: "01", title: "Add your first story", description: "Search for any movie, book, game, or show and add it to your library. That's how Memora starts knowing you.", icon: Plus, action: "Open library", to: "/app/library" },
     { number: "02", title: "Write a journal entry", description: "Capture a thought about what you watched. Even one sentence starts a memory.", icon: NotebookPen, action: "Open journal", to: "/app/journal" },
     { number: "03", title: "Explore your calendar", description: "See your year mapped out — every story, every quiet evening arranged into a timeline.", icon: Calendar, action: "Open calendar", to: "/app/calendar" },
   ];
@@ -242,7 +242,7 @@ function OnboardingGuide() {
   return (
     <div className="mt-10 space-y-10">
       <div className="text-center">
-        <h2 className="font-display text-4xl tracking-tight md:text-5xl">Welcome to Chronicle</h2>
+        <h2 className="font-display text-4xl tracking-tight md:text-5xl">Welcome to Memora</h2>
         <p className="mt-4 text-muted-foreground text-lg max-w-xl mx-auto">
           A quiet place to remember every story you've lived. Start with these three steps.
         </p>

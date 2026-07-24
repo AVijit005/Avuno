@@ -75,7 +75,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={onOpenSearch}
             className="hidden items-center gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-xs text-muted-foreground ring-1 ring-white/5 transition hover:text-foreground md:flex press-scale"
           >
-            <Search className="h-3.5 w-3.5" /> Search across Chronicle
+            <Search className="h-3.5 w-3.5" /> Search across Memora
             <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 tracking-wider">
               ⌘K
             </kbd>
@@ -89,7 +89,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           </button>
           <button
             onClick={openAdd}
-            aria-label="Add to Chronicle"
+            aria-label="Add to Memora"
             title="Add (⌘N)"
             className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.04] ring-1 ring-white/5 transition hover:text-primary press-scale"
           >

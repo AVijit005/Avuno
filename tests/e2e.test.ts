@@ -2,7 +2,7 @@ import { test, expect } from '@playwright/test';
 
 test.use({ viewport: { width: 1280, height: 1000 } });
 
-test.describe('Chronicle E2E', () => {
+test.describe('Memora E2E', () => {
   test.setTimeout(120000); // 2 minutes for Vite prebundling
 
   test('auth, dashboard, and analytics flow', async ({ page }) => {
@@ -33,7 +33,7 @@ test.describe('Chronicle E2E', () => {
     await page.screenshot({ path: 'artifacts/before-submit.png' });
     
     // Submit
-    await page.getByRole('button', { name: 'Begin Chronicle' }).click();
+    await page.getByRole('button', { name: 'Begin Memora' }).click();
     
     // Wait for redirect to dashboard
     try {

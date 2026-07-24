@@ -331,7 +331,7 @@ export function CommandPalette({
                 value={q}
                 aria-label="Search"
                 onChange={(e) => setQ(e.target.value)}
-                placeholder="Search your Chronicle…"
+                placeholder="Search your Memora…"
                 className="flex-1 bg-transparent text-base placeholder:text-muted-foreground/70 focus:outline-none"
               />
               <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px] tracking-wider text-muted-foreground">

@@ -62,7 +62,7 @@ export async function createApp(options?: NestApplicationOptions): Promise<INest
 
   if (swaggerEnabled) {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle(config.get<string>('swagger.title') ?? 'Chronicle API')
+      .setTitle(config.get<string>('swagger.title') ?? 'Memora API')
       .setDescription(config.get<string>('swagger.description') ?? '')
       .setVersion(config.get<string>('swagger.version') ?? '0.0.1')
       .build();

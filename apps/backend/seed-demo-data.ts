@@ -4,11 +4,11 @@ const prisma = new PrismaClient();
 
 async function main() {
   const user = await prisma.user.findFirst({
-    where: { email: 'chronicle-tester@example.com' },
+    where: { email: 'memora-tester@example.com' },
   });
 
   if (!user) {
-    console.error('User chronicle-tester@example.com not found');
+    console.error('User memora-tester@example.com not found');
     return;
   }
 
@@ -295,7 +295,7 @@ async function main() {
     skipDuplicates: true,
   });
 
-  console.log('Successfully seeded rich analytics demo data for chronicle-tester@example.com!');
+  console.log('Successfully seeded rich analytics demo data for memora-tester@example.com!');
 }
 
 main()

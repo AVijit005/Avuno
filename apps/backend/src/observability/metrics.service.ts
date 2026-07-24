@@ -110,58 +110,58 @@ export class MetricsService {
   getAsPrometheus(): string {
     const lines: string[] = [];
 
-    lines.push('# HELP chronicle_request_total Total HTTP requests');
-    lines.push('# TYPE chronicle_request_total counter');
-    lines.push(`chronicle_request_total ${this.requestCount}`);
+    lines.push('# HELP memora_request_total Total HTTP requests');
+    lines.push('# TYPE memora_request_total counter');
+    lines.push(`memora_request_total ${this.requestCount}`);
 
-    lines.push('# HELP chronicle_error_total Total HTTP errors');
-    lines.push('# TYPE chronicle_error_total counter');
-    lines.push(`chronicle_error_total ${this.errorCount}`);
+    lines.push('# HELP memora_error_total Total HTTP errors');
+    lines.push('# TYPE memora_error_total counter');
+    lines.push(`memora_error_total ${this.errorCount}`);
 
-    lines.push('# HELP chronicle_db_query_total Total database queries');
-    lines.push('# TYPE chronicle_db_query_total counter');
-    lines.push(`chronicle_db_query_total ${this.dbQueryCount}`);
+    lines.push('# HELP memora_db_query_total Total database queries');
+    lines.push('# TYPE memora_db_query_total counter');
+    lines.push(`memora_db_query_total ${this.dbQueryCount}`);
 
-    lines.push('# HELP chronicle_cache_hit_total Total cache hits');
-    lines.push('# TYPE chronicle_cache_hit_total counter');
-    lines.push(`chronicle_cache_hit_total ${this.cacheHits}`);
+    lines.push('# HELP memora_cache_hit_total Total cache hits');
+    lines.push('# TYPE memora_cache_hit_total counter');
+    lines.push(`memora_cache_hit_total ${this.cacheHits}`);
 
-    lines.push('# HELP chronicle_cache_miss_total Total cache misses');
-    lines.push('# TYPE chronicle_cache_miss_total counter');
-    lines.push(`chronicle_cache_miss_total ${this.cacheMisses}`);
+    lines.push('# HELP memora_cache_miss_total Total cache misses');
+    lines.push('# TYPE memora_cache_miss_total counter');
+    lines.push(`memora_cache_miss_total ${this.cacheMisses}`);
 
-    lines.push('# HELP chronicle_queue_job_completed_total Total completed queue jobs');
-    lines.push('# TYPE chronicle_queue_job_completed_total counter');
-    lines.push(`chronicle_queue_job_completed_total ${this.queueJobCompleted}`);
+    lines.push('# HELP memora_queue_job_completed_total Total completed queue jobs');
+    lines.push('# TYPE memora_queue_job_completed_total counter');
+    lines.push(`memora_queue_job_completed_total ${this.queueJobCompleted}`);
 
-    lines.push('# HELP chronicle_queue_job_failed_total Total failed queue jobs');
-    lines.push('# TYPE chronicle_queue_job_failed_total counter');
-    lines.push(`chronicle_queue_job_failed_total ${this.queueJobFailed}`);
+    lines.push('# HELP memora_queue_job_failed_total Total failed queue jobs');
+    lines.push('# TYPE memora_queue_job_failed_total counter');
+    lines.push(`memora_queue_job_failed_total ${this.queueJobFailed}`);
 
     const avgDuration = this.getHistogramAvg(this.requestDurations);
-    lines.push('# HELP chronicle_request_duration_ms Request duration histogram');
-    lines.push('# TYPE chronicle_request_duration_ms gauge');
-    lines.push(`chronicle_request_duration_ms ${avgDuration}`);
+    lines.push('# HELP memora_request_duration_ms Request duration histogram');
+    lines.push('# TYPE memora_request_duration_ms gauge');
+    lines.push(`memora_request_duration_ms ${avgDuration}`);
 
-    lines.push('# HELP chronicle_active_requests Current active requests');
-    lines.push('# TYPE chronicle_active_requests gauge');
-    lines.push(`chronicle_active_requests ${this.activeRequests}`);
+    lines.push('# HELP memora_active_requests Current active requests');
+    lines.push('# TYPE memora_active_requests gauge');
+    lines.push(`memora_active_requests ${this.activeRequests}`);
 
-    lines.push('# HELP chronicle_active_queue_jobs Current active queue jobs');
-    lines.push('# TYPE chronicle_active_queue_jobs gauge');
-    lines.push(`chronicle_active_queue_jobs ${this.activeQueueJobs}`);
+    lines.push('# HELP memora_active_queue_jobs Current active queue jobs');
+    lines.push('# TYPE memora_active_queue_jobs gauge');
+    lines.push(`memora_active_queue_jobs ${this.activeQueueJobs}`);
 
-    lines.push('# HELP chronicle_active_db_connections Current database connections');
-    lines.push('# TYPE chronicle_active_db_connections gauge');
-    lines.push(`chronicle_active_db_connections ${this.activeDbConnections}`);
+    lines.push('# HELP memora_active_db_connections Current database connections');
+    lines.push('# TYPE memora_active_db_connections gauge');
+    lines.push(`memora_active_db_connections ${this.activeDbConnections}`);
 
-    lines.push('# HELP chronicle_active_sessions Current active sessions');
-    lines.push('# TYPE chronicle_active_sessions gauge');
-    lines.push(`chronicle_active_sessions ${this.activeSessions}`);
+    lines.push('# HELP memora_active_sessions Current active sessions');
+    lines.push('# TYPE memora_active_sessions gauge');
+    lines.push(`memora_active_sessions ${this.activeSessions}`);
 
-    lines.push('# HELP chronicle_uptime_seconds Application uptime');
-    lines.push('# TYPE chronicle_uptime_seconds gauge');
-    lines.push(`chronicle_uptime_seconds ${Math.floor((Date.now() - this.startTime) / 1000)}`);
+    lines.push('# HELP memora_uptime_seconds Application uptime');
+    lines.push('# TYPE memora_uptime_seconds gauge');
+    lines.push(`memora_uptime_seconds ${Math.floor((Date.now() - this.startTime) / 1000)}`);
 
     return lines.join('\n') + '\n';
   }

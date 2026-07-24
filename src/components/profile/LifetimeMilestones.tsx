@@ -1,7 +1,7 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 
 const MILESTONES = [
-  { when: "2021", label: "Created your Chronicle" },
+  { when: "2021", label: "Created your Memora" },
   { when: "2022", label: "First 100 completed stories" },
   { when: "2023", label: "First long-form collection" },
   { when: "2024", label: "365 journal entries milestone" },

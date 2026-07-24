@@ -1,5 +1,5 @@
 /**
- * Canonical UI types for Chronicle frontend.
+ * Canonical UI types for Memora frontend.
  *
  * These types are the ONLY types that components should consume.
  * They are created by adapter functions that transform API responses.

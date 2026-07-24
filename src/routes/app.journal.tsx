@@ -26,9 +26,9 @@ export const Route = createFileRoute("/app/journal")({
   component: JournalPage,
   head: () => ({
     meta: [
-      { title: "Journal — Chronicle" },
+      { title: "Journal — Memora" },
       { name: "description", content: "Write about the stories that stayed with you. Capture moods, memories, and moments." },
-      { property: "og:title", content: "Chronicle Journal" },
+      { property: "og:title", content: "Memora Journal" },
       { property: "og:description", content: "Words for the stories that stayed." },
     ],
   }),
@@ -44,7 +44,7 @@ function JournalPage() {
 
   // Auto-save draft to localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('chronicle-journal-draft');
+    const saved = localStorage.getItem('memora-journal-draft');
     if (saved) {
       setJournalText(saved);
       setIsDraftSaved(true);
@@ -55,13 +55,13 @@ function JournalPage() {
   useEffect(() => {
     if (journalText.length === 0) return;
     const t = setTimeout(() => {
-      localStorage.setItem('chronicle-journal-draft', journalText);
+      localStorage.setItem('memora-journal-draft', journalText);
     }, 1000);
     return () => clearTimeout(t);
   }, [journalText]);
 
   const clearDraft = () => {
-    localStorage.removeItem('chronicle-journal-draft');
+    localStorage.removeItem('memora-journal-draft');
     setJournalText('');
     setIsDraftSaved(false);
   };

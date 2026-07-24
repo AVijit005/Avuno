@@ -30,7 +30,7 @@ function ImportExportPage() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = `chronicle-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `memora-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
     toast.success("Export downloaded");
@@ -139,7 +139,7 @@ function ImportExportPage() {
       </Link>
       <h1 className="mt-2 font-display text-3xl tracking-tight">Import & Export</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Move your story library in and out of Chronicle. JSON exports include every status,
+        Move your story library in and out of Memora. JSON exports include every status,
         reflection, shelf, and collection you've made.
       </p>
 
@@ -151,7 +151,7 @@ function ImportExportPage() {
           <div>
             <div className="font-display text-xl">Full library snapshot</div>
             <div className="text-xs text-muted-foreground">
-              JSON — re-importable into any Chronicle install.
+              JSON — re-importable into any Memora install.
             </div>
           </div>
           <button
@@ -170,7 +170,7 @@ function ImportExportPage() {
         <div className="mt-3 grid gap-3 sm:grid-cols-2">
           <FileTile
             icon={FileJson}
-            label="Chronicle JSON"
+            label="Memora JSON"
             hint="From a previous export."
             accept="application/json,.json"
             onFile={handleJsonImport}
@@ -195,7 +195,7 @@ function ImportExportPage() {
           <AlertCircle className="h-3.5 w-3.5" /> Coming with the backend
         </div>
         <p className="mt-2 max-w-prose text-sm text-muted-foreground">
-          Direct sync with these services needs OAuth — wired in when Chronicle's cloud is live. For
+          Direct sync with these services needs OAuth — wired in when Memora's cloud is live. For
           now, export from these and import the CSV/JSON above.
         </p>
         <ul className="mt-4 grid grid-cols-2 gap-2 sm:grid-cols-3">

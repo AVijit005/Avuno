@@ -10,7 +10,7 @@ function downloadAsImage() {
     // @ts-ignore
     window.html2canvas(document.body, { backgroundColor: '#090a0f' }).then((canvas: HTMLCanvasElement) => {
       const link = document.createElement('a');
-      link.download = 'chronicle-calendar.png';
+      link.download = 'memora-calendar.png';
       link.href = canvas.toDataURL();
       link.click();
     });

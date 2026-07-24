@@ -35,7 +35,7 @@ class EnvironmentVariables {
 
   @IsString()
   @IsOptional()
-  BULLMQ_PREFIX: string = 'chronicle';
+  BULLMQ_PREFIX: string = 'memora';
 
   @IsBoolean()
   @IsOptional()

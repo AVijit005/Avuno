@@ -1,4 +1,4 @@
-# Runbook — Chronicle Backend v1.0.0
+# Runbook — Memora Backend v1.0.0
 
 ## Alerts
 
@@ -19,7 +19,7 @@
 
 ### Queue Backlog > 1000
 
-1. Inspect queue: \`redis-cli llen chronicle:{queue}:wait\`
+1. Inspect queue: \`redis-cli llen memora:{queue}:wait\`
 2. Check worker logs
 3. Increase worker concurrency if needed
 4. Restart workers: \`docker compose restart api\`
@@ -55,5 +55,5 @@
 docker compose stop api
 docker compose -f docker-compose.prod.yml up -d api
 # If using orchestration:
-kubectl rollout undo deployment/chronicle-api
+kubectl rollout undo deployment/memora-api
 \`\`\`

@@ -8,7 +8,7 @@ import { MemoryQuote } from "./MemoryQuote";
 import { MemoryStats } from "./MemoryStats";
 
 /* --------------------------------------------------------------
- * Chronicle Auth 4.0 — Cinematic Memory Universe
+ * Memora Auth 4.0 — Cinematic Memory Universe
  * Five visual layers, hand-curated composition, memory artifacts.
  * -------------------------------------------------------------- */
 
@@ -486,7 +486,7 @@ export function AuthStage() {
                 },
               }}
             >
-              {"Chronicle".split("").map((ch, i) => (
+              {"Memora".split("").map((ch, i) => (
                 <motion.span
                   key={i}
                   className="inline-block"

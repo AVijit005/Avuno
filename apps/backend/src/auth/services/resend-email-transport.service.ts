@@ -15,13 +15,13 @@ export class ResendEmailTransportService implements EmailTransport {
 
   async sendVerificationEmail(to: string, options: VerificationEmailOptions): Promise<void> {
     const { link, userDisplayName } = options;
-    const fromEmail = this.configService.get<string>('EMAIL_FROM') || 'noreply@chronicle.com';
+    const fromEmail = this.configService.get<string>('EMAIL_FROM') || 'noreply@memora.com';
     
     try {
       await this.resend.emails.send({
         from: fromEmail,
         to,
-        subject: 'Verify your Chronicle Account',
+        subject: 'Verify your Memora Account',
         html: `<p>Hi ${userDisplayName || 'there'},</p><p>Please verify your account by clicking the link below:</p><p><a href="${link}">${link}</a></p>`,
       });
       this.logger.log(`Verification email sent to ${to} via Resend`);

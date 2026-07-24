@@ -46,9 +46,9 @@ export function useCreateJournalEntry() {
       queryClient.invalidateQueries({ queryKey: queryKeys.analytics.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.timeline.all });
       
-      if (typeof window !== 'undefined' && !localStorage.getItem('chronicle_first_entry_tracked')) {
+      if (typeof window !== 'undefined' && !localStorage.getItem('memora_first_entry_tracked')) {
         analytics.track('first_entry');
-        localStorage.setItem('chronicle_first_entry_tracked', 'true');
+        localStorage.setItem('memora_first_entry_tracked', 'true');
       }
     },
   });

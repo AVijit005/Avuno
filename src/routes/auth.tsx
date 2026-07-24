@@ -18,10 +18,10 @@ import { analytics } from "@/lib/analytics";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Enter Chronicle — the portal" },
+      { title: "Enter Memora — the portal" },
       {
         name: "description",
-        content: "Sign in to Chronicle. Pick up your story where you left it.",
+        content: "Sign in to Memora. Pick up your story where you left it.",
       },
     ],
   }),
@@ -249,7 +249,7 @@ function Auth() {
                 <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
                   <span className="font-display leading-none">C</span>
                 </div>
-                <span className="font-display text-lg">Chronicle</span>
+                <span className="font-display text-lg">Memora</span>
               </Link>
             </motion.div>
 
@@ -492,7 +492,7 @@ function Auth() {
                       error={signUp.formState.errors.confirmPassword?.message}
                       {...signUp.register("confirmPassword")}
                     />
-                    <PremiumButton status={status} label="Begin Chronicle" error={errorMessage} />
+                    <PremiumButton status={status} label="Begin Memora" error={errorMessage} />
                   </motion.form>
                 )}
               </AnimatePresence>

@@ -1,8 +1,8 @@
-# Chronicle
+# Memora
 
 > "A quiet place to remember every story you've lived."
 
-Chronicle is a premium, beautifully crafted personal media tracking platform. It allows users to track their movies, books, games, anime, and podcasts in a single, unified library. Rather than just acting as a database, Chronicle functions as a "memory capsule," providing intelligent resurfacing, mood reflections, and dynamic journaling.
+Memora is a premium, beautifully crafted personal media tracking platform. It allows users to track their movies, books, games, anime, and podcasts in a single, unified library. Rather than just acting as a database, Memora functions as a "memory capsule," providing intelligent resurfacing, mood reflections, and dynamic journaling.
 
 ## Features
 
@@ -14,7 +14,7 @@ Chronicle is a premium, beautifully crafted personal media tracking platform. It
 
 ## Architecture & Tech Stack
 
-Chronicle is a modern web application designed for both aesthetics and performance.
+Memora is a modern web application designed for both aesthetics and performance.
 
 ### Frontend
 - **React 19** (Vite + TypeScript)
@@ -41,8 +41,8 @@ Chronicle is a modern web application designed for both aesthetics and performan
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-org/chronicle.git
-   cd chronicle
+   git clone https://github.com/your-org/memora.git
+   cd memora
    ```
 
 2. **Install dependencies:**

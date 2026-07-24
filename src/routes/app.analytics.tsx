@@ -522,7 +522,7 @@ function AnalyticsPage() {
       </Zone>
 
       {/* ============ Zone 10 — Smart insights ============ */}
-      <Zone eyebrow="Zone 10" title="Smart insights" sub="Patterns Chronicle noticed.">
+      <Zone eyebrow="Zone 10" title="Smart insights" sub="Patterns Memora noticed.">
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
           {[
             `Your most active weekday is ${i.mostActiveWeekday}.`,
@@ -574,10 +574,10 @@ function AnalyticsPage() {
         </div>
       </Zone>
 
-      {/* Memory · What Chronicle noticed */}
+      {/* Memory · What Memora noticed */}
       <Zone
         eyebrow="Memory"
-        title="What Chronicle noticed"
+        title="What Memora noticed"
         sub="Observations from your reading, watching and listening."
       >
         <MemoryInsights max={6} />

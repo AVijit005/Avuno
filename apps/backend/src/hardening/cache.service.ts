@@ -5,7 +5,7 @@ import type { CacheService as ICacheService } from '../core';
 @Injectable()
 export class RedisCacheService implements ICacheService {
   private readonly logger = new Logger(RedisCacheService.name);
-  private readonly prefix = 'chronicle:cache:';
+  private readonly prefix = 'memora:cache:';
 
   constructor(private readonly redis: RedisService) {}
 

@@ -11,7 +11,7 @@ describe('LocalStorageService', () => {
   let service: LocalStorageService;
 
   beforeEach(async () => {
-    workDir = await mkdtemp(path.join(tmpdir(), 'chronicle-storage-'));
+    workDir = await mkdtemp(path.join(tmpdir(), 'memora-storage-'));
     const config = {
       get: (key: string) => (key === 'storage.uploadRoot' ? workDir : undefined),
     } as unknown as ConfigService;
@@ -88,7 +88,7 @@ describe('LocalStorageService', () => {
   });
 
   it('falls back to ./uploads when config is missing', async () => {
-    const fallbackWork = await mkdtemp(path.join(tmpdir(), 'chronicle-fallback-'));
+    const fallbackWork = await mkdtemp(path.join(tmpdir(), 'memora-fallback-'));
     const previousCwd = process.cwd();
     process.chdir(fallbackWork);
     try {
