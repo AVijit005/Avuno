@@ -27,7 +27,7 @@ function Page() {
           </kbd>
         </h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          Spotlight searches every corner of your Memora.
+          Spotlight searches every corner of your Chronicle.
         </p>
       </div>
     </div>

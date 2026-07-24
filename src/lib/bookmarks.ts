@@ -1,5 +1,5 @@
 // Universal bookmark system — localStorage-backed, SSR-safe.
-const KEY = "memora:bookmarks:v1";
+const KEY = "chronicle:bookmarks:v1";
 
 export type BookmarkKind =
   | "media"

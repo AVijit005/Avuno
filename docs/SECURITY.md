@@ -1,4 +1,4 @@
-# Security Overview — Memora Backend v1.0.0
+# Security Overview — Chronicle Backend v1.0.0
 
 ## Authentication
 

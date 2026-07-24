@@ -47,7 +47,7 @@ function downloadAsImage() {
 }
 
 function captureAndDownload() {
-  const el = document.getElementById('memora-wrapped-root');
+  const el = document.getElementById('chronicle-wrapped-root');
   if (!el || !window.html2canvas) {
     toast.error("Failed to generate image.");
     return;
@@ -55,7 +55,7 @@ function captureAndDownload() {
   const bg = getComputedStyle(document.documentElement).getPropertyValue('--background').trim() || '#090a0f';
   window.html2canvas(el, { backgroundColor: bg }).then((canvas: HTMLCanvasElement) => {
     const link = document.createElement('a');
-    link.download = 'memora-wrapped.png';
+    link.download = 'chronicle-wrapped.png';
     link.href = canvas.toDataURL();
     link.click();
   }).catch((err: unknown) => {
@@ -100,7 +100,7 @@ function WrappedPage() {
   const slides: UIWrappedSlide[] = [
     {
       key: "intro",
-      eyebrow: "Welcome to Memora",
+      eyebrow: "Welcome to Chronicle",
       title: "Your Year in Stories",
       caption: "A look back at everything you watched, read, played, and lived.",
       accent: "var(--primary)",
@@ -137,7 +137,7 @@ function WrappedPage() {
   ];
 
   return (
-    <div className="-mx-4 -mt-6 md:-mx-8" id="memora-wrapped-root">
+    <div className="-mx-4 -mt-6 md:-mx-8" id="chronicle-wrapped-root">
       {/* Snap-scroll container */}
       <div className="snap-y snap-mandatory overflow-y-auto">
         {slides.map((s, idx) => (
@@ -237,7 +237,7 @@ function Slide({ slide, index, last, totalSlides }: { slide: UIWrappedSlide; ind
                 transition={{ duration: 0.7, delay: 0.6 }}
                 className="mt-10 flex justify-center gap-3"
               >
-                <PremiumButton variant="primary" icon={<Share2 className="h-4 w-4" />} onClick={() => navigator.share?.({ title: "Memora Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
+                <PremiumButton variant="primary" icon={<Share2 className="h-4 w-4" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
                   Share your year
                 </PremiumButton>
                 <PremiumButton variant="secondary" icon={<Download className="h-4 w-4" />} onClick={downloadAsImage}>
@@ -352,7 +352,7 @@ function ShareSection({ overview: o, insights: i }: { overview: UIOverview; insi
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/15 to-amber-300/10" />
         <div className="relative">
           <div className="text-[11px] uppercase tracking-[0.32em] text-muted-foreground">
-            Memora {new Date().getFullYear()} · Share card
+            Chronicle {new Date().getFullYear()} · Share card
           </div>
           <div className="mt-4 font-display text-4xl tracking-tight">Your year in stories</div>
           <div className="mt-6 grid grid-cols-2 gap-3">
@@ -371,7 +371,7 @@ function ShareSection({ overview: o, insights: i }: { overview: UIOverview; insi
             ))}
           </div>
           <div className="mt-6 flex justify-center gap-2">
-            <PremiumButton variant="primary" size="sm" icon={<Share2 className="h-3.5 w-3.5" />} onClick={() => navigator.share?.({ title: "Memora Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
+            <PremiumButton variant="primary" size="sm" icon={<Share2 className="h-3.5 w-3.5" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
               Share
             </PremiumButton>
             <PremiumButton

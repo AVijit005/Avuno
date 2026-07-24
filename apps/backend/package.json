@@ -1,9 +1,9 @@
 {
-  "name": "@memora/backend",
+  "name": "@chronicle/backend",
   "version": "0.0.1",
   "private": true,
-  "description": "Memora production backend",
-  "author": "Memora",
+  "description": "Chronicle production backend",
+  "author": "Chronicle",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",

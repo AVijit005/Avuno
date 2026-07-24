@@ -1,4 +1,4 @@
-// Memora — emotional surface vocabulary.
+// Chronicle — emotional surface vocabulary.
 // Single source of truth for how the product names itself to the user.
 // Route paths stay technical; only what the eye reads changes.
 

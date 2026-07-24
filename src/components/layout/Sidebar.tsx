@@ -32,7 +32,7 @@ export function Sidebar({
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <div className="truncate font-display text-lg leading-none">Memora</div>
+            <div className="truncate font-display text-lg leading-none">Chronicle</div>
             <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Memory operating system
             </div>

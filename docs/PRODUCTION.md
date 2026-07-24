@@ -1,4 +1,4 @@
-# Production Readiness — Memora Backend v1.0.0
+# Production Readiness — Chronicle Backend v1.0.0
 
 ## Architecture Overview
 

@@ -24,7 +24,7 @@ export class DigestProcessor extends WorkerHost {
       const digest = await this.digestService.generateWeeklyDigest(userId);
       await this.repository.create({
         userId,
-        title: 'Your Weekly Memora Digest',
+        title: 'Your Weekly Chronicle Digest',
         body: digest,
         type: 'SYSTEM',
       });
@@ -32,7 +32,7 @@ export class DigestProcessor extends WorkerHost {
       const digest = await this.digestService.generateMonthlyDigest(userId);
       await this.repository.create({
         userId,
-        title: 'Your Monthly Memora Report',
+        title: 'Your Monthly Chronicle Report',
         body: digest,
         type: 'SYSTEM',
       });

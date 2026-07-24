@@ -29,7 +29,7 @@ export class BackupService {
   async backupDatabase(tag = 'daily'): Promise<BackupResult> {
     this.ensureBackupDir();
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `memora-db-${tag}-${timestamp}.sql`;
+    const filename = `chronicle-db-${tag}-${timestamp}.sql`;
     const filepath = path.join(this.backupDir, filename);
 
     try {
@@ -51,7 +51,7 @@ export class BackupService {
     this.ensureBackupDir();
     const uploadRoot = process.env.UPLOAD_ROOT || './uploads';
     const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
-    const filename = `memora-media-${timestamp}.tar.gz`;
+    const filename = `chronicle-media-${timestamp}.tar.gz`;
     const filepath = path.join(this.backupDir, filename);
 
     try {

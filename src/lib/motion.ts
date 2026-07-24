@@ -1,7 +1,7 @@
 import type { Variants, Transition } from "motion/react";
 
 /* ============================================================
- * MEMORA — Motion Tokens
+ * CHRONICLE — Motion Tokens
  * One source of truth for durations, easings, and shared
  * variants across the entire application.
  * ============================================================ */

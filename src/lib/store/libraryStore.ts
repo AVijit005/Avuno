@@ -353,7 +353,7 @@ export const useLibraryStore = create<State & Actions>()(
         set({ meta: initialMeta(), customItems: [], shelves: [], collections: [], userQuotes: [] }),
     }),
     {
-      name: "memora:library:v2",
+      name: "chronicle:library:v2",
       storage: createJSONStorage(() =>
         typeof window !== "undefined"
           ? window.localStorage

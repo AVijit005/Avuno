@@ -8,7 +8,7 @@ function Page() {
     <ComingSoon
       eyebrow="Goals"
       title="Quiet intentions."
-      description="Set the year's reading pile, your film count, the games you owe yourself. Memora nudges, never nags."
+      description="Set the year's reading pile, your film count, the games you owe yourself. Chronicle nudges, never nags."
     />
   );
 }

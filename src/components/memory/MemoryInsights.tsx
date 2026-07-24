@@ -29,7 +29,7 @@ export function MemoryInsights({ className, max = 4 }: Props) {
     <PremiumGlass variant="subtle" className={className}>
       <section className="p-5 md:p-6" aria-label="Memory insights">
         <header className="flex items-center gap-2 text-[10px] uppercase tracking-[0.24em] text-muted-foreground/70">
-          <Sparkles className="h-3 w-3" /> What Memora noticed
+          <Sparkles className="h-3 w-3" /> What Chronicle noticed
         </header>
         <ul className="mt-4 space-y-2.5">
           {displayLines.map((l) => (

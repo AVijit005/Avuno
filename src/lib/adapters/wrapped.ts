@@ -11,7 +11,7 @@ export function adaptWrappedResponse(w: WrappedResponse): UIWrappedSlide[] {
   // Intro slide
   slides.push({
     key: "intro",
-    eyebrow: `Memora ${w.year}`,
+    eyebrow: `Chronicle ${w.year}`,
     title: "Your year in stories.",
     subtitle: "Pause. Press play. Reflect.",
   });

@@ -1,4 +1,4 @@
-# Memora — Complete Deployment Guide
+# Chronicle — Complete Deployment Guide
 
 **Date:** July 24, 2026
 **Stack:** TanStack Start/Vite SPA + NestJS 11 + Prisma + PostgreSQL + Redis/BullMQ
@@ -212,7 +212,7 @@ services:
   backend:
     build: ./backend
     environment:
-      - DATABASE_URL=postgresql://memora:password@postgres:5432/memora
+      - DATABASE_URL=postgresql://chronicle:password@postgres:5432/chronicle
       - REDIS_URL=redis://redis:6379
       - JWT_SECRET=${JWT_SECRET}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
@@ -224,8 +224,8 @@ services:
   postgres:
     image: postgres:16-alpine
     environment:
-      - POSTGRES_DB=memora
-      - POSTGRES_USER=memora
+      - POSTGRES_DB=chronicle
+      - POSTGRES_USER=chronicle
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
     volumes:
       - pgdata:/var/lib/postgresql/data
@@ -241,7 +241,7 @@ services:
     command: node dist/worker.js
     environment:
       - REDIS_URL=redis://redis:6379
-      - DATABASE_URL=postgresql://memora:password@postgres:5432/memora
+      - DATABASE_URL=postgresql://chronicle:password@postgres:5432/chronicle
     depends_on:
       - redis
       - postgres
@@ -533,8 +533,8 @@ The $0 free tier stack gets you launched. The $5/mo Hetzner VPS gets you product
 
 ```env
 # Database
-DATABASE_URL="postgresql://user:pass@host:5432/memora"
-DIRECT_URL="postgresql://user:pass@host:5432/memora"
+DATABASE_URL="postgresql://user:pass@host:5432/chronicle"
+DIRECT_URL="postgresql://user:pass@host:5432/chronicle"
 
 # Redis
 REDIS_URL="redis://:password@host:6379"

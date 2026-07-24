@@ -36,7 +36,7 @@ export class DigestService {
 
     const totalCompleted = Object.values(completed).reduce((a, b) => a + b, 0);
     const lines: string[] = [
-      `📊 Monthly Memora Report`,
+      `📊 Monthly Chronicle Report`,
       ``,
       `This month you completed ${totalCompleted} item${totalCompleted !== 1 ? 's' : ''}.`,
     ];

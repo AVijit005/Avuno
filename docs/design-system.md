@@ -1,4 +1,4 @@
-# Memora Design System
+# Chronicle Design System
 
 Single source of truth for the visual and motion language used everywhere in
 the app. All values are already implemented in `src/styles.css`, `src/lib/motion.ts`,

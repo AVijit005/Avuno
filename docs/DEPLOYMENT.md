@@ -1,4 +1,4 @@
-# Deployment Guide — Memora Backend v1.0.0
+# Deployment Guide — Chronicle Backend v1.0.0
 
 ## Prerequisites
 

@@ -126,7 +126,7 @@ export function AddMemoryModal({ isOpen, onClose, selectedDay, monthName, curren
                 <div className="mb-10 text-center">
                   <h2 id="modal-title" className="font-display text-4xl tracking-tight text-foreground/90">Log a memory</h2>
                   <p className="mt-2 text-sm text-muted-foreground/80">
-                    {selectedDay ? `${monthName} ${selectedDay}, ${currentYear}` : "Select a medium to memora"}
+                    {selectedDay ? `${monthName} ${selectedDay}, ${currentYear}` : "Select a medium to chronicle"}
                   </p>
                 </div>
                 <div className="grid grid-cols-3 sm:grid-cols-5 gap-y-8 gap-x-4">

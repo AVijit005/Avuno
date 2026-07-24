@@ -12,7 +12,7 @@ export function renderShareCardSVG({
   title,
   subtitle,
   accent = "oklch(0.72 0.18 255)",
-  footer = "Memora",
+  footer = "Chronicle",
 }: ShareCardInput): string {
   const safe = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1080 1080" width="1080" height="1080">

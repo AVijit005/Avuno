@@ -1,11 +1,11 @@
-# Disaster Recovery — Memora Backend v1.0.0
+# Disaster Recovery — Chronicle Backend v1.0.0
 
 ## Recovery Scenarios
 
 ### 1. Database Corruption
 
 1. Stop API: \`docker compose stop api\`
-2. Restore from latest backup: \`psql -U memora memora < latest.sql\`
+2. Restore from latest backup: \`psql -U chronicle chronicle < latest.sql\`
 3. Verify data integrity: \`docker compose exec api node dist/main\`
 4. Resume API: \`docker compose start api\`
 5. **RTO**: < 30 minutes \| **RPO**: < 24 hours

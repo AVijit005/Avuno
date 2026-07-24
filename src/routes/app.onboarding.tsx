@@ -30,8 +30,8 @@ function OnboardingPage() {
     if (step === 1 && selected.length > 0) {
       setStep(2);
     } else if (step === 2) {
-      localStorage.setItem("memora_onboarding_complete", "true");
-      localStorage.setItem("memora_media_types", JSON.stringify(selected));
+      localStorage.setItem("chronicle_onboarding_complete", "true");
+      localStorage.setItem("chronicle_media_types", JSON.stringify(selected));
       analytics.track("onboarding_complete", { types: selected });
       navigate({ to: "/app" });
     }
@@ -46,7 +46,7 @@ function OnboardingPage() {
               What stories do you follow?
             </h1>
             <p className="mt-4 text-muted-foreground">
-              Select the types of media you want to track in Memora. You can change this later.
+              Select the types of media you want to track in Chronicle. You can change this later.
             </p>
             <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
               {MEDIA_TYPES.map((t) => {
@@ -94,7 +94,7 @@ function OnboardingPage() {
             </p>
             <div className="mt-10">
               <PremiumButton onClick={handleNext} size="lg">
-                Enter Memora
+                Enter Chronicle
               </PremiumButton>
             </div>
           </div>

@@ -50,7 +50,7 @@ function EmailCapturePage() {
           </div>
           <h1 className="font-display text-2xl">Upgrade to Plus</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Enter your email to get early access to Memora Plus.
+            Enter your email to get early access to Chronicle Plus.
           </p>
         </div>
 

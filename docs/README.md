@@ -1,6 +1,6 @@
-# Memora — Internal Documentation
+# Chronicle — Internal Documentation
 
-Memora is a Personal Memory Operating System for media: movies, anime, books,
+Chronicle is a Personal Memory Operating System for media: movies, anime, books,
 games, music, podcasts, courses, and more. Everything is editorial, deterministic,
 and reuses one design language.
 

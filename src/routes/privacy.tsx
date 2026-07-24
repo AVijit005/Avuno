@@ -16,7 +16,7 @@ function PrivacyPage() {
         
         <div className="prose prose-invert max-w-none text-white/80 space-y-6">
           <p>
-            Memora ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Memora.
+            Chronicle ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how your personal information is collected, used, and disclosed by Chronicle.
           </p>
           
           <h2 className="text-2xl font-semibold text-white mt-8">1. Information We Collect</h2>
@@ -30,7 +30,7 @@ function PrivacyPage() {
           <h2 className="text-2xl font-semibold text-white mt-8">2. How We Use Your Information</h2>
           <p>We use the information we collect to:</p>
           <ul className="list-disc pl-6 space-y-2">
-            <li>Provide, maintain, and improve the Memora application.</li>
+            <li>Provide, maintain, and improve the Chronicle application.</li>
             <li>Process transactions and send related information (if you subscribe to a paid tier).</li>
             <li>Send you technical notices, updates, security alerts, and support messages.</li>
             <li>Generate personalized analytics and "Wrapped" experiences for your account.</li>
@@ -48,7 +48,7 @@ function PrivacyPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">5. Contact Us</h2>
           <p>
-            If you have any questions about this Privacy Policy, please contact us at support@memora.app.
+            If you have any questions about this Privacy Policy, please contact us at support@chronicle.app.
           </p>
         </div>
       </div>

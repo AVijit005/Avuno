@@ -1,5 +1,5 @@
 // Memory Layer — deterministic, SSR-safe.
-// Source of truth for memory data, types, and selectors across Memora.
+// Source of truth for memory data, types, and selectors across Chronicle.
 import { mulberry } from "@/lib/seed";
 import type { MediaItem } from "@/lib/types";
 

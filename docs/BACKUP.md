@@ -1,10 +1,10 @@
-# Backup & Restore — Memora Backend
+# Backup & Restore — Chronicle Backend
 
 ## Database Backup
 
 \`\`\`bash
 # Manual backup
-docker compose exec postgres pg_dump -U memora memora > backup.sql
+docker compose exec postgres pg_dump -U chronicle chronicle > backup.sql
 
 # Via BackupService (automated)
 curl -X POST http://localhost:3000/api/deployment/backup/database
@@ -24,7 +24,7 @@ curl -X POST http://localhost:3000/api/deployment/backup/media
 
 \`\`\`bash
 # Database restore
-cat backup.sql | docker compose exec -T postgres psql -U memora memora
+cat backup.sql | docker compose exec -T postgres psql -U chronicle chronicle
 
 # Media restore
 tar -xzf media-backup.tar.gz -C ./uploads

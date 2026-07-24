@@ -78,9 +78,9 @@ describe('MetricsService', () => {
     service.incrementRequestCount();
     service.incrementErrorCount();
     const output = service.getAsPrometheus();
-    expect(output).toContain('memora_request_total');
-    expect(output).toContain('memora_error_total');
-    expect(output).toContain('memora_uptime_seconds');
+    expect(output).toContain('chronicle_request_total');
+    expect(output).toContain('chronicle_error_total');
+    expect(output).toContain('chronicle_uptime_seconds');
     expect(output).toMatch(/\d+/);
   });
 
