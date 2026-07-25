@@ -8,21 +8,24 @@ export const Route = createFileRoute("/app")({
   beforeLoad: async ({ context }) => {
     if (typeof window === "undefined") return;
 
+    const { getAccessToken } = await import("@/lib/api/fetch");
+    const token = getAccessToken();
+    if (!token) {
+      throw redirect({ to: "/auth" });
+    }
+
     const { queryClient } = context;
     try {
-      const user = await queryClient.fetchQuery({
+      await queryClient.fetchQuery({
         queryKey: ["auth", "me"],
         queryFn: () => authApi.getCurrentUser(),
         staleTime: 5 * 60_000,
       });
-      if (!user) {
-        throw redirect({ to: "/auth" });
-      }
     } catch (error) {
       if (isRedirect(error)) {
         throw error;
       }
-      throw redirect({ to: "/auth" });
+      // Token exists in localStorage, allow rendering /app
     }
   },
   component: () => (

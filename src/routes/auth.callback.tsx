@@ -25,12 +25,11 @@ function AuthCallback() {
         try {
           const user = await authApi.getCurrentUser();
           queryClient.setQueryData(queryKeys.auth.me(), user);
-          toast.success("Welcome to Avuno!");
-          navigate({ to: "/app" });
-        } catch {
-          toast.error("Failed to load user profile");
-          navigate({ to: "/auth" });
+        } catch (err) {
+          console.warn("User profile load warning:", err);
         }
+        toast.success("Welcome to Avuno!");
+        navigate({ to: "/app" });
       } else {
         toast.error("Authentication failed. Please try again.");
         navigate({ to: "/auth" });

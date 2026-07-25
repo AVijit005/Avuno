@@ -56,7 +56,11 @@ export async function resendVerification(input: ResendVerificationInput): Promis
 }
 
 export async function getCurrentUser(): Promise<UserResponse> {
-  return apiGet<UserResponse>('/auth/me');
+  try {
+    return await apiGet<UserResponse>('/auth/me');
+  } catch {
+    return await apiGet<UserResponse>('/users/me');
+  }
 }
 
 export async function logoutUser(): Promise<void> {
