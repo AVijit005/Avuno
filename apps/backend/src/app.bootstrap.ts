@@ -46,7 +46,7 @@ export async function createApp(options?: NestApplicationOptions): Promise<INest
     next();
   });
   app.enableCors({
-    origin: (origin, callback) => {
+    origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
       if (!origin) return callback(null, true);
       const raw = process.env.CORS_ORIGIN || '';
       const allowedOrigins = raw
