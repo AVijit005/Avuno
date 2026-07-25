@@ -14,20 +14,32 @@ export const Route = createFileRoute("/auth/callback")({
 });
 
 function AuthCallback() {
-  const { token } = Route.useSearch();
-  const navigate = useNavigate();
-  const { queryClient } = Route.useRouteContext();
-
   useEffect(() => {
-    if (token) {
-      setAccessToken(token);
+    if (typeof window === "undefined") return;
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+
+    if (token && token.trim().length > 0) {
+      setAccessToken(token.trim());
       toast.success("Welcome to Avuno!");
       window.location.href = "/app";
     } else {
-      toast.error("Authentication failed. Please try again.");
-      window.location.href = "/auth";
+      const timer = setTimeout(() => {
+        const retryParams = new URLSearchParams(window.location.search);
+        const retryToken = retryParams.get("token");
+        if (retryToken && retryToken.trim().length > 0) {
+          setAccessToken(retryToken.trim());
+          toast.success("Welcome to Avuno!");
+          window.location.href = "/app";
+        } else {
+          toast.error("Authentication failed. Please try again.");
+          window.location.href = "/auth";
+        }
+      }, 1000);
+      return () => clearTimeout(timer);
     }
-  }, [token]);
+  }, []);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
