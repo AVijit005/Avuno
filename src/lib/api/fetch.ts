@@ -24,16 +24,36 @@ export function setAccessToken(token: string | null): void {
   accessToken = token;
   if (typeof window !== 'undefined') {
     if (token) {
-      localStorage.setItem('accessToken', token);
+      try { localStorage.setItem('accessToken', token); } catch {}
+      try { sessionStorage.setItem('accessToken', token); } catch {}
+      try { document.cookie = `avuno_token=${encodeURIComponent(token)}; path=/; max-age=86400; SameSite=Lax; Secure`; } catch {}
     } else {
-      localStorage.removeItem('accessToken');
+      try { localStorage.removeItem('accessToken'); } catch {}
+      try { sessionStorage.removeItem('accessToken'); } catch {}
+      try { document.cookie = 'avuno_token=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT'; } catch {}
     }
   }
 }
 
 export function getAccessToken(): string | null {
-  if (!accessToken && typeof window !== 'undefined') {
-    accessToken = localStorage.getItem('accessToken');
+  if (accessToken) return accessToken;
+  if (typeof window !== 'undefined') {
+    try {
+      const lsToken = localStorage.getItem('accessToken');
+      if (lsToken) { accessToken = lsToken; return lsToken; }
+    } catch {}
+    try {
+      const ssToken = sessionStorage.getItem('accessToken');
+      if (ssToken) { accessToken = ssToken; return ssToken; }
+    } catch {}
+    try {
+      const match = document.cookie.match(/avuno_token=([^;]+)/);
+      if (match && match[1]) {
+        const decoded = decodeURIComponent(match[1]);
+        accessToken = decoded;
+        return decoded;
+      }
+    } catch {}
   }
   return accessToken;
 }
