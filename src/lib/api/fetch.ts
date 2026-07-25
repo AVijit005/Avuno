@@ -67,7 +67,6 @@ async function refreshAccessToken(): Promise<string> {
   });
 
   if (!response.ok) {
-    setAccessToken(null);
     throw new ApiError('Session expired. Please log in again.', 401, 'TOKEN_EXPIRED');
   }
 
@@ -77,7 +76,8 @@ async function refreshAccessToken(): Promise<string> {
 }
 
 async function getValidToken(): Promise<string | null> {
-  if (accessToken) return accessToken;
+  const stored = getAccessToken();
+  if (stored) return stored;
 
   if (!refreshPromise) {
     refreshPromise = refreshAccessToken().finally(() => {
@@ -155,13 +155,16 @@ export async function apiFetch<T>(
 
       if (response.status === 401 && !skipAuth && !path.includes(REFRESH_ENDPOINT)) {
         try {
-          setAccessToken(null);
-          const newToken = await getValidToken();
-          if (!newToken) throw new Error('Refresh failed');
-          continue;
+          const newToken = await refreshAccessToken();
+          if (newToken) {
+            continue;
+          }
         } catch {
-          throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
+          // Refresh failed — don't wipe the stored token.
+          // Google OAuth users never get a refresh cookie due to cross-domain redirect,
+          // so refresh will always fail for them. Let the UI handle gracefully.
         }
+        throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
       }
 
       let responseBody;
