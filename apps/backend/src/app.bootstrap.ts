@@ -46,12 +46,31 @@ export async function createApp(options?: NestApplicationOptions): Promise<INest
     next();
   });
   app.enableCors({
-    origin: process.env.CORS_ORIGIN 
-      ? process.env.CORS_ORIGIN.split(',').map((s) => s.trim())
-      : (process.env.NODE_ENV === 'production' ? false : 'http://localhost:5173'),
+    origin: (origin, callback) => {
+      if (!origin) return callback(null, true);
+      const raw = process.env.CORS_ORIGIN || '';
+      const allowedOrigins = raw
+        .replace(/"/g, '')
+        .replace(/'/g, '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+
+      if (
+        allowedOrigins.length === 0 ||
+        allowedOrigins.includes('*') ||
+        allowedOrigins.includes(origin) ||
+        origin.includes('avuno.xyz') ||
+        origin.includes('pages.dev') ||
+        origin.includes('localhost')
+      ) {
+        return callback(null, true);
+      }
+      return callback(null, true);
+    },
     credentials: true,
-    methods: ['GET', 'POST', 'PATCH', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id', 'ngrok-skip-browser-warning', 'x-correlation-id'],
   });
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
