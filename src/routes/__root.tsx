@@ -138,8 +138,14 @@ function RootComponent() {
 
   useEffect(() => {
     const restoreSession = async () => {
-      try { const user = await authApi.getCurrentUser(); queryClient.setQueryData(queryKeys.auth.me(), user); }
-      catch { setAccessToken(null); queryClient.removeQueries({ queryKey: queryKeys.auth.all }); }
+      const token = getAccessToken();
+      if (!token) return;
+      try {
+        const user = await authApi.getCurrentUser();
+        queryClient.setQueryData(queryKeys.auth.me(), user);
+      } catch (err) {
+        console.warn("Session restore warning:", err);
+      }
     };
     if (!queryClient.getQueryData(queryKeys.auth.me())) restoreSession();
   }, [queryClient]);

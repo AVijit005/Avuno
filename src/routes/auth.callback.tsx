@@ -19,24 +19,15 @@ function AuthCallback() {
   const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    const completeLogin = async () => {
-      if (token) {
-        setAccessToken(token);
-        try {
-          const user = await authApi.getCurrentUser();
-          queryClient.setQueryData(queryKeys.auth.me(), user);
-        } catch (err) {
-          console.warn("User profile load warning:", err);
-        }
-        toast.success("Welcome to Avuno!");
-        navigate({ to: "/app" });
-      } else {
-        toast.error("Authentication failed. Please try again.");
-        navigate({ to: "/auth" });
-      }
-    };
-    completeLogin();
-  }, [token, navigate, queryClient]);
+    if (token) {
+      setAccessToken(token);
+      toast.success("Welcome to Avuno!");
+      window.location.href = "/app";
+    } else {
+      toast.error("Authentication failed. Please try again.");
+      window.location.href = "/auth";
+    }
+  }, [token]);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
