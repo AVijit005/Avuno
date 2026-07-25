@@ -35,8 +35,7 @@ export class GoogleOAuthController {
       request.headers['user-agent'] as string | undefined,
       response,
     );
-    const rawUrl = process.env.FRONTEND_URL || process.env.APP_BASE_URL || 'https://www.avuno.xyz';
-    const frontendUrl = (rawUrl.includes('yourdomain') || !rawUrl.startsWith('http')) ? 'https://www.avuno.xyz' : rawUrl.replace(/\/api\/?$/, '');
+    const frontendUrl = 'https://www.avuno.xyz';
     response.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(authResult.accessToken)}`);
   }
 }
