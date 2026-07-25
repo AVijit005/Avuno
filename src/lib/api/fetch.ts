@@ -130,9 +130,6 @@ export async function apiFetch<T>(
           if (!newToken) throw new Error('Refresh failed');
           continue;
         } catch {
-          if (typeof window !== 'undefined' && window.location.pathname !== '/auth' && window.location.pathname !== '/') {
-            window.location.href = '/auth';
-          }
           throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
         }
       }
