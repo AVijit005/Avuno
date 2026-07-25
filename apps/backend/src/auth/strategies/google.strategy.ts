@@ -20,9 +20,9 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     config: ConfigService,
     private readonly googleOAuthService: GoogleOAuthService,
   ) {
-    const clientID = config.get<string>('google.clientId') || 'dummy-client-id';
-    const clientSecret = config.get<string>('google.clientSecret') || 'dummy-client-secret';
-    const callbackURL = config.get<string>('google.callbackUrl') ?? 'http://localhost:3000/api/auth/google/callback';
+    const clientID = (config.get<string>('google.clientId') || '').trim();
+    const clientSecret = (config.get<string>('google.clientSecret') || '').trim();
+    const callbackURL = (config.get<string>('google.callbackUrl') || 'https://www.avuno.xyz/api/auth/google/callback').trim();
 
     super({
       clientID,
