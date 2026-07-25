@@ -40,7 +40,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 const rawBackend = process.env.VITE_API_URL || process.env.API_HOST || "";
 const BACKEND_URL = (rawBackend && !rawBackend.includes("trycloudflare.com"))
   ? rawBackend
-  : "http://152.228.227.51:4000";
+  : "http://api.avuno.xyz:4000";
 
 async function handleApiProxy(request: Request): Promise<Response> {
   const url = new URL(request.url);
