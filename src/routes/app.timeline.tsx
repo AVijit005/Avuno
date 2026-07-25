@@ -12,6 +12,7 @@ import { LiveStatsStrip } from "@/components/memory/LiveStatsStrip";
 import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
 import { useTimelineEvents, useJournalStats } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
+import { PageSkeleton } from "@/components/common/PageSkeleton";
 export const Route = createFileRoute("/app/timeline")({ 
   component: TimelinePage,
   pendingComponent: PageSkeleton,
