@@ -22,8 +22,7 @@ export function MobileMemoryHero() {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(60% 70% at 50% 0%, oklch(0.32 0.09 270 / 0.55), transparent 75%), radial-gradient(40% 40% at 80% 20%, oklch(0.7 0.18 320 / 0.18), transparent 70%)",
-          filter: "blur(20px)",
+            "radial-gradient(60% 70% at 50% 0%, oklch(0.32 0.09 270 / 0.45), transparent 75%), radial-gradient(40% 40% at 80% 20%, oklch(0.7 0.18 320 / 0.15), transparent 70%)",
         }}
       />
 
@@ -33,7 +32,6 @@ export function MobileMemoryHero() {
         animate={{ opacity: 0.38, y: 0 }}
         transition={{ duration: 1.2, delay: 0.2, ease: ease.out }}
         className="absolute left-[6%] top-[14%] aspect-[2/3] w-[96px] -rotate-[7deg] overflow-hidden rounded-[10px] ring-1 ring-white/10 shadow-[0_24px_56px_-24px_oklch(0_0_0/0.85)]"
-        style={{ filter: "blur(2.5px)" }}
       >
         <img src={second.poster} alt="" className="h-full w-full object-cover" />
       </motion.div>

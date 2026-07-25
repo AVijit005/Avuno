@@ -45,6 +45,7 @@ export function LiquidGlassCard({ children, className = "" }: Props) {
 
   useEffect(() => {
     if (reduced) return;
+    if (typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches) return;
     const el = cardRef.current;
     if (!el) return;
 

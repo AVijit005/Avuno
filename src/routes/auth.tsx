@@ -208,7 +208,7 @@ function Auth() {
       />
 
       {/* === FLOATING CARD ZONE === */}
-      <div className="relative z-10 flex min-h-screen items-end justify-center px-4 pb-6 lg:items-center lg:justify-end lg:px-0 lg:pb-0 lg:pr-[5vw] xl:pr-[7vw]">
+      <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-8 lg:items-center lg:justify-end lg:px-0 lg:py-0 lg:pr-[5vw] xl:pr-[7vw]">
 
         {/* Ambient light depth — violet halo that drifts slowly behind the card */}
         {!reduced && (
