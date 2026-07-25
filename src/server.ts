@@ -37,8 +37,49 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
+const BACKEND_URL = process.env.VITE_API_URL || process.env.API_HOST || "http://106.196.8.206:3000";
+
+async function handleApiProxy(request: Request): Promise<Response> {
+  const url = new URL(request.url);
+  const targetUrl = new URL(url.pathname + url.search, BACKEND_URL);
+
+  const reqHeaders = new Headers(request.headers);
+  reqHeaders.set("host", targetUrl.host);
+
+  const init: RequestInit = {
+    method: request.method,
+    headers: reqHeaders,
+    redirect: "manual",
+  };
+
+  if (request.method !== "GET" && request.method !== "HEAD") {
+    init.body = await request.arrayBuffer();
+  }
+
+  try {
+    const backendRes = await fetch(targetUrl.toString(), init);
+    const resHeaders = new Headers(backendRes.headers);
+    return new Response(backendRes.body, {
+      status: backendRes.status,
+      statusText: backendRes.statusText,
+      headers: resHeaders,
+    });
+  } catch (err) {
+    console.error("API Proxy error:", err);
+    return new Response(JSON.stringify({ message: "Failed to connect to backend server." }), {
+      status: 502,
+      headers: { "content-type": "application/json" },
+    });
+  }
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const url = new URL(request.url);
+    if (url.pathname.startsWith("/api/")) {
+      return handleApiProxy(request);
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
