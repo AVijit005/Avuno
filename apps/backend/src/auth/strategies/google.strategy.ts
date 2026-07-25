@@ -20,8 +20,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     config: ConfigService,
     private readonly googleOAuthService: GoogleOAuthService,
   ) {
-    const clientID = config.get<string>('google.clientId') ?? '';
-    const clientSecret = config.get<string>('google.clientSecret') ?? '';
+    const clientID = config.get<string>('google.clientId') || 'dummy-client-id';
+    const clientSecret = config.get<string>('google.clientSecret') || 'dummy-client-secret';
     const callbackURL = config.get<string>('google.callbackUrl') ?? 'http://localhost:3000/api/auth/google/callback';
 
     super({
