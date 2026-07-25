@@ -37,7 +37,7 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
   });
 }
 
-const BACKEND_URL = process.env.VITE_API_URL || process.env.API_HOST || "https://api.avuno.xyz";
+const BACKEND_URL = process.env.VITE_API_URL || process.env.API_HOST || "http://152.228.227.51:4000";
 
 async function handleApiProxy(request: Request): Promise<Response> {
   const url = new URL(request.url);
