@@ -14,6 +14,15 @@ export const Route = createFileRoute("/auth/callback")({
 });
 
 function AuthCallback() {
+  if (typeof window !== "undefined") {
+    const urlParams = new URLSearchParams(window.location.search);
+    const token = urlParams.get("token");
+    if (token && token.trim().length > 0) {
+      setAccessToken(token.trim());
+      window.location.href = "/app";
+    }
+  }
+
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -22,7 +31,6 @@ function AuthCallback() {
 
     if (token && token.trim().length > 0) {
       setAccessToken(token.trim());
-      toast.success("Welcome to Avuno!");
       window.location.href = "/app";
     } else {
       const timer = setTimeout(() => {
@@ -30,7 +38,6 @@ function AuthCallback() {
         const retryToken = retryParams.get("token");
         if (retryToken && retryToken.trim().length > 0) {
           setAccessToken(retryToken.trim());
-          toast.success("Welcome to Avuno!");
           window.location.href = "/app";
         } else {
           toast.error("Authentication failed. Please try again.");
