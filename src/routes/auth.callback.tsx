@@ -3,6 +3,8 @@ import { useEffect } from "react";
 import { setAccessToken } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
+import { authApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
 
 export const Route = createFileRoute("/auth/callback")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -14,17 +16,28 @@ export const Route = createFileRoute("/auth/callback")({
 function AuthCallback() {
   const { token } = Route.useSearch();
   const navigate = useNavigate();
+  const { queryClient } = Route.useRouteContext();
 
   useEffect(() => {
-    if (token) {
-      setAccessToken(token);
-      toast.success("Welcome to Avuno!");
-      navigate({ to: "/app" });
-    } else {
-      toast.error("Authentication failed. Please try again.");
-      navigate({ to: "/auth" });
-    }
-  }, [token, navigate]);
+    const completeLogin = async () => {
+      if (token) {
+        setAccessToken(token);
+        try {
+          const user = await authApi.getCurrentUser();
+          queryClient.setQueryData(queryKeys.auth.me(), user);
+          toast.success("Welcome to Avuno!");
+          navigate({ to: "/app" });
+        } catch {
+          toast.error("Failed to load user profile");
+          navigate({ to: "/auth" });
+        }
+      } else {
+        toast.error("Authentication failed. Please try again.");
+        navigate({ to: "/auth" });
+      }
+    };
+    completeLogin();
+  }, [token, navigate, queryClient]);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4">

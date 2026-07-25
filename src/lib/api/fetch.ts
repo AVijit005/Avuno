@@ -22,9 +22,19 @@ let refreshPromise: Promise<string> | null = null;
 
 export function setAccessToken(token: string | null): void {
   accessToken = token;
+  if (typeof window !== 'undefined') {
+    if (token) {
+      localStorage.setItem('accessToken', token);
+    } else {
+      localStorage.removeItem('accessToken');
+    }
+  }
 }
 
 export function getAccessToken(): string | null {
+  if (!accessToken && typeof window !== 'undefined') {
+    accessToken = localStorage.getItem('accessToken');
+  }
   return accessToken;
 }
 
