@@ -26,14 +26,16 @@ export class GoogleOAuthController {
   @UseGuards(AuthGuard('google'))
   async googleAuthCallback(
     @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<AuthResponseDto> {
+    @Res() response: Response,
+  ): Promise<void> {
     const user = (request as any).user as OAuthUserPayload;
-    return this.authService.finishOAuthLogin(
+    const authResult = await this.authService.finishOAuthLogin(
       user,
       request.ip,
       request.headers['user-agent'] as string | undefined,
       response,
     );
+    const frontendUrl = process.env.APP_BASE_URL || 'https://www.avuno.xyz';
+    response.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(authResult.accessToken)}`);
   }
 }

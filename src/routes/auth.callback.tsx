@@ -1,0 +1,41 @@
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect } from "react";
+import { setAccessToken } from "@/lib/api/fetch";
+import { toast } from "sonner";
+import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
+
+export const Route = createFileRoute("/auth/callback")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    token: (search.token as string) || "",
+  }),
+  component: AuthCallback,
+});
+
+function AuthCallback() {
+  const { token } = Route.useSearch();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token) {
+      setAccessToken(token);
+      toast.success("Welcome to Avuno!");
+      navigate({ to: "/app" });
+    } else {
+      toast.error("Authentication failed. Please try again.");
+      navigate({ to: "/auth" });
+    }
+  }, [token, navigate]);
+
+  return (
+    <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
+      <AtmosphereBackground intensity="subtle" />
+      <div className="glass-strong rounded-3xl p-8 text-center max-w-sm">
+        <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
+          <span className="font-display text-xl font-bold leading-none">A</span>
+        </div>
+        <h2 className="mt-4 font-display text-xl">Logging you into Avuno…</h2>
+        <p className="mt-2 text-xs text-muted-foreground">Setting up your personal media universe</p>
+      </div>
+    </div>
+  );
+}

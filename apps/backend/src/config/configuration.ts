@@ -36,7 +36,7 @@ export default () => ({
   google: {
     clientId: process.env.GOOGLE_CLIENT_ID || '',
     clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
-    callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'http://localhost:3000/api/auth/google/callback',
+    callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'https://www.avuno.xyz/api/auth/google/callback',
   },
   oauth: {
     encryptionKey: process.env.OAUTH_ENCRYPTION_KEY || (() => { if (process.env.NODE_ENV === 'production') throw new Error('OAUTH_ENCRYPTION_KEY required in production'); return 'default_secret_key_32_bytes_long!'; })(),
