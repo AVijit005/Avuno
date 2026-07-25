@@ -1,4 +1,5 @@
 import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request, Response } from 'express';
@@ -12,7 +13,10 @@ interface OAuthUserPayload {
 
 @Controller('auth')
 export class GoogleOAuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly config: ConfigService,
+  ) {}
 
   @Get('google')
   @Throttle({ default: { limit: 10, ttl: 60000 } })
@@ -35,7 +39,7 @@ export class GoogleOAuthController {
       request.headers['user-agent'] as string | undefined,
       response,
     );
-    const frontendUrl = 'https://www.avuno.xyz';
+    const frontendUrl = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
     response.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(authResult.accessToken)}`);
   }
 }

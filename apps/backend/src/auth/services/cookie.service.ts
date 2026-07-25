@@ -13,7 +13,7 @@ export class CookieService {
     response.cookie(REFRESH_TOKEN_COOKIE, token, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: 'lax',
       path: '/api/auth',
       maxAge: maxAgeSeconds * 1000,
       domain: this.config.get<string>('cookie.domain') || undefined,
@@ -29,7 +29,7 @@ export class CookieService {
     response.clearCookie(REFRESH_TOKEN_COOKIE, {
       httpOnly: true,
       secure: isProduction,
-      sameSite: isProduction ? 'none' : 'lax',
+      sameSite: 'lax',
       path: '/api/auth',
       domain: this.config.get<string>('cookie.domain') || undefined,
     });

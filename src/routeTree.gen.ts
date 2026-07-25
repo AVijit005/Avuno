@@ -9,83 +9,64 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VisualRouteImport } from './routes/visual'
-import { Route as TermsRouteImport } from './routes/terms'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as AuthRouteImport } from './routes/auth'
-import { Route as AppRouteImport } from './routes/app'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AppRouteImport } from './routes/app'
+import { Route as AuthRouteImport } from './routes/auth'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as TermsRouteImport } from './routes/terms'
+import { Route as VisualRouteImport } from './routes/visual'
 import { Route as AppIndexRouteImport } from './routes/app.index'
-import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
-import { Route as AppWrappedRouteImport } from './routes/app.wrapped'
-import { Route as AppTimelineRouteImport } from './routes/app.timeline'
-import { Route as AppSettingsRouteImport } from './routes/app.settings'
-import { Route as AppSearchRouteImport } from './routes/app.search'
-import { Route as AppSaveForLaterRouteImport } from './routes/app.save-for-later'
-import { Route as AppQuotesRouteImport } from './routes/app.quotes'
-import { Route as AppProfileRouteImport } from './routes/app.profile'
-import { Route as AppOnboardingRouteImport } from './routes/app.onboarding'
-import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
-import { Route as AppMuseumRouteImport } from './routes/app.museum'
-import { Route as AppLibraryRouteImport } from './routes/app.library'
-import { Route as AppJournalRouteImport } from './routes/app.journal'
-import { Route as AppImportRouteImport } from './routes/app.import'
-import { Route as AppGoalsRouteImport } from './routes/app.goals'
-import { Route as AppDevRouteImport } from './routes/app.dev'
-import { Route as AppCollectionsRouteImport } from './routes/app.collections'
-import { Route as AppCalendarRouteImport } from './routes/app.calendar'
-import { Route as AppBookmarksRouteImport } from './routes/app.bookmarks'
-import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
 import { Route as AppAchievementsRouteImport } from './routes/app.achievements'
-import { Route as AppLibraryIndexRouteImport } from './routes/app.library.index'
-import { Route as AppFranchisesIndexRouteImport } from './routes/app.franchises.index'
-import { Route as AppCreatorsIndexRouteImport } from './routes/app.creators.index'
-import { Route as AppCollectionsIndexRouteImport } from './routes/app.collections.index'
+import { Route as AppAnalyticsRouteImport } from './routes/app.analytics'
+import { Route as AppBookmarksRouteImport } from './routes/app.bookmarks'
+import { Route as AppCalendarRouteImport } from './routes/app.calendar'
+import { Route as AppCollectionsRouteImport } from './routes/app.collections'
+import { Route as AppDevRouteImport } from './routes/app.dev'
+import { Route as AppGoalsRouteImport } from './routes/app.goals'
+import { Route as AppImportRouteImport } from './routes/app.import'
+import { Route as AppJournalRouteImport } from './routes/app.journal'
+import { Route as AppLibraryRouteImport } from './routes/app.library'
+import { Route as AppMuseumRouteImport } from './routes/app.museum'
+import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
+import { Route as AppOnboardingRouteImport } from './routes/app.onboarding'
+import { Route as AppProfileRouteImport } from './routes/app.profile'
+import { Route as AppQuotesRouteImport } from './routes/app.quotes'
+import { Route as AppSaveForLaterRouteImport } from './routes/app.save-for-later'
+import { Route as AppSearchRouteImport } from './routes/app.search'
+import { Route as AppSettingsRouteImport } from './routes/app.settings'
+import { Route as AppTimelineRouteImport } from './routes/app.timeline'
+import { Route as AppWrappedRouteImport } from './routes/app.wrapped'
+import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
+import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
 import { Route as AppCharactersIndexRouteImport } from './routes/app.characters.index'
-import { Route as AppTagsTagRouteImport } from './routes/app.tags.$tag'
-import { Route as AppSettingsEmailCaptureRouteImport } from './routes/app.settings.email-capture'
-import { Route as AppMediaIdRouteImport } from './routes/app.media.$id'
-import { Route as AppLibraryRewatchingRouteImport } from './routes/app.library.rewatching'
-import { Route as AppLibraryRecentlyFinishedRouteImport } from './routes/app.library.recently-finished'
-import { Route as AppLibraryPlanningRouteImport } from './routes/app.library.planning'
-import { Route as AppLibraryPausedRouteImport } from './routes/app.library.paused'
-import { Route as AppLibraryInProgressRouteImport } from './routes/app.library.in-progress'
-import { Route as AppLibraryFavoritesRouteImport } from './routes/app.library.favorites'
-import { Route as AppLibraryDroppedRouteImport } from './routes/app.library.dropped'
-import { Route as AppLibraryContinueRouteImport } from './routes/app.library.continue'
-import { Route as AppLibraryCompletedRouteImport } from './routes/app.library.completed'
-import { Route as AppLibraryArchivedRouteImport } from './routes/app.library.archived'
-import { Route as AppLibraryAllRouteImport } from './routes/app.library.all'
-import { Route as AppLibraryKindRouteImport } from './routes/app.library.$kind'
-import { Route as AppFranchisesIdRouteImport } from './routes/app.franchises.$id'
-import { Route as AppCreatorsIdRouteImport } from './routes/app.creators.$id'
-import { Route as AppCollectionsIdRouteImport } from './routes/app.collections.$id'
 import { Route as AppCharactersIdRouteImport } from './routes/app.characters.$id'
+import { Route as AppCollectionsIndexRouteImport } from './routes/app.collections.index'
+import { Route as AppCollectionsIdRouteImport } from './routes/app.collections.$id'
+import { Route as AppCreatorsIndexRouteImport } from './routes/app.creators.index'
+import { Route as AppCreatorsIdRouteImport } from './routes/app.creators.$id'
+import { Route as AppFranchisesIndexRouteImport } from './routes/app.franchises.index'
+import { Route as AppFranchisesIdRouteImport } from './routes/app.franchises.$id'
+import { Route as AppLibraryIndexRouteImport } from './routes/app.library.index'
+import { Route as AppLibraryKindRouteImport } from './routes/app.library.$kind'
+import { Route as AppLibraryAllRouteImport } from './routes/app.library.all'
+import { Route as AppLibraryArchivedRouteImport } from './routes/app.library.archived'
+import { Route as AppLibraryCompletedRouteImport } from './routes/app.library.completed'
+import { Route as AppLibraryContinueRouteImport } from './routes/app.library.continue'
+import { Route as AppLibraryDroppedRouteImport } from './routes/app.library.dropped'
+import { Route as AppLibraryFavoritesRouteImport } from './routes/app.library.favorites'
+import { Route as AppLibraryInProgressRouteImport } from './routes/app.library.in-progress'
+import { Route as AppLibraryPausedRouteImport } from './routes/app.library.paused'
+import { Route as AppLibraryPlanningRouteImport } from './routes/app.library.planning'
+import { Route as AppLibraryRecentlyFinishedRouteImport } from './routes/app.library.recently-finished'
+import { Route as AppLibraryRewatchingRouteImport } from './routes/app.library.rewatching'
+import { Route as AppMediaIdRouteImport } from './routes/app.media.$id'
+import { Route as AppSettingsEmailCaptureRouteImport } from './routes/app.settings.email-capture'
+import { Route as AppTagsTagRouteImport } from './routes/app.tags.$tag'
 
-const VisualRoute = VisualRouteImport.update({
-  id: '/visual',
-  path: '/visual',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppRoute = AppRouteImport.update({
@@ -93,9 +74,29 @@ const AppRoute = AppRouteImport.update({
   path: '/app',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VisualRoute = VisualRouteImport.update({
+  id: '/visual',
+  path: '/visual',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AppIndexRoute = AppIndexRouteImport.update({
@@ -103,99 +104,9 @@ const AppIndexRoute = AppIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppRoute,
 } as any)
-const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => AuthRoute,
-} as any)
-const AppWrappedRoute = AppWrappedRouteImport.update({
-  id: '/wrapped',
-  path: '/wrapped',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppTimelineRoute = AppTimelineRouteImport.update({
-  id: '/timeline',
-  path: '/timeline',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSettingsRoute = AppSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSearchRoute = AppSearchRouteImport.update({
-  id: '/search',
-  path: '/search',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppSaveForLaterRoute = AppSaveForLaterRouteImport.update({
-  id: '/save-for-later',
-  path: '/save-for-later',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppQuotesRoute = AppQuotesRouteImport.update({
-  id: '/quotes',
-  path: '/quotes',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppProfileRoute = AppProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppOnboardingRoute = AppOnboardingRouteImport.update({
-  id: '/onboarding',
-  path: '/onboarding',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppNotificationsRoute = AppNotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppMuseumRoute = AppMuseumRouteImport.update({
-  id: '/museum',
-  path: '/museum',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppLibraryRoute = AppLibraryRouteImport.update({
-  id: '/library',
-  path: '/library',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppJournalRoute = AppJournalRouteImport.update({
-  id: '/journal',
-  path: '/journal',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppImportRoute = AppImportRouteImport.update({
-  id: '/import',
-  path: '/import',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppGoalsRoute = AppGoalsRouteImport.update({
-  id: '/goals',
-  path: '/goals',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppDevRoute = AppDevRouteImport.update({
-  id: '/dev',
-  path: '/dev',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppCollectionsRoute = AppCollectionsRouteImport.update({
-  id: '/collections',
-  path: '/collections',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppCalendarRoute = AppCalendarRouteImport.update({
-  id: '/calendar',
-  path: '/calendar',
-  getParentRoute: () => AppRoute,
-} as any)
-const AppBookmarksRoute = AppBookmarksRouteImport.update({
-  id: '/bookmarks',
-  path: '/bookmarks',
+const AppAchievementsRoute = AppAchievementsRouteImport.update({
+  id: '/achievements',
+  path: '/achievements',
   getParentRoute: () => AppRoute,
 } as any)
 const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
@@ -203,24 +114,114 @@ const AppAnalyticsRoute = AppAnalyticsRouteImport.update({
   path: '/analytics',
   getParentRoute: () => AppRoute,
 } as any)
-const AppAchievementsRoute = AppAchievementsRouteImport.update({
-  id: '/achievements',
-  path: '/achievements',
+const AppBookmarksRoute = AppBookmarksRouteImport.update({
+  id: '/bookmarks',
+  path: '/bookmarks',
   getParentRoute: () => AppRoute,
 } as any)
-const AppLibraryIndexRoute = AppLibraryIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppFranchisesIndexRoute = AppFranchisesIndexRouteImport.update({
-  id: '/franchises/',
-  path: '/franchises/',
+const AppCalendarRoute = AppCalendarRouteImport.update({
+  id: '/calendar',
+  path: '/calendar',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCreatorsIndexRoute = AppCreatorsIndexRouteImport.update({
-  id: '/creators/',
-  path: '/creators/',
+const AppCollectionsRoute = AppCollectionsRouteImport.update({
+  id: '/collections',
+  path: '/collections',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppDevRoute = AppDevRouteImport.update({
+  id: '/dev',
+  path: '/dev',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppGoalsRoute = AppGoalsRouteImport.update({
+  id: '/goals',
+  path: '/goals',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppImportRoute = AppImportRouteImport.update({
+  id: '/import',
+  path: '/import',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppJournalRoute = AppJournalRouteImport.update({
+  id: '/journal',
+  path: '/journal',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryRoute = AppLibraryRouteImport.update({
+  id: '/library',
+  path: '/library',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMuseumRoute = AppMuseumRouteImport.update({
+  id: '/museum',
+  path: '/museum',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppNotificationsRoute = AppNotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppOnboardingRoute = AppOnboardingRouteImport.update({
+  id: '/onboarding',
+  path: '/onboarding',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppProfileRoute = AppProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppQuotesRoute = AppQuotesRouteImport.update({
+  id: '/quotes',
+  path: '/quotes',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSaveForLaterRoute = AppSaveForLaterRouteImport.update({
+  id: '/save-for-later',
+  path: '/save-for-later',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSearchRoute = AppSearchRouteImport.update({
+  id: '/search',
+  path: '/search',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppSettingsRoute = AppSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppTimelineRoute = AppTimelineRouteImport.update({
+  id: '/timeline',
+  path: '/timeline',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppWrappedRoute = AppWrappedRouteImport.update({
+  id: '/wrapped',
+  path: '/wrapped',
+  getParentRoute: () => AppRoute,
+} as any)
+const AuthCallbackRoute = AuthCallbackRouteImport.update({
+  id: '/callback',
+  path: '/callback',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => AuthRoute,
+} as any)
+const AppCharactersIndexRoute = AppCharactersIndexRouteImport.update({
+  id: '/characters/',
+  path: '/characters/',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppCharactersIdRoute = AppCharactersIdRouteImport.update({
+  id: '/characters/$id',
+  path: '/characters/$id',
   getParentRoute: () => AppRoute,
 } as any)
 const AppCollectionsIndexRoute = AppCollectionsIndexRouteImport.update({
@@ -228,29 +229,84 @@ const AppCollectionsIndexRoute = AppCollectionsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => AppCollectionsRoute,
 } as any)
-const AppCharactersIndexRoute = AppCharactersIndexRouteImport.update({
-  id: '/characters/',
-  path: '/characters/',
+const AppCollectionsIdRoute = AppCollectionsIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppCollectionsRoute,
+} as any)
+const AppCreatorsIndexRoute = AppCreatorsIndexRouteImport.update({
+  id: '/creators/',
+  path: '/creators/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppTagsTagRoute = AppTagsTagRouteImport.update({
-  id: '/tags/$tag',
-  path: '/tags/$tag',
+const AppCreatorsIdRoute = AppCreatorsIdRouteImport.update({
+  id: '/creators/$id',
+  path: '/creators/$id',
   getParentRoute: () => AppRoute,
 } as any)
-const AppSettingsEmailCaptureRoute = AppSettingsEmailCaptureRouteImport.update({
-  id: '/email-capture',
-  path: '/email-capture',
-  getParentRoute: () => AppSettingsRoute,
-} as any)
-const AppMediaIdRoute = AppMediaIdRouteImport.update({
-  id: '/media/$id',
-  path: '/media/$id',
+const AppFranchisesIndexRoute = AppFranchisesIndexRouteImport.update({
+  id: '/franchises/',
+  path: '/franchises/',
   getParentRoute: () => AppRoute,
 } as any)
-const AppLibraryRewatchingRoute = AppLibraryRewatchingRouteImport.update({
-  id: '/rewatching',
-  path: '/rewatching',
+const AppFranchisesIdRoute = AppFranchisesIdRouteImport.update({
+  id: '/franchises/$id',
+  path: '/franchises/$id',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppLibraryIndexRoute = AppLibraryIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryKindRoute = AppLibraryKindRouteImport.update({
+  id: '/$kind',
+  path: '/$kind',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryAllRoute = AppLibraryAllRouteImport.update({
+  id: '/all',
+  path: '/all',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryArchivedRoute = AppLibraryArchivedRouteImport.update({
+  id: '/archived',
+  path: '/archived',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryCompletedRoute = AppLibraryCompletedRouteImport.update({
+  id: '/completed',
+  path: '/completed',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryContinueRoute = AppLibraryContinueRouteImport.update({
+  id: '/continue',
+  path: '/continue',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryDroppedRoute = AppLibraryDroppedRouteImport.update({
+  id: '/dropped',
+  path: '/dropped',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryFavoritesRoute = AppLibraryFavoritesRouteImport.update({
+  id: '/favorites',
+  path: '/favorites',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryInProgressRoute = AppLibraryInProgressRouteImport.update({
+  id: '/in-progress',
+  path: '/in-progress',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryPausedRoute = AppLibraryPausedRouteImport.update({
+  id: '/paused',
+  path: '/paused',
+  getParentRoute: () => AppLibraryRoute,
+} as any)
+const AppLibraryPlanningRoute = AppLibraryPlanningRouteImport.update({
+  id: '/planning',
+  path: '/planning',
   getParentRoute: () => AppLibraryRoute,
 } as any)
 const AppLibraryRecentlyFinishedRoute =
@@ -259,74 +315,24 @@ const AppLibraryRecentlyFinishedRoute =
     path: '/recently-finished',
     getParentRoute: () => AppLibraryRoute,
   } as any)
-const AppLibraryPlanningRoute = AppLibraryPlanningRouteImport.update({
-  id: '/planning',
-  path: '/planning',
+const AppLibraryRewatchingRoute = AppLibraryRewatchingRouteImport.update({
+  id: '/rewatching',
+  path: '/rewatching',
   getParentRoute: () => AppLibraryRoute,
 } as any)
-const AppLibraryPausedRoute = AppLibraryPausedRouteImport.update({
-  id: '/paused',
-  path: '/paused',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryInProgressRoute = AppLibraryInProgressRouteImport.update({
-  id: '/in-progress',
-  path: '/in-progress',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryFavoritesRoute = AppLibraryFavoritesRouteImport.update({
-  id: '/favorites',
-  path: '/favorites',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryDroppedRoute = AppLibraryDroppedRouteImport.update({
-  id: '/dropped',
-  path: '/dropped',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryContinueRoute = AppLibraryContinueRouteImport.update({
-  id: '/continue',
-  path: '/continue',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryCompletedRoute = AppLibraryCompletedRouteImport.update({
-  id: '/completed',
-  path: '/completed',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryArchivedRoute = AppLibraryArchivedRouteImport.update({
-  id: '/archived',
-  path: '/archived',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryAllRoute = AppLibraryAllRouteImport.update({
-  id: '/all',
-  path: '/all',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppLibraryKindRoute = AppLibraryKindRouteImport.update({
-  id: '/$kind',
-  path: '/$kind',
-  getParentRoute: () => AppLibraryRoute,
-} as any)
-const AppFranchisesIdRoute = AppFranchisesIdRouteImport.update({
-  id: '/franchises/$id',
-  path: '/franchises/$id',
+const AppMediaIdRoute = AppMediaIdRouteImport.update({
+  id: '/media/$id',
+  path: '/media/$id',
   getParentRoute: () => AppRoute,
 } as any)
-const AppCreatorsIdRoute = AppCreatorsIdRouteImport.update({
-  id: '/creators/$id',
-  path: '/creators/$id',
-  getParentRoute: () => AppRoute,
+const AppSettingsEmailCaptureRoute = AppSettingsEmailCaptureRouteImport.update({
+  id: '/email-capture',
+  path: '/email-capture',
+  getParentRoute: () => AppSettingsRoute,
 } as any)
-const AppCollectionsIdRoute = AppCollectionsIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => AppCollectionsRoute,
-} as any)
-const AppCharactersIdRoute = AppCharactersIdRouteImport.update({
-  id: '/characters/$id',
-  path: '/characters/$id',
+const AppTagsTagRoute = AppTagsTagRouteImport.update({
+  id: '/tags/$tag',
+  path: '/tags/$tag',
   getParentRoute: () => AppRoute,
 } as any)
 
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/timeline': typeof AppTimelineRoute
   '/app/wrapped': typeof AppWrappedRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/app/': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
@@ -410,6 +417,7 @@ export interface FileRoutesByTo {
   '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/timeline': typeof AppTimelineRoute
   '/app/wrapped': typeof AppWrappedRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/app': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
@@ -466,6 +474,7 @@ export interface FileRoutesById {
   '/app/settings': typeof AppSettingsRouteWithChildren
   '/app/timeline': typeof AppTimelineRoute
   '/app/wrapped': typeof AppWrappedRoute
+  '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
   '/app/': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
@@ -523,6 +532,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/timeline'
     | '/app/wrapped'
+    | '/auth/callback'
     | '/auth/forgot-password'
     | '/app/'
     | '/app/characters/$id'
@@ -575,6 +585,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/timeline'
     | '/app/wrapped'
+    | '/auth/callback'
     | '/auth/forgot-password'
     | '/app'
     | '/app/characters/$id'
@@ -630,6 +641,7 @@ export interface FileRouteTypes {
     | '/app/settings'
     | '/app/timeline'
     | '/app/wrapped'
+    | '/auth/callback'
     | '/auth/forgot-password'
     | '/app/'
     | '/app/characters/$id'
@@ -670,39 +682,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/visual': {
-      id: '/visual'
-      path: '/visual'
-      fullPath: '/visual'
-      preLoaderRoute: typeof VisualRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app': {
@@ -712,11 +696,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/visual': {
+      id: '/visual'
+      path: '/visual'
+      fullPath: '/visual'
+      preLoaderRoute: typeof VisualRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/app/': {
@@ -726,137 +738,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppIndexRouteImport
       parentRoute: typeof AppRoute
     }
-    '/auth/forgot-password': {
-      id: '/auth/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/auth/forgot-password'
-      preLoaderRoute: typeof AuthForgotPasswordRouteImport
-      parentRoute: typeof AuthRoute
-    }
-    '/app/wrapped': {
-      id: '/app/wrapped'
-      path: '/wrapped'
-      fullPath: '/app/wrapped'
-      preLoaderRoute: typeof AppWrappedRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/timeline': {
-      id: '/app/timeline'
-      path: '/timeline'
-      fullPath: '/app/timeline'
-      preLoaderRoute: typeof AppTimelineRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/settings': {
-      id: '/app/settings'
-      path: '/settings'
-      fullPath: '/app/settings'
-      preLoaderRoute: typeof AppSettingsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/search': {
-      id: '/app/search'
-      path: '/search'
-      fullPath: '/app/search'
-      preLoaderRoute: typeof AppSearchRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/save-for-later': {
-      id: '/app/save-for-later'
-      path: '/save-for-later'
-      fullPath: '/app/save-for-later'
-      preLoaderRoute: typeof AppSaveForLaterRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/quotes': {
-      id: '/app/quotes'
-      path: '/quotes'
-      fullPath: '/app/quotes'
-      preLoaderRoute: typeof AppQuotesRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/profile': {
-      id: '/app/profile'
-      path: '/profile'
-      fullPath: '/app/profile'
-      preLoaderRoute: typeof AppProfileRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/onboarding': {
-      id: '/app/onboarding'
-      path: '/onboarding'
-      fullPath: '/app/onboarding'
-      preLoaderRoute: typeof AppOnboardingRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/notifications': {
-      id: '/app/notifications'
-      path: '/notifications'
-      fullPath: '/app/notifications'
-      preLoaderRoute: typeof AppNotificationsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/museum': {
-      id: '/app/museum'
-      path: '/museum'
-      fullPath: '/app/museum'
-      preLoaderRoute: typeof AppMuseumRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/library': {
-      id: '/app/library'
-      path: '/library'
-      fullPath: '/app/library'
-      preLoaderRoute: typeof AppLibraryRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/journal': {
-      id: '/app/journal'
-      path: '/journal'
-      fullPath: '/app/journal'
-      preLoaderRoute: typeof AppJournalRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/import': {
-      id: '/app/import'
-      path: '/import'
-      fullPath: '/app/import'
-      preLoaderRoute: typeof AppImportRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/goals': {
-      id: '/app/goals'
-      path: '/goals'
-      fullPath: '/app/goals'
-      preLoaderRoute: typeof AppGoalsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/dev': {
-      id: '/app/dev'
-      path: '/dev'
-      fullPath: '/app/dev'
-      preLoaderRoute: typeof AppDevRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/collections': {
-      id: '/app/collections'
-      path: '/collections'
-      fullPath: '/app/collections'
-      preLoaderRoute: typeof AppCollectionsRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/calendar': {
-      id: '/app/calendar'
-      path: '/calendar'
-      fullPath: '/app/calendar'
-      preLoaderRoute: typeof AppCalendarRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/bookmarks': {
-      id: '/app/bookmarks'
-      path: '/bookmarks'
-      fullPath: '/app/bookmarks'
-      preLoaderRoute: typeof AppBookmarksRouteImport
+    '/app/achievements': {
+      id: '/app/achievements'
+      path: '/achievements'
+      fullPath: '/app/achievements'
+      preLoaderRoute: typeof AppAchievementsRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/analytics': {
@@ -866,32 +752,158 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppAnalyticsRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/achievements': {
-      id: '/app/achievements'
-      path: '/achievements'
-      fullPath: '/app/achievements'
-      preLoaderRoute: typeof AppAchievementsRouteImport
+    '/app/bookmarks': {
+      id: '/app/bookmarks'
+      path: '/bookmarks'
+      fullPath: '/app/bookmarks'
+      preLoaderRoute: typeof AppBookmarksRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/library/': {
-      id: '/app/library/'
-      path: '/'
-      fullPath: '/app/library/'
-      preLoaderRoute: typeof AppLibraryIndexRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/franchises/': {
-      id: '/app/franchises/'
-      path: '/franchises'
-      fullPath: '/app/franchises/'
-      preLoaderRoute: typeof AppFranchisesIndexRouteImport
+    '/app/calendar': {
+      id: '/app/calendar'
+      path: '/calendar'
+      fullPath: '/app/calendar'
+      preLoaderRoute: typeof AppCalendarRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/creators/': {
-      id: '/app/creators/'
-      path: '/creators'
-      fullPath: '/app/creators/'
-      preLoaderRoute: typeof AppCreatorsIndexRouteImport
+    '/app/collections': {
+      id: '/app/collections'
+      path: '/collections'
+      fullPath: '/app/collections'
+      preLoaderRoute: typeof AppCollectionsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/dev': {
+      id: '/app/dev'
+      path: '/dev'
+      fullPath: '/app/dev'
+      preLoaderRoute: typeof AppDevRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/goals': {
+      id: '/app/goals'
+      path: '/goals'
+      fullPath: '/app/goals'
+      preLoaderRoute: typeof AppGoalsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/import': {
+      id: '/app/import'
+      path: '/import'
+      fullPath: '/app/import'
+      preLoaderRoute: typeof AppImportRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/journal': {
+      id: '/app/journal'
+      path: '/journal'
+      fullPath: '/app/journal'
+      preLoaderRoute: typeof AppJournalRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/library': {
+      id: '/app/library'
+      path: '/library'
+      fullPath: '/app/library'
+      preLoaderRoute: typeof AppLibraryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/museum': {
+      id: '/app/museum'
+      path: '/museum'
+      fullPath: '/app/museum'
+      preLoaderRoute: typeof AppMuseumRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/notifications': {
+      id: '/app/notifications'
+      path: '/notifications'
+      fullPath: '/app/notifications'
+      preLoaderRoute: typeof AppNotificationsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/onboarding': {
+      id: '/app/onboarding'
+      path: '/onboarding'
+      fullPath: '/app/onboarding'
+      preLoaderRoute: typeof AppOnboardingRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/profile': {
+      id: '/app/profile'
+      path: '/profile'
+      fullPath: '/app/profile'
+      preLoaderRoute: typeof AppProfileRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/quotes': {
+      id: '/app/quotes'
+      path: '/quotes'
+      fullPath: '/app/quotes'
+      preLoaderRoute: typeof AppQuotesRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/save-for-later': {
+      id: '/app/save-for-later'
+      path: '/save-for-later'
+      fullPath: '/app/save-for-later'
+      preLoaderRoute: typeof AppSaveForLaterRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/search': {
+      id: '/app/search'
+      path: '/search'
+      fullPath: '/app/search'
+      preLoaderRoute: typeof AppSearchRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings': {
+      id: '/app/settings'
+      path: '/settings'
+      fullPath: '/app/settings'
+      preLoaderRoute: typeof AppSettingsRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/timeline': {
+      id: '/app/timeline'
+      path: '/timeline'
+      fullPath: '/app/timeline'
+      preLoaderRoute: typeof AppTimelineRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/wrapped': {
+      id: '/app/wrapped'
+      path: '/wrapped'
+      fullPath: '/app/wrapped'
+      preLoaderRoute: typeof AppWrappedRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/auth/callback': {
+      id: '/auth/callback'
+      path: '/callback'
+      fullPath: '/auth/callback'
+      preLoaderRoute: typeof AuthCallbackRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/forgot-password': {
+      id: '/auth/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/auth/forgot-password'
+      preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/app/characters/': {
+      id: '/app/characters/'
+      path: '/characters'
+      fullPath: '/app/characters/'
+      preLoaderRoute: typeof AppCharactersIndexRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/characters/$id': {
+      id: '/app/characters/$id'
+      path: '/characters/$id'
+      fullPath: '/app/characters/$id'
+      preLoaderRoute: typeof AppCharactersIdRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/collections/': {
@@ -901,123 +913,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCollectionsIndexRouteImport
       parentRoute: typeof AppCollectionsRoute
     }
-    '/app/characters/': {
-      id: '/app/characters/'
-      path: '/characters'
-      fullPath: '/app/characters/'
-      preLoaderRoute: typeof AppCharactersIndexRouteImport
-      parentRoute: typeof AppRoute
+    '/app/collections/$id': {
+      id: '/app/collections/$id'
+      path: '/$id'
+      fullPath: '/app/collections/$id'
+      preLoaderRoute: typeof AppCollectionsIdRouteImport
+      parentRoute: typeof AppCollectionsRoute
     }
-    '/app/tags/$tag': {
-      id: '/app/tags/$tag'
-      path: '/tags/$tag'
-      fullPath: '/app/tags/$tag'
-      preLoaderRoute: typeof AppTagsTagRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/settings/email-capture': {
-      id: '/app/settings/email-capture'
-      path: '/email-capture'
-      fullPath: '/app/settings/email-capture'
-      preLoaderRoute: typeof AppSettingsEmailCaptureRouteImport
-      parentRoute: typeof AppSettingsRoute
-    }
-    '/app/media/$id': {
-      id: '/app/media/$id'
-      path: '/media/$id'
-      fullPath: '/app/media/$id'
-      preLoaderRoute: typeof AppMediaIdRouteImport
-      parentRoute: typeof AppRoute
-    }
-    '/app/library/rewatching': {
-      id: '/app/library/rewatching'
-      path: '/rewatching'
-      fullPath: '/app/library/rewatching'
-      preLoaderRoute: typeof AppLibraryRewatchingRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/recently-finished': {
-      id: '/app/library/recently-finished'
-      path: '/recently-finished'
-      fullPath: '/app/library/recently-finished'
-      preLoaderRoute: typeof AppLibraryRecentlyFinishedRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/planning': {
-      id: '/app/library/planning'
-      path: '/planning'
-      fullPath: '/app/library/planning'
-      preLoaderRoute: typeof AppLibraryPlanningRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/paused': {
-      id: '/app/library/paused'
-      path: '/paused'
-      fullPath: '/app/library/paused'
-      preLoaderRoute: typeof AppLibraryPausedRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/in-progress': {
-      id: '/app/library/in-progress'
-      path: '/in-progress'
-      fullPath: '/app/library/in-progress'
-      preLoaderRoute: typeof AppLibraryInProgressRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/favorites': {
-      id: '/app/library/favorites'
-      path: '/favorites'
-      fullPath: '/app/library/favorites'
-      preLoaderRoute: typeof AppLibraryFavoritesRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/dropped': {
-      id: '/app/library/dropped'
-      path: '/dropped'
-      fullPath: '/app/library/dropped'
-      preLoaderRoute: typeof AppLibraryDroppedRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/continue': {
-      id: '/app/library/continue'
-      path: '/continue'
-      fullPath: '/app/library/continue'
-      preLoaderRoute: typeof AppLibraryContinueRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/completed': {
-      id: '/app/library/completed'
-      path: '/completed'
-      fullPath: '/app/library/completed'
-      preLoaderRoute: typeof AppLibraryCompletedRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/archived': {
-      id: '/app/library/archived'
-      path: '/archived'
-      fullPath: '/app/library/archived'
-      preLoaderRoute: typeof AppLibraryArchivedRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/all': {
-      id: '/app/library/all'
-      path: '/all'
-      fullPath: '/app/library/all'
-      preLoaderRoute: typeof AppLibraryAllRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/library/$kind': {
-      id: '/app/library/$kind'
-      path: '/$kind'
-      fullPath: '/app/library/$kind'
-      preLoaderRoute: typeof AppLibraryKindRouteImport
-      parentRoute: typeof AppLibraryRoute
-    }
-    '/app/franchises/$id': {
-      id: '/app/franchises/$id'
-      path: '/franchises/$id'
-      fullPath: '/app/franchises/$id'
-      preLoaderRoute: typeof AppFranchisesIdRouteImport
+    '/app/creators/': {
+      id: '/app/creators/'
+      path: '/creators'
+      fullPath: '/app/creators/'
+      preLoaderRoute: typeof AppCreatorsIndexRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/creators/$id': {
@@ -1027,18 +934,130 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppCreatorsIdRouteImport
       parentRoute: typeof AppRoute
     }
-    '/app/collections/$id': {
-      id: '/app/collections/$id'
-      path: '/$id'
-      fullPath: '/app/collections/$id'
-      preLoaderRoute: typeof AppCollectionsIdRouteImport
-      parentRoute: typeof AppCollectionsRoute
+    '/app/franchises/': {
+      id: '/app/franchises/'
+      path: '/franchises'
+      fullPath: '/app/franchises/'
+      preLoaderRoute: typeof AppFranchisesIndexRouteImport
+      parentRoute: typeof AppRoute
     }
-    '/app/characters/$id': {
-      id: '/app/characters/$id'
-      path: '/characters/$id'
-      fullPath: '/app/characters/$id'
-      preLoaderRoute: typeof AppCharactersIdRouteImport
+    '/app/franchises/$id': {
+      id: '/app/franchises/$id'
+      path: '/franchises/$id'
+      fullPath: '/app/franchises/$id'
+      preLoaderRoute: typeof AppFranchisesIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/library/': {
+      id: '/app/library/'
+      path: '/'
+      fullPath: '/app/library/'
+      preLoaderRoute: typeof AppLibraryIndexRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/$kind': {
+      id: '/app/library/$kind'
+      path: '/$kind'
+      fullPath: '/app/library/$kind'
+      preLoaderRoute: typeof AppLibraryKindRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/all': {
+      id: '/app/library/all'
+      path: '/all'
+      fullPath: '/app/library/all'
+      preLoaderRoute: typeof AppLibraryAllRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/archived': {
+      id: '/app/library/archived'
+      path: '/archived'
+      fullPath: '/app/library/archived'
+      preLoaderRoute: typeof AppLibraryArchivedRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/completed': {
+      id: '/app/library/completed'
+      path: '/completed'
+      fullPath: '/app/library/completed'
+      preLoaderRoute: typeof AppLibraryCompletedRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/continue': {
+      id: '/app/library/continue'
+      path: '/continue'
+      fullPath: '/app/library/continue'
+      preLoaderRoute: typeof AppLibraryContinueRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/dropped': {
+      id: '/app/library/dropped'
+      path: '/dropped'
+      fullPath: '/app/library/dropped'
+      preLoaderRoute: typeof AppLibraryDroppedRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/favorites': {
+      id: '/app/library/favorites'
+      path: '/favorites'
+      fullPath: '/app/library/favorites'
+      preLoaderRoute: typeof AppLibraryFavoritesRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/in-progress': {
+      id: '/app/library/in-progress'
+      path: '/in-progress'
+      fullPath: '/app/library/in-progress'
+      preLoaderRoute: typeof AppLibraryInProgressRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/paused': {
+      id: '/app/library/paused'
+      path: '/paused'
+      fullPath: '/app/library/paused'
+      preLoaderRoute: typeof AppLibraryPausedRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/planning': {
+      id: '/app/library/planning'
+      path: '/planning'
+      fullPath: '/app/library/planning'
+      preLoaderRoute: typeof AppLibraryPlanningRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/recently-finished': {
+      id: '/app/library/recently-finished'
+      path: '/recently-finished'
+      fullPath: '/app/library/recently-finished'
+      preLoaderRoute: typeof AppLibraryRecentlyFinishedRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/library/rewatching': {
+      id: '/app/library/rewatching'
+      path: '/rewatching'
+      fullPath: '/app/library/rewatching'
+      preLoaderRoute: typeof AppLibraryRewatchingRouteImport
+      parentRoute: typeof AppLibraryRoute
+    }
+    '/app/media/$id': {
+      id: '/app/media/$id'
+      path: '/media/$id'
+      fullPath: '/app/media/$id'
+      preLoaderRoute: typeof AppMediaIdRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/settings/email-capture': {
+      id: '/app/settings/email-capture'
+      path: '/email-capture'
+      fullPath: '/app/settings/email-capture'
+      preLoaderRoute: typeof AppSettingsEmailCaptureRouteImport
+      parentRoute: typeof AppSettingsRoute
+    }
+    '/app/tags/$tag': {
+      id: '/app/tags/$tag'
+      path: '/tags/$tag'
+      fullPath: '/app/tags/$tag'
+      preLoaderRoute: typeof AppTagsTagRouteImport
       parentRoute: typeof AppRoute
     }
   }
@@ -1173,10 +1192,12 @@ const AppRouteChildren: AppRouteChildren = {
 const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 
 interface AuthRouteChildren {
+  AuthCallbackRoute: typeof AuthCallbackRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
+  AuthCallbackRoute: AuthCallbackRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
 }
 

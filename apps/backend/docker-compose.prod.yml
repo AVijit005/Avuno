@@ -72,7 +72,13 @@ services:
       MINIO_SECRET_KEY: ${MINIO_SECRET_KEY:-minioadmin}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
-      CORS_ORIGIN: ${CORS_ORIGIN:-http://localhost:5173}
+      CORS_ORIGIN: ${CORS_ORIGIN:-https://www.avuno.xyz}
+      FRONTEND_URL: ${FRONTEND_URL:-https://www.avuno.xyz}
+      COOKIE_DOMAIN: ${COOKIE_DOMAIN:-.avuno.xyz}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
+      GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-https://www.avuno.xyz/api/auth/google/callback}
+      OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY}
     depends_on:
       postgres:
         condition: service_healthy
