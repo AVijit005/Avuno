@@ -4,8 +4,8 @@ export default () => ({
   apiPrefix: process.env.API_PREFIX || 'api',
   swagger: {
     enabled: process.env.SWAGGER_ENABLED === 'true',
-    title: 'Chronicle API',
-    description: 'Chronicle production backend API',
+    title: 'Avuno API',
+    description: 'Avuno production backend API',
     version: '0.0.1',
     path: 'docs',
   },
@@ -19,7 +19,7 @@ export default () => ({
     db: parseInt(process.env.REDIS_DB || '0', 10),
   },
   bullmq: {
-    prefix: process.env.BULLMQ_PREFIX || 'chronicle',
+    prefix: process.env.BULLMQ_PREFIX || 'avuno',
   },
   jwt: {
     accessSecret: process.env.JWT_ACCESS_SECRET,

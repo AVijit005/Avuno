@@ -19,13 +19,13 @@ import { MagneticButton } from "@/components/landing/MagneticButton";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Chronicle — Every story you finish becomes part of your story" },
+      { title: "Avuno — Every story you finish becomes part of your story" },
       {
         name: "description",
         content:
           "A cinematic personal media journal for movies, anime, books, games, music and more. Beautifully organized, gently remembered.",
       },
-      { property: "og:title", content: "Chronicle" },
+      { property: "og:title", content: "Avuno" },
       { property: "og:description", content: "Every story you finish becomes part of your story." },
     ],
   }),
@@ -58,9 +58,9 @@ function Landing() {
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
           <Link to="/" className="flex items-center gap-2">
             <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-              <span className="font-display text-base leading-none">C</span>
+              <span className="font-display text-base leading-none">A</span>
             </div>
-            <span className="font-display text-lg leading-none">Chronicle</span>
+            <span className="font-display text-lg leading-none">Avuno</span>
           </Link>
           <nav className="hidden items-center gap-1 rounded-2xl px-1 py-1 text-sm md:flex">
             {[
@@ -198,7 +198,7 @@ function Landing() {
                 to="/auth"
                 className="inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-4 text-sm font-medium text-black press-scale animate-pulse-glow"
               >
-                Enter Chronicle <ArrowRight className="h-4 w-4" />
+                Enter Avuno <ArrowRight className="h-4 w-4" />
               </Link>
             </MagneticButton>
             <MagneticButton strength={0.18}>
@@ -218,12 +218,12 @@ function Landing() {
         <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <div className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-              <span className="font-display text-xs leading-none">C</span>
+              <span className="font-display text-xs leading-none">A</span>
             </div>
-            <span>Chronicle © {new Date().getFullYear()}</span>
+            <span>Avuno © {new Date().getFullYear()}</span>
           </div>
           <div className="flex gap-5">
-            <a href="mailto:press@chronicle.app" className="hover:text-foreground">
+            <a href="mailto:press@avuno.xyz" className="hover:text-foreground">
               Press
             </a>
             <Link to="/privacy" className="hover:text-foreground">

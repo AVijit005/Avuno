@@ -1,9 +1,9 @@
 {
-  "name": "@chronicle/backend",
+  "name": "@avuno/backend",
   "version": "0.0.1",
   "private": true,
-  "description": "Chronicle production backend",
-  "author": "Chronicle",
+  "description": "Avuno production backend",
+  "author": "Avuno",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",

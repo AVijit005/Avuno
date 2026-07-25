@@ -28,11 +28,11 @@ export function Sidebar({
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
         <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_0_24px_oklch(0.72_0.18_255/0.45)]">
-          <span className="font-display text-lg leading-none">C</span>
+          <span className="font-display text-lg leading-none">A</span>
         </div>
         {!collapsed && (
           <div className="min-w-0">
-            <div className="truncate font-display text-lg leading-none">Chronicle</div>
+            <div className="truncate font-display text-lg leading-none">Avuno</div>
             <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
               Memory operating system
             </div>

@@ -18,10 +18,10 @@ import { analytics } from "@/lib/analytics";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Enter Chronicle — the portal" },
+      { title: "Enter Avuno — the portal" },
       {
         name: "description",
-        content: "Sign in to Chronicle. Pick up your story where you left it.",
+        content: "Sign in to Avuno. Pick up your story where you left it.",
       },
     ],
   }),
@@ -247,9 +247,9 @@ function Auth() {
             <motion.div variants={cardLine}>
               <Link to="/" className="mb-5 inline-flex items-center gap-2 lg:hidden">
                 <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-                  <span className="font-display leading-none">C</span>
+                  <span className="font-display leading-none">A</span>
                 </div>
-                <span className="font-display text-lg">Chronicle</span>
+                <span className="font-display text-lg">Avuno</span>
               </Link>
             </motion.div>
 

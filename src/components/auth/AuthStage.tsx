@@ -467,7 +467,7 @@ export function AuthStage() {
               />
               <span className="font-display text-[22px] font-bold text-white leading-none z-10"
                 style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
-                C
+                A
               </span>
             </motion.div>
           </div>
@@ -486,7 +486,7 @@ export function AuthStage() {
                 },
               }}
             >
-              {"Chronicle".split("").map((ch, i) => (
+              {"Avuno".split("").map((ch, i) => (
                 <motion.span
                   key={i}
                   className="inline-block"

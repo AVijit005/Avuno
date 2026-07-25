@@ -95,7 +95,7 @@ export function LivingHero() {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="mx-auto mt-8 max-w-xl text-base text-muted-foreground md:text-lg"
           >
-            Chronicle is a cinematic memory journal for everything you watch, read, play and listen
+            Avuno is a cinematic memory journal for everything you watch, read, play and listen
             to — beautifully organized, gently remembered.
           </motion.p>
 
@@ -110,7 +110,7 @@ export function LivingHero() {
                 to="/auth"
                 className="group inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-medium text-black press-scale animate-pulse-glow"
               >
-                Start your Chronicle
+                Start with Avuno
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
             </MagneticButton>
