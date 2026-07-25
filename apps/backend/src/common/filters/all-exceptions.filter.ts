@@ -2,8 +2,6 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logge
 import { BaseExceptionFilter } from '@nestjs/core';
 import type { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
-import * as Sentry from '@sentry/nestjs';
-
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -44,9 +42,6 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
   }
 
   private resolveError(exception: unknown): { status: number; message: string | string[]; code?: string } {
-    if (process.env.SENTRY_DSN) {
-      Sentry.captureException(exception);
-    }
 
     // HttpException — use as-is
     if (exception instanceof HttpException) {

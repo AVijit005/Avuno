@@ -9,7 +9,6 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { randomUUID } from 'crypto';
 import type { Request, Response, NextFunction } from 'express';
 import { ValidationPipe } from '@nestjs/common';
-import * as Sentry from '@sentry/nestjs';
 import { AppModule } from './app.module';
 
 export async function createApp(options?: NestApplicationOptions): Promise<INestApplication> {
