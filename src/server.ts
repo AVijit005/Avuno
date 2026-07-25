@@ -30,11 +30,17 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
     return response;
   }
 
-  console.error(consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`));
-  return new Response(renderErrorPage(), {
-    status: 500,
-    headers: { "content-type": "text/html; charset=utf-8" },
-  });
+  const err = consumeLastCapturedError() ?? new Error(`h3 swallowed SSR error: ${body}`);
+  console.error(err);
+  const errMsg = err instanceof Error ? (err.stack || err.message) : String(err);
+
+  return new Response(
+    `<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>SSR Diagnostic Error</title></head><body style="font-family:monospace;padding:2rem;background:#111;color:#f87171;"><h1>SSR Runtime Error</h1><pre style="white-space:pre-wrap;background:#222;padding:1rem;border-radius:8px;">${errMsg}</pre><pre style="white-space:pre-wrap;background:#222;padding:1rem;border-radius:8px;">${body}</pre></body></html>`,
+    {
+      status: 500,
+      headers: { "content-type": "text/html; charset=utf-8" },
+    }
+  );
 }
 
 export default {
@@ -45,10 +51,14 @@ export default {
       return await normalizeCatastrophicSsrResponse(response);
     } catch (error) {
       console.error(error);
-      return new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      });
+      const errMsg = error instanceof Error ? (error.stack || error.message) : String(error);
+      return new Response(
+        `<!doctype html><html lang="en"><head><meta charset="utf-8"/><title>SSR Diagnostic Error</title></head><body style="font-family:monospace;padding:2rem;background:#111;color:#f87171;"><h1>SSR Fetch Error</h1><pre style="white-space:pre-wrap;background:#222;padding:1rem;border-radius:8px;">${errMsg}</pre></body></html>`,
+        {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }
+      );
     }
   },
 };
