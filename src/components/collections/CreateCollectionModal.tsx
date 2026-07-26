@@ -57,6 +57,9 @@ export function CreateCollectionModal({
             exit={{ y: 18, opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="modal-title"
             className="glass-strong relative w-full max-w-xl overflow-hidden rounded-[32px] p-8"
             style={{ boxShadow: "0 60px 140px -30px oklch(0 0 0 / 0.75)" }}
           >
@@ -78,7 +81,7 @@ export function CreateCollectionModal({
             <div className="text-[10px] uppercase tracking-[0.22em] text-primary/90">
               New collection
             </div>
-            <h2 className="mt-2 font-display text-3xl tracking-tight">Curate a new shelf</h2>
+            <h2 id="modal-title" className="mt-2 font-display text-3xl tracking-tight">Curate a new shelf</h2>
             <p className="mt-2 text-sm text-muted-foreground">
               A collection becomes a small story of its own.
             </p>
@@ -223,6 +226,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
+          aria-label={label}
           rows={3}
           className="mt-2 w-full resize-none rounded-2xl border border-border/60 bg-white/[0.03] px-4 py-3 text-sm placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
@@ -231,6 +235,7 @@ function Field({
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
+          aria-label={label}
           className="mt-2 w-full rounded-2xl border border-border/60 bg-white/[0.03] px-4 py-3 text-sm placeholder:text-muted-foreground/60 focus:border-primary/50 focus:outline-none focus:ring-2 focus:ring-primary/20"
         />
       )}

@@ -1084,6 +1084,7 @@ model UserTvSeason {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   tvSeason           TvSeason        @relation(fields: [tvSeasonId], references: [id], onDelete: Cascade)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1127,6 +1128,7 @@ model UserTvEpisode {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   tvEpisode          TvEpisode       @relation(fields: [tvEpisodeId], references: [id], onDelete: Cascade)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1214,6 +1216,7 @@ model UserAnimeEpisode {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   animeEpisode       AnimeEpisode    @relation(fields: [animeEpisodeId], references: [id], onDelete: Cascade)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1389,6 +1392,7 @@ model UserMusicTrack {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   musicTrack         MusicTrack      @relation(fields: [musicTrackId], references: [id], onDelete: Restrict)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1476,6 +1480,7 @@ model UserPodcastEpisode {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   podcastEpisode     PodcastEpisode  @relation(fields: [podcastEpisodeId], references: [id], onDelete: Restrict)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1563,6 +1568,7 @@ model UserCourseModule {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   courseModule       CourseModule    @relation(fields: [courseModuleId], references: [id], onDelete: Restrict)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -1606,6 +1612,7 @@ model UserCourseLesson {
   metadata           Json?           @map("metadata")
   createdAt          DateTime        @default(now()) @map("created_at")
   updatedAt          DateTime        @updatedAt @map("updated_at")
+  deletedAt          DateTime?       @map("deleted_at")
   courseLesson       CourseLesson    @relation(fields: [courseLessonId], references: [id], onDelete: Restrict)
   user               User            @relation(fields: [userId], references: [id], onDelete: Cascade)
 

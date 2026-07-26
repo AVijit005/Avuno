@@ -1,7 +1,16 @@
 import { motion } from "motion/react";
 import { CountUp } from "@/components/landing/CountUp";
 import { Suspense } from "react";
-import { ResponsiveContainer, PieChart, Pie, Cell, BarChart, Bar, XAxis, Tooltip } from "recharts";
+import { lazy, type ComponentType } from "react";
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+const PieChart = lazy(() => import("recharts").then((m) => ({ default: m.PieChart as unknown as ComponentType<any> })));
+const Pie = lazy(() => import("recharts").then((m) => ({ default: m.Pie as unknown as ComponentType<any> })));
+const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell as unknown as ComponentType<any> })));
+const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart as unknown as ComponentType<any> })));
+const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar as unknown as ComponentType<any> })));
+const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as ComponentType<any> })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
+
 import type { Collection } from "@/lib/types";
 
 const COLORS = [
@@ -109,3 +118,4 @@ function Card({ label, children }: { label: string; children: React.ReactNode })
     </motion.div>
   );
 }
+

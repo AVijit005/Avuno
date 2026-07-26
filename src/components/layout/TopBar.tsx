@@ -73,7 +73,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
         <div className="flex shrink-0 items-center gap-2">
           <button
             onClick={onOpenSearch}
-            className="hidden items-center gap-2 rounded-xl bg-white/[0.04] px-3 py-2 text-xs text-muted-foreground ring-1 ring-white/5 transition hover:text-foreground md:flex press-scale"
+            className="hidden items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 py-2 text-xs text-muted-foreground ring-1 ring-foreground/5 transition hover:text-foreground md:flex press-scale"
           >
             <Search className="h-3.5 w-3.5" /> Search across Chronicle
             <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 tracking-wider">
@@ -83,7 +83,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <button
             onClick={onOpenSearch}
             aria-label="Search"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.04] ring-1 ring-white/5 transition hover:text-primary md:hidden press-scale"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary md:hidden press-scale"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -91,14 +91,14 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={openAdd}
             aria-label="Add to Chronicle"
             title="Add (⌘N)"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.04] ring-1 ring-white/5 transition hover:text-primary press-scale"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Plus className="h-4 w-4" />
           </button>
           <Link
             to="/app/notifications"
             aria-label="Notifications"
-            className="relative grid h-9 w-9 place-items-center rounded-xl bg-white/[0.04] ring-1 ring-white/5 transition hover:text-primary press-scale"
+            className="relative grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Bell className="h-4 w-4" />
             {notifications?.unreadCount ? (
@@ -108,7 +108,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Link
             to="/app/settings"
             aria-label="Quick settings"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.04] ring-1 ring-white/5 transition hover:text-primary press-scale"
+            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Settings className="h-4 w-4" />
           </Link>

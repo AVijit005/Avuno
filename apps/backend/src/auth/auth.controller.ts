@@ -36,11 +36,10 @@ export class AuthController {
   @HttpCode(200)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   async refresh(
-    @Body() dto: RefreshAccessTokenDto,
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<AuthResponseDto> {
-    const refreshToken = dto.refreshToken || request.cookies?.[REFRESH_TOKEN_COOKIE];
+    const refreshToken = request.cookies?.[REFRESH_TOKEN_COOKIE];
     return this.authService.refresh(
       refreshToken,
       request.ip,
@@ -61,10 +60,11 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(200)
-  @UseGuards(JwtAuthGuard)
   async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response): Promise<void> {
     const refreshToken = request.cookies?.[REFRESH_TOKEN_COOKIE];
-    await this.authService.logout(refreshToken, response);
+    if (refreshToken) {
+      await this.authService.logout(refreshToken, response);
+    }
   }
 
   @Post('logout-all')

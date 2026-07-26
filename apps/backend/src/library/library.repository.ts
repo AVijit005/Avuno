@@ -161,14 +161,22 @@ export class LibraryRepository {
       return this.executeFindAll(delegate, userId, type, params);
     }
 
-    const all: LibraryRow[] = [];
-    for (const t of this.getTypes()) {
+    const promises = this.getTypes().map(t => {
       const delegate = this.getDelegate(t);
-      if (!delegate) continue;
-      const rows = await this.executeFindAll(delegate, userId, t, params);
-      all.push(...rows);
-      if (all.length > params.limit) break;
-    }
+      if (!delegate) return Promise.resolve([]);
+      return this.executeFindAll(delegate, userId, t, params);
+    });
+    const results = await Promise.all(promises);
+    const all = results.flat();
+    const sortField = params.sortBy ?? 'createdAt';
+    const sortOrder = params.sortOrder ?? 'desc';
+    all.sort((a: any, b: any) => {
+      const valA = a[sortField];
+      const valB = b[sortField];
+      if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+      if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+      return a.id.localeCompare(b.id);
+    });
     return all.slice(0, params.limit);
   }
 

@@ -134,7 +134,7 @@ export async function apiFetch<T>(
       clearTimeout(timeoutId);
 
       if (response.status === 204) {
-        return undefined as T;
+        return null as unknown as T;
       }
 
       if (response.status === 401 && !skipAuth && !path.includes(REFRESH_ENDPOINT)) {
@@ -143,10 +143,9 @@ export async function apiFetch<T>(
           if (newToken) {
             continue;
           }
-        } catch {
-          // Refresh failed — don't wipe the stored token.
-          // Google OAuth users never get a refresh cookie due to cross-domain redirect,
-          // so refresh will always fail for them. Let the UI handle gracefully.
+        } catch (e) {
+          setAccessToken(null);
+          throw e;
         }
         throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
       }

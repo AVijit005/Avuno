@@ -1,6 +1,10 @@
 import { motion } from "motion/react";
 import { Film, BookOpen, Gamepad2, Music2, Target, Flame, Sparkles } from "lucide-react";
-import { Area, AreaChart, ResponsiveContainer } from "recharts";
+import { lazy, type ComponentType } from "react";
+const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
+const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+
 import { } from "@/lib/types";
 import { CountUp } from "@/components/landing/CountUp";
 const THIS_WEEK: any[] = [];
@@ -135,3 +139,4 @@ export function ThisWeek() {
     </div>
   );
 }
+

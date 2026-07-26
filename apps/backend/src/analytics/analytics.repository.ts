@@ -55,26 +55,36 @@ export class AnalyticsRepository {
 
   async countCompletedByType(userId: string): Promise<Record<string, number>> {
     const counts: Record<string, number> = {};
-    for (const cfg of USER_LIB_TYPES) {
-      const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const count = await delegate.count({
-        where: { userId, status: 'COMPLETED', deletedAt: null },
-      });
-      if (count > 0) counts[cfg.type] = count;
+    const results = await Promise.all(
+      USER_LIB_TYPES.map(async (cfg) => {
+        const delegate = this.prismaAny()[cfg.delegate];
+        if (!delegate) return { type: cfg.type, count: 0 };
+        const count = await delegate.count({
+          where: { userId, status: 'COMPLETED', deletedAt: null },
+        });
+        return { type: cfg.type, count };
+      })
+    );
+    for (const r of results) {
+      if (r.count > 0) counts[r.type] = r.count;
     }
     return counts;
   }
 
   async countTotalByType(userId: string): Promise<Record<string, number>> {
     const counts: Record<string, number> = {};
-    for (const cfg of USER_LIB_TYPES) {
-      const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const count = await delegate.count({
-        where: { userId, deletedAt: null },
-      });
-      if (count > 0) counts[cfg.type] = count;
+    const results = await Promise.all(
+      USER_LIB_TYPES.map(async (cfg) => {
+        const delegate = this.prismaAny()[cfg.delegate];
+        if (!delegate) return { type: cfg.type, count: 0 };
+        const count = await delegate.count({
+          where: { userId, deletedAt: null },
+        });
+        return { type: cfg.type, count };
+      })
+    );
+    for (const r of results) {
+      if (r.count > 0) counts[r.type] = r.count;
     }
     return counts;
   }
@@ -262,35 +272,39 @@ export class AnalyticsRepository {
   // ─── Recently Added / Completed ────────────────────────────────────────────
 
   async getRecentlyAdded(userId: string, limit = 10): Promise<any[]> {
-    const results: any[] = [];
-    for (const cfg of USER_LIB_TYPES) {
-      const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const items = await delegate.findMany({
-        where: { userId, deletedAt: null },
-        orderBy: { createdAt: 'desc' },
-        take: limit,
-        include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
-      });
-      for (const item of items) results.push({ ...item, _mediaType: cfg.type });
-    }
+    const allItems = await Promise.all(
+      USER_LIB_TYPES.map(async (cfg) => {
+        const delegate = this.prismaAny()[cfg.delegate];
+        if (!delegate) return [];
+        const items = await delegate.findMany({
+          where: { userId, deletedAt: null },
+          orderBy: { createdAt: 'desc' },
+          take: limit,
+          include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
+        });
+        return items.map((item: any) => ({ ...item, _mediaType: cfg.type }));
+      })
+    );
+    const results = allItems.flat();
     results.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
     return results.slice(0, limit);
   }
 
   async getRecentlyCompleted(userId: string, limit = 10): Promise<any[]> {
-    const results: any[] = [];
-    for (const cfg of USER_LIB_TYPES) {
-      const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const items = await delegate.findMany({
-        where: { userId, status: 'COMPLETED', deletedAt: null },
-        orderBy: { updatedAt: 'desc' },
-        take: limit,
-        include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
-      });
-      for (const item of items) results.push({ ...item, _mediaType: cfg.type });
-    }
+    const allItems = await Promise.all(
+      USER_LIB_TYPES.map(async (cfg) => {
+        const delegate = this.prismaAny()[cfg.delegate];
+        if (!delegate) return [];
+        const items = await delegate.findMany({
+          where: { userId, status: 'COMPLETED', deletedAt: null },
+          orderBy: { updatedAt: 'desc' },
+          take: limit,
+          include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
+        });
+        return items.map((item: any) => ({ ...item, _mediaType: cfg.type }));
+      })
+    );
+    const results = allItems.flat();
     results.sort((a, b) => (b.updatedAt?.getTime() || 0) - (a.updatedAt?.getTime() || 0));
     return results.slice(0, limit);
   }
@@ -348,44 +362,45 @@ export class AnalyticsRepository {
     const startDate = new Date();
     startDate.setDate(startDate.getDate() - days);
 
-    // Library items created
-    for (const cfg of USER_LIB_TYPES) {
+    // Run all queries in parallel: library items + journal + memories
+    const libraryPromises = USER_LIB_TYPES.map(async (cfg) => {
       const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const items = await delegate.findMany({
+      if (!delegate) return [];
+      return delegate.findMany({
         where: { userId, createdAt: { gte: startDate }, deletedAt: null },
         select: { createdAt: true },
       });
+    });
+
+    const journal = this.prismaAny().journalEntry;
+    const journalPromise = journal
+      ? journal.findMany({ where: { userId, createdAt: { gte: startDate } }, select: { createdAt: true } })
+      : Promise.resolve([]);
+
+    const memory = this.prismaAny().memory;
+    const memoryPromise = memory
+      ? memory.findMany({ where: { userId, createdAt: { gte: startDate } }, select: { createdAt: true } })
+      : Promise.resolve([]);
+
+    const [libraryResults, entries, mems] = await Promise.all([
+      Promise.all(libraryPromises),
+      journalPromise,
+      memoryPromise,
+    ]);
+
+    for (const items of libraryResults) {
       for (const item of items) {
         const key = item.createdAt.toISOString().slice(0, 10);
         heatmap[key] = (heatmap[key] ?? 0) + 1;
       }
     }
-
-    // Journal entries
-    const journal = this.prismaAny().journalEntry;
-    if (journal) {
-      const entries = await journal.findMany({
-        where: { userId, createdAt: { gte: startDate } },
-        select: { createdAt: true },
-      });
-      for (const e of entries) {
-        const key = e.createdAt.toISOString().slice(0, 10);
-        heatmap[key] = (heatmap[key] ?? 0) + 1;
-      }
+    for (const e of entries) {
+      const key = e.createdAt.toISOString().slice(0, 10);
+      heatmap[key] = (heatmap[key] ?? 0) + 1;
     }
-
-    // Memories
-    const memory = this.prismaAny().memory;
-    if (memory) {
-      const mems = await memory.findMany({
-        where: { userId, createdAt: { gte: startDate } },
-        select: { createdAt: true },
-      });
-      for (const m of mems) {
-        const key = m.createdAt.toISOString().slice(0, 10);
-        heatmap[key] = (heatmap[key] ?? 0) + 1;
-      }
+    for (const m of mems) {
+      const key = m.createdAt.toISOString().slice(0, 10);
+      heatmap[key] = (heatmap[key] ?? 0) + 1;
     }
 
     return heatmap;
@@ -402,40 +417,40 @@ export class AnalyticsRepository {
     const completedCounts: Record<string, number> = {};
     const hoursTracked: Record<string, number> = {};
 
-    // Journal entries
     const journal = this.prismaAny().journalEntry;
-    if (journal) {
-      const entries = await journal.findMany({
-        where: { userId, createdAt: { gte: startDate, lte: endDate } },
-        select: { createdAt: true },
-      });
-      for (const e of entries) {
-        const key = e.createdAt.toISOString().slice(0, 10);
-        journalCounts[key] = (journalCounts[key] ?? 0) + 1;
-      }
-    }
+    const journalPromise = journal
+      ? journal.findMany({ where: { userId, createdAt: { gte: startDate, lte: endDate } }, select: { createdAt: true } })
+      : Promise.resolve([]);
 
-    // Memories
     const memory = this.prismaAny().memory;
-    if (memory) {
-      const mems = await memory.findMany({
-        where: { userId, createdAt: { gte: startDate, lte: endDate } },
-        select: { createdAt: true },
-      });
-      for (const m of mems) {
-        const key = m.createdAt.toISOString().slice(0, 10);
-        memoryCounts[key] = (memoryCounts[key] ?? 0) + 1;
-      }
-    }
+    const memoryPromise = memory
+      ? memory.findMany({ where: { userId, createdAt: { gte: startDate, lte: endDate } }, select: { createdAt: true } })
+      : Promise.resolve([]);
 
-    // Completed items + hours tracked
-    for (const cfg of USER_LIB_TYPES) {
+    const completedPromises = USER_LIB_TYPES.map(async (cfg) => {
       const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
-      const items = await delegate.findMany({
+      if (!delegate) return [];
+      return delegate.findMany({
         where: { userId, updatedAt: { gte: startDate, lte: endDate }, status: 'COMPLETED', deletedAt: null },
         select: { updatedAt: true, minutesSpent: true, hoursSpent: true },
       });
+    });
+
+    const [entries, mems, completedResults] = await Promise.all([
+      journalPromise,
+      memoryPromise,
+      Promise.all(completedPromises),
+    ]);
+
+    for (const e of entries) {
+      const key = e.createdAt.toISOString().slice(0, 10);
+      journalCounts[key] = (journalCounts[key] ?? 0) + 1;
+    }
+    for (const m of mems) {
+      const key = m.createdAt.toISOString().slice(0, 10);
+      memoryCounts[key] = (memoryCounts[key] ?? 0) + 1;
+    }
+    for (const items of completedResults) {
       for (const item of items) {
         const key = item.updatedAt.toISOString().slice(0, 10);
         completedCounts[key] = (completedCounts[key] ?? 0) + 1;
@@ -455,23 +470,27 @@ export class AnalyticsRepository {
     const genreRatings: Record<string, { total: number; count: number }> = {};
     const genreTime: Record<string, number> = {};
 
-    for (const cfg of USER_LIB_TYPES) {
-      const delegate = this.prismaAny()[cfg.delegate];
-      if (!delegate) continue;
+    const allItems = await Promise.all(
+      USER_LIB_TYPES.map(async (cfg) => {
+        const delegate = this.prismaAny()[cfg.delegate];
+        if (!delegate) return [];
+        const items = await delegate.findMany({
+          where: { userId, deletedAt: null },
+          select: { 
+            status: true, 
+            rating: true, 
+            minutesSpent: true, 
+            hoursSpent: true,
+            [cfg.mediaDelegate]: { select: { genres: true } }
+          },
+        });
+        return items.map((item: any) => ({ ...item, _mediaDelegateKey: cfg.mediaDelegate }));
+      })
+    );
 
-      const items = await delegate.findMany({
-        where: { userId, deletedAt: null },
-        select: { 
-          status: true, 
-          rating: true, 
-          minutesSpent: true, 
-          hoursSpent: true,
-          [cfg.mediaDelegate]: { select: { genres: true } }
-        },
-      });
-
+    for (const items of allItems) {
       for (const item of items) {
-        const media = item[cfg.mediaDelegate];
+        const media = item[item._mediaDelegateKey];
         const genres: string[] = media?.genres ?? [];
         for (const genre of genres) {
           genreCounts[genre] = (genreCounts[genre] ?? 0) + 1;

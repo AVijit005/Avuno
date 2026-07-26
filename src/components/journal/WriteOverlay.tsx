@@ -43,12 +43,19 @@ export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], j
             <X className="h-6 w-6" />
           </motion.button>
 
-          <motion.div
+          <motion.form
+            onSubmit={(e) => {
+              e.preventDefault();
+              if (journalText.length > 5 && !isSealing) onSeal();
+            }}
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 10, transition: { duration: 0.2 } }}
             transition={{ duration: 0.6, delay: 0.1, type: "spring", damping: 25 }}
             className="w-full max-w-3xl flex flex-col items-center px-6"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Write journal entry"
           >
             <div className="text-primary/70 text-[11px] tracking-[0.25em] uppercase font-bold mb-8">
               {timeContext} · Focus Mode
@@ -67,6 +74,13 @@ export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], j
               value={journalText}
               onChange={(e) => onTextChange(e.target.value)}
               placeholder="Start typing..."
+              aria-label="Journal entry text"
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                  e.preventDefault();
+                  if (journalText.length > 5 && !isSealing) onSeal();
+                }
+              }}
               className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-center leading-relaxed"
               style={{ boxShadow: "none" }}
             />
@@ -74,11 +88,11 @@ export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], j
             <AnimatePresence>
               {journalText.length > 5 && (
                 <motion.button
+                  type="submit"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   disabled={isSealing}
-                  onClick={onSeal}
                   className="mt-8 flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:scale-105 transition-all shadow-[0_0_40px_oklch(0.72_0.18_255/0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSealing ? (
@@ -90,7 +104,7 @@ export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], j
                 </motion.button>
               )}
             </AnimatePresence>
-          </motion.div>
+          </motion.form>
         </motion.div>
       )}
     </AnimatePresence>,

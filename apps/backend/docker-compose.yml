@@ -12,10 +12,10 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3000
-      DATABASE_URL: postgresql://chronicle:chronicle@postgres:5432/chronicle?schema=public
+      DATABASE_URL: postgresql://${DB_USER:-chronicle}:${DB_PASSWORD:-chronicle_db_secret}@postgres:5432/${DB_NAME:-chronicle}?schema=public
       REDIS_HOST: redis
       REDIS_PORT: 6379
-      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-chronicle_redis_secret}
       REDIS_DB: 0
       BULLMQ_PREFIX: chronicle
       SWAGGER_ENABLED: 'true'
@@ -33,15 +33,13 @@ services:
     container_name: chronicle-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_USER: chronicle
-      POSTGRES_PASSWORD: chronicle
-      POSTGRES_DB: chronicle
-    ports:
-      - '5432:5432'
+      POSTGRES_USER: ${DB_USER:-chronicle}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-chronicle_db_secret}
+      POSTGRES_DB: ${DB_NAME:-chronicle}
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U chronicle -d chronicle']
+      test: ['CMD-SHELL', 'pg_isready -U ${DB_USER:-chronicle} -d ${DB_NAME:-chronicle}']
       interval: 5s
       timeout: 5s
       retries: 5
@@ -52,13 +50,11 @@ services:
     image: redis:7-alpine
     container_name: chronicle-redis
     restart: unless-stopped
-    ports:
-      - '6379:6379'
-    command: redis-server --appendonly yes
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-chronicle_redis_secret}
     volumes:
       - redis_data:/data
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ['CMD', 'redis-cli', '-a', '${REDIS_PASSWORD:-chronicle_redis_secret}', 'ping']
       interval: 5s
       timeout: 5s
       retries: 5

@@ -1,6 +1,12 @@
 import { motion } from "motion/react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { ResponsiveContainer, AreaChart, Area, XAxis, Tooltip } from "recharts";
+import { lazy, type ComponentType } from "react";
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
+const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
+const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as ComponentType<any> })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
+
 import { TrendingUp } from "lucide-react";
 
 export function MediaEvolution(props: any) {
@@ -51,3 +57,4 @@ export function MediaEvolution(props: any) {
     </PremiumGlass>
   );
 }
+

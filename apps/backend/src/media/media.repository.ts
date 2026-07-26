@@ -134,14 +134,22 @@ export class MediaRepository {
       return this.executeFindMany(delegate, params);
     }
 
-    const allResults: MediaRow[] = [];
-    for (const key of this.getModelKeys()) {
+    const promises = this.getModelKeys().map(key => {
       const delegate = this.getDelegate(key);
-      if (!delegate) continue;
-      const rows = await this.executeFindMany(delegate, params);
-      allResults.push(...rows);
-      if (allResults.length > params.limit) break;
-    }
+      if (!delegate) return Promise.resolve([]);
+      return this.executeFindMany(delegate, params);
+    });
+    const results = await Promise.all(promises);
+    let allResults = results.flat();
+    const sortField = params.sortBy ?? 'createdAt';
+    const sortOrder = params.sortOrder ?? 'desc';
+    allResults.sort((a: any, b: any) => {
+      const valA = a[sortField];
+      const valB = b[sortField];
+      if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
+      if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+      return a.id.localeCompare(b.id);
+    });
     return allResults.slice(0, params.limit + 1);
   }
 
@@ -170,13 +178,13 @@ export class MediaRepository {
       return delegate.count({ where: buildWhere(params) as any });
     }
 
-    let total = 0;
-    for (const key of this.getModelKeys()) {
+    const promises = this.getModelKeys().map(key => {
       const delegate = this.getDelegate(key);
-      if (!delegate) continue;
-      total += await delegate.count({ where: buildWhere(params) as any });
-    }
-    return total;
+      if (!delegate) return Promise.resolve(0);
+      return delegate.count({ where: buildWhere(params) as any });
+    });
+    const counts = await Promise.all(promises);
+    return counts.reduce((acc, count) => acc + (typeof count === 'number' ? count : 0), 0);
   }
 
   async findRelated(type: string, id: string, limit = 10): Promise<MediaRow[]> {

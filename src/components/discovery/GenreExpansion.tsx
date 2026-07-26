@@ -1,6 +1,12 @@
 import { motion } from "motion/react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { ResponsiveContainer, PolarAngleAxis, PolarGrid, Radar, RadarChart } from "recharts";
+import { lazy, type ComponentType } from "react";
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as ComponentType<any> })));
+const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as ComponentType<any> })));
+const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as ComponentType<any> })));
+const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as ComponentType<any> })));
+
 import { ArrowRight, Compass } from "lucide-react";
 
 interface Props {
@@ -54,3 +60,4 @@ export function GenreExpansion({ data }: Props) {
     </PremiumGlass>
   );
 }
+

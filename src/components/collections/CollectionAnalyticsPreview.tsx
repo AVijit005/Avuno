@@ -1,6 +1,12 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { motion } from "motion/react";
-import { ResponsiveContainer, BarChart, Bar, Cell, Tooltip } from "recharts";
+import { lazy, type ComponentType } from "react";
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart as unknown as ComponentType<any> })));
+const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar as unknown as ComponentType<any> })));
+const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell as unknown as ComponentType<any> })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
+
 import { CountUp } from "@/components/landing/CountUp";
 import { Activity, Clock } from "lucide-react";
 
@@ -62,3 +68,4 @@ export function CollectionAnalyticsPreview({ collection }: Props) {
     </PremiumGlass>
   );
 }
+
