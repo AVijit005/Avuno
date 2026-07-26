@@ -1,4 +1,4 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { ArrowRight, Lock, Mail, Check, Loader as Loader2, User } from "lucide-react";
 import { useForm } from "react-hook-form";
@@ -68,6 +68,13 @@ const cardLine = {
 
 
 function Auth() {
+  const matchRoute = useMatchRoute();
+  const isChildRoute = matchRoute({ to: "/auth/callback" }) || matchRoute({ to: "/auth/forgot-password" });
+
+  if (isChildRoute) {
+    return <Outlet />;
+  }
+
   const navigate = useNavigate();
   const reduced = useReducedMotion();
   const [mode, setMode] = useState<Mode>("signin");
