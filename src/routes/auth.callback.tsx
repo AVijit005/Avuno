@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { setAccessToken, getAccessToken } from "@/lib/api/fetch";
+import { setAccessToken } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 import { authApi } from "@/lib/api";
