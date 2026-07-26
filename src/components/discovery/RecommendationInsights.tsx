@@ -20,7 +20,7 @@ export function RecommendationInsights({ className }: Props) {
         <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/75">
           Quiet patterns
         </div>
-        <h2 className="font-display text-2xl tracking-tight">What Chronicle notices</h2>
+        <h2 className="font-display text-2xl tracking-tight">What Avuno notices</h2>
       </header>
       <ul className="grid gap-2 md:grid-cols-2">
         {LINES.map((line) => (

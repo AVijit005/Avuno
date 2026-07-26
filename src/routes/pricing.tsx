@@ -13,7 +13,7 @@ function PricingPage() {
       <div className="mx-auto max-w-4xl px-6 md:px-10">
         <div className="text-center">
           <div className="glass-subtle mx-auto inline-flex items-center gap-2 rounded-full px-4 py-1.5 text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            <Sparkles className="h-3 w-3 text-primary" /> Chronicle Plus
+            <Sparkles className="h-3 w-3 text-primary" /> Avuno Plus
           </div>
           <h1 className="mt-8 font-display text-5xl tracking-tight md:text-7xl">
             <span className="text-gradient-aurora">Upgrade your story.</span>

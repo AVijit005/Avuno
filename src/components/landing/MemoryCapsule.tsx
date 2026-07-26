@@ -31,7 +31,7 @@ export function MemoryCapsule() {
           <span className="italic text-muted-foreground">you'll remember why you watched it.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
-          Chronicle holds the feeling, not just the file. Notes, moods, moments — preserved beside
+          Avuno holds the feeling, not just the file. Notes, moods, moments — preserved beside
           every story.
         </p>
       </div>

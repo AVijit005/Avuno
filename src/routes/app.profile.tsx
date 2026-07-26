@@ -43,7 +43,7 @@ function ProfilePage() {
       <IdentityHero />
 
       {/* Editorial breath between identity and metrics */}
-      <PullQuote attribution="Chronicle · a living record">
+      <PullQuote attribution="Avuno · a living record">
         You aren't a list of titles. You're the pattern between them.
       </PullQuote>
 
@@ -84,7 +84,7 @@ function ProfilePage() {
       </div>
 
       {/* Memory map — full width */}
-      <Section title="Memory map" subtitle="Every corner of your Chronicle, one tap away.">
+      <Section title="Memory map" subtitle="Every corner of your Avuno, one tap away.">
         <MemoryMap />
       </Section>
 
@@ -103,7 +103,7 @@ function ProfilePage() {
                 Memory capsules
               </h2>
               <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-foreground/80">
-                Weekends and weeks Chronicle quietly folded into a single feeling — opened only when
+                Weekends and weeks Avuno quietly folded into a single feeling — opened only when
                 you want them.
               </p>
             </div>

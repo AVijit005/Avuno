@@ -26,9 +26,9 @@ export const Route = createFileRoute("/app/journal")({
   component: JournalPage,
   head: () => ({
     meta: [
-      { title: "Journal — Chronicle" },
+      { title: "Journal — Avuno" },
       { name: "description", content: "Write about the stories that stayed with you. Capture moods, memories, and moments." },
-      { property: "og:title", content: "Chronicle Journal" },
+      { property: "og:title", content: "Avuno Journal" },
       { property: "og:description", content: "Words for the stories that stayed." },
     ],
   }),

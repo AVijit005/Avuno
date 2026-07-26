@@ -29,7 +29,7 @@ export function MemorySummary({ mediaId, className }: Props) {
       <EmptyState
         icon={<BookHeart className="h-6 w-6" />}
         title="Add your first memory."
-        description="A line, a moment, a feeling — Chronicle remembers what your library cannot."
+        description="A line, a moment, a feeling — Avuno remembers what your library cannot."
         hint="Memories are optional, never required."
         className={className}
       />

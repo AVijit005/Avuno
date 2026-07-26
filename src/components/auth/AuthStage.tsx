@@ -8,7 +8,7 @@ import { MemoryQuote } from "./MemoryQuote";
 import { MemoryStats } from "./MemoryStats";
 
 /* --------------------------------------------------------------
- * Chronicle Auth 4.0 — Cinematic Memory Universe
+ * Avuno Auth 4.0 — Cinematic Memory Universe
  * Five visual layers, hand-curated composition, memory artifacts.
  * -------------------------------------------------------------- */
 

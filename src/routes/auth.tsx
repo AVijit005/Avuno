@@ -483,7 +483,7 @@ function Auth() {
                       error={signUp.formState.errors.confirmPassword?.message}
                       {...signUp.register("confirmPassword")}
                     />
-                    <PremiumButton status={status} label="Begin Chronicle" error={errorMessage} />
+                    <PremiumButton status={status} label="Begin Avuno" error={errorMessage} />
                   </motion.form>
                 )}
               </AnimatePresence>

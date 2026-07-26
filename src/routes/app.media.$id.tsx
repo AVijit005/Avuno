@@ -178,7 +178,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
         <SimilarMemories item={item} />
         <CompanionStories item={item} />
         <MediaRelationships item={item} />
-        <RelationshipPanel kind="media" id={item.id} title="Across your Chronicle" />
+        <RelationshipPanel kind="media" id={item.id} title="Across your Avuno" />
       </Chapter>
 
       {/* ───── Chapter 05 — Journey (timeline) ────────────────────────── */}

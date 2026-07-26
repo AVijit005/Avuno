@@ -122,7 +122,7 @@ function Landing() {
         eyebrow="Continue your story"
         align="center"
         title={<>A cinematic command center.</>}
-        intro="Chronicle greets you with the story you're already in the middle of — themed to whatever you're watching, reading or playing right now."
+        intro="Avuno greets you with the story you're already in the middle of — themed to whatever you're watching, reading or playing right now."
       >
         <DashboardShowcase />
       </SceneSection>
@@ -140,7 +140,7 @@ function Landing() {
         eyebrow="Analytics"
         align="center"
         title={<>The patterns you didn't notice.</>}
-        intro="Hours, streaks, genres, monthly rhythm — visualized as gently as the rest of Chronicle, never as a productivity dashboard."
+        intro="Hours, streaks, genres, monthly rhythm — visualized as gently as the rest of Avuno, never as a productivity dashboard."
       >
         <AnalyticsPreview />
       </SceneSection>
@@ -163,7 +163,7 @@ function Landing() {
 
       <SceneSection
         eyebrow="Everywhere you are"
-        title={<>The same Chronicle, beautifully adapted.</>}
+        title={<>The same Avuno, beautifully adapted.</>}
         intro="Desktop, tablet, phone. The same atmosphere, the same calm typography, the same memories — wherever your story finds you."
       >
         <CrossPlatform />

@@ -39,9 +39,9 @@ export const Route = createFileRoute("/app/calendar")({
   component: CalendarPage,
   head: () => ({
     meta: [
-      { title: "Calendar — Chronicle" },
+      { title: "Calendar — Avuno" },
       { name: "description", content: "A memory map of your year — every story, chapter, and quiet evening mapped onto your life." },
-      { property: "og:title", content: "Chronicle Calendar" },
+      { property: "og:title", content: "Avuno Calendar" },
       { property: "og:description", content: "A year, day by day — your personal memory map." },
     ],
   }),

@@ -46,7 +46,7 @@ function OnboardingPage() {
               What stories do you follow?
             </h1>
             <p className="mt-4 text-muted-foreground">
-              Select the types of media you want to track in Chronicle. You can change this later.
+              Select the types of media you want to track in Avuno. You can change this later.
             </p>
             <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
               {MEDIA_TYPES.map((t) => {
@@ -94,7 +94,7 @@ function OnboardingPage() {
             </p>
             <div className="mt-10">
               <PremiumButton onClick={handleNext} size="lg">
-                Enter Chronicle
+                Enter Avuno
               </PremiumButton>
             </div>
           </div>

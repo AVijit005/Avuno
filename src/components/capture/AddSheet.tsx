@@ -133,7 +133,7 @@ export function AddSheet({
       addedAt: "Just now",
       ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
     });
-    toast.success("Added to Chronicle", { description: title.trim() });
+    toast.success("Added to Avuno", { description: title.trim() });
     onOpenChange(false);
     setTimeout(() => navigate({ to: "/app/media/$id", params: { id } }), 60);
   }
@@ -189,7 +189,7 @@ export function AddSheet({
         {step === 2 && (
           <div className="px-6 pb-6 pt-4">
             <DialogTitle className="font-display text-2xl tracking-tight">
-              Tell Chronicle about it
+              Tell Avuno about it
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
               Just the basics — you can refine later.
@@ -302,7 +302,7 @@ export function AddSheet({
                 onClick={confirm}
                 className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 press-scale"
               >
-                Add to Chronicle
+                Add to Avuno
               </button>
             </div>
           </div>

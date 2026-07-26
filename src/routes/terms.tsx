@@ -16,7 +16,7 @@ function TermsPage() {
         
         <div className="prose prose-invert max-w-none text-white/80 space-y-6">
           <p>
-            Please read these Terms of Service carefully before using Chronicle (the "Service"). By accessing or using the Service, you agree to be bound by these Terms.
+            Please read these Terms of Service carefully before using Avuno (the "Service"). By accessing or using the Service, you agree to be bound by these Terms.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">1. Accounts</h2>
@@ -39,7 +39,7 @@ function TermsPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">4. Intellectual Property</h2>
           <p>
-            The Service and its original content (excluding User Content), features, and functionality are and will remain the exclusive property of Chronicle and its licensors.
+            The Service and its original content (excluding User Content), features, and functionality are and will remain the exclusive property of Avuno and its licensors.
           </p>
 
           <h2 className="text-2xl font-semibold text-white mt-8">5. Termination</h2>
@@ -49,7 +49,7 @@ function TermsPage() {
 
           <h2 className="text-2xl font-semibold text-white mt-8">6. Limitation of Liability</h2>
           <p>
-            In no event shall Chronicle, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
+            In no event shall Avuno, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.
           </p>
         </div>
       </div>

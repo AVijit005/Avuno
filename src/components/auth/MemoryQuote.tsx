@@ -7,7 +7,7 @@ const QUOTES = [
   "Some memories deserve more than a watch history.",
   "Everything you finish leaves something behind.",
   "One day you'll forget the date, but never how it felt.",
-  "Chronicle remembers what algorithms forget.",
+  "Avuno remembers what algorithms forget.",
 ];
 
 export function MemoryQuote({ className = "" }: { className?: string }) {
