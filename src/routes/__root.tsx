@@ -65,7 +65,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
   head: () => ({
     meta: [
       { charSet: "utf-8" },
-      { name: "viewport", content: "width=device-width, initial-scale=1" },
+      { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Avuno — Every story you finish becomes part of your story" },
       { name: "description", content: "Avuno is a personal media journal for movies, anime, books, games, music and more. Organize, remember and rediscover everything you experience." },
       { name: "author", content: "Avuno" },
