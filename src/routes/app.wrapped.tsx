@@ -59,7 +59,6 @@ function captureAndDownload() {
     link.href = canvas.toDataURL();
     link.click();
   }).catch((err: unknown) => {
-    console.error("Failed to generate image", err);
     toast.error("Failed to generate image.");
   });
 }
@@ -237,7 +236,7 @@ function Slide({ slide, index, last, totalSlides }: { slide: UIWrappedSlide; ind
                 transition={{ duration: 0.7, delay: 0.6 }}
                 className="mt-10 flex justify-center gap-3"
               >
-                <PremiumButton variant="primary" icon={<Share2 className="h-4 w-4" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
+                <PremiumButton variant="primary" icon={<Share2 className="h-4 w-4" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(() => {})}>
                   Share your year
                 </PremiumButton>
                 <PremiumButton variant="secondary" icon={<Download className="h-4 w-4" />} onClick={downloadAsImage}>
@@ -371,7 +370,7 @@ function ShareSection({ overview: o, insights: i }: { overview: UIOverview; insi
             ))}
           </div>
           <div className="mt-6 flex justify-center gap-2">
-            <PremiumButton variant="primary" size="sm" icon={<Share2 className="h-3.5 w-3.5" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(e => console.error("Share failed", e))}>
+            <PremiumButton variant="primary" size="sm" icon={<Share2 className="h-3.5 w-3.5" />} onClick={() => navigator.share?.({ title: "Chronicle Wrapped", url: window.location.href }).catch(() => {})}>
               Share
             </PremiumButton>
             <PremiumButton

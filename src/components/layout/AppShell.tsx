@@ -14,6 +14,7 @@ import { pagePresence, pagePresenceReduced } from "@/lib/motion";
 import { MediaActionsProvider, useMediaActions } from "@/lib/store/MediaActionsContext";
 import { Toaster } from "@/components/ui/sonner";
 import { useOnline } from "@/hooks/use-online";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { trackPageView } from "@/lib/analytics-tracker";
 import { cn } from "@/lib/utils";
 
@@ -24,9 +25,15 @@ export function AppShell({ children }: { children?: ReactNode }) {
   const reduced = useReducedMotion();
   const online = useOnline();
 
+  const isMobile = useIsMobile();
+
   useEffect(() => {
     trackPageView(pathname);
   }, [pathname]);
+
+  if (isMobile === undefined) {
+    return null;
+  }
 
   return (
     <MediaActionsProvider>

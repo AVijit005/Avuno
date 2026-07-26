@@ -42,6 +42,7 @@ export function CollectionCard({
       <Link
         to="/app/collections/$id"
         params={{ id: c.id }}
+        aria-label={`View collection: ${c.name}`}
         className={`relative block ${aspect} overflow-hidden rounded-3xl ring-1 ring-white/10 transition-shadow duration-500 group-hover:shadow-[0_30px_80px_-30px_oklch(0_0_0/0.7)]`}
       >
         {/* collage of covers */}

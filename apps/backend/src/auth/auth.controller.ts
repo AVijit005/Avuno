@@ -60,6 +60,7 @@ export class AuthController {
 
   @Post('logout')
   @HttpCode(200)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
   async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response): Promise<void> {
     const refreshToken = request.cookies?.[REFRESH_TOKEN_COOKIE];
     if (refreshToken) {
@@ -69,6 +70,7 @@ export class AuthController {
 
   @Post('logout-all')
   @HttpCode(200)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
   @UseGuards(JwtAuthGuard)
   async logoutAll(
     @CurrentUser() user: AccessTokenPayload,
@@ -78,6 +80,7 @@ export class AuthController {
   }
 
   @Get('me')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @UseGuards(JwtAuthGuard)
   async me(@CurrentUser() user: AccessTokenPayload): Promise<UserResponseDto> {
     return this.authService.me(user.sub);

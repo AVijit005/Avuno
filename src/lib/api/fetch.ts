@@ -17,11 +17,18 @@ interface ApiErrorResponse {
   code?: string;
 }
 
-let accessToken: string | null = null;
-let refreshPromise: Promise<string> | null = null;
+let modAccessToken: string | null = null;
+let modRefreshPromise: Promise<string> | null = null;
+
+function getTokenStore(): { accessToken: string | null; refreshPromise: Promise<string> | null } {
+  if (typeof window === 'undefined') {
+    return { accessToken: null, refreshPromise: null };
+  }
+  return { accessToken: modAccessToken, refreshPromise: modRefreshPromise };
+}
 
 export function setAccessToken(token: string | null): void {
-  accessToken = token;
+  modAccessToken = token;
   if (typeof window !== 'undefined') {
     if (token) {
       try { sessionStorage.setItem('accessToken', token); } catch {}
@@ -32,14 +39,14 @@ export function setAccessToken(token: string | null): void {
 }
 
 export function getAccessToken(): string | null {
-  if (accessToken) return accessToken;
+  if (getTokenStore().accessToken) return getTokenStore().accessToken;
   if (typeof window !== 'undefined') {
     try {
       const ssToken = sessionStorage.getItem('accessToken');
-      if (ssToken) { accessToken = ssToken; return ssToken; }
+      if (ssToken) { modAccessToken = ssToken; return ssToken; }
     } catch {}
   }
-  return accessToken;
+  return getTokenStore().accessToken;
 }
 
 async function refreshAccessToken(): Promise<string> {
@@ -63,14 +70,14 @@ async function getValidToken(): Promise<string | null> {
   const stored = getAccessToken();
   if (stored) return stored;
 
-  if (!refreshPromise) {
-    refreshPromise = refreshAccessToken().finally(() => {
-      refreshPromise = null;
+  if (!getTokenStore().refreshPromise) {
+    modRefreshPromise = refreshAccessToken().finally(() => {
+      modRefreshPromise = null;
     });
   }
 
   try {
-    return await refreshPromise;
+    return await (getTokenStore().refreshPromise || modRefreshPromise);
   } catch {
     return null;
   }
@@ -111,7 +118,9 @@ export async function apiFetch<T>(
 
     try {
       const headers = new Headers(fetchOptions.headers);
-      headers.set('ngrok-skip-browser-warning', 'true');
+      if (import.meta.env.DEV) {
+        headers.set('ngrok-skip-browser-warning', 'true');
+      }
 
       if (!skipAuth) {
         const token = await getValidToken();

@@ -73,6 +73,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
         <div className="flex shrink-0 items-center gap-2">
           <button
             onClick={onOpenSearch}
+            aria-label="Search across Chronicle"
             className="hidden items-center gap-2 rounded-xl bg-foreground/[0.04] px-3 py-2 text-xs text-muted-foreground ring-1 ring-foreground/5 transition hover:text-foreground md:flex press-scale"
           >
             <Search className="h-3.5 w-3.5" /> Search across Chronicle
@@ -114,6 +115,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           </Link>
           <Link
             to="/app/profile"
+            aria-label="Profile"
             className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-white/20 press-scale"
           >
             AY

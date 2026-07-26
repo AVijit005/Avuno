@@ -90,6 +90,7 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
               <button
                 key={m}
                 onClick={() => setMood(mood === m ? undefined : m)}
+                aria-label={`Select mood: ${m}`}
                 className={cn(
                   "rounded-full border px-3 py-1 text-xs transition press-scale",
                   mood === m
@@ -110,6 +111,7 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
+            aria-label="Your reflection"
             rows={5}
             placeholder="What stayed? What surprised you? Who were you while watching this?"
             className="mt-1 w-full resize-none rounded-xl border border-border/60 bg-white/[0.03] px-3 py-2 text-sm outline-none focus:border-primary/40"

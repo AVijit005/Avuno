@@ -418,6 +418,7 @@ function RowView({
     <button
       role="option"
       aria-selected={focused}
+      aria-label="Search option"
       data-row={index}
       onClick={onClick}
       onMouseEnter={onMouseEnter}

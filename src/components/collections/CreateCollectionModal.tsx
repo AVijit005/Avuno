@@ -127,7 +127,7 @@ export function CreateCollectionModal({
                     <button
                       key={c}
                       onClick={() => setAccent(c)}
-                      aria-label="accent"
+                      aria-label={`Select accent color ${c}`}
                       className={`relative h-8 w-8 rounded-full transition ${accent === c ? "ring-2 ring-foreground/80 ring-offset-2 ring-offset-background" : ""}`}
                       style={{ background: c, boxShadow: `0 0 16px ${c}` }}
                     />
@@ -175,6 +175,7 @@ export function CreateCollectionModal({
                       <button
                         key={opt.v}
                         onClick={() => setPrivacy(opt.v)}
+                        aria-label={`Set privacy to ${opt.label}`}
                         className={`glass-subtle flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs transition ${on ? "ring-2 ring-primary/60" : ""}`}
                       >
                         <I className="h-3.5 w-3.5" /> {opt.label}

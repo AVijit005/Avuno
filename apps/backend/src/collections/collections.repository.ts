@@ -111,8 +111,10 @@ export class CollectionsRepository {
     const existing = await this.prismaAny().collection.findUnique({ where: { id } });
     if (!existing || existing.userId !== userId) return false;
 
-    await this.prismaAny().collectionItem.deleteMany({ where: { collectionId: id } });
-    await this.prismaAny().collection.delete({ where: { id } });
+    await this.prisma.$transaction([
+      this.prismaAny().collectionItem.deleteMany({ where: { collectionId: id } }),
+      this.prismaAny().collection.delete({ where: { id } })
+    ]);
     return true;
   }
 
@@ -180,12 +182,13 @@ export class CollectionsRepository {
     if (!collection || collection.userId !== userId) return false;
 
     // Atomic update: set position based on array index
-    for (let i = 0; i < itemIds.length; i++) {
-      await this.prismaAny().collectionItem.update({
-        where: { id: itemIds[i] },
+    const queries = itemIds.map((itemId, i) =>
+      this.prismaAny().collectionItem.update({
+        where: { id: itemId },
         data: { position: i },
-      });
-    }
+      })
+    );
+    await this.prisma.$transaction(queries);
     return true;
   }
 
@@ -263,8 +266,10 @@ export class CollectionsRepository {
     const existing = await this.prismaAny().shelf.findUnique({ where: { id } });
     if (!existing || existing.userId !== userId) return false;
 
-    await this.prismaAny().shelfItem.deleteMany({ where: { shelfId: id } });
-    await this.prismaAny().shelf.delete({ where: { id } });
+    await this.prisma.$transaction([
+      this.prismaAny().shelfItem.deleteMany({ where: { shelfId: id } }),
+      this.prismaAny().shelf.delete({ where: { id } })
+    ]);
     return true;
   }
 

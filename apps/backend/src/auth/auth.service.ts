@@ -55,11 +55,14 @@ export class AuthService {
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string, response?: Response): Promise<AuthResponseDto> {
     const emailKey = `auth:attempts:${dto.email.toLowerCase().trim()}`;
+    const ipKey = `auth:attempts:ip:${ipAddress || 'unknown'}`;
     const redisClient = this.redis.getClient();
     
     const attempts = parseInt((await redisClient.get(emailKey)) || '0', 10);
-    if (attempts >= MAX_LOGIN_ATTEMPTS) {
-      const ttl = await redisClient.ttl(emailKey);
+    const ipAttempts = parseInt((await redisClient.get(ipKey)) || '0', 10);
+    if (attempts >= MAX_LOGIN_ATTEMPTS || ipAttempts >= MAX_LOGIN_ATTEMPTS) {
+      const lockedKey = attempts >= MAX_LOGIN_ATTEMPTS ? emailKey : ipKey;
+      const ttl = await redisClient.ttl(lockedKey);
       const minutes = Math.ceil(ttl / 60);
       throw new ForbiddenException(`Account temporarily locked. Try again in ${minutes} minutes.`);
     }
@@ -67,16 +70,19 @@ export class AuthService {
     const user = await this.authRepository.findByEmail(dto.email);
     if (!user || !user.passwordHash) {
       await this.recordFailedAttempt(emailKey);
+      await this.recordFailedAttempt(ipKey);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     const valid = await this.passwordService.compare(dto.password, user.passwordHash);
     if (!valid) {
       await this.recordFailedAttempt(emailKey);
+      await this.recordFailedAttempt(ipKey);
       throw new UnauthorizedException('Invalid credentials');
     }
 
     await redisClient.del(emailKey);
+    await redisClient.del(ipKey);
 
     const verificationRequired = String(this.config.get('emailVerification.required')) !== 'false';
     if (verificationRequired && !user.emailVerified) {

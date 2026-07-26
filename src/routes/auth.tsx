@@ -31,7 +31,6 @@ export const Route = createFileRoute("/auth")({
 const signInSchema = z.object({
   email: z.string().trim().email("Enter a valid email"),
   password: z.string().min(8, "At least 8 characters"),
-  remember: z.boolean().optional(),
 });
 
 const signUpSchema = z
@@ -87,7 +86,7 @@ function Auth() {
   // Forms
   const signIn = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
-    defaultValues: { email: "", password: "", remember: false },
+    defaultValues: { email: "", password: "" },
   });
   const signUp = useForm<SignUp>({
     resolver: zodResolver(signUpSchema),
@@ -432,22 +431,7 @@ function Auth() {
                       {...signIn.register("password")}
                     />
 
-                    <div className="flex items-center justify-between pt-1 text-[11px]">
-                      <motion.label
-                        className="inline-flex cursor-pointer items-center gap-2 text-white/45"
-                        whileHover={{ scale: 1.02, color: "rgba(255,255,255,0.72)" }}
-                        transition={{ duration: 0.18, ease: "easeOut" }}
-                      >
-                        <input
-                          type="checkbox"
-                          {...signIn.register("remember")}
-                          className="peer sr-only"
-                        />
-                        <span className="grid h-3.5 w-3.5 place-items-center rounded-sm border border-white/20 bg-white/[0.04] transition-all duration-200 peer-checked:border-white/70 peer-checked:bg-white/80 hover:border-white/35">
-                          <Check className="h-2.5 w-2.5 text-black opacity-0 peer-checked:opacity-100" />
-                        </span>
-                        Remember me
-                      </motion.label>
+                    <div className="flex justify-end pt-1 text-[11px]">
                       <Link
                         to="/auth/forgot-password"
                         className="text-white/45 hover:text-white/85 transition-colors duration-150"

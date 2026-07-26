@@ -27,7 +27,6 @@ function EmailCapturePage() {
       })
       .catch((err) => {
         toast.error("Failed to update preferences.");
-        console.error(err);
       })
       .finally(() => {
         setLoading(false);

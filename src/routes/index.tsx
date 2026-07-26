@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useScroll, useTransform } from "motion/react";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 
 import { LivingHero } from "@/components/landing/LivingHero";
@@ -41,6 +41,8 @@ function Landing() {
     [0, 200],
     ["oklch(0.14 0.012 270 / 0.35)", "oklch(0.14 0.012 270 / 0.7)"],
   );
+  const [year, setYear] = useState("");
+  useEffect(() => setYear(new Date().getFullYear().toString()), []);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
@@ -220,7 +222,7 @@ function Landing() {
             <div className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-primary to-secondary text-primary-foreground">
               <span className="font-display text-xs leading-none">A</span>
             </div>
-            <span>Avuno © {new Date().getFullYear()}</span>
+            <span>Avuno © {year}</span>
           </div>
           <div className="flex gap-5">
             <a href="mailto:press@avuno.xyz" className="hover:text-foreground">

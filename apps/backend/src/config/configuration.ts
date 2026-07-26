@@ -40,7 +40,7 @@ export default () => ({
     callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'https://www.avuno.xyz/api/auth/google/callback',
   },
   oauth: {
-    encryptionKey: process.env.OAUTH_ENCRYPTION_KEY || (() => { if (process.env.NODE_ENV === 'production') throw new Error('OAUTH_ENCRYPTION_KEY required in production'); return 'default_secret_key_32_bytes_long!'; })(),
+    encryptionKey: process.env.OAUTH_ENCRYPTION_KEY || (() => { if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') throw new Error('OAUTH_ENCRYPTION_KEY required in production'); return 'dev_only_secret_key_32_bytes_long_'; })(),
   },
   emailVerification: {
     ttlSeconds: parseInt(process.env.EMAIL_VERIFICATION_TTL_SECONDS || '86400', 10),

@@ -41,7 +41,6 @@ function NotFoundComponent() {
 }
 
 function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
   const router = useRouter();
   useEffect(() => {
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
@@ -144,7 +143,7 @@ function RootComponent() {
         const user = await authApi.getCurrentUser();
         queryClient.setQueryData(queryKeys.auth.me(), user);
       } catch (err) {
-        console.warn("Session restore warning:", err);
+        // Silently handle session restore failure
       }
     };
     if (!queryClient.getQueryData(queryKeys.auth.me())) restoreSession();

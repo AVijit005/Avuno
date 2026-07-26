@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useRef, useState, useMemo } from "react";
+import { useRef, useState, useMemo, useEffect } from "react";
 import { useScroll, useTransform, useReducedMotion, motion } from "motion/react";
 import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
@@ -20,7 +20,10 @@ export const Route = createFileRoute("/app/timeline")({
 });
 
 function TimelinePage() {
-  const [year, setYear] = useState<string>(new Date().getFullYear().toString());
+  const [year, setYear] = useState<string>("");
+  useEffect(() => {
+    setYear(new Date().getFullYear().toString());
+  }, []);
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);

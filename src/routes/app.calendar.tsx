@@ -57,7 +57,7 @@ const seasonOf = (m: number) =>
   m < 2 || m === 11 ? "winter" : m < 5 ? "spring" : m < 8 ? "summer" : "autumn";
 
 function CalendarPage() {
-  const now = new Date();
+  const [now] = useState(() => new Date());
   const currentYear = now.getFullYear();
   const currentMonth = now.getMonth();
   const [yearOffset, setYearOffset] = useState(0);

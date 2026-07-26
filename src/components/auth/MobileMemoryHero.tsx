@@ -14,11 +14,11 @@ export function MobileMemoryHero() {
 
   return (
     <div
-      aria-hidden
       className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[48vh] overflow-hidden lg:hidden"
     >
       {/* atmospheric wash */}
       <div
+        aria-hidden
         className="absolute inset-0"
         style={{
           background:
@@ -28,6 +28,7 @@ export function MobileMemoryHero() {
 
       {/* secondary distant poster */}
       <motion.div
+        aria-hidden
         initial={{ opacity: 0, y: 14 }}
         animate={{ opacity: 0.38, y: 0 }}
         transition={{ duration: 1.2, delay: 0.2, ease: ease.out }}
@@ -38,6 +39,7 @@ export function MobileMemoryHero() {
 
       {/* hero poster */}
       <motion.div
+        aria-hidden
         initial={{ opacity: 0, y: 18, scale: 0.94 }}
         animate={{ opacity: 0.92, y: 0, scale: 1 }}
         transition={{ duration: 1.2, delay: 0.3, ease: ease.out }}
@@ -64,6 +66,7 @@ export function MobileMemoryHero() {
 
       {/* ticket artifact */}
       <motion.div
+        aria-hidden
         initial={{ opacity: 0, y: 10, rotate: -12 }}
         animate={{ opacity: 1, y: 0, rotate: -9 }}
         transition={{ duration: 1.0, delay: 0.55, ease: ease.out }}
@@ -89,6 +92,7 @@ export function MobileMemoryHero() {
 
       {/* fade into card */}
       <div
+        aria-hidden
         className="absolute inset-x-0 bottom-0 h-32"
         style={{
           background:

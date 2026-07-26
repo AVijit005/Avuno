@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { motion, useReducedMotion } from "motion/react";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { lazy, Suspense } from "react";
 import type { ComponentType } from "react";
 const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
@@ -89,6 +89,8 @@ export default function AnalyticsPage() {
   const reduced = useReducedMotion();
   const [range, setRange] = useState<"lifetime" | "year" | "month" | "week">("year");
   const [scope, setScope] = useState<"all" | "movies" | "anime" | "books" | "games">("all");
+  const [todayStr, setTodayStr] = useState("");
+  useEffect(() => setTodayStr(new Date().toLocaleDateString()), []);
 
   const qOverview = useOverview();
   const qStreaks = useStreaks();
@@ -204,7 +206,7 @@ export default function AnalyticsPage() {
           />
           <div className="relative">
             <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground flex items-center gap-2">
-              <Sparkles className="h-3 w-3 text-primary" /> Hello · {new Date().toLocaleDateString()}
+              <Sparkles className="h-3 w-3 text-primary" /> Hello {todayStr ? `· ${todayStr}` : ''}
             </div>
             <h1 className="mt-5 font-display text-5xl tracking-tight md:text-7xl">
               <span className="text-gradient-aurora">A year of stories,</span>

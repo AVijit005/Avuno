@@ -8,7 +8,7 @@ export class SignedUrlService {
   private readonly secret: string;
 
   constructor(private readonly config: ConfigService) {
-    const secret = this.config.get<string>('jwt.accessSecret');
+    const secret = this.config.get<string>('storage.signingSecret') || this.config.get<string>('jwt.accessSecret');
     if (!secret) throw new Error('JWT access secret must be defined for signed URLs');
     this.secret = secret;
   }

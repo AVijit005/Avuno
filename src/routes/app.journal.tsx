@@ -92,12 +92,11 @@ function JournalPage() {
   const { data: discovery } = useDiscovery();
   const { data: prompts } = useJournalPrompts();
 
-  const hour = new Date().getHours();
-  const timeContext =
-    hour < 12 ? "This morning" :
-    hour < 17 ? "This afternoon" :
-    hour < 21 ? "This evening" :
-    "Tonight";
+  const [timeContext, setTimeContext] = useState("Today");
+  useEffect(() => {
+    const hr = new Date().getHours();
+    setTimeContext(hr < 12 ? "This morning" : hr < 17 ? "This afternoon" : hr < 21 ? "This evening" : "Tonight");
+  }, []);
 
   const entries = useMemo(() => {
     return journalData?.pages.flatMap((p) => p.items).filter(Boolean).map(adaptJournalEntry) ?? [];
