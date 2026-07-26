@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { analytics } from "../lib/analytics";
 import { queryKeys } from "../lib/api/query-keys";
 import { authApi } from "../lib/api";
-import { setAccessToken } from "../lib/api/fetch";
+import { setAccessToken, getAccessToken } from "../lib/api/fetch";
 import { ErrorBoundary } from "../components/common/ErrorBoundary";
 import { PageSkeleton } from "../components/common/PageSkeleton";
 
