@@ -3,19 +3,12 @@ import { useEffect } from "react";
 import { setAccessToken } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
-import { authApi } from "@/lib/api";
-import { queryKeys } from "@/lib/api/query-keys";
 
 export const Route = createFileRoute("/auth/callback")({
-  validateSearch: (search: Record<string, unknown>) => ({
-    token: (search.token as string) || "",
-  }),
   component: AuthCallback,
 });
 
 function AuthCallback() {
-  const navigate = useNavigate();
-
   useEffect(() => {
     if (typeof window === "undefined") return;
 
@@ -24,17 +17,17 @@ function AuthCallback() {
 
     if (token && token.trim().length > 0) {
       setAccessToken(token.trim());
-      navigate({ to: "/app", replace: true });
+      window.location.href = "/app";
     } else {
       const timer = setTimeout(() => {
         const retryParams = new URLSearchParams(window.location.search);
         const retryToken = retryParams.get("token");
         if (retryToken && retryToken.trim().length > 0) {
           setAccessToken(retryToken.trim());
-          navigate({ to: "/app", replace: true });
+          window.location.href = "/app";
         } else {
           toast.error("Authentication failed. Please try again.");
-          navigate({ to: "/auth", replace: true });
+          window.location.href = "/auth";
         }
       }, 1000);
       return () => clearTimeout(timer);
