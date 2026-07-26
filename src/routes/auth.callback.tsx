@@ -24,17 +24,17 @@ function AuthCallback() {
 
     if (token && token.trim().length > 0) {
       setAccessToken(token.trim());
-      window.location.replace("/app");
+      navigate({ to: "/app", replace: true });
     } else {
       const timer = setTimeout(() => {
         const retryParams = new URLSearchParams(window.location.search);
         const retryToken = retryParams.get("token");
         if (retryToken && retryToken.trim().length > 0) {
           setAccessToken(retryToken.trim());
-          window.location.replace("/app");
+          navigate({ to: "/app", replace: true });
         } else {
           toast.error("Authentication failed. Please try again.");
-          window.location.replace("/auth");
+          navigate({ to: "/auth", replace: true });
         }
       }, 1000);
       return () => clearTimeout(timer);
