@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
-import { setAccessToken } from "@/lib/api/fetch";
+import { setAccessToken, apiPost } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 
@@ -13,24 +13,25 @@ function AuthCallback() {
     if (typeof window === "undefined") return;
 
     const urlParams = new URLSearchParams(window.location.search);
+    const code = urlParams.get("code");
     const token = urlParams.get("token");
 
-    if (token && token.trim().length > 0) {
+    if (code && code.trim().length > 0) {
+      apiPost<{ accessToken: string }>('/auth/exchange', { code: code.trim() })
+        .then(res => {
+          setAccessToken(res.accessToken);
+          window.location.href = "/app";
+        })
+        .catch(() => {
+          toast.error("Authentication failed. Please try again.");
+          window.location.href = "/auth";
+        });
+    } else if (token && token.trim().length > 0) {
       setAccessToken(token.trim());
       window.location.href = "/app";
     } else {
-      const timer = setTimeout(() => {
-        const retryParams = new URLSearchParams(window.location.search);
-        const retryToken = retryParams.get("token");
-        if (retryToken && retryToken.trim().length > 0) {
-          setAccessToken(retryToken.trim());
-          window.location.href = "/app";
-        } else {
-          toast.error("Authentication failed. Please try again.");
-          window.location.href = "/auth";
-        }
-      }, 1000);
-      return () => clearTimeout(timer);
+      toast.error("Authentication failed. Please try again.");
+      window.location.href = "/auth";
     }
   }, []);
 

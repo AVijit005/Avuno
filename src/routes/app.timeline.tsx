@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState, useMemo } from "react";
+import { useScroll, useTransform, useReducedMotion, motion } from "motion/react";
 import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { CountUp, SegmentedFilter, ZoneHeading } from "@/components/analytics/AnalyticsKit";

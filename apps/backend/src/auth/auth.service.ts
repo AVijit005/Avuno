@@ -205,6 +205,29 @@ export class AuthService {
       user: this.toUserResponse(dbUser),
       accessToken,
       expiresIn,
+      refreshToken,
+    } as any;
+  }
+
+  async exchangeCode(code: string, response: Response): Promise<AuthResponseDto> {
+    const redisClient = this.redis.getClient();
+    const dataStr = await redisClient.get(`oauth:code:${code}`);
+    if (!dataStr) {
+      throw new UnauthorizedException('Invalid or expired code');
+    }
+    await redisClient.del(`oauth:code:${code}`);
+
+    const data = JSON.parse(dataStr);
+
+    if (data.refreshToken) {
+      const refreshExpirySeconds = this.config.get<number>('jwt.refreshExpirySeconds') ?? 604800;
+      this.cookieService.writeRefreshToken(response, data.refreshToken, refreshExpirySeconds);
+    }
+
+    return {
+      user: data.user,
+      accessToken: data.accessToken,
+      expiresIn: data.expiresIn,
     };
   }
 

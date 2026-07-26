@@ -5,6 +5,8 @@ import { AuthGuard } from '@nestjs/passport';
 import type { Request, Response } from 'express';
 import { AuthService } from '../auth.service';
 import { AuthResponseDto } from '../dto';
+import { randomUUID } from 'crypto';
+import { RedisService } from '../../redis/redis.service';
 
 interface OAuthUserPayload {
   sub: string;
@@ -16,6 +18,7 @@ export class GoogleOAuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly config: ConfigService,
+    private readonly redis: RedisService,
   ) {}
 
   @Get('google')
@@ -37,9 +40,13 @@ export class GoogleOAuthController {
       user,
       request.ip,
       request.headers['user-agent'] as string | undefined,
-      response,
     );
+    
+    const code = randomUUID();
+    const redisClient = this.redis.getClient();
+    await redisClient.set(`oauth:code:${code}`, JSON.stringify(authResult), 'EX', 30);
+    
     const frontendUrl = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
-    response.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(authResult.accessToken)}`);
+    response.redirect(`${frontendUrl}/auth/callback?code=${encodeURIComponent(code)}`);
   }
 }

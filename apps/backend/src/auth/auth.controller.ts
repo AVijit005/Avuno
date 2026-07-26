@@ -49,6 +49,16 @@ export class AuthController {
     );
   }
 
+  @Post('exchange')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  async exchange(
+    @Body('code') code: string,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<AuthResponseDto> {
+    return this.authService.exchangeCode(code, response);
+  }
+
   @Post('logout')
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)

@@ -59,14 +59,11 @@ export async function createApp(options?: NestApplicationOptions): Promise<INest
       if (
         allowedOrigins.length === 0 ||
         allowedOrigins.includes('*') ||
-        allowedOrigins.includes(origin) ||
-        origin.includes('avuno.xyz') ||
-        origin.includes('pages.dev') ||
-        origin.includes('localhost')
+        allowedOrigins.includes(origin)
       ) {
         return callback(null, true);
       }
-      return callback(null, true);
+      return callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
