@@ -1,6 +1,6 @@
 export { ApiError, NetworkError, TimeoutError } from './errors';
 export { API_BASE_URL } from './constants';
-export { apiFetch, apiGet, apiPost, apiPatch, apiDelete, apiUpload, setAccessToken, getAccessToken, logout } from './fetch';
+export { apiFetch, apiGet, apiPost, apiPatch, apiDelete, apiUpload, setAccessToken, getAccessToken } from './fetch';
 
 export * as authApi from './auth';
 export * as usersApi from './users';

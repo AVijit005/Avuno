@@ -75,9 +75,19 @@ async function forceRefreshValidToken(): Promise<string> {
   return (await (getTokenStore().refreshPromise || modRefreshPromise)) as string;
 }
 
+function isTokenExpired(token: string): boolean {
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]));
+    if (!payload.exp) return false;
+    return payload.exp * 1000 <= Date.now() + 30000;
+  } catch {
+    return true;
+  }
+}
+
 async function getValidToken(): Promise<string | null> {
   const stored = getAccessToken();
-  if (stored) return stored;
+  if (stored && !isTokenExpired(stored)) return stored;
 
   try {
     return await forceRefreshValidToken();
@@ -110,6 +120,7 @@ export async function apiFetch<T>(
   } = options;
 
   const url = path.startsWith('http') ? path : `${API_BASE_URL}${path}`;
+  let refreshAttempted = false;
 
   for (let attempt = 0; attempt <= retries; attempt++) {
     const controller = new AbortController();
@@ -150,7 +161,11 @@ export async function apiFetch<T>(
       }
 
       if (response.status === 401 && !skipAuth && !path.includes(REFRESH_ENDPOINT)) {
+        if (refreshAttempted) {
+          throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
+        }
         try {
+          refreshAttempted = true;
           setAccessToken(null);
           const newToken = await forceRefreshValidToken();
           if (newToken) {
@@ -265,8 +280,3 @@ function anySignal(signals: AbortSignal[]): AbortSignal {
   return controller.signal;
 }
 
-export function logout(): void {
-  apiFetch(LOGOUT_ENDPOINT, { method: 'POST', skipAuth: false })
-    .catch(() => {})
-    .finally(() => setAccessToken(null));
-}

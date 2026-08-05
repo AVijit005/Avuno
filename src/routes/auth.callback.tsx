@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { setAccessToken, apiPost } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
@@ -9,12 +9,23 @@ export const Route = createFileRoute("/auth/callback")({
 });
 
 function AuthCallback() {
+  const exchanged = useRef(false);
+
   useEffect(() => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined" || exchanged.current) return;
+    exchanged.current = true;
 
     const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get("error");
+    const errorDesc = urlParams.get("error_description");
     const code = urlParams.get("code");
     const token = urlParams.get("token");
+
+    if (error) {
+      toast.error(errorDesc ? decodeURIComponent(errorDesc).replace(/\+/g, " ") : "Authentication failed.");
+      window.location.href = "/auth";
+      return;
+    }
 
     if (code && code.trim().length > 0) {
       apiPost<{ accessToken: string }>('/auth/exchange', { code: code.trim() })

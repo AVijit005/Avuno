@@ -4,7 +4,7 @@ import { ArrowRight, Lock, Mail, Check, Loader as Loader2, User } from "lucide-r
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 import { AuthStage } from "@/components/auth/AuthStage";
 import { MobileMemoryHero } from "@/components/auth/MobileMemoryHero";
@@ -14,6 +14,7 @@ import { ParticleBurst } from "@/components/auth/ParticleBurst";
 import { useMouseParallax } from "@/lib/useParallax";
 import { useLogin, useRegister } from "@/hooks/use-auth";
 import { analytics } from "@/lib/analytics";
+import { API_BASE_URL } from "@/lib/api/constants";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
@@ -81,6 +82,15 @@ function Auth() {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const { x: ax, y: ay } = useMouseParallax(18);
 
+  const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
+  useEffect(() => {
+    return () => timeoutRefs.current.forEach(clearTimeout);
+  }, []);
+  const safeTimeout = (cb: () => void, ms: number) => {
+    const id = setTimeout(cb, ms);
+    timeoutRefs.current.push(id);
+  };
+
   const loginMutation = useLogin();
   const registerMutation = useRegister();
   // Forms
@@ -93,22 +103,22 @@ function Auth() {
     defaultValues: { fullName: "", email: "", password: "", confirmPassword: "" },
   });
 
-  const onSubmit = async () => {
+  const onSubmit = async (data: SignIn | SignUp) => {
     setStatus("loading");
     setErrorMessage(null);
 
     try {
       if (mode === "signin") {
-        const values = signIn.getValues();
+        const values = data as SignIn;
         const user = await loginMutation.mutateAsync({
           email: values.email,
           password: values.password,
         });
         analytics.identify(user.user.id);
         setStatus("success");
-        setTimeout(() => navigate({ to: "/app" }), 700);
+        safeTimeout(() => navigate({ to: "/app" }), 700);
       } else {
-        const values = signUp.getValues();
+        const values = data as SignUp;
         const newUser = await registerMutation.mutateAsync({
           email: values.email,
           password: values.password,
@@ -123,18 +133,24 @@ function Auth() {
           analytics.identify(user.user.id);
           analytics.track("signup");
           setStatus("success");
-          setTimeout(() => navigate({ to: "/app" }), 700);
+          safeTimeout(() => navigate({ to: "/app" }), 700);
         } catch (loginErr: any) {
           if (loginErr?.message === "Email not verified" || loginErr?.status === 403) {
             analytics.track("signup");
             setStatus("success");
             setErrorMessage("Account created! Please check your email to verify your account.");
-            setTimeout(() => {
+            safeTimeout(() => {
               setStatus("idle");
               switchMode("signin");
             }, 3000);
           } else {
-            throw loginErr;
+            analytics.track("signup");
+            setStatus("success");
+            setErrorMessage("Account created successfully! Please sign in.");
+            safeTimeout(() => {
+              setStatus("idle");
+              switchMode("signin");
+            }, 3000);
           }
         }
       }
@@ -143,7 +159,7 @@ function Auth() {
       const message =
         err instanceof Error ? err.message : "Something went wrong. Please try again.";
       setErrorMessage(message);
-      setTimeout(() => setStatus("idle"), 3000);
+      safeTimeout(() => setStatus("idle"), 3000);
     }
   };
 
@@ -344,7 +360,7 @@ function Auth() {
             {/* Google button */}
             <motion.div variants={cardLine}>
               <a
-                href="/api/auth/google"
+                href={`${API_BASE_URL}/auth/google`}
                 className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-all duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
                 style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)" }}
               >
@@ -431,6 +447,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Email"
                       type="email"
+                      autoComplete="email"
                       icon={<Mail className="h-4 w-4" />}
                       error={signIn.formState.errors.email?.message}
                       {...signIn.register("email")}
@@ -438,6 +455,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Password"
                       type="password"
+                      autoComplete="current-password"
                       icon={<Lock className="h-4 w-4" />}
                       error={signIn.formState.errors.password?.message}
                       {...signIn.register("password")}
@@ -470,6 +488,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Full Name"
                       type="text"
+                      autoComplete="name"
                       icon={<User className="h-4 w-4" />}
                       error={signUp.formState.errors.fullName?.message}
                       {...signUp.register("fullName")}
@@ -477,6 +496,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Email"
                       type="email"
+                      autoComplete="email"
                       icon={<Mail className="h-4 w-4" />}
                       error={signUp.formState.errors.email?.message}
                       {...signUp.register("email")}
@@ -484,6 +504,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Password"
                       type="password"
+                      autoComplete="new-password"
                       icon={<Lock className="h-4 w-4" />}
                       error={signUp.formState.errors.password?.message}
                       {...signUp.register("password")}
@@ -491,6 +512,7 @@ function Auth() {
                     <BottomBorderInput
                       label="Confirm Password"
                       type="password"
+                      autoComplete="new-password"
                       icon={<Lock className="h-4 w-4" />}
                       error={signUp.formState.errors.confirmPassword?.message}
                       {...signUp.register("confirmPassword")}
