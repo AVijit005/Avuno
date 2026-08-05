@@ -20,7 +20,15 @@ export class PasswordService {
       const [salt, key] = parts;
       crypto.scrypt(plain, salt, 64, (err, derivedKey) => {
         if (err) reject(err);
-        resolve(key === derivedKey.toString('hex'));
+        try {
+          const keyBuffer = Buffer.from(key, 'hex');
+          resolve(
+            keyBuffer.length === derivedKey.length &&
+              crypto.timingSafeEqual(keyBuffer, derivedKey)
+          );
+        } catch {
+          resolve(false);
+        }
       });
     });
   }
