@@ -52,7 +52,7 @@ export function StatusOverviewRow() {
         const tint = STATUS_TINT[c.status];
         const label = c.status === "favorite" ? "Favorites" : STATUS_LABEL[c.status];
         const collage = items.slice(0, 3).map((m) => m.poster);
-        while (collage.length < 3) collage.push(items[0]?.poster ?? favs[0]?.poster ?? "");
+        while (collage.length < 3) collage.push(items[0]?.poster ?? localFavs[0]?.poster ?? "");
         return (
           <Link key={c.status} to={c.to}>
             <PremiumGlass className="group/sc h-full p-5">
