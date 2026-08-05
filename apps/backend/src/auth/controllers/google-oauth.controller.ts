@@ -4,7 +4,7 @@ import { Throttle } from '@nestjs/throttler';
 import { AuthGuard } from '@nestjs/passport';
 import type { Request, Response } from 'express';
 import { AuthService } from '../auth.service';
-import { randomUUID, createHash } from 'crypto';
+import { randomUUID } from 'crypto';
 import { RedisService } from '../../redis/redis.service';
 
 interface OAuthUserPayload {
@@ -28,8 +28,8 @@ export class GoogleOAuthGuard extends AuthGuard('google') {
       ? 'http://localhost:5173' 
       : 'https://www.avuno.xyz';
     
-    const hash = createHash('sha256').update(`${request.ip}:${request.headers['user-agent'] || ''}`).digest('hex');
-    await this.redis.getClient().set(`oauth:state:${hash}`, JSON.stringify({ state: stateId, returnTo }), 'EX', 300);
+    // Store state using the UUID itself as key (IP hashing breaks behind Cloudflare proxy)
+    await this.redis.getClient().set(`oauth:state:${stateId}`, JSON.stringify({ returnTo }), 'EX', 300);
     return { state: stateId };
   }
 }
@@ -57,25 +57,26 @@ export class GoogleOAuthController {
     @Res() response: Response,
   ): Promise<void> {
     const state = (request.query as any).state;
-    const hash = createHash('sha256').update(`${request.ip}:${request.headers['user-agent'] || ''}`).digest('hex');
-    const redisClient = this.redis.getClient();
-    const savedStateStr = await redisClient.get(`oauth:state:${hash}`);
-    
-    let savedState = savedStateStr;
-    let returnTo = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
-    
-    if (savedStateStr) {
-      try {
-        const parsed = JSON.parse(savedStateStr);
-        savedState = parsed.state;
-        if (parsed.returnTo) returnTo = parsed.returnTo;
-      } catch (e) {
-        // Fallback for old plain-string format
-      }
+    if (!state) {
+      throw new UnauthorizedException('Missing OAuth state');
     }
     
-    if (!state || state !== savedState) {
-      throw new UnauthorizedException('Invalid OAuth state');
+    const redisClient = this.redis.getClient();
+    const savedStateStr = await redisClient.get(`oauth:state:${state}`);
+    
+    if (!savedStateStr) {
+      throw new UnauthorizedException('Invalid or expired OAuth state');
+    }
+    
+    // Delete state immediately to prevent replay attacks (one-time use)
+    await redisClient.del(`oauth:state:${state}`);
+    
+    let returnTo = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
+    try {
+      const parsed = JSON.parse(savedStateStr);
+      if (parsed.returnTo) returnTo = parsed.returnTo;
+    } catch (e) {
+      // Use default returnTo
     }
     
     const user = (request as any).user as OAuthUserPayload;
@@ -91,3 +92,4 @@ export class GoogleOAuthController {
     response.redirect(`${returnTo}/auth/callback?code=${encodeURIComponent(code)}`);
   }
 }
+
