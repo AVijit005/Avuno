@@ -19,10 +19,18 @@ export class GoogleOAuthGuard extends AuthGuard('google') {
   }
   async getAuthenticateOptions(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
-    const state = randomUUID();
+    const stateId = randomUUID();
+    
+    // Check if request came from localhost for local development (Enterprise Grade Security)
+    const referer = request.headers.referer || request.headers.origin || '';
+    const isLocalAllowed = process.env.ALLOW_LOCAL_DEV_REDIRECT === 'true';
+    const returnTo = (isLocalAllowed && referer.startsWith('http://localhost:5173')) 
+      ? 'http://localhost:5173' 
+      : 'https://www.avuno.xyz';
+    
     const hash = createHash('sha256').update(`${request.ip}:${request.headers['user-agent'] || ''}`).digest('hex');
-    await this.redis.getClient().set(`oauth:state:${hash}`, state, 'EX', 300);
-    return { state };
+    await this.redis.getClient().set(`oauth:state:${hash}`, JSON.stringify({ state: stateId, returnTo }), 'EX', 300);
+    return { state: stateId };
   }
 }
 
@@ -51,7 +59,20 @@ export class GoogleOAuthController {
     const state = (request.query as any).state;
     const hash = createHash('sha256').update(`${request.ip}:${request.headers['user-agent'] || ''}`).digest('hex');
     const redisClient = this.redis.getClient();
-    const savedState = await redisClient.get(`oauth:state:${hash}`);
+    const savedStateStr = await redisClient.get(`oauth:state:${hash}`);
+    
+    let savedState = savedStateStr;
+    let returnTo = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
+    
+    if (savedStateStr) {
+      try {
+        const parsed = JSON.parse(savedStateStr);
+        savedState = parsed.state;
+        if (parsed.returnTo) returnTo = parsed.returnTo;
+      } catch (e) {
+        // Fallback for old plain-string format
+      }
+    }
     
     if (!state || state !== savedState) {
       throw new UnauthorizedException('Invalid OAuth state');
@@ -67,7 +88,6 @@ export class GoogleOAuthController {
     const code = randomUUID();
     await redisClient.set(`oauth:code:${code}`, JSON.stringify(authResult), 'EX', 30);
     
-    const frontendUrl = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
-    response.redirect(`${frontendUrl}/auth/callback?code=${encodeURIComponent(code)}`);
+    response.redirect(`${returnTo}/auth/callback?code=${encodeURIComponent(code)}`);
   }
 }

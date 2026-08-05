@@ -80,9 +80,8 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
           )}
           {/* gradient + sheen */}
           <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
-          <motion.div
-            variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
-            className="absolute inset-0"
+          <div
+            className="absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
             style={{
               background: `radial-gradient(60% 80% at 50% 100%, color-mix(in oklch, ${accent} 35%, transparent), transparent 70%)`,
             }}
@@ -90,7 +89,7 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
 
           {/* Rating chip */}
           {rating > 0 && (
-            <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/50 px-2 py-0.5 text-[10px] backdrop-blur-md">
+            <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/80 px-2 py-0.5 text-[10px] text-white/90">
               <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" /> {rating.toFixed(1)}
             </div>
           )}
@@ -98,7 +97,7 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
           {/* Cross-media glyph — subtle medium identity */}
           <div
             aria-hidden
-            className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-black/45 text-white/85 ring-1 ring-white/10 backdrop-blur-md z-10"
+            className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-black/80 text-white/90 ring-1 ring-white/10 z-10"
             title={item.kind}
           >
             <Glyph className="h-3 w-3" />
@@ -116,15 +115,13 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
             </div>
           )}
         </motion.div>
-        <motion.div
-          variants={{ rest: { opacity: 0, y: 8, scale: 0.96 }, hover: { opacity: 1, y: 0, scale: 1 } }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-          className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center"
+        <div
+          className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center opacity-0 translate-y-2 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100"
         >
           <div className="pointer-events-auto w-full max-w-[220px]">
             <ItemActionBar id={item.id} title={item.title} variant="overlay" />
           </div>
-        </motion.div>
+        </div>
       </div>
       <div className="mt-3 px-0.5">
         <div className="truncate text-sm font-medium">{item.title}</div>
