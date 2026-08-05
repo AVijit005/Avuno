@@ -1,0 +1,6 @@
+- Every route is defined as an exported `Route = createFileRoute("/app/library/...")({...})` object with a `component` and optional `loader`/`pendingComponent`.
+- Status-specific pages follow a thin pattern: fetch items via a `@/lib/library` helper function and render them inside the shared `StatusPageShell` wrapper with a `status`, `title`, `description`, and `count` prop.
+- Data from the API is normalized through `adaptLibraryItem` / `adaptCollectionResponse` before being passed to UI components, keeping downstream props consistent.
+- Empty states use the shared `EmptyState` component with a title, description, icon, and optional action button rather than inline fallback JSX.
+- Animated list entries use `motion.div` with `initial={{ opacity: 0, y: 14 }}`, `whileInView`, and the shared `cascade(i)` transition helper for staggered reveal effects.
+- Navigation between library sections uses `<Link>` components pointing to sibling routes under `/app/library/*` instead of programmatic navigation.

@@ -1,0 +1,10 @@
+schema_version: 1
+module_path: frontend_app/auth_flow
+title: Authentication & Onboarding Routes
+scope:
+    - src/routes/auth.*.tsx
+    - src/routes/app.onboarding.tsx
+source_files: []
+depends_on: []
+related_to:
+    - path: tests

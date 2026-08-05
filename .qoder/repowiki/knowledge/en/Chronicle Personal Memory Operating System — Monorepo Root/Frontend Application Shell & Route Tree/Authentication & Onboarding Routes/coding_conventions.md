@@ -1,0 +1,5 @@
+- Each route file exports a `Route` created with `createFileRoute('<path>')` where the path matches the filename, keeping URL structure in sync with file layout.
+- Auth-related side effects that run once on mount use `useEffect` with an empty dependency array and guard against SSR via `typeof window === 'undefined'`.
+- User-facing errors and success messages are surfaced through `sonner`'s `toast.error` / `toast.success` rather than inline error states.
+- Navigation after completing an action (token exchange, onboarding completion) is performed via `window.location.href` for hard redirects or `useNavigate().navigate({ to })` for client-side navigation.
+- UI composition reuses shared design-system components from `@/components/ui/*` and `@/components/auth/*` instead of inline styles, with `AtmosphereBackground` providing consistent dark themed backgrounds.

@@ -58,8 +58,18 @@ export async function resendVerification(input: ResendVerificationInput): Promis
 export async function getCurrentUser(): Promise<UserResponse> {
   try {
     return await apiGet<UserResponse>('/users/me');
-  } catch {
-    return await apiGet<UserResponse>('/auth/me');
+  } catch (error) {
+    // Try fallback endpoint, but preserve original error for debugging
+    try {
+      return await apiGet<UserResponse>('/auth/me');
+    } catch (fallbackError) {
+      // If both fail, throw the fallback error (more likely to be relevant)
+      // but log the original for debugging purposes
+      if (error instanceof Error) {
+        console.warn('Primary /users/me endpoint failed:', error.message);
+      }
+      throw fallbackError;
+    }
   }
 }
 

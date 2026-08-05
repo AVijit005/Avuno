@@ -128,12 +128,13 @@ export class AuthService {
       throw new UnauthorizedException('Session invalid or expired');
     }
 
-    // Now rotate the token (atomic transaction)
-    const { token: newRefreshToken, refreshToken: stored } = await this.refreshTokenService.rotate(refreshToken);
-
-    // Invalidate old session and create new one
-    await this.sessionService.invalidateByToken(refreshToken);
-    await this.sessionService.create(stored.userId, ipAddress, userAgent, newRefreshToken);
+    // Rotate token and update session atomically
+    // This prevents partial state if session operations fail
+    const { token: newRefreshToken, refreshToken: stored } = await this.refreshTokenService.rotateWithSession(
+      refreshToken,
+      ipAddress,
+      userAgent,
+    );
 
     const user = await this.authRepository.findById(stored.userId);
     if (!user) {
@@ -270,11 +271,8 @@ export class AuthService {
   private async recordFailedAttempt(key: string): Promise<void> {
     const redisClient = this.redis.getClient();
     const attempts = await redisClient.incr(key);
-    if (attempts === 1) {
-      await redisClient.expire(key, LOCKOUT_MINUTES * 60);
-    }
-    if (attempts >= MAX_LOGIN_ATTEMPTS) {
-      await redisClient.expire(key, LOCKOUT_MINUTES * 60);
-    }
+    // Always set/reset TTL to ensure the key expires correctly
+    // This handles edge cases where key exists without TTL
+    await redisClient.expire(key, LOCKOUT_MINUTES * 60);
   }
 }

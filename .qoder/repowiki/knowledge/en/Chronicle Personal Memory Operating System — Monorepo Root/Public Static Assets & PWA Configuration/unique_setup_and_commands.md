@@ -1,0 +1,1 @@
+No build step required — files are served as-is by Vite's built-in static asset server. New landing images should be placed under public/landing/images/ following the existing naming conventions (bg_*, chapter_*, frag_*, hero_*, mockup_*, polaroid_*, poster_*, texture_*, timeline_*YYYY_N.png, world_*.png).

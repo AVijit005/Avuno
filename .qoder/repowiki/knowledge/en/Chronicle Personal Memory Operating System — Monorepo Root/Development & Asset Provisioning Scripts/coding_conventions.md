@@ -1,0 +1,4 @@
+- Each script is a single-file executable that reads/writes absolute Windows paths under `C:\Users\palav\...` or `C:\chronicle-your-media-story-mainzipzip\...` rather than using relative paths or config files.
+- Transcript-parsing scripts follow the same pattern: stream `transcript_full.jsonl` line-by-line with `readline.createInterface`, try-parse each line as JSON, look for `tool_calls` entries whose `name` includes `write_to_file`, then extract `args.TargetFile` and `args.CodeContent` to reconstruct source files.
+- Asset-download scripts define a static array of `{ name/file, url/query }` pairs at the top of the file and iterate over them with a small `setTimeout` delay between requests to avoid rate limiting.
+- Playwright scripts consistently launch `chromium`, set a fixed viewport of `1280x800`, navigate to `http://localhost:5173/new-landing` with `waitUntil: 'networkidle'`, and close the browser in an IIFE async entry point.

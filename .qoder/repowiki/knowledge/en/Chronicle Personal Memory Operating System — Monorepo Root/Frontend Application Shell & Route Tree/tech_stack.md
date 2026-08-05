@@ -1,0 +1,1 @@
+TanStack Router (file-based routing with auto-generated tree), React Query for server state, Tailwind CSS for styling, and a custom shadcn/ui component library under `components/ui/`.

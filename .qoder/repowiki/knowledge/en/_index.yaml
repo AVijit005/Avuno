@@ -1,0 +1,189 @@
+# 知识卡导出索引文件
+schema_version: 1
+locale: en-US
+branch: main
+nodes_managed: true
+exported_at: "2026-07-28T11:07:18Z"
+modules:
+    "":
+        dir_name: Chronicle Personal Memory Operating System — Monorepo Root
+        title: Chronicle Personal Memory Operating System — Monorepo Root
+        scope:
+            - README.md
+            - DEPLOYMENT-GUIDE.md
+            - .gitignore
+            - .npmrc
+            - .prettierrc
+            - .prettierignore
+            - package.json
+            - bunfig.toml
+            - tsconfig.json
+            - vite.config.ts
+            - eslint.config.js
+            - components.json
+            - AGENTS.md
+            - bun.lock
+            - check_console.js
+            - check_errors.js
+            - check_tags.cjs
+            - curated_download.js
+            - ddg_download_all.js
+            - ddg_images.js
+            - docker-compose.e2e.yml
+            - download_images.ps1
+            - download_videos.ps1
+            - extract.cjs
+            - extract_hero_node.cjs
+            - extract_worlds.cjs
+            - fetch_itunes_posters.js
+            - fill_blanks.js
+            - final_rollback.cjs
+            - lets brainstrom and completely make.txt
+            - my_restore.cjs
+            - ps_extract.ps1
+            - redownload_videos.ps1
+            - restore.cjs
+            - restore2.cjs
+            - restore3.cjs
+            - restore4.cjs
+            - restore_all.cjs
+            - restore_good_images.js
+            - restored_hero.txt
+            - rollback_final.cjs
+            - rollback_hero_current.cjs
+            - rollback_latest.cjs
+            - scrape_tmdb.js
+            - scrape_unsplash.js
+            - screenshot.js
+            - search_all.cjs
+            - test_ddg.jpg
+            - test_opacity.js
+            - test_scroll.js
+            - test_scroll2.js
+            - wiki_fetch.js
+            - yt-dlp.exe
+        source_files: []
+        children:
+            - dev_scripts
+            - docs
+            - frontend_app
+            - public_assets
+            - tests
+        depends_on: []
+        related_to: []
+    dev_scripts:
+        dir_name: Development & Asset Provisioning Scripts
+        title: Development & Asset Provisioning Scripts
+        scope:
+            - '*.js'
+            - '*.cjs'
+            - '*.ps1'
+            - '*.yml'
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: frontend_app/landing_pages
+            - path: tests
+    docs:
+        dir_name: Chronicle Project Documentation
+        title: Chronicle Project Documentation
+        scope:
+            - docs/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    frontend_app:
+        dir_name: Frontend Application Shell & Route Tree
+        title: Frontend Application Shell & Route Tree
+        scope:
+            - src/
+        source_files: []
+        children:
+            - frontend_app/auth_flow
+            - frontend_app/collections
+            - frontend_app/landing_pages
+            - frontend_app/library
+            - frontend_app/profile_and_identity
+        depends_on: []
+        related_to: []
+    frontend_app/auth_flow:
+        dir_name: Authentication & Onboarding Routes
+        title: Authentication & Onboarding Routes
+        scope:
+            - src/routes/auth.*.tsx
+            - src/routes/app.onboarding.tsx
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: tests
+    frontend_app/collections:
+        dir_name: Collections Route Module
+        title: Collections Route Module
+        scope:
+            - src/routes/app.collections*.tsx
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: frontend_app/library
+    frontend_app/landing_pages:
+        dir_name: Public Landing & Legal Pages
+        title: Public Landing & Legal Pages
+        scope:
+            - src/routes/new-landing.tsx
+            - src/routes/pricing.tsx
+            - src/routes/terms.tsx
+            - src/routes/privacy.tsx
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: dev_scripts
+            - path: tests
+    frontend_app/library:
+        dir_name: Library Dashboard & Status Views
+        title: Library Dashboard & Status Views
+        scope:
+            - src/routes/app.library.*.tsx
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: frontend_app/collections
+            - path: frontend_app/profile_and_identity
+    frontend_app/profile_and_identity:
+        dir_name: Profile, Quotes & Museum Pages
+        title: Profile, Quotes & Museum Pages
+        scope:
+            - src/routes/app.profile.tsx
+            - src/routes/app.quotes.tsx
+            - src/routes/app.museum.tsx
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: frontend_app/library
+    public_assets:
+        dir_name: Public Static Assets & PWA Configuration
+        title: Public Static Assets & PWA Configuration
+        scope:
+            - public/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
+    tests:
+        dir_name: Test Suite — Unit, Component & Visual Regression
+        title: Test Suite — Unit, Component & Visual Regression
+        scope:
+            - tests/
+        source_files: []
+        children: []
+        depends_on: []
+        related_to:
+            - path: dev_scripts
+            - path: frontend_app/auth_flow
+            - path: frontend_app/landing_pages

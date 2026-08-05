@@ -1,0 +1,1 @@
+Vitest + @testing-library/react + @testing-library/jest-dom for unit/component tests; Playwright (Node) for E2E; Python 3 + Playwright async API + Pillow (PIL) for visual regression screenshot capture and mean-per-channel pixel diffing.

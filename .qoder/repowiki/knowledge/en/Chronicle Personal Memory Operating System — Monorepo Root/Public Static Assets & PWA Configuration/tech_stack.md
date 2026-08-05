@@ -1,0 +1,1 @@
+Vite static asset pipeline with Web App Manifest (PWA), PNG icons at 192px/512px, SVG favicon, robots.txt, and sitemaps.org-compliant sitemap.xml targeting the chronicle.app domain.

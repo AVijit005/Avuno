@@ -1,0 +1,5 @@
+- Each route file exports a `Route` created via `createFileRoute` with the path matching the filename, following TanStack Router's file-based convention.
+- Data fetching is delegated to custom hooks (`useCollections`, `useCollection`) rather than inline fetch calls, and raw API responses are normalized through `adaptCollectionResponse` before use.
+- Loading states render a consistent `ShimmerSkeleton` pattern with grid layouts mirroring the eventual content shape, while error/empty states use dedicated components like `PremiumErrorState` and `EmptyState`.
+- Sections are wrapped in `RevealSection` with a `SectionHeader` (eyebrow/title/subtitle) to provide uniform scroll-reveal behavior across the index page.
+- The detail page structures long-form content using the `Chapter` component with numbered sections, `DropCap`, and `PullQuote` editorial primitives for narrative presentation.

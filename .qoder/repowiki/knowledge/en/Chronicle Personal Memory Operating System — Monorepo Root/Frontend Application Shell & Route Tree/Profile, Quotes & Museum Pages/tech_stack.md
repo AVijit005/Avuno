@@ -1,0 +1,1 @@
+TanStack Router with file-based routing (`createFileRoute`), React components styled with Tailwind CSS utility classes, and custom hooks for data fetching paired with adapter functions for response transformation.

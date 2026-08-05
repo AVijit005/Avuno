@@ -1,0 +1,1 @@
+TanStack Router-based frontend that wires generated file-based routes into a shared AppShell, enforces auth guards on /app, and bootstraps React Query, analytics, theme, and error boundaries at the root.

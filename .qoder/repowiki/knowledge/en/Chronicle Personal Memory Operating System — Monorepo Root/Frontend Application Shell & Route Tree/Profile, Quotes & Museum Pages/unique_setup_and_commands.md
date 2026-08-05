@@ -1,0 +1,1 @@
+Routes are registered automatically by TanStack Router's file-based convention — no additional registration is needed beyond exporting `Route` from each file.

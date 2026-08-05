@@ -1,0 +1,1 @@
+Reference documentation for the Chronicle Personal Memory Operating System covering architecture, design system, production deployment, security posture, operations runbooks, and disaster recovery procedures.

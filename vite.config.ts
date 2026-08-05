@@ -12,6 +12,13 @@ export default defineConfig({
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
     server: { entry: "server" },
+    // __app.analytics-page.tsx is a lazy-imported component (loaded by app.analytics.tsx),
+    // not a route. Exclude it from route generation so TanStack stops warning
+    // "does not export a Route". The pattern matches only this component file
+    // (the real route is app.analytics.tsx, which has no "-page" suffix).
+    router: {
+      routeFileIgnorePattern: "analytics-page",
+    },
   },
   vite: {
     server: {
@@ -33,6 +40,9 @@ export default defineConfig({
         manifest: false, // We're using our own manifest.webmanifest file
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+        },
+        devOptions: {
+          enabled: false // Crucial: prevents SW from locking the UI in dev mode
         }
       })
     ]

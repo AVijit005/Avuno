@@ -1,0 +1,1 @@
+Visual regression requires the dev server running on port 8080 before invoking `python3 tests/visual/run.py` (check mode) or `--update` to rewrite baselines; project scripts `bun run test:visual` and `bun run test:visual:update` wrap this. E2E tests expect the Vite dev server on port 5173 and include a 2-minute timeout to accommodate prebundling.

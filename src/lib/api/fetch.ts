@@ -66,18 +66,21 @@ async function refreshAccessToken(): Promise<string> {
   return body.data.accessToken;
 }
 
-async function getValidToken(): Promise<string | null> {
-  const stored = getAccessToken();
-  if (stored) return stored;
-
+async function forceRefreshValidToken(): Promise<string> {
   if (!getTokenStore().refreshPromise) {
     modRefreshPromise = refreshAccessToken().finally(() => {
       modRefreshPromise = null;
     });
   }
+  return (await (getTokenStore().refreshPromise || modRefreshPromise)) as string;
+}
+
+async function getValidToken(): Promise<string | null> {
+  const stored = getAccessToken();
+  if (stored) return stored;
 
   try {
-    return await (getTokenStore().refreshPromise || modRefreshPromise);
+    return await forceRefreshValidToken();
   } catch {
     return null;
   }
@@ -148,7 +151,8 @@ export async function apiFetch<T>(
 
       if (response.status === 401 && !skipAuth && !path.includes(REFRESH_ENDPOINT)) {
         try {
-          const newToken = await refreshAccessToken();
+          setAccessToken(null);
+          const newToken = await forceRefreshValidToken();
           if (newToken) {
             continue;
           }

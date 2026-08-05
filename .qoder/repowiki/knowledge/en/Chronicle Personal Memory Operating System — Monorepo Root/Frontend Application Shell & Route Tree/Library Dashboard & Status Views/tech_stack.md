@@ -1,0 +1,1 @@
+TanStack Router file-based routing with `createFileRoute`, React hooks for data fetching (`useLibrary`, `useLibraryByStatus`, `useLibraryStats`), Framer Motion (`motion/react`) for scroll-triggered animations, and Tailwind CSS for styling.

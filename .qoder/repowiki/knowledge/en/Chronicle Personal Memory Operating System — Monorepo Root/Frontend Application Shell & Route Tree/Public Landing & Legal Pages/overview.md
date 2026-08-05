@@ -1,0 +1,1 @@
+TanStack Router file-based routes for the public-facing landing, pricing, terms of service, and privacy policy pages that render marketing and legal content without authentication.

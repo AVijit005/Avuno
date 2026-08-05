@@ -1,0 +1,60 @@
+schema_version: 1
+module_path: ""
+title: Chronicle Personal Memory Operating System — Monorepo Root
+scope:
+    - README.md
+    - DEPLOYMENT-GUIDE.md
+    - .gitignore
+    - .npmrc
+    - .prettierrc
+    - .prettierignore
+    - package.json
+    - bunfig.toml
+    - tsconfig.json
+    - vite.config.ts
+    - eslint.config.js
+    - components.json
+    - AGENTS.md
+    - bun.lock
+    - check_console.js
+    - check_errors.js
+    - check_tags.cjs
+    - curated_download.js
+    - ddg_download_all.js
+    - ddg_images.js
+    - docker-compose.e2e.yml
+    - download_images.ps1
+    - download_videos.ps1
+    - extract.cjs
+    - extract_hero_node.cjs
+    - extract_worlds.cjs
+    - fetch_itunes_posters.js
+    - fill_blanks.js
+    - final_rollback.cjs
+    - lets brainstrom and completely make.txt
+    - my_restore.cjs
+    - ps_extract.ps1
+    - redownload_videos.ps1
+    - restore.cjs
+    - restore2.cjs
+    - restore3.cjs
+    - restore4.cjs
+    - restore_all.cjs
+    - restore_good_images.js
+    - restored_hero.txt
+    - rollback_final.cjs
+    - rollback_hero_current.cjs
+    - rollback_latest.cjs
+    - scrape_tmdb.js
+    - scrape_unsplash.js
+    - screenshot.js
+    - search_all.cjs
+    - test_ddg.jpg
+    - test_opacity.js
+    - test_scroll.js
+    - test_scroll2.js
+    - wiki_fetch.js
+    - yt-dlp.exe
+source_files: []
+depends_on: []
+related_to: []

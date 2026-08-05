@@ -7,7 +7,7 @@ import {
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode, Suspense } from "react";
+import { useEffect, useState, type ReactNode, Suspense } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -112,6 +112,15 @@ function RootShell({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               try {
+                if ('serviceWorker' in navigator) {
+                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
+                    for(let registration of registrations) {
+                      registration.unregister();
+                    }
+                  }).catch(function() {});
+                }
+              } catch (e) {}
+              try {
                 const storedTheme = localStorage.getItem('theme');
                 const isLight = storedTheme === 'light' || (!storedTheme && window.matchMedia('(prefers-color-scheme: light)').matches);
                 if (isLight) {
@@ -134,19 +143,31 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const [isRestoring, setIsRestoring] = useState(true);
 
   useEffect(() => {
+    let mounted = true;
     const restoreSession = async () => {
       const token = getAccessToken();
-      if (!token) return;
+      if (!token) {
+        if (mounted) setIsRestoring(false);
+        return;
+      }
       try {
         const user = await authApi.getCurrentUser();
         queryClient.setQueryData(queryKeys.auth.me(), user);
       } catch (err) {
-        // Silently handle session restore failure
+        setAccessToken(null);
+      } finally {
+        if (mounted) setIsRestoring(false);
       }
     };
-    if (!queryClient.getQueryData(queryKeys.auth.me())) restoreSession();
+    if (!queryClient.getQueryData(queryKeys.auth.me())) {
+      restoreSession();
+    } else {
+      setIsRestoring(false);
+    }
+    return () => { mounted = false; };
   }, [queryClient]);
 
   // Apply theme on boot
@@ -173,6 +194,10 @@ function RootComponent() {
   useEffect(() => {
     analytics.page(router.state.location.pathname);
   }, [router.state.location.pathname]);
+
+  if (isRestoring) {
+    return <PageSkeleton />;
+  }
 
   return (
     <QueryClientProvider client={queryClient}>

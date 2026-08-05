@@ -1,0 +1,4 @@
+- Each document follows a consistent title header format including the version tag (e.g., "Chronicle Backend v1.0.0") to anchor the scope of the described system.
+- Operational guidance is structured as numbered step lists with inline backtick-quoted commands, making runbook actions copy-paste safe.
+- Environment variables are split into Required and Optional-but-recommended sections with brief descriptions of purpose and constraints.
+- Security recommendations are presented as bullet-pointed controls grouped by category (Authentication, Authorization, Data Protection, Transport Security) rather than narrative prose.

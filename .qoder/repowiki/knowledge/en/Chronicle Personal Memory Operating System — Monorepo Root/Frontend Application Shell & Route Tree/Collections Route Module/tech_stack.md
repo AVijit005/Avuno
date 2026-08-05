@@ -1,0 +1,1 @@
+TanStack Router file-based routing (`createFileRoute`), React hooks for data fetching (`useCollections`, `useCollection`), Tailwind CSS for styling, `motion/react` for animations, `sonner` for toast notifications, and `lucide-react` icons.

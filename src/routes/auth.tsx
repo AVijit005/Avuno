@@ -109,22 +109,34 @@ function Auth() {
         setTimeout(() => navigate({ to: "/app" }), 700);
       } else {
         const values = signUp.getValues();
-        await registerMutation.mutateAsync({
+        const newUser = await registerMutation.mutateAsync({
           email: values.email,
           password: values.password,
           name: values.fullName,
         });
         
-        // Automatically log the user in after successful registration
-        const user = await loginMutation.mutateAsync({
-          email: values.email,
-          password: values.password,
-        });
-        
-        analytics.identify(user.user.id);
-        analytics.track("signup");
-        setStatus("success");
-        setTimeout(() => navigate({ to: "/app" }), 700);
+        try {
+          const user = await loginMutation.mutateAsync({
+            email: values.email,
+            password: values.password,
+          });
+          analytics.identify(user.user.id);
+          analytics.track("signup");
+          setStatus("success");
+          setTimeout(() => navigate({ to: "/app" }), 700);
+        } catch (loginErr: any) {
+          if (loginErr?.message === "Email not verified" || loginErr?.status === 403) {
+            analytics.track("signup");
+            setStatus("success");
+            setErrorMessage("Account created! Please check your email to verify your account.");
+            setTimeout(() => {
+              setStatus("idle");
+              switchMode("signin");
+            }, 3000);
+          } else {
+            throw loginErr;
+          }
+        }
       }
     } catch (err: unknown) {
       setStatus("error");

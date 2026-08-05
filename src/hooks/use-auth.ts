@@ -29,9 +29,6 @@ export function useRegister() {
   const queryClient = useQueryClient();
   return useMutation<UserResponse, Error, RegisterInput>({
     mutationFn: (input) => authApi.register(input),
-    onSuccess: (data) => {
-      queryClient.setQueryData(queryKeys.auth.me(), data);
-    }
   });
 }
 
@@ -39,7 +36,7 @@ export function useLogout() {
   const queryClient = useQueryClient();
   return useMutation<void, Error, void>({
     mutationFn: () => authApi.logoutUser(),
-    onSuccess: () => {
+    onSettled: () => {
       setAccessToken(null);
       queryClient.clear();
     },
@@ -50,7 +47,7 @@ export function useLogoutAll() {
   const queryClient = useQueryClient();
   return useMutation<void, Error, void>({
     mutationFn: () => authApi.logoutAll(),
-    onSuccess: () => {
+    onSettled: () => {
       setAccessToken(null);
       queryClient.clear();
     },

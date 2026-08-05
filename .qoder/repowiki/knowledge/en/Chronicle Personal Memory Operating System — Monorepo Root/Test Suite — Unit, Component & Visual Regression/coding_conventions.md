@@ -1,0 +1,5 @@
+- Component tests use `describe`/`it` from Vitest with `render` and `screen` from `@testing-library/react`, asserting presence via `getByText` / `getByLabelText` / `toBeInTheDocument`.
+- External modules are isolated with `vi.mock` providing minimal functional shims (returning `<div>{children}</div>` or no-op functions) rather than full implementations.
+- Each component test file lives directly under `tests/components/<feature>/` mirroring the source component's directory structure and shares the same filename suffix `.test.tsx`.
+- Visual regression fixtures are identified by stable `data-vr-id` attributes on the rendered element, and captured in exactly three states: default, hover, active.
+- Screenshot artifacts are persisted under an `artifacts/` directory relative to the test runner for debugging failed E2E runs.
