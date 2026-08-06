@@ -30,10 +30,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       callbackURL,
       scope: ['email', 'profile'],
       state: true,
-      store: {
-        store: (req: any, cb: any) => cb(null, ''),
-        verify: (req: any, state: string, cb: any) => cb(null, true)
-      }
     });
   }
 
