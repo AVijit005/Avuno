@@ -42,6 +42,7 @@ export class StorageController {
     @UploadedFile() file: any,
     @Query('category') category: string,
   ): Promise<UploadResponseDto> {
+    if (!file) throw new BadRequestException('No file provided');
     return this.storageService.upload(
       { buffer: file.buffer, mimeType: file.mimetype, originalName: file.originalname },
       category || 'uploads',
