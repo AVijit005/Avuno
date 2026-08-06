@@ -64,7 +64,7 @@ export function adaptLibraryItem(item: LibraryItemResponse): UIMediaItem {
     mediaId: media?.id ?? item.id,
     title: media?.title ?? "Unknown",
     kind: adaptMediaType(item.mediaType),
-    year: media?.releaseYear ?? 0,
+    year: media?.releaseYear ?? null,
     poster: media?.posterUrl ?? PLACEHOLDER_POSTER,
     backdrop: media?.backdropUrl ?? null,
     rating: item.rating,

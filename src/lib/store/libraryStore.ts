@@ -118,19 +118,18 @@ export const useLibraryStore = create<State & Actions>()(
       hydrated: false,
 
       setStatus: (id, status) =>
-        set((s) => {
-          const prev = s.meta[id] ?? { status };
-          const next: StoredMeta = { ...prev, status, lastActivityAt: "Just now" };
-          if (status === "completed") {
-            next.completedAt = "Today";
-            next.progress = 100;
-          }
-          if (status === "rewatching") {
-            next.progress = 0;
-            next.timesWatched = (prev.timesWatched ?? 0) + 1;
-          }
-          return { meta: { ...s.meta, [id]: next } };
-        }),
+        set((s) => ({
+          meta: {
+            ...s.meta,
+            [id]: {
+              ...s.meta[id],
+              status,
+              lastActivityAt: "Just now",
+              ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
+              ...(status === "rewatching" ? { progress: 0, timesWatched: ((s.meta[id]?.timesWatched ?? 0) + 1) } : {}),
+            },
+          },
+        })),
       toggleFavorite: (id) =>
         set((s) => ({
           meta: {
@@ -256,7 +255,7 @@ export const useLibraryStore = create<State & Actions>()(
         })),
 
       createCollection: (name, note) => {
-        const id = `col_${Date.now().toString(36)}`;
+        const id = `col_${crypto.randomUUID().slice(0, 8)}`;
         set((s) => ({ collections: [{ id, name, note, itemIds: [] }, ...s.collections] }));
         return id;
       },
