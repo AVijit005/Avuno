@@ -9,7 +9,7 @@
  * ============================================================ */
 
 body {
-  overflow-x: clip;
+  /* overflow-x: clip removed */
 }
 
 /* Horizontal scroll containers — smooth touch on mobile */
@@ -512,7 +512,6 @@ select {
     font-feature-settings: "cv11", "ss01", "ss03";
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
-    overscroll-behavior-y: contain;
   }
   @media (prefers-reduced-motion: no-preference) {
     html {
