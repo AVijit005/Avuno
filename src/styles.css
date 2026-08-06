@@ -506,6 +506,12 @@ select {
   body {
     background: var(--background);
     color: var(--foreground);
+    /* Defensive scroll fixes */
+    overflow-y: auto;
+    height: auto;
+  }
+  body:not([data-scroll-locked]) {
+    overflow-y: auto !important;
   }
   body {
     font-family: var(--font-sans);
