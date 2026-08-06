@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { allCreators } from "@/lib/creatorEngine";
 import { PullQuote } from "@/components/editorial/PullQuote";
+import { ComingSoon } from "@/components/common/ComingSoon";
 
 export const Route = createFileRoute("/app/creators/")({ component: CreatorsIndex });
 
@@ -91,6 +92,13 @@ function CreatorsIndex() {
           ))}
         </div>
       </section>
+      {creators.length === 0 && (
+        <ComingSoon
+          eyebrow="Coming soon"
+          title="Creator profiles"
+          description="We're building detailed profiles for every director, author, and artist in your collection. Check back soon."
+        />
+      )}
     </div>
   );
 }

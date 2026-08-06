@@ -1,13 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { FRANCHISES } from "@/lib/franchiseEngine";
+import { getAllFranchises } from "@/lib/franchiseEngine";
 import { Collage } from "@/components/editorial/Collage";
+import { ComingSoon } from "@/components/common/ComingSoon";
 
 export const Route = createFileRoute("/app/franchises/")({ component: FranchisesIndex });
 
 function FranchisesIndex() {
-  const featured = FRANCHISES.slice(0, 4);
-  const rest = FRANCHISES.slice(4);
+  const franchises = getAllFranchises();
+  const featured = franchises.slice(0, 4);
+  const rest = franchises.slice(4);
   const hero = featured[0];
 
   return (
@@ -74,6 +76,13 @@ function FranchisesIndex() {
             ))}
           </div>
         </section>
+      )}
+      {franchises.length === 0 && (
+        <ComingSoon
+          eyebrow="Coming soon"
+          title="Franchise worlds"
+          description="We're mapping every cinematic universe, book series, and game saga across your library. Come back soon."
+        />
       )}
     </div>
   );
