@@ -1,15 +1,25 @@
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
-import { Quote, ArrowUpRight } from "lucide-react";
-import { } from "@/lib/types";
-const JOURNAL: any[] = [];
-
-
+import { Quote, ArrowUpRight, BookOpen } from "lucide-react";
+import { useJournalEntries } from "@/hooks/use-journal";
 
 export function JournalPreview() {
+  const { data, isLoading } = useJournalEntries({ limit: 3 });
+  const entries = data?.pages?.flatMap((p: any) => p.items ?? p.data ?? [])?.slice(0, 3) ?? [];
+
+  if (isLoading) return null;
+  if (entries.length === 0) {
+    return (
+      <div className="glass rounded-3xl p-8 text-center">
+        <BookOpen className="mx-auto h-8 w-8 text-muted-foreground/40" />
+        <p className="mt-3 text-sm text-muted-foreground">No journal entries yet. Start writing.</p>
+      </div>
+    );
+  }
+
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      {JOURNAL.map((j, i) => (
+      {entries.map((j: any, i: number) => (
         <motion.div
           key={j.id}
           initial={{ opacity: 0, y: 16, rotate: -1 + i * 0.5 }}
@@ -24,18 +34,18 @@ export function JournalPreview() {
         >
           <div
             className="absolute -right-14 -top-14 h-40 w-40 rounded-full opacity-40 blur-3xl"
-            style={{ background: j.accent }}
+            style={{ background: "var(--primary)" }}
           />
           <div className="relative">
             <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-              <span>{j.date}</span>
-              <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px]">{j.mood}</span>
+              <span>{new Date(j.createdAt).toLocaleDateString()}</span>
+              {j.mood && <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px]">{j.mood}</span>}
             </div>
-            <div className="mt-3 font-display text-2xl leading-tight">{j.title}</div>
-            <div className="text-[11px] text-muted-foreground">{j.media}</div>
+            <div className="mt-3 font-display text-2xl leading-tight">{j.title ?? "Untitled"}</div>
+            <div className="text-[11px] text-muted-foreground">{j.location ?? ""}</div>
             <div className="mt-4 flex gap-2 text-sm text-foreground/85">
               <Quote className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
-              <p className="font-display italic leading-snug">{j.excerpt}</p>
+              <p className="font-display italic leading-snug line-clamp-3">{j.content}</p>
             </div>
             <Link
               to="/app/journal"

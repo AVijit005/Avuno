@@ -1,15 +1,12 @@
 import { motion } from "motion/react";
 import { Film, BookOpen, Gamepad2, Music2, Target, Flame, Sparkles } from "lucide-react";
 import { lazy, type ComponentType } from "react";
+import { useOverview, useStreaks } from "@/hooks/use-analytics";
+import { CountUp } from "@/components/landing/CountUp";
+
 const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
 const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
 const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-
-import { } from "@/lib/types";
-import { CountUp } from "@/components/landing/CountUp";
-const THIS_WEEK: any[] = [];
-
-
 
 type Item = {
   key: string;
@@ -20,63 +17,6 @@ type Item = {
   suffix?: string;
   text?: string;
 };
-const ITEMS: Item[] = [
-  {
-    key: "watch",
-    icon: Film,
-    label: "Watch time",
-    value: THIS_WEEK.watchTime,
-    suffix: "h",
-    color: "var(--primary)",
-  },
-  {
-    key: "read",
-    icon: BookOpen,
-    label: "Reading",
-    value: THIS_WEEK.readingTime,
-    suffix: "h",
-    color: "oklch(0.62 0.2 295)",
-  },
-  {
-    key: "game",
-    icon: Gamepad2,
-    label: "Gaming",
-    value: THIS_WEEK.gamingTime,
-    suffix: "h",
-    color: "oklch(0.72 0.16 80)",
-  },
-  {
-    key: "listen",
-    icon: Music2,
-    label: "Listening",
-    value: THIS_WEEK.listeningTime,
-    suffix: "h",
-    color: "oklch(0.7 0.18 25)",
-  },
-  {
-    key: "rate",
-    icon: Target,
-    label: "Completion",
-    value: THIS_WEEK.completionRate,
-    suffix: "%",
-    color: "oklch(0.72 0.16 160)",
-  },
-  {
-    key: "streak",
-    icon: Flame,
-    label: "Streak",
-    value: THIS_WEEK.streak,
-    suffix: " d",
-    color: "oklch(0.78 0.16 50)",
-  },
-  {
-    key: "genre",
-    icon: Sparkles,
-    label: "Top genre",
-    text: THIS_WEEK.favoriteGenre,
-    color: "oklch(0.65 0.22 295)",
-  },
-];
 
 function spark(seed: number) {
   return Array.from({ length: 14 }, (_, i) => ({
@@ -85,6 +25,67 @@ function spark(seed: number) {
 }
 
 export function ThisWeek() {
+  const { data: overview } = useOverview();
+  const { data: streaks } = useStreaks();
+
+  const ITEMS: Item[] = [
+    {
+      key: "watch",
+      icon: Film,
+      label: "Watch time",
+      value: overview?.hoursWatched ?? 0,
+      suffix: "h",
+      color: "var(--primary)",
+    },
+    {
+      key: "read",
+      icon: BookOpen,
+      label: "Reading",
+      value: overview?.hoursRead ?? 0,
+      suffix: "h",
+      color: "oklch(0.62 0.2 295)",
+    },
+    {
+      key: "game",
+      icon: Gamepad2,
+      label: "Gaming",
+      value: overview?.hoursPlayed ?? 0,
+      suffix: "h",
+      color: "oklch(0.72 0.16 80)",
+    },
+    {
+      key: "listen",
+      icon: Music2,
+      label: "Listening",
+      value: overview?.hoursLearned ?? 0,
+      suffix: "h",
+      color: "oklch(0.7 0.18 25)",
+    },
+    {
+      key: "rate",
+      icon: Target,
+      label: "Completion",
+      value: overview?.averageRating ?? 0,
+      suffix: " avg",
+      color: "oklch(0.72 0.16 160)",
+    },
+    {
+      key: "streak",
+      icon: Flame,
+      label: "Streak",
+      value: streaks?.currentStreak ?? 0,
+      suffix: " d",
+      color: "oklch(0.78 0.16 50)",
+    },
+    {
+      key: "genre",
+      icon: Sparkles,
+      label: "Top genre",
+      text: overview?.favoriteGenre ?? "—",
+      color: "oklch(0.65 0.22 295)",
+    },
+  ];
+
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4 lg:grid-cols-7">
       {ITEMS.map((it, i) => (
@@ -139,4 +140,3 @@ export function ThisWeek() {
     </div>
   );
 }
-

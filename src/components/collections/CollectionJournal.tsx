@@ -1,12 +1,16 @@
 import { Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { } from "@/lib/types";
+import { BookOpen } from "lucide-react";
 import type { Collection } from "@/lib/types";
-const JOURNAL: any[] = [];
-
-
+import { useJournalEntries } from "@/hooks/use-journal";
 
 export function CollectionJournal({ collection: _c }: { collection: Collection }) {
+  const { data, isLoading } = useJournalEntries({ limit: 5 });
+  const entries = data?.pages?.flatMap((p: any) => p.items ?? p.data ?? [])?.slice(0, 5) ?? [];
+
+  if (isLoading) return null;
+  if (entries.length === 0) return null;
+
   return (
     <PremiumGlass variant="subtle">
       <div className="p-5">
@@ -22,13 +26,13 @@ export function CollectionJournal({ collection: _c }: { collection: Collection }
           </Link>
         </div>
         <ul className="mt-4 space-y-3">
-          {JOURNAL.map((j) => (
+          {entries.map((j: any) => (
             <li key={j.id} className="border-l-2 border-primary/40 pl-3">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/75">
-                {j.date} · {j.mood}
+                {new Date(j.createdAt).toLocaleDateString()} {j.mood ? `· ${j.mood}` : ""}
               </div>
-              <div className="text-sm">{j.title}</div>
-              <p className="text-[11px] text-muted-foreground">{j.excerpt}</p>
+              <div className="text-sm">{j.title ?? "Untitled"}</div>
+              <p className="text-[11px] text-muted-foreground line-clamp-2">{j.content}</p>
             </li>
           ))}
         </ul>
