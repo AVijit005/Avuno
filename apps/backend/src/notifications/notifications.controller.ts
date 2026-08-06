@@ -1,3 +1,4 @@
+import { safeParseInt } from '../shared';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser, JwtAuthGuard } from '../auth';
@@ -24,7 +25,7 @@ export class NotificationsController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ): Promise<NotificationListDto> {
-    return this.notificationsService.findAll(user.sub, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.notificationsService.findAll(user.sub, cursor, limit ? safeParseInt(limit, 20) : 20);
   }
 
   @Patch(':id/read')

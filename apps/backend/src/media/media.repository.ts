@@ -67,8 +67,9 @@ function buildWhere(params: FindManyParams): Record<string, unknown> {
 }
 
 function buildOrderBy(params: FindManyParams): Record<string, string>[] {
-  const sortField = params.sortBy ?? 'createdAt';
-  const sortOrder = params.sortOrder ?? 'desc';
+  const ALLOWED_SORT_FIELDS = ['createdAt', 'updatedAt', 'title', 'releaseYear', 'slug'];
+  const sortField = params.sortBy && ALLOWED_SORT_FIELDS.includes(params.sortBy) ? params.sortBy : 'createdAt';
+  const sortOrder = params.sortOrder === 'asc' ? 'asc' : 'desc';
   return [{ [sortField]: sortOrder }, { id: 'asc' }];
 }
 

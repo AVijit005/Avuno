@@ -49,7 +49,7 @@ export function listSaved(): SavedItem[] {
 export function saveForLater(item: Omit<SavedItem, "id" | "createdAt">) {
   const next: SavedItem = {
     ...item,
-    id: `sv_${Date.now().toString(36)}`,
+    id: `sv_${crypto.randomUUID().slice(0,8)}`,
     createdAt: new Date().toISOString(),
   };
   writem([next, ...read()]);

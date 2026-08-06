@@ -1,3 +1,4 @@
+import { safeParseInt } from '../shared';
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser, JwtAuthGuard } from '../auth';
@@ -105,7 +106,7 @@ export class InteractionController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.interactionService.listReviews(user.sub, type, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.interactionService.listReviews(user.sub, type, cursor, limit ? safeParseInt(limit, 20) : 20);
   }
 
   @Get('favorites')
@@ -116,7 +117,7 @@ export class InteractionController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.interactionService.listFavorites(user.sub, type, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.interactionService.listFavorites(user.sub, type, cursor, limit ? safeParseInt(limit, 20) : 20);
   }
 
   @Get('bookmarks')
@@ -127,7 +128,7 @@ export class InteractionController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.interactionService.listBookmarks(user.sub, type, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.interactionService.listBookmarks(user.sub, type, cursor, limit ? safeParseInt(limit, 20) : 20);
   }
 
   @Get('history')
@@ -138,6 +139,6 @@ export class InteractionController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.interactionService.listHistory(user.sub, type, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.interactionService.listHistory(user.sub, type, cursor, limit ? safeParseInt(limit, 20) : 20);
   }
 }

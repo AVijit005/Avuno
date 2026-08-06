@@ -1,6 +1,7 @@
 import { Controller, Delete, Get, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
+import { safeParseInt } from '../shared';
 import { CurrentUser, JwtAuthGuard } from '../auth';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import { SearchService } from './search.service';
@@ -29,7 +30,7 @@ export class SearchController {
     @Query('q') q: string,
     @Query('limit') limit?: string,
   ): Promise<SuggestionsResponseDto> {
-    return this.searchService.getSuggestions(user.sub, q ?? '', limit ? parseInt(limit, 10) : 8);
+    return this.searchService.getSuggestions(user.sub, q ?? '', limit ? safeParseInt(limit, 10) : 8);
   }
 
   @Get('recent')
@@ -47,7 +48,7 @@ export class SearchController {
   @Get('trending')
   @ApiOperation({ summary: 'Trending media' })
   async trending(@CurrentUser() user: AccessTokenPayload, @Query('limit') limit?: string): Promise<TrendingItemDto[]> {
-    return this.searchService.getTrending(limit ? parseInt(limit, 10) : 10);
+    return this.searchService.getTrending(limit ? safeParseInt(limit, 10) : 10);
   }
 
   @Get('filter-options')

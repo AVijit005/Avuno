@@ -45,7 +45,7 @@ export function listNotes(kind?: NoteEntityKind, refId?: string): Note[] {
 
 export function addNote(kind: NoteEntityKind, refId: string, text: string) {
   const note: Note = {
-    id: `n_${Date.now().toString(36)}`,
+    id: `n_${crypto.randomUUID().slice(0,8)}`,
     kind,
     refId,
     text,

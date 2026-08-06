@@ -62,7 +62,7 @@ export function toggleBookmark(b: Omit<Bookmark, "id" | "createdAt">): boolean {
     writem(list);
     return false;
   }
-  list.unshift({ ...b, id: `bm_${Date.now().toString(36)}`, createdAt: new Date().toISOString() });
+  list.unshift({ ...b, id: `bm_${crypto.randomUUID().slice(0,8)}`, createdAt: new Date().toISOString() });
   writem(list);
   return true;
 }

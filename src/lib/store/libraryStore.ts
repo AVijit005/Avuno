@@ -233,7 +233,7 @@ export const useLibraryStore = create<State & Actions>()(
         }),
 
       createShelf: (name, accent) => {
-        const id = `shelf_${Date.now().toString(36)}`;
+        const id = `shelf_${crypto.randomUUID().slice(0,8)}`;
         set((s) => ({ shelves: [...s.shelves, { id, name, accent, itemIds: [] }] }));
         return id;
       },
@@ -282,7 +282,7 @@ export const useLibraryStore = create<State & Actions>()(
         })),
 
       addUserQuote: (text, ref) => {
-        const id = `uq_${Date.now().toString(36)}`;
+        const id = `uq_${crypto.randomUUID().slice(0,8)}`;
         set((s) => ({
           userQuotes: [
             {

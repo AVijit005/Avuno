@@ -1,3 +1,4 @@
+import { safeParseInt } from '../shared';
 import { Body, Controller, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { CurrentUser, JwtAuthGuard } from '../auth';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
@@ -51,6 +52,6 @@ export class ProgressController {
     @CurrentUser() user: AccessTokenPayload,
     @Query('limit') limit?: string,
   ): Promise<RecentProgressItemDto[]> {
-    return this.progressService.getRecent(user.sub, limit ? parseInt(limit, 10) : 20);
+    return this.progressService.getRecent(user.sub, limit ? safeParseInt(limit, 20) : 20);
   }
 }
