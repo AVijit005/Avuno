@@ -12,22 +12,14 @@ const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as u
 const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
 
 import type { Collection } from "@/lib/types";
-
-const COLORS = [
-  "var(--primary)",
-  "oklch(0.65 0.22 295)",
-  "oklch(0.78 0.16 50)",
-  "oklch(0.72 0.16 160)",
-  "oklch(0.7 0.18 25)",
-];
+import { useCollectionStats } from "@/hooks/use-collections";
 
 export function CollectionStatistics({ collection: c }: { collection: Collection }) {
-  const genres = [
-    { name: "Sci-Fi", value: 38 },
-    { name: "Drama", value: 24 },
-    { name: "Action", value: 18 },
-    { name: "Fantasy", value: 12 },
-    { name: "Other", value: 8 },
+  const { data: stats } = useCollectionStats(c.id);
+  const genres = (stats?.genreDistribution ?? []).slice(0, 5).map((g: any, i: number) => ({
+    name: g.name ?? g.genre ?? `Genre ${i + 1}`,
+    value: g.value ?? g.count ?? 0,
+  }));
   ];
   const years = Array.from({ length: 8 }, (_, i) => ({
     y: 2017 + i,
