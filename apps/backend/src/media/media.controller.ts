@@ -10,15 +10,15 @@ export class MediaController {
   constructor(private readonly mediaService: MediaService) {}
 
   @Get()
-  async list(@Query() filter: MediaFilterDto, @Query() sort: MediaSortDto): Promise<MediaListResult> {
+  async list(@Query() filter: MediaFilterDto): Promise<MediaListResult> {
     return this.mediaService.list({
       genre: filter.genre,
       language: filter.language,
       country: filter.country,
       releaseYear: filter.releaseYear,
       status: filter.status,
-      sortBy: sort.sortBy,
-      sortOrder: sort.sortOrder,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       cursor: filter.cursor,
       limit: filter.limit,
     });
@@ -44,7 +44,6 @@ export class MediaController {
   async listByType(
     @Param() params: TypeParamDto,
     @Query() filter: MediaFilterDto,
-    @Query() sort: MediaSortDto,
   ): Promise<MediaListResult> {
     return this.mediaService.listByType(params.type, {
       genre: filter.genre,
@@ -52,8 +51,8 @@ export class MediaController {
       country: filter.country,
       releaseYear: filter.releaseYear,
       status: filter.status,
-      sortBy: sort.sortBy,
-      sortOrder: sort.sortOrder,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       cursor: filter.cursor,
       limit: filter.limit,
     });

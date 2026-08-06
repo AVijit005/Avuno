@@ -39,15 +39,14 @@ export class LibraryController {
   async list(
     @CurrentUser() user: AccessTokenPayload,
     @Query() filter: LibraryFilterDto,
-    @Query() sort: LibrarySortDto,
   ): Promise<LibraryListResult> {
     return this.libraryService.list(user.sub, filter.mediaType, {
       status: filter.status,
       favorite: filter.favorite,
       hidden: filter.hidden,
       private: filter.private,
-      sortBy: sort.sortBy,
-      sortOrder: sort.sortOrder,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       cursor: filter.cursor,
       limit: filter.limit,
     });
@@ -58,15 +57,14 @@ export class LibraryController {
     @CurrentUser() user: AccessTokenPayload,
     @Param() params: StatusParamDto,
     @Query() filter: LibraryFilterDto,
-    @Query() sort: LibrarySortDto,
   ): Promise<LibraryListResult> {
     return this.libraryService.list(user.sub, filter.mediaType, {
       status: params.status,
       favorite: filter.favorite,
       hidden: filter.hidden,
       private: filter.private,
-      sortBy: sort.sortBy,
-      sortOrder: sort.sortOrder,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       cursor: filter.cursor,
       limit: filter.limit,
     });
@@ -77,15 +75,14 @@ export class LibraryController {
     @CurrentUser() user: AccessTokenPayload,
     @Param() params: TypeParamDto,
     @Query() filter: LibraryFilterDto,
-    @Query() sort: LibrarySortDto,
   ): Promise<LibraryListResult> {
     return this.libraryService.list(user.sub, params.type, {
       status: filter.status,
       favorite: filter.favorite,
       hidden: filter.hidden,
       private: filter.private,
-      sortBy: sort.sortBy,
-      sortOrder: sort.sortOrder,
+      sortBy: filter.sortBy,
+      sortOrder: filter.sortOrder,
       cursor: filter.cursor,
       limit: filter.limit,
     });

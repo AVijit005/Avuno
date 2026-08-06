@@ -1,5 +1,6 @@
 import { IsBoolean, IsIn, IsInt, IsOptional, IsString, IsUUID, Max, Min } from 'class-validator';
 import { CursorPaginationDto, SortDto } from '../../common';
+import { Transform } from 'class-transformer';
 
 const MEDIA_TYPE_VALUES = ['movie', 'tvShow', 'anime', 'book', 'game', 'musicAlbum', 'podcast', 'course'] as const;
 
@@ -86,16 +87,27 @@ export class LibraryFilterDto extends CursorPaginationDto {
   mediaType?: string;
 
   @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   favorite?: boolean;
 
   @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   hidden?: boolean;
 
   @IsOptional()
+  @Transform(({ value }) => value === 'true' || value === true)
   @IsBoolean()
   private?: boolean;
+
+  @IsOptional()
+  @IsIn(['createdAt', 'updatedAt', 'status', 'rating', 'lastInteractionAt', 'progress'])
+  sortBy: string = 'createdAt';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  sortOrder: 'asc' | 'desc' = 'desc';
 }
 
 export class LibrarySortDto extends SortDto {

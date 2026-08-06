@@ -46,6 +46,14 @@ export class MediaFilterDto extends CursorPaginationDto {
   @IsOptional()
   @IsIn(CONTENT_STATUS_VALUES)
   status?: string;
+
+  @IsOptional()
+  @IsIn(['title', 'releaseYear', 'releaseDate', 'createdAt', 'updatedAt', 'runtime', 'duration'])
+  sortBy?: 'title' | 'releaseYear' | 'releaseDate' | 'createdAt' | 'updatedAt' | 'runtime' | 'duration' = 'createdAt';
+
+  @IsOptional()
+  @IsIn(['asc', 'desc'])
+  sortOrder?: 'asc' | 'desc' = 'desc';
 }
 
 export class MediaSortDto extends SortDto {
