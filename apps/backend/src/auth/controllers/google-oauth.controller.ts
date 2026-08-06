@@ -37,8 +37,11 @@ export class GoogleOAuthController {
       request.ip,
       request.headers['user-agent'] as string | undefined,
     );
-    
-    const frontendUrl = this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz';
+    const allowLocal = process.env.ALLOW_LOCAL_DEV_REDIRECT === 'true';
+    const frontendUrl = allowLocal 
+      ? 'http://localhost:5173' 
+      : (this.config.get<string>('frontendUrl') || 'https://www.avuno.xyz');
+      
     response.redirect(`${frontendUrl}/auth/callback?token=${encodeURIComponent(authResult.accessToken)}`);
   }
 }

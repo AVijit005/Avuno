@@ -8,10 +8,8 @@
  * Dark-first, cinematic, premium. OKLCH tokens.
  * ============================================================ */
 
-html,
 body {
-  overflow-x: hidden;
-  overflow-y: auto;
+  overflow-x: clip;
 }
 
 /* Horizontal scroll containers — smooth touch on mobile */
