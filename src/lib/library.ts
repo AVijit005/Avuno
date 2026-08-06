@@ -40,7 +40,6 @@ function liveMeta(id: string): Partial<LibraryMeta> {
   return useLibraryStore.getState().meta[id] ?? {};
 }
 
-export const ALL_LIBRARY: MediaItem[] = [];
 
 export function metaOf(id: string): LibraryMeta {
   const all = liveItems();

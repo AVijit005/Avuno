@@ -1,7 +1,7 @@
-import { CHALLENGES } from "@/lib/challenges";
+import { getChallenges } from "@/lib/challenges";
 import { ChallengeCard } from "./ChallengeCard";
 
-const ofKind = (k: string) => CHALLENGES.find((c) => c.kind === k)!;
+const ofKind = (k: string) => getChallenges().find((c) => c.kind === k);
 
 export const MonthlyChallenge = () => <ChallengeCard challenge={ofKind("Monthly")} />;
 export const SeasonChallenge = () => <ChallengeCard challenge={ofKind("Season")} />;

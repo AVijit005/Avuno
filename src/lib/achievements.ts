@@ -29,15 +29,12 @@ export interface Achievement {
   icon?: string;
 }
 
-export const ACHIEVEMENTS_FULL: any[] = [];
+// Achievements feature not yet connected to backend API
+// Consumers handle null/undefined gracefully (AchievementHero checks `if (!a) return null`)
 
-export const getAchievements = () => ACHIEVEMENTS_FULL;
-export const rankAchievements = () =>
-  [...ACHIEVEMENTS_FULL].sort(
-    (a, b) => new Date(b.earnedAt).getTime() - new Date(a.earnedAt).getTime(),
-  );
-export const getMilestones = () => ACHIEVEMENTS_FULL.slice(0, 5);
-
+export const getAchievements = (): Achievement[] => [];
+export const rankAchievements = (): Achievement[] => [];
+export const getMilestones = (): Achievement[] => [];
 export function getAchievementsByCategory(): Record<AchievementCategory, Achievement[]> {
   return {} as Record<AchievementCategory, Achievement[]>;
 }

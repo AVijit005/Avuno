@@ -1,19 +1,19 @@
 // Crosslinks — surface peer entities for any media item.
 import type { MediaItem } from "@/lib/types";
-import { GOALS_FULL } from "@/lib/goals";
+import type { Goal } from "@/lib/goals";
 
 export interface Crosslinks {
   collections: any[];
   journal: any[];
-  goals: typeof GOALS_FULL;
+  goals: Goal[];
   related: MediaItem[];
 }
 
-export function getCrosslinks(item: MediaItem): Crosslinks {
+export function getCrosslinks(_item: MediaItem): Crosslinks {
   return {
     collections: [],
     journal: [],
-    goals: GOALS_FULL.filter((g) => g.coverIds?.includes(item.id)),
+    goals: [],
     related: [],
   };
 }

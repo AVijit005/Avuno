@@ -1,7 +1,5 @@
 // Media Graph — pure relationship builders over live library data.
 import type { MediaItem } from "@/lib/types";
-import { GOALS_FULL } from "@/lib/goals";
-import { ACHIEVEMENTS_FULL } from "@/lib/achievements";
 
 export function getSharedCreator(_id: string, _items: MediaItem[]): MediaItem[] {
   return [];
@@ -20,11 +18,11 @@ export function getSharedJourney(_id: string, _items: MediaItem[]): MediaItem[] 
 }
 
 export function getRelatedGoals(_id: string) {
-  return GOALS_FULL.filter((g) => g.coverIds?.includes(_id));
+  return [];
 }
 
 export function getRelatedAchievements(_id: string) {
-  return ACHIEVEMENTS_FULL.filter((a) => a.mediaIds?.includes(_id));
+  return [];
 }
 
 export interface GraphSummary {

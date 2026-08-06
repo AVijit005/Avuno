@@ -1,5 +1,4 @@
 // Challenges — deterministic personal prompts.
-import type { MediaItem } from "@/lib/types";
 
 export type ChallengeKind =
   | "Monthly"
@@ -20,13 +19,13 @@ export interface Challenge {
   current: number;
   reward: string;
   expiresIn?: string;
-  suggestions: MediaItem[];
+  suggestions: any[];
   accent: string;
 }
 
-export const CHALLENGES: Challenge[] = [];
+// Challenges feature not yet connected to backend API
+// Consumers handle null/undefined gracefully (ChallengeCard checks `if (!g) return null`)
 
-export const getChallenges = () => CHALLENGES;
-export const getRecommendedChallenge = (): Challenge | undefined => CHALLENGES[0];
-export const getActiveChallenge = (): Challenge | undefined =>
-  CHALLENGES.find((c) => c.current < c.target) ?? CHALLENGES[0];
+export const getChallenges = (): Challenge[] => [];
+export const getRecommendedChallenge = (): Challenge | undefined => undefined;
+export const getActiveChallenge = (): Challenge | undefined => undefined;
