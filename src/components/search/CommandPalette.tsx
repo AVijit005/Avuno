@@ -60,6 +60,7 @@ export function CommandPalette({
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
+  const focusTimerRef = useRef<ReturnType<typeof setTimeout>>();
   
   const { data: searchData } = useSearch({ q });
   const { data: recentData } = useRecentSearches();
@@ -90,9 +91,10 @@ export function CommandPalette({
     if (open) {
       setQ("");
       setActive(0);
-      // small delay so the input is mounted
-      setTimeout(() => inputRef.current?.focus(), 60);
+      clearTimeout(focusTimerRef.current);
+      focusTimerRef.current = setTimeout(() => inputRef.current?.focus(), 60);
     }
+    return () => clearTimeout(focusTimerRef.current);
   }, [open]);
 
   const close = () => onOpenChange(false);

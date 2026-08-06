@@ -1,21 +1,32 @@
-import { Component, type ReactNode } from "react";
+import { PureComponent, type ReactNode, type ErrorInfo } from "react";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
 
 interface Props {
   children: ReactNode;
   fallback?: ReactNode;
-  onRetry?: () => void;
 }
 
 interface State {
   error: Error | null;
 }
 
-export class ErrorBoundary extends Component<Props, State> {
+export class ErrorBoundary extends PureComponent<Props, State> {
   state: State = { error: null };
 
   static getDerivedStateFromError(error: Error): State {
     return { error };
+  }
+
+  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+    console.error("[ErrorBoundary] Caught error:", error, errorInfo);
+    if (typeof window !== "undefined") {
+      try {
+        const { reportLovableError } = require("@/lib/lovable-error-reporting") as { reportLovableError: (err: Error, info: Record<string, unknown>) => void };
+        reportLovableError(error, { boundary: "ErrorBoundary", componentStack: errorInfo.componentStack ?? undefined });
+      } catch {
+        // Error reporting unavailable — error already logged to console
+      }
+    }
   }
 
   render() {
@@ -27,26 +38,12 @@ export class ErrorBoundary extends Component<Props, State> {
         <div className="py-20">
           <PremiumErrorState
             title="Something unexpected happened"
-            description={this.state.error.message ?? "An unhandled error occurred. Please reload the page."}
-            action={
-              <button
-                onClick={() => {
-                  this.setState({ error: null });
-                  if (this.props.onRetry) {
-                    this.props.onRetry();
-                  } else {
-                    window.location.reload();
-                  }
-                }}
-                className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
-              >
-                Reload page
-              </button>
-            }
+            description="We've logged the error and our team has been notified."
           />
         </div>
       );
     }
+
     return this.props.children;
   }
 }

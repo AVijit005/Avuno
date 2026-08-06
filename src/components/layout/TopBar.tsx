@@ -4,6 +4,7 @@ import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
 import { useNotifications } from "@/hooks/use-notifications";
+import { useCurrentUser } from "@/hooks/use-auth";
 
 const TITLES: Record<string, { title: string; subtitle?: string }> = {
   "/app/library": { title: "Your Library", subtitle: "Everything you've experienced." },
@@ -20,6 +21,10 @@ const TITLES: Record<string, { title: string; subtitle?: string }> = {
 export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { openAdd } = useMediaActions();
   const { data: notifications } = useNotifications();
+  const { data: user } = useCurrentUser();
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : user?.email?.slice(0, 2).toUpperCase() ?? "U";
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/app" || pathname === "/app/";
   const meta =
@@ -118,7 +123,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             aria-label="Profile"
             className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-white/20 press-scale"
           >
-            AY
+            {initials}
           </Link>
         </div>
       </div>
