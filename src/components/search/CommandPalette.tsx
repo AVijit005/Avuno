@@ -56,13 +56,21 @@ export function CommandPalette({
   onOpenChange: (v: boolean) => void;
 }) {
   const [q, setQ] = useState("");
+  const [debouncedQ, setDebouncedQ] = useState("");
+  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
   const [active, setActive] = useState(0);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
   const focusTimerRef = useRef<ReturnType<typeof setTimeout>>();
-  
-  const { data: searchData } = useSearch({ q });
+
+  const handleQ = (val: string) => {
+    setQ(val);
+    clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => setDebouncedQ(val), 300);
+  };
+
+  const { data: searchData } = useSearch({ q: debouncedQ });
   const { data: recentData } = useRecentSearches();
   const { data: trendingData } = useTrending();
 
@@ -94,7 +102,10 @@ export function CommandPalette({
       clearTimeout(focusTimerRef.current);
       focusTimerRef.current = setTimeout(() => inputRef.current?.focus(), 60);
     }
-    return () => clearTimeout(focusTimerRef.current);
+    return () => {
+      clearTimeout(focusTimerRef.current);
+      clearTimeout(debounceRef.current);
+    };
   }, [open]);
 
   const close = () => onOpenChange(false);
@@ -332,7 +343,7 @@ export function CommandPalette({
                 ref={inputRef}
                 value={q}
                 aria-label="Search"
-                onChange={(e) => setQ(e.target.value)}
+                onChange={(e) => handleQ(e.target.value)}
                 placeholder="Search your Avuno…"
                 className="flex-1 bg-transparent text-base placeholder:text-muted-foreground/70 focus:outline-none focus-visible:!shadow-none"
               />
