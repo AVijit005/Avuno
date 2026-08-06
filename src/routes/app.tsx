@@ -25,7 +25,11 @@ export const Route = createFileRoute("/app")({
       if (isRedirect(error)) {
         throw error;
       }
-      // Token exists in localStorage, allow rendering /app
+      if (error instanceof ApiError && error.status === 401) {
+        throw redirect({ to: "/auth" });
+      }
+      // Network error or other transient failure — allow rendering /app
+      // The user still has a token; retry will happen naturally
     }
   },
   component: () => (

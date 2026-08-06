@@ -1,6 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Query, UseGuards } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { CurrentUser, JwtAuthGuard } from '../auth';
+import { safeParseInt } from '../shared';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import { JournalService } from './journal.service';
 import {
@@ -46,7 +47,7 @@ export class JournalController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.journalService.findEntries(user.sub, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.journalService.findEntries(user.sub, cursor, safeParseInt(limit, 20));
   }
 
   // ─── Statistics & Prompts ─────────────────────────────────────────────────
@@ -103,7 +104,7 @@ export class JournalController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.journalService.findMemories(user.sub, cursor, limit ? parseInt(limit, 10) : 20);
+    return this.journalService.findMemories(user.sub, cursor, safeParseInt(limit, 20));
   }
 
   @Get('memories/:id')
@@ -151,7 +152,7 @@ export class JournalController {
       undefined,
       undefined,
       cursor,
-      limit ? parseInt(limit, 10) : 50,
+      safeParseInt(limit, 50),
     );
   }
 
@@ -165,10 +166,10 @@ export class JournalController {
   ) {
     return this.journalService.findTimelineEvents(
       user.sub,
-      parseInt(year, 10),
+      safeParseInt(year, new Date().getFullYear()),
       undefined,
       cursor,
-      limit ? parseInt(limit, 10) : 50,
+      safeParseInt(limit, 50),
     );
   }
 
@@ -183,10 +184,10 @@ export class JournalController {
   ) {
     return this.journalService.findTimelineEvents(
       user.sub,
-      parseInt(year, 10),
-      parseInt(month, 10),
+      safeParseInt(year, new Date().getFullYear()),
+      safeParseInt(month, new Date().getMonth() + 1),
       cursor,
-      limit ? parseInt(limit, 10) : 50,
+      safeParseInt(limit, 50),
     );
   }
 

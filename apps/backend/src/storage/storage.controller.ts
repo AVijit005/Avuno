@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Controller,
   Delete,
   Get,
@@ -128,6 +129,7 @@ export class StorageController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async uploadAvatar(@CurrentUser() user: AccessTokenPayload, @UploadedFile() file: any): Promise<UploadResponseDto> {
+    if (!file) throw new BadRequestException('No file provided');
     return this.storageService.uploadAvatar(
       { buffer: file.buffer, mimeType: file.mimetype, originalName: file.originalname },
       user.sub,
@@ -142,6 +144,7 @@ export class StorageController {
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
   async uploadCover(@CurrentUser() user: AccessTokenPayload, @UploadedFile() file: any): Promise<UploadResponseDto> {
+    if (!file) throw new BadRequestException('No file provided');
     return this.storageService.uploadCover(
       { buffer: file.buffer, mimeType: file.mimetype, originalName: file.originalname },
       user.sub,

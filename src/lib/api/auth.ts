@@ -74,3 +74,7 @@ export async function logoutAll(): Promise<void> {
     setAccessToken(null);
   }
 }
+
+export async function forgotPassword(input: { email: string }): Promise<{ message: string }> {
+  return apiPost<{ message: string }>('/auth/forgot-password', input, { skipAuth: true });
+}

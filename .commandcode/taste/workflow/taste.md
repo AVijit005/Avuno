@@ -9,3 +9,4 @@
 - Never make definitive readiness assessments ("beta-ready", "SaaS-ready", "production-ready") without first independently verifying all claimed criteria — do not assert a status and only check after the user challenges it; verify first, then report. Confidence: 0.90
 - When the user asks for suggestions or options (names, technologies, approaches), present the list and wait for explicit user selection — never unilaterally pick one and start implementing without confirmation. Confidence: 0.80
 - Never push speculative fixes to production in rapid succession — wait for the user to confirm whether each deployed fix actually resolved the issue before attempting the next fix. Iterative guess-and-push cycles waste CI/CD builds and erode trust. Confidence: 0.95
+- Never push to remote (git push) without explicit user permission — commit locally but wait for the user to explicitly approve the push. Confidence: 0.90

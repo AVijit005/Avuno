@@ -285,9 +285,23 @@ export class LibraryRepository {
 
     const updateData = { ...data, updatedAt: new Date() };
 
+    // Whitelist: only allow specific fields through for security
+    const ALLOWED_UPDATE_FIELDS = [
+      'status', 'progress', 'rating', 'review', 'notes', 'isFavorite',
+      'readAt', 'watchedAt', 'completedAt', 'pausedAt', 'droppedAt',
+      'timesWatched', 'timesRead', 'timesPlayed',
+    ];
+    const safeData: Record<string, any> = { updatedAt: new Date() };
+    for (const key of ALLOWED_UPDATE_FIELDS) {
+      if (key in updateData && (updateData as any)[key] !== undefined) {
+        safeData[key] = (updateData as any)[key];
+      }
+    }
+    safeData.updatedAt = new Date();
+
     const item = await delegate.update({
       where: { id },
-      data: updateData as any,
+      data: safeData as any,
       include: {
         [cfg.includeKey]: {
           select: {
