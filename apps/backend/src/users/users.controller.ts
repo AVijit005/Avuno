@@ -22,6 +22,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { UserRole } from '@prisma/client';
+import { PrismaService } from '../prisma/prisma.service';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import { CookieService } from '../auth/services/cookie.service';
 import { UpdatePreferencesDto, UpdatePrivacyDto, UpdateProfileDto } from './dto';
@@ -33,6 +34,7 @@ export class UsersController {
   constructor(
     private readonly users: UsersService,
     private readonly cookies: CookieService,
+    private readonly prisma: PrismaService,
   ) {}
 
   @Get('me')
@@ -100,8 +102,14 @@ export class UsersController {
 
   @Get('admin/metrics')
   @Roles(UserRole.ADMIN)
-  getAdminMetrics() {
-    return { usersCount: 42, activeUsers: 10 };
+  async getAdminMetrics() {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+    const [total, active] = await Promise.all([
+      this.prisma.user.count(),
+      this.prisma.user.count({ where: { lastLoginAt: { gte: thirtyDaysAgo } } }),
+    ]);
+    return { usersCount: total, activeUsers: active };
   }
 
   private metadata(req: Request): RequestMetadata {

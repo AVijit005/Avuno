@@ -14,7 +14,6 @@ export class ConsoleEmailTransportService implements EmailTransport {
         greeting,
         'Use the link below to verify your email address:',
         options.link,
-        `Raw token: ${options.token}`,
         '---',
       ].join('\n'),
     );

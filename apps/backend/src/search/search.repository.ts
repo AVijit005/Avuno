@@ -241,6 +241,7 @@ export class SearchRepository {
     const items = await delegate.findMany({
       where: {
         userId,
+        deletedAt: null,
         OR: [
           { title: { contains: qLower, mode: 'insensitive' } },
           { description: { contains: qLower, mode: 'insensitive' } },
