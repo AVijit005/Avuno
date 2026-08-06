@@ -1,23 +1,46 @@
-import { motion } from "motion/react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { lazy, type ComponentType } from "react";
+import { useIntelligence } from "@/hooks/use-analytics";
+import { TrendingUp, Loader2 } from "lucide-react";
+
 const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
 const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
 const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
 const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as ComponentType<any> })));
 const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
 
-import { TrendingUp } from "lucide-react";
+export function MediaEvolution(_props: any) {
+  const { data: intelligence, isLoading } = useIntelligence();
+  const rawData = intelligence?.mediaEvolution ?? [];
+  const data = rawData.map((d: any) => ({
+    year: d.year ?? d.focus ?? "",
+    "Media": d.mediaCount ?? 0,
+    "Hours": d.hoursSpent ?? 0,
+  }));
 
-export function MediaEvolution(props: any) {
-  const data = [
-    { year: "2019", SciFi: 20, Drama: 80, Action: 40 },
-    { year: "2020", SciFi: 45, Drama: 60, Action: 50 },
-    { year: "2021", SciFi: 70, Drama: 40, Action: 30 },
-    { year: "2022", SciFi: 85, Drama: 35, Action: 60 },
-    { year: "2023", SciFi: 60, Drama: 50, Action: 80 },
-    { year: "2024", SciFi: 90, Drama: 40, Action: 70 },
-  ];
+  if (isLoading) {
+    return (
+      <PremiumGlass className="p-6 h-[400px] flex items-center justify-center">
+        <Loader2 className="animate-spin h-6 w-6 text-muted-foreground" />
+      </PremiumGlass>
+    );
+  }
+
+  if (data.length === 0) {
+    return (
+      <PremiumGlass className="p-6 h-[400px] flex flex-col">
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/5 text-[oklch(0.72_0.18_255)]">
+            <TrendingUp size={20} />
+          </div>
+          <div>
+            <h3 className="font-display text-xl tracking-tight">Media Evolution</h3>
+            <p className="text-xs text-muted-foreground">Keep tracking to see your journey</p>
+          </div>
+        </div>
+      </PremiumGlass>
+    );
+  }
 
   return (
     <PremiumGlass className="p-6 h-[400px] flex flex-col">
@@ -35,26 +58,24 @@ export function MediaEvolution(props: any) {
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart data={data} margin={{ top: 10, right: 0, left: 0, bottom: 0 }}>
             <defs>
-              <linearGradient id="colorSciFi" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="var(--primary)" stopOpacity={0}/>
-              </linearGradient>
-              <linearGradient id="colorDrama" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="oklch(0.78 0.16 50)" stopOpacity={0.8}/>
-                <stop offset="95%" stopColor="oklch(0.78 0.16 50)" stopOpacity={0}/>
+              <linearGradient id="colorMedia" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--primary)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="year" stroke="rgba(255,255,255,0.2)" tick={{ fill: 'rgba(255,255,255,0.5)', fontSize: 12 }} />
-            <Tooltip 
-              contentStyle={{ background: "rgba(0,0,0,0.8)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}
-              itemStyle={{ fontSize: 13 }}
+            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "oklch(1 0 0 / 0.4)" }} />
+            <Tooltip
+              contentStyle={{
+                background: "oklch(0.15 0 0 / 0.95)",
+                border: "1px solid oklch(1 0 0 / 0.1)",
+                borderRadius: "12px",
+                fontSize: "12px",
+              }}
             />
-            <Area type="monotone" dataKey="SciFi" stroke="var(--primary)" fillOpacity={1} fill="url(#colorSciFi)" />
-            <Area type="monotone" dataKey="Drama" stroke="oklch(0.78 0.16 50)" fillOpacity={1} fill="url(#colorDrama)" />
+            <Area type="monotone" dataKey="Media" stroke="var(--primary)" strokeWidth={2} fill="url(#colorMedia)" dot={{ r: 3, fill: "var(--primary)" }} />
           </AreaChart>
         </ResponsiveContainer>
       </div>
     </PremiumGlass>
   );
 }
-
