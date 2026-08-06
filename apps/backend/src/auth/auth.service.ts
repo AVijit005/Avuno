@@ -271,8 +271,10 @@ export class AuthService {
   private async recordFailedAttempt(key: string): Promise<void> {
     const redisClient = this.redis.getClient();
     const attempts = await redisClient.incr(key);
-    // Always set/reset TTL to ensure the key expires correctly
-    // This handles edge cases where key exists without TTL
     await redisClient.expire(key, LOCKOUT_MINUTES * 60);
+  }
+
+  logForgotPasswordRequest(email: string): void {
+    this.redis.getClient().sadd('auth:forgot_password_requests', email).catch(() => {});
   }
 }

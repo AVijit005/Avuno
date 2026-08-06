@@ -85,4 +85,12 @@ export class AuthController {
   async me(@CurrentUser() user: AccessTokenPayload): Promise<UserResponseDto> {
     return this.authService.me(user.sub);
   }
+
+  @Post('forgot-password')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 3, ttl: 60000 } })
+  async forgotPassword(@Body('email') email: string): Promise<{ message: string }> {
+    this.authService.logForgotPasswordRequest(email);
+    return { message: 'If an account exists, a reset link has been sent.' };
+  }
 }

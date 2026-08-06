@@ -38,9 +38,14 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 const rawBackend = process.env.VITE_API_URL || process.env.API_HOST || "";
-const BACKEND_URL = (rawBackend && !rawBackend.includes("trycloudflare.com"))
+const BACKEND_URL = rawBackend && !rawBackend.includes("trycloudflare.com")
   ? rawBackend
-  : "http://api.avuno.xyz:4000";
+  : (() => {
+      if (process.env.NODE_ENV === 'production') {
+        throw new Error('VITE_API_URL or API_HOST must be set in production');
+      }
+      return "http://localhost:3000";
+    })();
 
 async function handleApiProxy(request: Request): Promise<Response> {
   const url = new URL(request.url);

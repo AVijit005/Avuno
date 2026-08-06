@@ -19,7 +19,6 @@ function AuthCallback() {
     const error = urlParams.get("error");
     const errorDesc = urlParams.get("error_description");
     const code = urlParams.get("code");
-    const token = urlParams.get("token");
 
     if (error) {
       toast.error(errorDesc ? decodeURIComponent(errorDesc).replace(/\+/g, " ") : "Authentication failed.");
@@ -37,9 +36,6 @@ function AuthCallback() {
           toast.error("Authentication failed. Please try again.");
           window.location.href = "/auth";
         });
-    } else if (token && token.trim().length > 0) {
-      setAccessToken(token.trim());
-      window.location.href = "/app";
     } else {
       toast.error("Authentication failed. Please try again.");
       window.location.href = "/auth";
