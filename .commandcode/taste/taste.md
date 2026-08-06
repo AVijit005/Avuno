@@ -13,6 +13,7 @@
 - Always add ownership checks for storage deletion operations. Confidence: 0.70
 - Add cursor pagination to `GET /collections` and `GET /shelves` before any frontend integration. Confidence: 0.70
 - Create proper DTO validation classes for analytics, wrapped generate, and storage endpoints. Confidence: 0.70
+- The NestJS build in this project outputs compiled JS to `dist/src/` not `dist/` directly — PM2 start command is `dist/src/main.js`, not `dist/main.js`. Confidence: 0.70
 
 # frontend
 See [frontend/taste.md](frontend/taste.md)

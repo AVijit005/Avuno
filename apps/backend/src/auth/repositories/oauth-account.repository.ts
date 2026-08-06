@@ -53,7 +53,8 @@ export class OAuthAccountRepository extends BaseRepository<OAuthAccount> {
       decipher.setAuthTag(authTag);
       return decipher.update(encryptedText) + decipher.final('utf8');
     } catch {
-      throw new Error('Failed to decrypt OAuth token');
+      console.warn('Failed to decrypt OAuth token (encryption key may have changed). Ignoring old token.');
+      return '';
     }
   }
 
