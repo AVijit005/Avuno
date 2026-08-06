@@ -10,3 +10,4 @@
 - When the user asks for suggestions or options (names, technologies, approaches), present the list and wait for explicit user selection — never unilaterally pick one and start implementing without confirmation. Confidence: 0.80
 - Never push speculative fixes to production in rapid succession — wait for the user to confirm whether each deployed fix actually resolved the issue before attempting the next fix. Iterative guess-and-push cycles waste CI/CD builds and erode trust. Confidence: 0.95
 - Never push to remote (git push) without explicit user permission — commit locally but wait for the user to explicitly approve the push. Confidence: 0.90
+- When deploying to a remote server, push local commits first before pulling/updating on the remote — don't suggest stashing or modifying the remote before the local state is pushed. Confidence: 0.70
