@@ -1,3 +1,4 @@
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { motion } from "motion/react";
@@ -41,7 +42,7 @@ function AllLibraryPage() {
       );
     }
     if (status.length) r = r.filter((m) => status.includes(statusOf(m.id)));
-    if (kinds.length) r = r.filter((m) => kinds.includes(m.kind as any));
+    if (kinds.length) r = r.filter((m) => kinds.includes(m.kind as MediaKind));
     if (favOnly) r = r.filter((m) => metaOf(m.id).favorite);
     if (journaledOnly) r = r.filter((m) => Boolean(metaOf(m.id).journalExcerpt));
 
@@ -50,23 +51,22 @@ function AllLibraryPage() {
         r.sort((a, b) => a.title.localeCompare(b.title));
         break;
       case "Rating":
-        r.sort((a, b) => (b.avgRating ?? 0) - (a.avgRating ?? 0));
+        r.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
         break;
       case "Release Year":
-        r.sort((a, b) => b.year - a.year);
+        r.sort((a, b) => (b.year ?? 0) - (a.year ?? 0));
         break;
       case "Personal Rating":
         r.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
         break;
       case "Most Time Spent":
-        r.sort((a, b) => {
-          const hoursA = (a.hoursSpent ?? 0) + (a.minutesSpent ?? 0) / 60;
-          const hoursB = (b.hoursSpent ?? 0) + (b.minutesSpent ?? 0) / 60;
-          return hoursB - hoursA;
-        });
+        r.sort((a, b) => (b.progress ?? 0) - (a.progress ?? 0));
         break;
       case "Random":
-        r.sort(() => Math.random() - 0.5);
+        for (let i = r.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [r[i], r[j]] = [r[j], r[i]];
+        }
         break;
       case "Recently Added":
         r.sort((a, b) => new Date(metaOf(b.id).addedAt ?? 0).getTime() - new Date(metaOf(a.id).addedAt ?? 0).getTime());
@@ -156,7 +156,7 @@ function AllLibraryPage() {
               viewport={{ once: true, margin: "-40px" }}
               transition={cascade(i)}
             >
-              <MediaCard item={m as any} />
+              <MediaCard item={m as UIMediaItem} />
             </motion.div>
           ))
         ) : (

@@ -1,3 +1,5 @@
+import { adaptLibraryItem } from "@/lib/adapters/media";
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { useLibrary } from "@/hooks/use-library";
 import { Link } from "@tanstack/react-router";
 import { Bookmark } from "lucide-react";
@@ -11,7 +13,7 @@ interface Props {
 
 export function MemoryBookmarks({ className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA = libraryData?.pages.flatMap(p => p.items) || [];
+  const MEDIA = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   return (
     <section aria-label="Memory bookmarks" className={cn("space-y-5", className)}>
       <header className="flex items-baseline justify-between">

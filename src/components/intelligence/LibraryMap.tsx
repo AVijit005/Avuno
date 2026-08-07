@@ -2,6 +2,7 @@ import { motion } from "motion/react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { Map, Loader2 } from "lucide-react";
 import { useIntelligence } from "@/hooks/use-analytics";
+import type { TasteGenre } from "@/lib/types/intelligence";
 
 const GENRE_COLORS: Record<string, string> = {
   "Sci-Fi": "var(--primary)",
@@ -14,9 +15,9 @@ const GENRE_COLORS: Record<string, string> = {
   Romance: "oklch(0.6 0.2 10)",
 };
 
-export function LibraryMap(_props: any) {
+export function LibraryMap() {
   const { data: intelligence, isLoading } = useIntelligence();
-  const tags = (intelligence?.tasteProfile?.favoriteGenres ?? []).map((g: any) => ({
+  const tags: Array<{ name: string; count: number; color: string }> = (intelligence?.tasteProfile?.favoriteGenres ?? []).map((g: TasteGenre) => ({
     name: g.name,
     count: g.count,
     color: GENRE_COLORS[g.name] ?? "var(--primary)",
@@ -59,7 +60,7 @@ export function LibraryMap(_props: any) {
       </div>
 
       <div className="flex-1 relative z-10 flex flex-wrap content-center justify-center gap-3 p-4">
-        {tags.map((tag: any, i: number) => {
+        {tags.map((tag, i: number) => {
           const size = Math.max(0.75, Math.min(2.5, tag.count / 15));
 
           return (

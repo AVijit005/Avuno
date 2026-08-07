@@ -14,7 +14,7 @@ export function MemoryHighlights({ highlights: propHighlights }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
       {highlights.slice(0, 6).map((h, i) => (
-        <BentoCard key={h.label} h={h as any} colSpan={BENTO_SPANS[i] ?? "md:col-span-1"} index={i} />
+        <BentoCard key={h.label} h={h} colSpan={BENTO_SPANS[i] ?? "md:col-span-1"} index={i} />
       ))}
     </div>
   );

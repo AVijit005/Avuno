@@ -31,7 +31,7 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
       {ITEMS.map((it) => {
         const tint = STATUS_TINT[it.key === "total" ? "in_progress" : it.key];
         const trend =
-          it.key === "total" || it.key === "favorite" ? 0 : trendFor(it.key as MediaStatus);
+          it.key === "total" || it.key === "favorite" ? 0 : trendFor(it.key as MediaStatus) ?? 0;
         const TrendIcon = trend > 0 ? ArrowUp : trend < 0 ? ArrowDown : Minus;
         return (
           <button 

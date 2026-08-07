@@ -3,19 +3,19 @@ import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { motion, useReducedMotion } from "motion/react";
 import { useState, useMemo, useEffect } from "react";
 import { lazy, Suspense } from "react";
-import type { ComponentType } from "react";
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
-const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
-const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as ComponentType<any> })));
-const YAxis = lazy(() => import("recharts").then((m) => ({ default: m.YAxis as unknown as ComponentType<any> })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
-const PieChart = lazy(() => import("recharts").then((m) => ({ default: m.PieChart as unknown as ComponentType<any> })));
-const Pie = lazy(() => import("recharts").then((m) => ({ default: m.Pie as unknown as ComponentType<any> })));
-const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell as unknown as ComponentType<any> })));
-const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart as unknown as ComponentType<any> })));
-const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar as unknown as ComponentType<any> })));
-const Legend = lazy(() => import("recharts").then((m) => ({ default: m.Legend as unknown as ComponentType<any> })));
+import type { RechartsComponent } from "@/lib/types/collection";
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })));
+const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })));
+const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as RechartsComponent })));
+const YAxis = lazy(() => import("recharts").then((m) => ({ default: m.YAxis as unknown as RechartsComponent })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
+const PieChart = lazy(() => import("recharts").then((m) => ({ default: m.PieChart as unknown as RechartsComponent })));
+const Pie = lazy(() => import("recharts").then((m) => ({ default: m.Pie as unknown as RechartsComponent })));
+const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell as unknown as RechartsComponent })));
+const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart as unknown as RechartsComponent })));
+const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar as unknown as RechartsComponent })));
+const Legend = lazy(() => import("recharts").then((m) => ({ default: m.Legend as unknown as RechartsComponent })));
 import {
   Flame,
   Film,
@@ -115,6 +115,37 @@ export default function AnalyticsPage() {
     qActivity.isError ||
     qInsights.isError;
 
+  const o = qOverview.data ? adaptOverview(qOverview.data) : null;
+  const s = qStreaks.data ? adaptStreaks(qStreaks.data) : null;
+  const m = qMedia.data ? adaptMediaAnalytics(qMedia.data) : null;
+  const g = qGenres.data ? adaptGenreAnalytics(qGenres.data) : null;
+  const a = qActivity.data ? adaptActivity(qActivity.data) : null;
+  const i = qInsights.data ? adaptInsights(qInsights.data) : null;
+
+  const lifetimeStats = useMemo(() => {
+    if (!o) return [];
+    const stats = [
+      { label: "Completed Stories", value: o.completedItems, delta: o.completedItemsDelta ?? null, accent: "oklch(0.72 0.18 255)", scopeKey: "all" },
+      { label: "Movies Completed", value: o.moviesCompleted, delta: o.moviesCompletedDelta ?? null, accent: "oklch(0.65 0.22 295)", scopeKey: "movies" },
+      { label: "Books Read", value: o.booksRead, delta: o.booksReadDelta ?? null, accent: "oklch(0.7 0.18 25)", scopeKey: "books" },
+      { label: "Games Finished", value: o.gamesFinished, delta: o.gamesFinishedDelta ?? null, accent: "oklch(0.82 0.16 80)", scopeKey: "games" },
+      { label: "Total Library Items", value: o.totalItems, delta: o.totalItemsDelta ?? null, accent: "oklch(0.72 0.16 160)", scopeKey: "all" },
+      { label: "Average Rating", value: o.averageRating ?? 5.0, delta: o.averageRatingDelta ?? null, accent: "oklch(0.85 0.2 100)", scopeKey: "all" },
+    ];
+    if (scope === "all") return stats;
+    return stats.filter((st) => st.scopeKey === scope || st.scopeKey === "all");
+  }, [o, scope]);
+
+  const mediaDistribution = useMemo(() => {
+    if (!m) return [];
+    const source = Object.keys(m.completionByType).length > 0 ? m.completionByType : m.totalByType;
+    return Object.entries(source).map(([name, value], idx) => {
+      const colors = ["var(--primary)", "oklch(0.65 0.22 295)", "oklch(0.72 0.16 160)", "oklch(0.7 0.18 25)", "oklch(0.82 0.16 80)"];
+      const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
+      return { name: formattedName, value, color: colors[idx % colors.length] };
+    });
+  }, [m]);
+
   if (isLoading) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4">
@@ -145,13 +176,6 @@ export default function AnalyticsPage() {
     );
   }
 
-  const o = qOverview.data ? adaptOverview(qOverview.data) : null;
-  const s = qStreaks.data ? adaptStreaks(qStreaks.data) : null;
-  const m = qMedia.data ? adaptMediaAnalytics(qMedia.data) : null;
-  const g = qGenres.data ? adaptGenreAnalytics(qGenres.data) : null;
-  const a = qActivity.data ? adaptActivity(qActivity.data) : null;
-  const i = qInsights.data ? adaptInsights(qInsights.data) : null;
-
   if (!o || !s || !m || !g || !a || !i) {
     return (
       <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4">
@@ -159,28 +183,6 @@ export default function AnalyticsPage() {
       </div>
     );
   }
-
-  const lifetimeStats = useMemo(() => {
-    const stats = [
-      { label: "Completed Stories", value: o.completedItems, delta: o.completedItemsDelta ?? null, accent: "oklch(0.72 0.18 255)", scopeKey: "all" },
-      { label: "Movies Completed", value: o.moviesCompleted, delta: o.moviesCompletedDelta ?? null, accent: "oklch(0.65 0.22 295)", scopeKey: "movies" },
-      { label: "Books Read", value: o.booksRead, delta: o.booksReadDelta ?? null, accent: "oklch(0.7 0.18 25)", scopeKey: "books" },
-      { label: "Games Finished", value: o.gamesFinished, delta: o.gamesFinishedDelta ?? null, accent: "oklch(0.82 0.16 80)", scopeKey: "games" },
-      { label: "Total Library Items", value: o.totalItems, delta: o.totalItemsDelta ?? null, accent: "oklch(0.72 0.16 160)", scopeKey: "all" },
-      { label: "Average Rating", value: o.averageRating ?? 5.0, delta: o.averageRatingDelta ?? null, accent: "oklch(0.85 0.2 100)", scopeKey: "all" },
-    ];
-    if (scope === "all") return stats;
-    return stats.filter((s) => s.scopeKey === scope || s.scopeKey === "all");
-  }, [o, scope]);
-
-  const mediaDistribution = useMemo(() => {
-    const source = Object.keys(m.completionByType).length > 0 ? m.completionByType : m.totalByType;
-    return Object.entries(source).map(([name, value], idx) => {
-      const colors = ["var(--primary)", "oklch(0.65 0.22 295)", "oklch(0.72 0.16 160)", "oklch(0.7 0.18 25)", "oklch(0.82 0.16 80)"];
-      const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
-      return { name: formattedName, value, color: colors[idx % colors.length] };
-    });
-  }, [m]);
 
   return (
     <Suspense fallback={<div className="min-h-screen animate-pulse bg-white/5" />}>
@@ -310,7 +312,7 @@ export default function AnalyticsPage() {
                 key={st.label}
                 label={st.label}
                 value={st.value}
-                delta={st.delta as any}
+                delta={st.delta}
                 accent={st.accent + " / 0.4"}
                 icon={<Icon className="h-4 w-4 text-muted-foreground/70" />}
               />
@@ -480,7 +482,9 @@ export default function AnalyticsPage() {
       {/* ============ Zone 6 — Genre analysis ============ */}
       <Zone eyebrow="Zone 06" title="Genre analysis" sub="What you reach for.">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {g.topGenres.map((genre) => (
+          {g.topGenres.map((genre, idx) => {
+            const genreColors = ["oklch(0.72 0.18 255)", "oklch(0.65 0.22 295)", "oklch(0.78 0.14 180)", "oklch(0.70 0.16 50)"];
+            return (
             <motion.div
               key={genre.genre}
               whileHover={{ y: -4 }}
@@ -489,7 +493,7 @@ export default function AnalyticsPage() {
             >
               <div
                 className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl opacity-60 transition group-hover:opacity-100"
-                style={{ background: (g as any).accent }}
+                style={{ background: genreColors[idx % genreColors.length] }}
               />
               <div className="relative">
                 <div className="flex items-center justify-between">
@@ -512,9 +516,10 @@ export default function AnalyticsPage() {
                   />
                 </div>
                 <div className="mt-2 text-xs text-muted-foreground">{g.genreTimeSpent[genre.genre] ?? 0}h</div>
-              </div>
-            </motion.div>
-          ))}
+                </div>
+              </motion.div>
+            );
+          })}
         </div>
       </Zone>
 

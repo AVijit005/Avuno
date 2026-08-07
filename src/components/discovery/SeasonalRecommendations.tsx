@@ -37,7 +37,7 @@ export function SeasonalRecommendations({ items = [], season = "Winter" }: Props
         </div>
         
         <div className="md:w-2/3 grid grid-cols-3 gap-4">
-          {items.map((item: any, i: number) => (
+          {items.map((item: UIMediaItem, i: number) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 20 }}

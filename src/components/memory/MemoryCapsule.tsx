@@ -1,3 +1,5 @@
+import { adaptLibraryItem } from "@/lib/adapters/media";
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { useLibrary } from "@/hooks/use-library";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import type { Capsule } from "@/lib/memoryInsights";
@@ -10,7 +12,7 @@ interface Props {
 
 export function MemoryCapsule({ capsule, className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA = libraryData?.pages.flatMap(p => p.items) || [];
+  const MEDIA = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   const covers = capsule.coverIds
     .map((id) => MEDIA.find((m) => m.id === id))
     .filter((m): m is NonNullable<typeof m> => !!m);

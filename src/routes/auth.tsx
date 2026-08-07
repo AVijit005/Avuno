@@ -26,7 +26,7 @@ export const Route = createFileRoute("/auth")({
       },
     ],
   }),
-  component: Auth,
+  component: AuthLayout,
 });
 
 const signInSchema = z.object({
@@ -67,7 +67,7 @@ const cardLine = {
 
 
 
-function Auth() {
+function AuthLayout() {
   const matchRoute = useMatchRoute();
   const isChildRoute = matchRoute({ to: "/auth/callback" }) || matchRoute({ to: "/auth/forgot-password" });
 
@@ -75,6 +75,10 @@ function Auth() {
     return <Outlet />;
   }
 
+  return <AuthPage />;
+}
+
+function AuthPage() {
   const navigate = useNavigate();
   const reduced = useReducedMotion();
   const [mode, setMode] = useState<Mode>("signin");
@@ -134,8 +138,8 @@ function Auth() {
           analytics.track("signup");
           setStatus("success");
           safeTimeout(() => navigate({ to: "/app" }), 700);
-        } catch (loginErr: any) {
-          if (loginErr?.message === "Email not verified" || loginErr?.status === 403) {
+        } catch (loginErr: unknown) {
+          if ((loginErr as { message?: string; status?: number })?.message === "Email not verified" || (loginErr as { message?: string; status?: number })?.status === 403) {
             analytics.track("signup");
             setStatus("success");
             setErrorMessage("Account created! Please check your email to verify your account.");
@@ -359,8 +363,13 @@ function Auth() {
 
             {/* Google button */}
             <motion.div variants={cardLine}>
-              <a
-                href={`${API_BASE_URL}/auth/google`}
+              <button
+                type="button"
+                onClick={() => {
+                  const state = crypto.randomUUID();
+                  try { sessionStorage.setItem("oauth_state", state); } catch {}
+                  window.location.href = `${API_BASE_URL}/auth/google?state=${encodeURIComponent(state)}`;
+                }}
                 className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-all duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
                 style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)" }}
               >
@@ -374,7 +383,7 @@ function Auth() {
                       "linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent)",
                   }}
                 />
-              </a>
+              </button>
             </motion.div>
 
             {/* Divider */}

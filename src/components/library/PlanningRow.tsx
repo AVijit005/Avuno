@@ -1,9 +1,9 @@
 import { Link } from "@tanstack/react-router";
 import { Flame, ChevronUp, Minus } from "lucide-react";
-import type { MediaItem } from "@/lib/types";
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { metaOf } from "@/lib/library";
 
-export function PlanningRow({ item }: { item: MediaItem }) {
+export function PlanningRow({ item }: { item: UIMediaItem }) {
   const m = metaOf(item.id);
   const PIcon = m.priority === "high" ? Flame : m.priority === "med" ? ChevronUp : Minus;
   const pColor =

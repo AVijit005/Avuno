@@ -81,7 +81,19 @@ export function adaptCalendar(c: CalendarResponse): UICalendar {
 }
 
 export function adaptInsights(i: InsightsResponse): UIInsights {
-  return i; // Matches perfectly
+  return {
+    mostActiveWeekday: i.mostActiveWeekday,
+    favoriteGenre: i.favoriteGenre,
+    favoriteDecade: null,
+    longestBinge: i.longestBinge ?? null,
+    mostRewatchedMedia: null,
+    mostRereadBook: null,
+    mostReplayedGame: null,
+    averageCompletionTime: i.averageCompletionTime ? Number(i.averageCompletionTime) : null,
+    mostProductiveMonth: i.mostProductiveMonth,
+    totalUniqueMedia: i.totalUniqueMedia,
+    totalHoursSpent: i.totalHoursSpent,
+  };
 }
 
 // ─── Calendar Year ──────────────────────────────

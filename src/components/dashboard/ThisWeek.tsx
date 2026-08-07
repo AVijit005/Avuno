@@ -1,12 +1,13 @@
 import { motion } from "motion/react";
 import { Film, BookOpen, Gamepad2, Music2, Target, Flame, Sparkles } from "lucide-react";
-import { lazy, type ComponentType } from "react";
+import { lazy } from "react";
+import type { RechartsComponent } from "@/lib/types/collection";
 import { useOverview, useStreaks } from "@/hooks/use-analytics";
 import { CountUp } from "@/components/landing/CountUp";
 
-const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
-const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
+const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })));
+const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
 
 type Item = {
   key: string;

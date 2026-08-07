@@ -91,7 +91,7 @@ export function StatCardPremium({
 }: {
   label: string;
   value: number | string;
-  delta?: string;
+  delta?: number | null;
   accent?: string;
   decimals?: number;
   suffix?: string;
@@ -128,9 +128,9 @@ export function StatCardPremium({
             value
           )}
         </div>
-        {delta && (
+        {delta != null && (
           <div className="mt-1 text-xs text-muted-foreground">
-            <span className={delta.toString().startsWith('-') ? "text-rose-400/90" : "text-emerald-300/90"}>{delta}</span> · vs last period
+            <span className={delta < 0 ? "text-rose-400/90" : "text-emerald-300/90"}>{delta > 0 ? `+${delta}` : delta}</span> · vs last period
           </div>
         )}
       </div>

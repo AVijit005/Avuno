@@ -110,7 +110,7 @@ export function LivingHero() {
                 to="/auth"
                 className="group inline-flex items-center gap-2 rounded-2xl bg-white px-6 py-3.5 text-sm font-medium text-black press-scale animate-pulse-glow"
               >
-                Start with Avuno
+                Start free — no card needed
                 <ArrowRight className="h-4 w-4 transition group-hover:translate-x-0.5" />
               </Link>
             </MagneticButton>
@@ -123,6 +123,15 @@ export function LivingHero() {
               </a>
             </MagneticButton>
           </motion.div>
+
+          <motion.p
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.8, delay: 1.65 }}
+            className="mt-5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground/70"
+          >
+            Free forever plan · No credit card · Export your data anytime
+          </motion.p>
         </div>
 
         {/* Living card constellation */}

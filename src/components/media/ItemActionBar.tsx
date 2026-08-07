@@ -1,5 +1,4 @@
-// Contextual verbs for any media item. Frontend-only — drives the live library store.
-import { useMemo, useState, useRef, useEffect } from "react";
+import { memo, useMemo, useState, useRef, useCallback, useEffect } from "react";
 import {
   Heart,
   Play,
@@ -55,17 +54,10 @@ interface Verb {
   danger?: boolean;
 }
 
-export function ItemActionBar({ id, title, variant = "inline", className }: Props) {
+function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) {
   const navigate = useNavigate();
   const meta = useLibraryStore((s) => s.meta[id]);
   const collections = useLibraryStore((s) => s.collections);
-  const setStatus = useLibraryStore((s) => s.setStatus);
-  const toggleFavorite = useLibraryStore((s) => s.toggleFavorite);
-  const incrementRewatch = useLibraryStore((s) => s.incrementRewatch);
-  const removeItem = useLibraryStore((s) => s.removeItem);
-  const createCollection = useLibraryStore((s) => s.createCollection);
-  const toggleCollectionItem = useLibraryStore((s) => s.toggleCollectionItem);
-  const addUserQuote = useLibraryStore((s) => s.addUserQuote);
   const { openProgress, openReflection } = useMediaActions();
   const [bookmarked, setBookmarked] = useState(() => isBookmarked("media", id));
   const [quoteOpen, setQuoteOpen] = useState(false);
@@ -86,25 +78,23 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
   const status = meta?.status;
   const fav = !!meta?.favorite;
 
-  function s(next: typeof status, msg: string) {
+  const s = useCallback((next: typeof status, msg: string) => {
     if (!next) return;
-    setStatus(id, next);
+    useLibraryStore.getState().setStatus(id, next);
     toast.success(msg, { description: title });
-  }
+  }, [id, title]);
 
-  function handleToggleFavorite() {
-    toggleFavorite(id);
+  const handleToggleFavorite = useCallback(() => {
+    useLibraryStore.getState().toggleFavorite(id);
     toast(fav ? "Removed from favorites" : "Favorited", { description: title });
-  }
+  }, [id, title, fav]);
 
-  function handleToggleBookmark() {
+  const handleToggleBookmark = useCallback(() => {
     const v = toggleBookmark({ kind: "media", refId: id, title, to: `/app/media/${id}` });
     setBookmarked(v);
     toast(v ? "Bookmarked" : "Bookmark removed");
-  }
+  }, [id, title]);
 
-  // Media Detail hero row only — favorite/bookmark quick keys. Empty map on
-  // every other variant (e.g. MediaCard overlays) so they don't fire per-card.
   useShortcuts(variant === "hero" ? { f: handleToggleFavorite, b: handleToggleBookmark } : {});
 
   const verbs = useMemo<Verb[]>(() => {
@@ -184,7 +174,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
         label: "Rewatch",
         icon: RotateCcw,
         run: () => {
-          incrementRewatch(id);
+          useLibraryStore.getState().incrementRewatch(id);
           toast.success("Rewatch started", { description: title });
         },
         primary: true,
@@ -227,7 +217,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
       });
     }
     return v;
-  }, [status, id, title]);
+  }, [status, id, title, s, openProgress, openReflection]);
 
   const primary = verbs.filter((v) => v.primary);
   const secondary = verbs.filter((v) => !v.primary);
@@ -362,7 +352,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
                 <DropdownMenuItem
                   key={c.id}
                   onSelect={() => {
-                    toggleCollectionItem(c.id, id);
+                    useLibraryStore.getState().toggleCollectionItem(c.id, id);
                     toast.success(
                       c.itemIds?.includes(id) ? `Removed from ${c.name}` : `Added to ${c.name}`,
                     );
@@ -393,7 +383,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 onSelect={() => {
-                  removeItem(id);
+                  useLibraryStore.getState().removeItem(id);
                   toast("Removed from library", { description: title });
                 }}
                 className="text-rose-300 focus:text-rose-200"
@@ -414,7 +404,7 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
         confirmLabel="Save quote"
         multiline
         onConfirm={(text) => {
-          addUserQuote(text, { id, title });
+          useLibraryStore.getState().addUserQuote(text, { id, title });
           toast.success("Quote saved", { description: title });
         }}
       />
@@ -425,11 +415,13 @@ export function ItemActionBar({ id, title, variant = "inline", className }: Prop
         placeholder="Collection name…"
         confirmLabel="Create"
         onConfirm={(name) => {
-          const cid = createCollection(name);
-          toggleCollectionItem(cid, id);
+          const cid = useLibraryStore.getState().createCollection(name);
+          useLibraryStore.getState().toggleCollectionItem(cid, id);
           toast.success(`Added to ${name}`);
         }}
       />
     </div>
   );
 }
+
+export const ItemActionBar = memo(ItemActionBarImpl);

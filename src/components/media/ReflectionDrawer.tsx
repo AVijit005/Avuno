@@ -1,5 +1,5 @@
 // Reflection drawer — opened when a media item is completed.
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Star } from "lucide-react";
 import { toast } from "sonner";
@@ -18,6 +18,7 @@ const MOODS = [
 ];
 
 export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: () => void }) {
+  const reflectionId = useId();
   const open = !!id;
   const item = id ? snapshotAllItems().find((m) => m.id === id) : undefined;
   const meta = useLibraryStore((s) => (id ? s.meta[id] : undefined));
@@ -105,13 +106,13 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
         </div>
 
         <div className="mt-4">
-          <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label htmlFor={reflectionId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             A paragraph for your future self
           </label>
           <textarea
+            id={reflectionId}
             value={text}
             onChange={(e) => setText(e.target.value)}
-            aria-label="Your reflection"
             rows={5}
             placeholder="What stayed? What surprised you? Who were you while watching this?"
             className="mt-1 w-full resize-none rounded-xl border border-border/60 bg-white/[0.03] px-3 py-2 text-sm outline-none focus:border-primary/40"

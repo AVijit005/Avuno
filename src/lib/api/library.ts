@@ -65,7 +65,7 @@ export interface UpdateLibraryItemInput {
 }
 
 export interface LibraryFilterParams {
-  [key: string]: any;
+  [key: string]: unknown;
   status?: string;
   mediaType?: string;
   favorite?: boolean;

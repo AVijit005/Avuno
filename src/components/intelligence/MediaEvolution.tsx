@@ -1,18 +1,20 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { lazy, type ComponentType } from "react";
+import { lazy } from "react";
+import type { RechartsComponent } from "@/lib/types/collection";
 import { useIntelligence } from "@/hooks/use-analytics";
 import { TrendingUp, Loader2 } from "lucide-react";
+import type { EvolutionItem } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as ComponentType<any> })));
-const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as ComponentType<any> })));
-const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as ComponentType<any> })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })));
+const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })));
+const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as RechartsComponent })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
 
-export function MediaEvolution(_props: any) {
+export function MediaEvolution() {
   const { data: intelligence, isLoading } = useIntelligence();
   const rawData = intelligence?.mediaEvolution ?? [];
-  const data = rawData.map((d: any) => ({
+  const data = rawData.map((d: EvolutionItem) => ({
     year: d.year ?? d.focus ?? "",
     "Media": d.mediaCount ?? 0,
     "Hours": d.hoursSpent ?? 0,

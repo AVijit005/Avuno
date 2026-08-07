@@ -1,6 +1,8 @@
 import { motion } from "motion/react";
+import type { CalendarMonth } from "@/lib/types/calendar";
+
 interface Props {
-  months?: any[];
+  months?: CalendarMonth[];
   monthIdx: number;
   onSelectMonth: (idx: number) => void;
 }
@@ -8,7 +10,7 @@ interface Props {
 export function YearOverview({ monthIdx, onSelectMonth, months = [] }: Props) {
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
-      {months.map((m: any) => {
+      {months.map((m: CalendarMonth) => {
         const active = m.index === monthIdx;
         return (
           <motion.button
@@ -23,7 +25,7 @@ export function YearOverview({ monthIdx, onSelectMonth, months = [] }: Props) {
             />
             <div className="relative">
               <div className="grid grid-cols-2 gap-1">
-                {m.collage.map((src: any, i: any) => (
+                {m.collage.map((src: string, i: number) => (
                   <div key={i} className="aspect-square overflow-hidden rounded-md">
                     <img src={src} alt="" className="h-full w-full object-cover opacity-80" />
                   </div>

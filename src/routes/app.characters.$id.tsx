@@ -16,10 +16,15 @@ export const Route = createFileRoute("/app/characters/$id")({
   component: CharacterPage,
 });
 
+import { useLibraryItem } from "@/hooks/use-library";
+
 function CharacterPage() {
   const { character } = Route.useLoaderData() as {
     character: NonNullable<ReturnType<typeof getCharacter>>;
   };
+  const { data: item } = useLibraryItem(character.mediaId);
+  const media = item?.media ? { id: item.media.id, title: item.media.title, poster: item.media.posterUrl || undefined } : null;
+
   return (
     <div className="space-y-6 pb-16">
       <Link
@@ -28,9 +33,9 @@ function CharacterPage() {
       >
         <ArrowLeft className="h-4 w-4" /> All characters
       </Link>
-      <CharacterProfile character={character} />
+      <CharacterProfile character={character} media={media} />
       <Section title="Quotes">
-        <CharacterQuotes quotes={character.quotes} accent={character.accent} />
+        <CharacterQuotes quotes={character.quotes ?? []} accent={character.accent} />
       </Section>
       <Section title="Connections">
         <RelationshipPanel kind="character" id={character.id} />

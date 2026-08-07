@@ -136,6 +136,8 @@ export async function apiFetch<T>(
         headers.set('ngrok-skip-browser-warning', 'true');
       }
 
+      headers.set('X-Requested-With', 'XMLHttpRequest');
+
       if (!skipAuth) {
         const token = await getValidToken();
         if (token) {

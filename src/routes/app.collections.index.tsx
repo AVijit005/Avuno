@@ -89,7 +89,7 @@ function CollectionsIndex() {
           {allCollections
             .slice(0, 6)
             .map((c) => (
-              <SmartCollectionCard key={c.id} collection={c as any} />
+              <SmartCollectionCard key={c.id} collection={c} />
             ))}
         </div>
       </RevealSection>

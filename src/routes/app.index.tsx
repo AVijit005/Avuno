@@ -31,6 +31,7 @@ import { useCollections } from "@/hooks/use-collections";
 import { adaptContinueItem, activityToContinueItem } from "@/lib/adapters/media";
 import { adaptCollectionResponse } from "@/lib/adapters/collection";
 import { adaptInsights, adaptOverview } from "@/lib/adapters/analytics";
+import { adaptChallenge } from "@/lib/challenges";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
@@ -150,7 +151,7 @@ function Home() {
         </div>
         
         <ErrorBoundary fallback={<div className="p-4 text-sm text-muted-foreground text-center">On this day failed to load.</div>}>
-          <OnThisDay variant="compact" className="mt-12" />
+          <div className="mt-12"><OnThisDay /></div>
         </ErrorBoundary>
         
         <ErrorBoundary fallback={<div className="p-4 text-sm text-muted-foreground text-center">Quote failed to load.</div>}>
@@ -159,7 +160,7 @@ function Home() {
         
         <div className="mt-16 grid gap-4 lg:grid-cols-[1fr_1.3fr]">
           <ErrorBoundary fallback={<div className="p-4 text-sm text-muted-foreground text-center">Challenges failed to load.</div>}>
-            <ChallengeCard challenge={challengesData?.challenges?.[0] as any} />
+            <ChallengeCard challenge={challengesData?.challenges?.[0] ? adaptChallenge(challengesData.challenges[0]) : undefined} />
           </ErrorBoundary>
           <ErrorBoundary fallback={<div className="p-4 text-sm text-muted-foreground text-center">Goals failed to load.</div>}>
             <GoalHero goal={challengesData?.goals?.[0] ? { id: challengesData.goals[0].id, title: challengesData.goals[0].title, description: challengesData.goals[0].description, current: challengesData.goals[0].current, target: challengesData.goals[0].target, reward: challengesData.goals[0].reward, accent: challengesData.goals[0].accent, startedAt: challengesData.goals[0].startedAt, priority: challengesData.goals[0].priority } : null} />

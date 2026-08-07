@@ -1,5 +1,6 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { Link } from "@tanstack/react-router";
+import type { UIMediaItem } from "@/lib/adapters/types";
 
 import { getMuseum } from "@/lib/museumEngine";
 import { useLibrary } from "@/hooks/use-library";
@@ -13,7 +14,7 @@ export function Museum() {
   return (
     <div className="space-y-6">
       {galleries.map((g) => {
-        const items = (g as any).items.map((m: any) => libraryItems.find(x => x.id === m.id || x.mediaId === m.id)).filter(Boolean);
+        const items = g.items.map((m) => libraryItems.find(x => x.id === m.id)).filter((x): x is UIMediaItem => !!x);
         if (items.length === 0) return null;
 
         return (
@@ -29,7 +30,7 @@ export function Museum() {
                 </div>
               </div>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-                {items.map((m: any) => (
+                {items.map((m: UIMediaItem) => (
                   <Link
                     key={m!.id}
                     to="/app/media/$id"

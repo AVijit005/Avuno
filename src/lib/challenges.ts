@@ -1,5 +1,7 @@
 // Challenges — deterministic personal prompts.
 
+import type { UIMediaKind } from "@/lib/adapters/types";
+
 export type ChallengeKind =
   | "Monthly"
   | "Season"
@@ -10,6 +12,13 @@ export type ChallengeKind =
   | "Journal"
   | "Comfort";
 
+export interface ChallengeSuggestion {
+  id: string;
+  title: string;
+  posterUrl: string | null;
+  mediaType: UIMediaKind | string;
+}
+
 export interface Challenge {
   id: string;
   kind: ChallengeKind;
@@ -19,8 +28,36 @@ export interface Challenge {
   current: number;
   reward: string;
   expiresIn?: string;
-  suggestions: any[];
+  suggestions: ChallengeSuggestion[];
   accent: string;
+}
+
+interface ApiChallenge {
+  id: string;
+  kind: string;
+  title: string;
+  description: string;
+  target: number;
+  current: number;
+  reward: string;
+  expiresIn?: string;
+  suggestions: { id: string; title: string; posterUrl: string | null; mediaType: string }[];
+  accent: string;
+}
+
+export function adaptChallenge(apiChallenge: ApiChallenge): Challenge {
+  return {
+    id: apiChallenge.id,
+    kind: (["Monthly", "Season", "Weekend", "Creator", "Genre", "Memory", "Journal", "Comfort"].includes(apiChallenge.kind) ? apiChallenge.kind : "Monthly") as ChallengeKind,
+    title: apiChallenge.title,
+    description: apiChallenge.description,
+    target: apiChallenge.target,
+    current: apiChallenge.current,
+    reward: apiChallenge.reward,
+    expiresIn: apiChallenge.expiresIn,
+    suggestions: apiChallenge.suggestions,
+    accent: apiChallenge.accent,
+  };
 }
 
 // Challenges feature not yet connected to backend API

@@ -3,7 +3,9 @@ import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { ImageIcon } from "lucide-react";
 
 interface Props {
-  collection: any;
+  collection?: {
+    images?: string[];
+  };
 }
 
 export function CollectionMoodboard({ collection }: Props) {

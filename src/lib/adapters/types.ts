@@ -213,6 +213,12 @@ export interface UIOverview {
   hoursPlayed: number;
   hoursLearned: number;
   totalReviews: number;
+  completedItemsDelta?: number;
+  moviesCompletedDelta?: number;
+  booksReadDelta?: number;
+  gamesFinishedDelta?: number;
+  totalItemsDelta?: number;
+  averageRatingDelta?: number;
 }
 
 export interface UIStreak {

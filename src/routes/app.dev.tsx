@@ -16,7 +16,7 @@ export const Route = createFileRoute("/app/dev")({
 });
 
 function DevPlayground() {
-  const findings: any[] = [];
+  const findings: Array<{ severity: string; area: string; message: string }> = [];
   return (
     <div className="space-y-10 pb-24 pt-4">
       <header>

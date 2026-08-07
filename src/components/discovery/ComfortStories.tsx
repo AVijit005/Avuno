@@ -3,9 +3,10 @@ import { motion } from "motion/react";
 import { Heart } from "lucide-react";
 import { PosterCard } from "@/components/ui/PosterCard";
 import type { MediaItem } from "@/lib/types";
+import type { UIMediaItem } from "@/lib/adapters/types";
 
 interface Props {
-  items?: MediaItem[];
+  items?: (MediaItem | UIMediaItem)[];
 }
 
 export function ComfortStories({ items = [] }: Props) {
@@ -15,7 +16,7 @@ export function ComfortStories({ items = [] }: Props) {
     { id: "cs2", mediaId: "cs2", _mediaId: "cs2", title: "The Office", poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)", mediaType: "tv", rewatchCount: 8, accent: "var(--primary)" },
     { id: "cs3", mediaId: "cs3", _mediaId: "cs3", title: "Stardew Valley", poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)", mediaType: "game", rewatchCount: 12, accent: "var(--primary)" },
     { id: "cs4", mediaId: "cs4", _mediaId: "cs4", title: "Harry Potter", poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)", mediaType: "book", rewatchCount: 3, accent: "var(--primary)" },
-  ] as any[];
+  ] as unknown as UIMediaItem[];
 
   if (displayItems.length === 0) return null;
 
@@ -37,7 +38,7 @@ export function ComfortStories({ items = [] }: Props) {
         <div className="flex w-max gap-4 px-6">
           {displayItems.map((item, i) => (
             <motion.div
-              key={item._mediaId || item.id}
+              key={"mediaId" in item ? item.mediaId : item.id}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.1, duration: 0.5 }}
@@ -45,7 +46,7 @@ export function ComfortStories({ items = [] }: Props) {
             >
               <PosterCard item={item} />
               <div className="mt-2 text-center text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">{item.rewatchCount}</span> revisits
+                <span className="font-medium text-foreground">{"rewatchCount" in item ? item.rewatchCount : 0}</span> revisits
               </div>
             </motion.div>
           ))}

@@ -10,6 +10,7 @@ export interface Character {
   bio: string;
   accent: string;
   poster?: string;
+  quotes?: string[];
 }
 
 export const CHARACTERS: Character[] = [];

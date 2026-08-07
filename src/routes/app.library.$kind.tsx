@@ -1,3 +1,4 @@
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { motion } from "motion/react";
 import { MediaCard } from "@/components/media/MediaCard";
@@ -69,7 +70,7 @@ function LibraryKind() {
               viewport={{ once: true, margin: "-40px" }}
               transition={cascade(i)}
             >
-              <MediaCard item={m.media as any} />
+              <MediaCard item={m.media as unknown as UIMediaItem} />
             </motion.div>
           ))}
         </div>

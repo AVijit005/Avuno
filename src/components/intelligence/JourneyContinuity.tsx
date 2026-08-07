@@ -36,7 +36,7 @@ export function JourneyContinuity({ journey, steps: propSteps }: Props) {
         <div className="absolute left-1/2 top-10 bottom-10 w-0.5 -translate-x-1/2 bg-white/10 hidden sm:block" />
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-4 justify-between relative z-10">
-          {steps.map((step: any, i: number) => (
+          {steps.map((step: JourneyStep, i: number) => (
             <motion.div 
               key={step.id}
               initial={{ opacity: 0, y: 20 }}

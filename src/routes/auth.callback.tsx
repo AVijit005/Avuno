@@ -14,20 +14,43 @@ function AuthCallback() {
 
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get("token");
+    const state = urlParams.get("state");
 
-    if (token && token.trim().length > 0) {
+    // Verify OAuth state to prevent login CSRF / session fixation
+    const expectedState = (() => {
+      try { return sessionStorage.getItem("oauth_state"); } catch { return null; }
+    })();
+    try { sessionStorage.removeItem("oauth_state"); } catch {}
+
+    const isStateValid = !!(state && expectedState && state === expectedState);
+
+    if (token && token.trim().length > 0 && isStateValid) {
       setAccessToken(token.trim());
-      window.location.href = "/app";
+      // Scrub token + state from URL before navigation to prevent leakage
+      window.history.replaceState({}, "", "/auth/callback");
+      window.location.replace("/app");
+    } else if (token && token.trim().length > 0 && !isStateValid) {
+      // Token present but state mismatch — possible CSRF attack
+      window.history.replaceState({}, "", "/auth/callback");
+      toast.error("Authentication failed: invalid session. Please try again.");
+      window.location.replace("/auth");
     } else {
       const timer = setTimeout(() => {
         const retryParams = new URLSearchParams(window.location.search);
         const retryToken = retryParams.get("token");
-        if (retryToken && retryToken.trim().length > 0) {
+        const retryState = retryParams.get("state");
+        const retryExpected = (() => {
+          try { return sessionStorage.getItem("oauth_state"); } catch { return null; }
+        })();
+        const retryValid = !!(retryState && retryExpected && retryState === retryExpected);
+        if (retryToken && retryToken.trim().length > 0 && retryValid) {
           setAccessToken(retryToken.trim());
-          window.location.href = "/app";
+          window.history.replaceState({}, "", "/auth/callback");
+          window.location.replace("/app");
         } else {
+          window.history.replaceState({}, "", "/auth/callback");
           toast.error("Authentication failed. Please try again.");
-          window.location.href = "/auth";
+          window.location.replace("/auth");
         }
       }, 1000);
       return () => clearTimeout(timer);

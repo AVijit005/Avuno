@@ -30,11 +30,12 @@ export function CollectionToolbar({ view, onView, query, onQuery }: Props) {
   return (
     <div className="glass flex flex-wrap items-center gap-3 rounded-2xl p-2.5">
       <div className="flex flex-1 items-center gap-2 rounded-xl bg-white/[0.04] px-3 py-2 ring-1 ring-white/5">
-        <Search className="h-3.5 w-3.5 text-muted-foreground" />
+        <Search className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
         <input
           value={query}
           onChange={(e) => onQuery(e.target.value)}
           placeholder="Search inside this collection…"
+          aria-label="Search inside this collection"
           className="w-full bg-transparent text-sm placeholder:text-muted-foreground/60 focus:outline-none"
         />
       </div>

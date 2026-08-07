@@ -18,6 +18,7 @@ export default defineConfig({
     // (the real route is app.analytics.tsx, which has no "-page" suffix).
     router: {
       routeFileIgnorePattern: "analytics-page",
+      autoCodeSplitting: true,
     },
   },
   vite: {
@@ -39,7 +40,29 @@ export default defineConfig({
         includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],
         manifest: false, // We're using our own manifest.webmanifest file
         workbox: {
-          globPatterns: ['**/*.{js,css,html,ico,png,svg}']
+          globPatterns: ['**/*.{js,css,html,ico,png,svg}'],
+          runtimeCaching: [
+            {
+              urlPattern: ({ url }) => url.pathname.startsWith('/api/'),
+              handler: 'NetworkFirst',
+              options: {
+                cacheName: 'api-cache',
+                networkTimeoutSeconds: 10,
+                expiration: { maxEntries: 100, maxAgeSeconds: 300 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+            {
+              urlPattern: ({ request, url }) =>
+                request.destination === 'image' || /\.(png|jpg|jpeg|svg|webp|avif)$/i.test(url.pathname),
+              handler: 'CacheFirst',
+              options: {
+                cacheName: 'image-cache',
+                expiration: { maxEntries: 300, maxAgeSeconds: 60 * 60 * 24 * 30 },
+                cacheableResponse: { statuses: [0, 200] },
+              },
+            },
+          ],
         },
         devOptions: {
           enabled: false // Crucial: prevents SW from locking the UI in dev mode

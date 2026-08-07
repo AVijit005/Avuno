@@ -31,7 +31,7 @@ function ForgotPasswordPage() {
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[oklch(0.08_0.02_270)] flex items-center justify-center p-4">
-      <AtmosphereBackground intensity="subtle" />
+      <AtmosphereBackground intensity="soft" />
       <LiquidGlassCard className="w-full max-w-md">
         <h1 className="font-display text-2xl tracking-tight mb-2">Reset your password</h1>
         <p className="text-white/60 text-sm">Enter your email and we'll send you a link to get back into your account.</p>
@@ -39,6 +39,7 @@ function ForgotPasswordPage() {
           <input
             type="email"
             placeholder="you@example.com"
+            aria-label="Email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full h-12 rounded-full bg-white/5 border border-white/10 px-5 text-sm text-white placeholder:text-white/30 focus:outline-none focus:border-white/20"

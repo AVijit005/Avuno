@@ -57,12 +57,12 @@ export function CommandPalette({
 }) {
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const [active, setActive] = useState(0);
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement | null>(null);
   const listRef = useRef<HTMLDivElement | null>(null);
-  const focusTimerRef = useRef<ReturnType<typeof setTimeout>>();
+  const focusTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const handleQ = (val: string) => {
     setQ(val);
@@ -115,7 +115,7 @@ export function CommandPalette({
   };
 
   const rows: { title: string; rows: Row[] }[] = useMemo(() => {
-    const term = q.trim().toLowerCase();
+    const term = debouncedQ.trim().toLowerCase();
     if (!term) {
       return [
         {
@@ -271,31 +271,37 @@ export function CommandPalette({
       });
       
     return out;
-  }, [q, recentData, trendingData, searchData]);
+  }, [debouncedQ, recentData, trendingData, searchData]);
 
-  const flat = rows.flatMap((g) => g.rows);
+  const flat = useMemo(() => rows.flatMap((g) => g.rows), [rows]);
   useEffect(() => {
     setActive(0);
   }, [q]);
 
-  // keyboard navigation
+  const activeRef = useRef(active);
+  activeRef.current = active;
+  const flatRef = useRef(flat);
+  flatRef.current = flat;
+
   useEffect(() => {
     if (!open) return;
     const handler = (e: KeyboardEvent) => {
+      const currentFlat = flatRef.current;
+      const currentActive = activeRef.current;
       if (e.key === "ArrowDown") {
         e.preventDefault();
-        setActive((a) => Math.min(flat.length - 1, a + 1));
+        setActive((a) => Math.min(currentFlat.length - 1, a + 1));
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setActive((a) => Math.max(0, a - 1));
       } else if (e.key === "Enter") {
         e.preventDefault();
-        flat[active]?.onSelect();
+        currentFlat[currentActive]?.onSelect();
       }
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [open, flat, active]);
+  }, [open]);
 
   // keep focused row in view
   useEffect(() => {
@@ -338,11 +344,16 @@ export function CommandPalette({
             />
 
             <div className="flex items-center gap-3 border-b border-border/60 px-5 py-4">
-              <Search className="h-5 w-5 text-muted-foreground" />
+              <Search className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
               <input
                 ref={inputRef}
                 value={q}
-                aria-label="Search"
+                role="combobox"
+                aria-expanded={open}
+                aria-controls="search-listbox"
+                aria-autocomplete="list"
+                aria-activedescendant={flat[active] ? `search-option-${active}` : undefined}
+                aria-label="Search your library"
                 onChange={(e) => handleQ(e.target.value)}
                 placeholder="Search your Avuno…"
                 className="flex-1 bg-transparent text-base placeholder:text-muted-foreground/70 focus:outline-none focus-visible:!shadow-none"
@@ -352,7 +363,10 @@ export function CommandPalette({
               </kbd>
             </div>
 
-            <div ref={listRef} role="listbox" className="max-h-[60vh] overflow-y-auto p-3">
+            <div aria-live="polite" aria-atomic="true" className="sr-only">
+              {flat.length} results found
+            </div>
+            <div ref={listRef} id="search-listbox" role="listbox" aria-label="Search results" className="max-h-[60vh] overflow-y-auto p-3">
               {rows.length === 0 ? (
                 <EmptyState
                   icon={<Search className="h-6 w-6" />}
@@ -429,9 +443,9 @@ function RowView({
 }) {
   return (
     <button
+      id={`search-option-${index}`}
       role="option"
       aria-selected={focused}
-      aria-label="Search option"
       data-row={index}
       onClick={onClick}
       onMouseEnter={onMouseEnter}

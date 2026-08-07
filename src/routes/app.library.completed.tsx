@@ -4,6 +4,7 @@ import { MediaCard } from "@/components/media/MediaCard";
 import { StatusPageShell } from "@/components/library/StatusPageShell";
 import { completed, metaOf } from "@/lib/library";
 import { cn } from "@/lib/utils";
+import type { UIMediaItem } from "@/lib/adapters/types";
 
 import { EmptyState } from "@/components/ui/EmptyState";
 import { CheckCircle2 } from "lucide-react";
@@ -21,7 +22,7 @@ function CompletedPage() {
     .slice()
     .sort((a, b) => {
       if (sort === "Highest Rated") return (b.rating ?? 0) - (a.rating ?? 0);
-      if (sort === "Most Rewatched") return (b.stats?.rewatches ?? 0) - (a.stats?.rewatches ?? 0);
+      if (sort === "Most Rewatched") return ((b as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0) - ((a as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0);
       return new Date(metaOf(b.id).completedAt ?? 0).getTime() - new Date(metaOf(a.id).completedAt ?? 0).getTime();
     });
   return (
@@ -56,7 +57,7 @@ function CompletedPage() {
       ) : (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {items.map((m) => (
-            <MediaCard key={m.id} item={m as any} />
+            <MediaCard key={m.id} item={m as unknown as UIMediaItem} />
           ))}
         </div>
       )}

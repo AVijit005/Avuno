@@ -1,3 +1,4 @@
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute } from "@tanstack/react-router";
 import { ContinueCard } from "@/components/library/ContinueCard";
 import { StatusPageShell } from "@/components/library/StatusPageShell";
@@ -18,7 +19,7 @@ function ContinueJourneyPage() {
     >
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {items.map((m) => (
-          <ContinueCard key={m.id} item={m as any} />
+          <ContinueCard key={m.id} item={m as UIMediaItem} />
         ))}
       </div>
     </StatusPageShell>

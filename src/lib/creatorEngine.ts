@@ -8,9 +8,11 @@ export interface Creator {
   totalHours?: number;
   topGenre?: string;
   cover?: string;
+  accent?: string;
+  bio?: string;
 }
 
-export function allCreators(_items: MediaItem[]): Creator[] {
+export function allCreators(_items?: MediaItem[]): Creator[] {
   return [];
 }
 
@@ -22,6 +24,14 @@ export function getWorksByCreator(id: string, _items: MediaItem[]): MediaItem[] 
   return [];
 }
 
-export function buildCreatorProfile(id: string): Creator | undefined {
+export interface CreatorProfile {
+  creator: Creator;
+  works: MediaItem[];
+  collections: Collection[];
+  relatedCreators: Creator[];
+  stats: { works: number; completed: number; avgRating: number; totalHours: number };
+}
+
+export function buildCreatorProfile(_id: string): CreatorProfile | undefined {
   return undefined;
 }

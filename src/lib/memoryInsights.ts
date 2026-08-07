@@ -54,6 +54,7 @@ export interface MemoryHighlight {
   label: string;
   caption: string;
   mediaId: string;
+  title?: string;
 }
 export const HIGHLIGHTS: MemoryHighlight[] = [];
 

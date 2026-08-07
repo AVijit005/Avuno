@@ -1,19 +1,21 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { lazy, type ComponentType } from "react";
+import { lazy } from "react";
+import type { RechartsComponent } from "@/lib/types/collection";
 import { useIntelligence } from "@/hooks/use-analytics";
 import { Dna, Loader2 } from "lucide-react";
+import type { ImpactItem } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as ComponentType<any> })));
-const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as ComponentType<any> })));
-const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as ComponentType<any> })));
-const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as ComponentType<any> })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as ComponentType<any> })));
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })));
+const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })));
+const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })));
+const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })));
+const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
 
-export function MemoryDNA(_props: any) {
+export function MemoryDNA() {
   const { data: intelligence, isLoading } = useIntelligence();
   const rawImpact = intelligence?.impactSummary ?? [];
-  const data = rawImpact.map((i: any) => ({
+  const data = rawImpact.map((i: ImpactItem) => ({
     trait: i.label,
     value: i.value,
     fullMark: 100,

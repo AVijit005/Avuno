@@ -8,9 +8,10 @@ export const Route = createFileRoute("/app/characters/")({ component: Characters
 
 function CharactersIndex() {
   const { data: libraryData } = useLibrary({ limit: 50 });
-  const MEDIA = libraryData?.pages.flatMap(p => p.data ?? p.items ?? []) || [];
+  const MEDIA = libraryData?.pages.flatMap((p) => p.data || []) || [];
   const hero = CHARACTERS[0];
-  const heroMedia = hero ? MEDIA.find((x) => x.id === hero.mediaId) : null;
+  const heroMediaItem = hero ? MEDIA.find((x) => x.media?.id === hero.mediaId) : null;
+  const heroMedia = heroMediaItem?.media;
   const rest = CHARACTERS.slice(1);
 
   return (
@@ -42,7 +43,7 @@ function CharactersIndex() {
               </Link>
             </>
           }
-          image={heroMedia?.poster || ""}
+          image={heroMedia.posterUrl || ""}
           side="left"
         />
       )}
@@ -57,7 +58,8 @@ function CharactersIndex() {
           </div>
           <div className="space-y-3">
             {rest.map((c, i) => {
-              const m = MEDIA.find((x) => x.id === c.mediaId);
+              const mItem = MEDIA.find((x) => x.media?.id === c.mediaId);
+              const m = mItem?.media;
               const offset = i % 2 === 0 ? "md:ml-0 md:mr-12" : "md:ml-12 md:mr-0";
               return (
                 <Link
@@ -70,7 +72,7 @@ function CharactersIndex() {
                     <div className="grid grid-cols-[88px_minmax(0,1fr)_auto] items-center gap-5 p-4 md:gap-6">
                       {m && (
                         <img
-                          src={m.poster || undefined}
+                          src={m.posterUrl || undefined}
                           alt=""
                           className="aspect-[2/3] w-22 rounded-xl object-cover ring-1 ring-white/10"
                         />
@@ -98,4 +100,3 @@ function CharactersIndex() {
     </div>
   );
 }
-

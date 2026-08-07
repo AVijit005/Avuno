@@ -4,6 +4,8 @@ import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import type { LifeChapter } from "@/lib/memoryInsights";
 import { MemoryChip } from "./MemoryChip";
 import { cn } from "@/lib/utils";
+import { adaptLibraryItem } from "@/lib/adapters/media";
+import type { UIMediaItem } from "@/lib/adapters/types";
 
 interface Props {
   chapter: LifeChapter;
@@ -12,7 +14,7 @@ interface Props {
 
 export function LifeChapterCard({ chapter, className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA = libraryData?.pages.flatMap(p => p.items) || [];
+  const MEDIA: UIMediaItem[] = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   const covers = chapter.coverIds
     .map((id) => MEDIA.find((m) => m.id === id))
     .filter((m): m is NonNullable<typeof m> => !!m);

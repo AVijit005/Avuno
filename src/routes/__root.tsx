@@ -69,10 +69,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "description", content: "Avuno is a personal media journal for movies, anime, books, games, music and more. Organize, remember and rediscover everything you experience." },
       { name: "author", content: "Avuno" },
       { name: "theme-color", content: "#0d0d14" },
+      { property: "og:site_name", content: "Avuno" },
       { property: "og:title", content: "Avuno — Your personal media journal" },
       { property: "og:description", content: "Every story you finish becomes part of your story." },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://avuno.xyz" },
+      { property: "og:image", content: "https://avuno.xyz/og-image.png" },
+      { property: "og:image:width", content: "1536" },
+      { property: "og:image:height", content: "864" },
+      { property: "og:image:alt", content: "Avuno — a cinematic memory journal for everything you watch, read, play and listen to." },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Avuno — Your personal media journal" },
+      { name: "twitter:description", content: "Every story you finish becomes part of your story." },
+      { name: "twitter:image", content: "https://avuno.xyz/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
@@ -91,9 +100,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
           "name": "Avuno",
           "description": "A quiet place to remember every story you've lived.",
           "url": "https://avuno.xyz",
+          "image": "https://avuno.xyz/og-image.png",
           "applicationCategory": "LifestyleApplication",
           "operatingSystem": "Web",
           "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+          "publisher": { "@type": "Organization", "name": "Avuno", "url": "https://avuno.xyz" },
         }),
       },
     ],
@@ -111,15 +122,6 @@ function RootShell({ children }: { children: ReactNode }) {
         <script
           dangerouslySetInnerHTML={{
             __html: `
-              try {
-                if ('serviceWorker' in navigator) {
-                  navigator.serviceWorker.getRegistrations().then(function(registrations) {
-                    for(let registration of registrations) {
-                      registration.unregister();
-                    }
-                  }).catch(function() {});
-                }
-              } catch (e) {}
               try {
                 const storedTheme = localStorage.getItem('theme');
                 const isLight = storedTheme === 'light' || (!storedTheme && window.matchMedia('(prefers-color-scheme: light)').matches);

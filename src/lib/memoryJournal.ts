@@ -168,7 +168,7 @@ function buildExtensions(item: MediaItem, memory: MediaMemory): MemoryExtensions
 
   const hasQuote = rng() > 0.4;
   const quote: MemoryQuoteData | null = hasQuote
-    ? { text: pick(rng, QUOTES), attribution: item.creator }
+    ? { text: pick(rng, QUOTES), attribution: item.creator ?? undefined }
     : null;
 
   const reflection: MemoryReflectionData = {

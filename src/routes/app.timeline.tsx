@@ -133,19 +133,19 @@ function TimelinePage() {
             {yearEvents.map((e, i) => {
                // Map UI event properties from metadata or fallback
                const rawEvent = (timelineData?.items ?? []).find(d => d.id === e.id);
-               const meta = (rawEvent?.metadata as any) || {};
-               const media = {
-                 poster: meta.mediaPoster,
-                 title: meta.mediaTitle || e.title,
-                 creator: meta.mediaCreator || "Creator",
-                 accent: e.color || "var(--primary)"
-               };
-               const when = new Date(e.eventDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-               const mood = meta.mood || e.type;
-               const journal = e.description || meta.journalExcerpt;
-               const rating = meta.rating;
-               const achievement = meta.achievement;
-               const collection = meta.collection;
+                const meta = rawEvent?.metadata ?? {};
+                const media = {
+                  poster: meta.mediaPoster as string | undefined,
+                  title: (meta.mediaTitle as string) || e.title,
+                  creator: (meta.mediaCreator as string) || "Creator",
+                  accent: e.color || "var(--primary)"
+                };
+                const when = new Date(e.eventDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+                const mood = (meta.mood as string) || e.type;
+                const journal = e.description || (meta.journalExcerpt as string);
+                const rating = meta.rating as number | undefined;
+                const achievement = meta.achievement as string | undefined;
+                const collection = meta.collection as string | undefined;
                
                return (
                 <motion.div
@@ -236,33 +236,8 @@ function TimelinePage() {
         transition={{ duration: reduced ? 0 : 0.7 }}
         className="mt-24"
       >
-        <ZoneHeading eyebrow="Highlights" title="Editorial highlights" />
+         <ZoneHeading eyebrow="Highlights" title="Editorial highlights" />
         <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-          {[].map((m: any) => (
-            <Link key={m.id} to="/app/media/$id" params={{ id: m.id }} className="block">
-              <motion.div
-                whileHover={{ y: reduced ? 0 : -4 }}
-                className="group relative overflow-hidden rounded-3xl h-72"
-              >
-                <img
-                  src={m.backdrop ?? m.poster}
-                  alt=""
-                  loading="lazy"
-                  decoding="async"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                  className="absolute inset-0 h-full w-full object-cover transition duration-[var(--dur-page)] ease-[var(--ease-out)] group-hover:scale-105"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-6">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-                    Defining story
-                  </div>
-                  <div className="mt-1 font-display text-2xl tracking-tight">{m.title}</div>
-                  <div className="text-xs text-muted-foreground">{m.creator}</div>
-                </div>
-              </motion.div>
-            </Link>
-          ))}
         </div>
       </motion.section>
 

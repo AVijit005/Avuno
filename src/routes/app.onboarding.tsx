@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Film, Tv, BookOpen, Gamepad2, Headphones, Check, ArrowRight } from "lucide-react";
@@ -58,7 +58,7 @@ function OnboardingPage() {
                     className={`press-scale relative flex flex-col items-center gap-3 rounded-2xl border border-white/10 p-6 transition-all duration-[var(--dur-normal)] ${
                       isActive ? "bg-white/[0.08] shadow-[0_0_20px_var(--accent)]" : "bg-black/20 hover:bg-white/[0.04]"
                     }`}
-                    style={{ "--accent": t.accent } as any}
+                    style={{ "--accent": t.accent } as CSSProperties}
                   >
                     {isActive && (
                       <div className="absolute right-3 top-3">

@@ -36,7 +36,7 @@ export interface MediaListResponse {
 }
 
 export interface MediaSearchParams {
-  [key: string]: any;
+  [key: string]: unknown;
   search: string;
   mediaType?: string;
   genre?: string;
@@ -51,7 +51,7 @@ export interface MediaSearchParams {
 }
 
 export interface MediaFilterParams {
-  [key: string]: any;
+  [key: string]: unknown;
   mediaType?: string;
   genre?: string;
   language?: string;

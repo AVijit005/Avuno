@@ -4,7 +4,12 @@ import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { Search } from "lucide-react";
 
 interface Props {
-  collections: any[];
+  collections: Array<{
+    id: string;
+    cover?: string;
+    name: string;
+    description?: string;
+  }>;
 }
 
 const FILTERS = ["All", "Smart", "Curated", "Seasonal", "Franchise"];
@@ -38,10 +43,11 @@ export function CollectionExplorer({ collections }: Props) {
         </div>
         
         <PremiumGlass className="flex items-center gap-2 rounded-full px-4 py-2">
-          <Search size={14} className="text-muted-foreground" />
-          <input 
-            type="text" 
-            placeholder="Search collections..." 
+          <Search size={14} className="text-muted-foreground" aria-hidden="true" />
+          <input
+            type="text"
+            placeholder="Search collections..."
+            aria-label="Search collections"
             className="bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground"
           />
         </PremiumGlass>

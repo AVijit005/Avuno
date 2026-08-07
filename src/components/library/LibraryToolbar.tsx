@@ -62,11 +62,12 @@ export function LibraryToolbar(p: Props) {
     <div className="glass sticky top-[88px] z-20 -mx-6 mb-8 rounded-none px-6 py-3 lg:-mx-10 lg:px-10">
       <div className="flex flex-wrap items-center gap-3">
         <div className="glass-subtle inline-flex items-center gap-2 rounded-full px-3 py-1.5">
-          <Search className="h-3.5 w-3.5 text-muted-foreground" />
+          <Search className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
           <input
             value={p.q}
             onChange={(e) => p.onQ(e.target.value)}
             placeholder="Search your library…"
+            aria-label="Search your library"
             className="w-44 bg-transparent text-xs outline-none placeholder:text-muted-foreground sm:w-64"
           />
         </div>

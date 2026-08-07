@@ -33,7 +33,7 @@ export function ChallengeCard({
             {c.suggestions.slice(0, 3).map((m) => (
               <li key={m.id}>
                 <img
-                  src={m.poster || undefined}
+                  src={m.posterUrl || undefined}
                   alt=""
                   className="h-12 w-9 rounded-md object-cover ring-1 ring-white/10"
                 />

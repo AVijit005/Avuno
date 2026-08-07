@@ -79,7 +79,7 @@ export function MemoryStreaks({ streaks: propStreaks }: Props) {
 
   return (
     <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-5">
-      {streaks.map((s: any, idx: any) => (
+      {streaks.map((s, idx: number) => (
         <StreakCard key={s.label} s={s} idx={idx} />
       ))}
     </div>

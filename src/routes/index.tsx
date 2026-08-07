@@ -15,6 +15,8 @@ import { MemoryCapsule } from "@/components/landing/MemoryCapsule";
 import { WrappedPreview } from "@/components/landing/WrappedPreview";
 import { CrossPlatform } from "@/components/landing/CrossPlatform";
 import { MagneticButton } from "@/components/landing/MagneticButton";
+import { TrustSignals } from "@/components/landing/TrustSignals";
+import { FAQSection } from "@/components/landing/FAQSection";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -89,10 +91,10 @@ function Landing() {
             </Link>
             <MagneticButton>
               <Link
-                to="/app"
+                to="/auth"
                 className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-4 py-2 text-sm font-medium text-black press-scale hover:bg-white/90"
               >
-                Enter <ArrowRight className="h-4 w-4" />
+                Start free <ArrowRight className="h-4 w-4" />
               </Link>
             </MagneticButton>
           </div>
@@ -168,6 +170,10 @@ function Landing() {
       >
         <CrossPlatform />
       </SceneSection>
+
+      <TrustSignals />
+
+      <FAQSection />
 
       {/* Final CTA */}
       <section className="relative px-6 py-36 md:px-10">

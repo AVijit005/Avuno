@@ -1,6 +1,6 @@
 // Collection Relationships — adjacency builder.
 import { type Collection } from "@/lib/types";
-const COLLECTIONS: any[] = [];
+const COLLECTIONS: Collection[] = [];
 
 
 

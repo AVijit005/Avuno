@@ -65,7 +65,7 @@ export function YourReflectionsRail({
             />
             <div className="relative flex gap-4">
               <img
-                src={r.item.poster}
+                src={r.item.poster || undefined}
                 alt=""
                 className="h-24 w-16 shrink-0 rounded-xl object-cover ring-1 ring-white/10"
               />

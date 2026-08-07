@@ -31,6 +31,7 @@ import { useCollections } from "@/hooks/use-collections";
 import { useChallenges } from "@/hooks/use-analytics";
 import { adaptLibraryItem } from "@/lib/adapters/media";
 import { adaptCollectionResponse } from "@/lib/adapters/collection";
+import { adaptGoal } from "@/lib/goals";
 
 export const Route = createFileRoute("/app/library/")({
   component: LibraryIndex,
@@ -80,7 +81,7 @@ function LibraryIndex() {
   const recentlyAdded = (allData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
   const collectionList = collections?.map(adaptCollectionResponse) ?? [];
   const wall = favs.slice(0, 4);
-  const primaryGoal = challengesData?.goals?.[0] as any;
+  const primaryGoal = challengesData?.goals?.[0] ? adaptGoal(challengesData.goals[0]) : null;
 
   return (
     <div className="space-y-16 pt-2 pb-24">
@@ -152,7 +153,7 @@ function LibraryIndex() {
           <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:-mx-10 lg:px-10">
             {cont.map((m) => (
               <div key={m.id} className="snap-start">
-                <ContinueCard item={m as any} />
+                <ContinueCard item={m} />
               </div>
             ))}
           </div>
@@ -176,7 +177,7 @@ function LibraryIndex() {
           />
           <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
             {plan.map((m) => (
-              <PlanningRow key={m.id} item={m as any} />
+              <PlanningRow key={m.id} item={m} />
             ))}
           </div>
         </RevealSection>
@@ -231,7 +232,7 @@ function LibraryIndex() {
         <motion.div className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 lg:-mx-10 lg:px-10">
           {recentlyAdded.map((m) => (
             <div key={m.id} className="snap-start w-44">
-              <MediaCard item={m as any} size="md" />
+              <MediaCard item={m} size="md" />
             </div>
           ))}
         </motion.div>

@@ -71,7 +71,7 @@ function PricingPage() {
             <PremiumButton
               onClick={() => {
                 analytics.track("upgrade_click");
-                navigate({ to: "/app/settings/email-capture" as any });
+                navigate({ to: "/app/settings/email-capture" });
               }}
               className="mt-8 w-full"
             >

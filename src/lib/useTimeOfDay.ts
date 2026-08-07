@@ -3,17 +3,27 @@ import { useEffect, useState } from "react";
 export type TimeOfDay = "morning" | "afternoon" | "evening" | "night";
 
 export function useTimeOfDay(): TimeOfDay {
-  const [t, setT] = useState<TimeOfDay>("night");
+  const [t, setT] = useState<TimeOfDay>(() => {
+    const h = new Date().getHours();
+    if (h >= 5 && h < 11) return "morning";
+    if (h >= 11 && h < 17) return "afternoon";
+    if (h >= 17 && h < 21) return "evening";
+    return "night";
+  });
   useEffect(() => {
-    const compute = () => {
+    const compute = (): TimeOfDay => {
       const h = new Date().getHours();
       if (h >= 5 && h < 11) return "morning";
       if (h >= 11 && h < 17) return "afternoon";
       if (h >= 17 && h < 21) return "evening";
       return "night";
     };
-    setT(compute());
-    const id = setInterval(() => setT(compute()), 60_000);
+    const id = setInterval(() => {
+      setT((prev) => {
+        const next = compute();
+        return prev === next ? prev : next;
+      });
+    }, 60_000);
     return () => clearInterval(id);
   }, []);
   return t;

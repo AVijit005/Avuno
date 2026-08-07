@@ -2,10 +2,11 @@ import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Quote, ArrowUpRight, BookOpen } from "lucide-react";
 import { useJournalEntries } from "@/hooks/use-journal";
+import type { UIJournalEntry } from "@/lib/adapters/types";
 
 export function JournalPreview() {
   const { data, isLoading } = useJournalEntries({ limit: 3 });
-  const entries = data?.pages?.flatMap((p: any) => p.items ?? p.data ?? [])?.slice(0, 3) ?? [];
+  const entries: UIJournalEntry[] = data?.pages?.flatMap((p) => p.items)?.slice(0, 3) ?? [];
 
   if (isLoading) return null;
   if (entries.length === 0) {
@@ -19,7 +20,7 @@ export function JournalPreview() {
 
   return (
     <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-      {entries.map((j: any, i: number) => (
+      {entries.map((j: UIJournalEntry, i: number) => (
         <motion.div
           key={j.id}
           initial={{ opacity: 0, y: 16, rotate: -1 + i * 0.5 }}

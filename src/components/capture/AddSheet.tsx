@@ -1,5 +1,5 @@
 // Universal capture flow. Frontend-only, writes into useLibraryStore.
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
   Film,
@@ -325,12 +325,14 @@ function Field({
   placeholder?: string;
   autoFocus?: boolean;
 }) {
+  const id = useId();
   return (
     <div>
-      <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+      <label htmlFor={id} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
         {label}
       </label>
       <input
+        id={id}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

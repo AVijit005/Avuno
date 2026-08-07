@@ -1,3 +1,4 @@
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Play, Archive as ArchiveIcon } from "lucide-react";
 import { StatusPageShell } from "@/components/library/StatusPageShell";
@@ -53,7 +54,7 @@ function PausedPage() {
                 </Link>
                 <button 
                   className="press-scale glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] text-muted-foreground hover:text-foreground"
-                  onClick={() => useLibraryStore.getState().setStatus(m.id, "archived" as any)}
+                  onClick={() => useLibraryStore.getState().setStatus(m.id, "archived")}
                 >
                   <ArchiveIcon className="h-3 w-3" /> Archive
                 </button>

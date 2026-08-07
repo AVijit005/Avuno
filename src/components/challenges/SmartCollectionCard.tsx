@@ -4,7 +4,12 @@ import { Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 
 interface Props {
-  collection: any; // Using any temporarily as per the stub props
+  collection?: {
+    accent?: string;
+    cover?: string | null;
+    name?: string;
+    description?: string | null;
+  };
   index?: number;
 }
 

@@ -12,7 +12,7 @@ export function MediaHeatmap({ heatmap }: Props) {
       <div className="overflow-x-auto pb-2">
         <div className="grid grid-rows-7 gap-1" style={{ gridTemplateColumns: `repeat(52, minmax(10px, 1fr))` }}>
           <TooltipProvider delayDuration={0}>
-            {cells.map((c: any, i: any) => {
+            {cells.map((c, i: number) => {
               const isActive = c.v >= 0.15;
               const opacity = isActive ? Math.min(1, 0.15 + c.v * 0.85) : 0;
               return (

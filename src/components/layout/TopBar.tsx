@@ -32,10 +32,14 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
 
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
+    if (!isHome) {
+      setNow(null);
+      return;
+    }
     setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 30_000);
     return () => clearInterval(id);
-  }, []);
+  }, [isHome]);
 
   return (
     <motion.header
@@ -64,7 +68,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           ) : (
             meta && (
               <div className="min-w-0">
-                <h1 className="truncate font-display text-lg md:text-xl">{meta.title}</h1>
+                <p className="truncate font-display text-lg md:text-xl">{meta.title}</p>
                 {meta.subtitle && (
                   <p className="hidden truncate text-[11px] text-muted-foreground md:block">
                     {meta.subtitle}

@@ -1,9 +1,9 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { getWorkspace } from "@/lib/collectionWorkspace";
+import { getWorkspace, type WorkspaceNote, type WorkspaceQuote, type WorkspaceMemory } from "@/lib/collectionWorkspace";
 import type { Collection } from "@/lib/types";
 
 export function CollectionWorkspace({ collection }: { collection: Collection }) {
-  const w = getWorkspace(collection);
+  const w = getWorkspace(collection.id);
   return (
     <div className="grid gap-3 lg:grid-cols-3">
       <PremiumGlass variant="subtle">
@@ -12,7 +12,7 @@ export function CollectionWorkspace({ collection }: { collection: Collection }) 
             Pinned notes
           </div>
           <ul className="mt-3 space-y-2 text-sm">
-            {w.notes.map((n) => (
+            {w.notes.map((n: WorkspaceNote) => (
               <li key={n.id}>{n.text}</li>
             ))}
           </ul>
@@ -24,7 +24,7 @@ export function CollectionWorkspace({ collection }: { collection: Collection }) 
             Pinned quotes
           </div>
           <ul className="mt-3 space-y-3">
-            {w.quotes.map((q) => (
+            {w.quotes.map((q: WorkspaceQuote) => (
               <li key={q.id} className="border-l-2 border-primary/40 pl-3">
                 <p className="text-sm italic">"{q.quote}"</p>
                 <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/70">
@@ -41,11 +41,10 @@ export function CollectionWorkspace({ collection }: { collection: Collection }) 
             Pinned memories
           </div>
           <ul className="mt-3 space-y-2 text-sm">
-            {w.memories.map((m) => {
-              const media = MEDIA.find((x) => x.id === m.mediaId);
+            {w.memories.map((m: WorkspaceMemory) => {
               return (
                 <li key={m.id}>
-                  {media?.title}: <span className="text-muted-foreground">{m.note}</span>
+                  <span className="text-muted-foreground">{m.note}</span>
                 </li>
               );
             })}

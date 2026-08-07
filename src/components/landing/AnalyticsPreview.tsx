@@ -1,15 +1,15 @@
 import { motion } from "motion/react";
 import { lazy, Suspense } from "react";
-import type { ComponentType } from "react";
+import type { RechartsComponent } from "@/lib/types/collection";
 
-const Area = lazy(() => import("recharts").then(m => ({ default: m.Area as unknown as ComponentType<any> })));
-const AreaChart = lazy(() => import("recharts").then(m => ({ default: m.AreaChart as unknown as ComponentType<any> })));
-const Cell = lazy(() => import("recharts").then(m => ({ default: m.Cell as unknown as ComponentType<any> })));
-const Pie = lazy(() => import("recharts").then(m => ({ default: m.Pie as unknown as ComponentType<any> })));
-const PieChart = lazy(() => import("recharts").then(m => ({ default: m.PieChart as unknown as ComponentType<any> })));
-const ResponsiveContainer = lazy(() => import("recharts").then(m => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-const Bar = lazy(() => import("recharts").then(m => ({ default: m.Bar as unknown as ComponentType<any> })));
-const BarChart = lazy(() => import("recharts").then(m => ({ default: m.BarChart as unknown as ComponentType<any> })));
+const Area = lazy(() => import("recharts").then(m => ({ default: m.Area as unknown as RechartsComponent })));
+const AreaChart = lazy(() => import("recharts").then(m => ({ default: m.AreaChart as unknown as RechartsComponent })));
+const Cell = lazy(() => import("recharts").then(m => ({ default: m.Cell as unknown as RechartsComponent })));
+const Pie = lazy(() => import("recharts").then(m => ({ default: m.Pie as unknown as RechartsComponent })));
+const PieChart = lazy(() => import("recharts").then(m => ({ default: m.PieChart as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() => import("recharts").then(m => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const Bar = lazy(() => import("recharts").then(m => ({ default: m.Bar as unknown as RechartsComponent })));
+const BarChart = lazy(() => import("recharts").then(m => ({ default: m.BarChart as unknown as RechartsComponent })));
 import { useReducedMotion } from "motion/react";
 import { CountUp } from "./CountUp";
 

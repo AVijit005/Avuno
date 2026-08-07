@@ -1,5 +1,5 @@
 // Progress logger sheet. Writes to library store + opens reflection when hitting 100%.
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { useLibraryStore, snapshotAllItems } from "@/lib/store/libraryStore";
@@ -37,6 +37,10 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
   const [label, setLabel] = useState("");
   const [note, setNote] = useState("");
 
+  const completionId = useId();
+  const labelId = useId();
+  const noteId = useId();
+
   useEffect(() => {
     if (open) {
       setPct(meta?.progress ?? item?.progress ?? 0);
@@ -63,12 +67,13 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
 
         <div className="mt-4">
           <div className="flex items-baseline justify-between">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <label htmlFor={completionId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               Completion
             </label>
             <span className="font-display text-2xl tabular-nums">{pct}%</span>
           </div>
           <input
+            id={completionId}
             type="range"
             min={0}
             max={100}
@@ -79,10 +84,11 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
         </div>
 
         <div className="mt-4">
-          <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label htmlFor={labelId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Where are you
           </label>
           <input
+            id={labelId}
             value={label}
             onChange={(e) => setLabel(e.target.value)}
             placeholder={suggestedLabel(item?.kind)}
@@ -91,10 +97,11 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
         </div>
 
         <div className="mt-3">
-          <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label htmlFor={noteId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
             Note
           </label>
           <textarea
+            id={noteId}
             value={note}
             onChange={(e) => setNote(e.target.value)}
             rows={2}

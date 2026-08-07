@@ -1,26 +1,24 @@
 import { motion } from "motion/react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { lazy, type ComponentType } from "react";
+import { lazy } from "react";
+import type { RechartsComponent } from "@/lib/types/collection";
 import { useIntelligence } from "@/hooks/use-analytics";
 import { ArrowRight, Compass } from "lucide-react";
+import type { TasteGenre } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as ComponentType<any> })));
-const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as ComponentType<any> })));
-const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as ComponentType<any> })));
-const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as ComponentType<any> })));
-const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as ComponentType<any> })));
+const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })));
+const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })));
+const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })));
+const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })));
 
-interface Props {
-  data?: any;
-}
-
-export function GenreExpansion(_props: Props) {
+export function GenreExpansion() {
   const { data: intelligence } = useIntelligence();
   const genres = intelligence?.tasteProfile?.favoriteGenres ?? [];
-  const chartData = genres.map((g: any) => ({
+  const chartData = genres.map((g: TasteGenre) => ({
     genre: g.name,
     count: g.count,
-    fullMark: Math.max(...genres.map((x: any) => x.count)) * 1.2,
+    fullMark: Math.max(...genres.map((x: TasteGenre) => x.count)) * 1.2,
   }));
 
   if (chartData.length === 0) return null;

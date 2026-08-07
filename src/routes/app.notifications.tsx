@@ -46,7 +46,7 @@ function Page() {
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium">
                   {n.actionUrl ? (
-                    <Link to={n.actionUrl as any} className="hover:underline">{n.title}</Link>
+                    <Link to={n.actionUrl ?? "/app"} className="hover:underline">{n.title}</Link>
                   ) : n.title}
                 </div>
                 <div className="text-xs text-muted-foreground">{n.body}</div>

@@ -7,6 +7,7 @@ export interface Franchise {
   name: string;
   description: string;
   cover: string;
+  accent?: string;
   mediaIds: string[];
 }
 
@@ -20,10 +21,20 @@ export function getFranchiseMedia(franchise: Franchise, _items: MediaItem[]): Me
   return [];
 }
 
-export function getAllFranchises(_items: MediaItem[]): Franchise[] {
+export function getAllFranchises(_items?: MediaItem[]): Franchise[] {
   return FRANCHISES;
 }
 
-export function buildFranchiseProfile(id: string): Franchise | undefined {
-  return FRANCHISES.find((f) => f.id === id);
+export interface FranchiseProfile {
+  franchise: Franchise;
+  media: MediaItem[];
+  collections: Collection[];
+  relatedFranchises: Franchise[];
+  completion: number;
+  entries: MediaItem[];
+  timeline: { id: string; label: string; when: string }[];
+}
+
+export function buildFranchiseProfile(_id: string): FranchiseProfile | undefined {
+  return undefined;
 }

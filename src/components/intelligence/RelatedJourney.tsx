@@ -5,7 +5,7 @@ import { JourneyConnector } from "./JourneyConnector";
 import { cn } from "@/lib/utils";
 
 export function RelatedJourney({ mediaId, className }: { mediaId: string; className?: string }) {
-  const items = getRelatedStories(mediaId).slice(0, 4);
+  const items = getRelatedStories(mediaId, []).slice(0, 4);
   if (!items.length) return null;
   return (
     <section aria-label="Related journey" className={cn("space-y-3", className)}>

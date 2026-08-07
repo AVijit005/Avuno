@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Download, Upload, FileText, FileJson, AlertCircle, Check, ArrowLeft } from "lucide-react";
 import { toast } from "sonner";
 import { useLibraryStore } from "@/lib/store/libraryStore";
+import { ImportSchema } from "@/lib/validation/import";
 import type { UIMediaItem as MediaItem } from "@/lib/adapters/types";
 import type { MediaStatus } from "@/lib/library";
 
@@ -39,13 +40,27 @@ function ImportExportPage() {
   async function handleJsonImport(file: File) {
     try {
       const text = await file.text();
-      const json = JSON.parse(text);
-      const r = importJSON(json);
+      let parsed: unknown;
+      try {
+        parsed = JSON.parse(text);
+      } catch {
+        toast.error("Invalid JSON", { description: "The file could not be parsed as JSON." });
+        return;
+      }
+      const result = ImportSchema.safeParse(parsed);
+      if (!result.success) {
+        const firstIssue = result.error.issues[0];
+        toast.error("Invalid import file", {
+          description: `${firstIssue.path.join(".")}: ${firstIssue.message}`,
+        });
+        return;
+      }
+      const r = importJSON(result.data);
       setReport(r);
       toast.success("Import complete", { description: `${r.added} added · ${r.updated} updated` });
     } catch (e) {
       toast.error("Couldn't read that file", {
-        description: e instanceof Error ? e.message : "Invalid JSON",
+        description: e instanceof Error ? e.message : "Unknown error",
       });
     }
   }
@@ -90,8 +105,7 @@ function ImportExportPage() {
           title,
           kind,
           year,
-          poster:
-            null,
+          poster: "",
           backdrop: null,
           rating: Number(cells[idx("rating")]) || 0,
           progress: 0,

@@ -111,6 +111,8 @@ export interface InsightsResponse {
   mostProductiveMonth: string | null;
   totalUniqueMedia: number;
   totalHoursSpent: number;
+  longestBinge?: string;
+  averageCompletionTime?: string;
 }
 
 export async function getDashboard(): Promise<DashboardResponse> {

@@ -1,3 +1,5 @@
+import { adaptLibraryItem } from "@/lib/adapters/media";
+import type { UIMediaItem } from "@/lib/adapters/types";
 import { useLibrary } from "@/hooks/use-library";
 import { Link } from "@tanstack/react-router";
 import { MEMORIES_BY_MEDIA } from "@/lib/memory";
@@ -11,7 +13,7 @@ type Conn = { reason: string; mediaId: string };
 
 export function MemoryConnections({ mediaId, className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA = libraryData?.pages.flatMap(p => p.items) || [];
+  const MEDIA = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   const base = MEDIA.find((m) => m.id === mediaId);
   const baseMem = MEMORIES_BY_MEDIA[mediaId];
   if (!base) return null;

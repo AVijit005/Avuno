@@ -28,7 +28,7 @@ export function CalendarInsights({ insights: propInsights }: Props) {
   return (
     <>
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {insightLines.map((line: any, i: any) => (
+        {insightLines.map((line: string, i: number) => (
           <PremiumGlass key={i} interactive variant="subtle"
             initial={{ opacity: 0, y: 12 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             transition={{ duration: 0.5, delay: i * 0.06 }} whileHover={{ y: -2 }} whileTap={{ scale: 0.98 }}

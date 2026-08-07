@@ -10,8 +10,8 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-const CALENDAR_YEAR: any = {};
-const MEDIA: any[] = [];
+const CALENDAR_YEAR: Record<string, unknown> = {};
+const MEDIA: Array<{ title: string; poster?: string }> = [];
 import { useCalendarYear } from "@/hooks/use-analytics";
 import { adaptCalendarYear } from "@/lib/adapters/analytics";
 import { useQuery } from "@tanstack/react-query";
