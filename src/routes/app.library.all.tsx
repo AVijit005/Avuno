@@ -1,6 +1,6 @@
 import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { motion } from "motion/react";
 import { MediaCard } from "@/components/media/MediaCard";
 import { LibraryToolbar, type SortKey } from "@/components/library/LibraryToolbar";
@@ -27,7 +27,7 @@ function AllLibraryPage() {
   const [sort, setSort] = useState<SortKey>("Recently Added");
   const [view, setView] = useState<"grid" | "rows">("grid");
 
-  const { data: libraryData } = useLibrary({ limit: 100 });
+  const { data: libraryData, isLoading, isError, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useLibrary({ limit: 50 });
 
   const items = useMemo(() => {
     const rawApiItems = libraryData?.pages.flatMap((page) => page.data.map(adaptLibraryItem)) ?? [];
@@ -87,6 +87,50 @@ function AllLibraryPage() {
     setFavOnly(false);
     setJournaledOnly(false);
   };
+
+  const loadMoreRef = useRef<HTMLDivElement>(null);
+  const observerRef = useRef<IntersectionObserver | null>(null);
+
+  useEffect(() => {
+    if (observerRef.current) observerRef.current.disconnect();
+    observerRef.current = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasNextPage && !isFetchingNextPage) {
+          fetchNextPage();
+        }
+      },
+      { threshold: 0.1 }
+    );
+    if (loadMoreRef.current) observerRef.current.observe(loadMoreRef.current);
+    return () => observerRef.current?.disconnect();
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
+
+  // Early returns MUST stay below every hook. React identifies hooks by call
+  // order, so returning before them changes the hook count between the loading
+  // and loaded renders and throws "Rendered fewer hooks than expected".
+  if (isError) {
+    return (
+      <div className="flex min-h-[50vh] flex-col items-center justify-center space-y-4">
+        <p className="text-destructive">Failed to load library.</p>
+        <button
+          onClick={() => refetch()}
+          className="rounded-md bg-primary px-4 py-2 text-sm text-primary-foreground"
+        >
+          Retry
+        </button>
+      </div>
+    );
+  }
+
+  if (isLoading) {
+    return (
+      <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        {Array.from({ length: 12 }, (_, i) => (
+          <div key={i} className="aspect-[2/3] animate-pulse rounded-2xl bg-white/5" />
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="pt-2">
@@ -190,13 +234,25 @@ function AllLibraryPage() {
                   </div>
                 </div>
                 <div className="hidden text-xs text-muted-foreground md:block">
-                  ★ {((m.rating ?? 0) ?? 0).toFixed(1)}
+                  ★ {(m.rating ?? 0).toFixed(1)}
                 </div>
               </Link>
             </motion.div>
           ))
         )}
       </motion.div>
+
+      <div ref={loadMoreRef} className="mt-8 flex justify-center">
+        {isFetchingNextPage && (
+          <div className="flex items-center gap-2 text-sm text-muted-foreground">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-primary border-t-transparent" />
+            Loading more...
+          </div>
+        )}
+        {!hasNextPage && items.length > 0 && (
+          <p className="text-xs text-muted-foreground">You've reached the end</p>
+        )}
+      </div>
     </div>
   );
 }
