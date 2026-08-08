@@ -44,7 +44,13 @@ describe('OAuthAccountRepository', () => {
         delete: mock(() => Promise.resolve(undefined)),
       },
     };
-    repository = new OAuthAccountRepository(prismaMock as never);
+    // A valid 32-byte key in hex. The repository now rejects short or missing
+    // keys instead of silently padding them, so the mock must supply a real one.
+    const configMock = {
+      get: (key: string) =>
+        key === 'oauth.encryptionKey' ? '0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef' : undefined,
+    };
+    repository = new OAuthAccountRepository(prismaMock as never, configMock as never);
   });
 
   it('findById delegates to prisma.oAuthAccount.findUnique', async () => {
@@ -146,18 +152,23 @@ describe('OAuthAccountRepository', () => {
       idToken: 'id-token',
       expiresAt,
     });
-    expect(prismaMock.oAuthAccount.create).toHaveBeenCalledWith({
-      data: {
-        userId: 'user-1',
-        provider: 'GOOGLE',
-        providerAccountId: 'google-1',
-        accessToken: 'access',
-        refreshToken: 'refresh',
-        tokenType: 'Bearer',
-        scope: 'email profile',
-        idToken: 'id-token',
-        expiresAt,
-      },
+    const written = prismaMock.oAuthAccount.create.mock.calls[0][0].data;
+
+    expect(written).toMatchObject({
+      userId: 'user-1',
+      provider: 'GOOGLE',
+      providerAccountId: 'google-1',
+      tokenType: 'Bearer',
+      scope: 'email profile',
+      idToken: 'id-token',
+      expiresAt,
     });
+
+    // Provider tokens are encrypted at rest (AES-256-GCM, iv:ciphertext:tag),
+    // so the plaintext must never reach the database.
+    expect(written.accessToken).not.toBe('access');
+    expect(written.refreshToken).not.toBe('refresh');
+    expect(written.accessToken).toMatch(/^[0-9a-f]+:[0-9a-f]+:[0-9a-f]+$/);
+    expect(written.refreshToken).toMatch(/^[0-9a-f]+:[0-9a-f]+:[0-9a-f]+$/);
   });
 });

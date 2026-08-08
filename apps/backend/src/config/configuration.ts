@@ -40,7 +40,13 @@ export default () => ({
     callbackUrl: process.env.GOOGLE_CALLBACK_URL || 'https://www.avuno.xyz/api/auth/google/callback',
   },
   oauth: {
-    encryptionKey: process.env.OAUTH_ENCRYPTION_KEY || (() => { if (process.env.NODE_ENV !== 'test' && process.env.NODE_ENV !== 'development') throw new Error('OAUTH_ENCRYPTION_KEY required in production'); return 'dev_only_secret_key_32_bytes_long_'; })(),
+    // No fallback. The previous default ('dev_only_secret_key_32_bytes_long_')
+    // is in the public git history, and because it was returned whenever
+    // NODE_ENV was 'development' or 'test' the production guard downstream in
+    // OAuthAccountRepository never fired — a deployment with NODE_ENV
+    // misconfigured would encrypt every stored provider token under a
+    // published key. Missing or malformed values now fail at boot.
+    encryptionKey: process.env.OAUTH_ENCRYPTION_KEY,
   },
   emailVerification: {
     ttlSeconds: parseInt(process.env.EMAIL_VERIFICATION_TTL_SECONDS || '86400', 10),
@@ -58,6 +64,6 @@ export default () => ({
       bucket: process.env.S3_BUCKET,
       accessKeyId: process.env.S3_ACCESS_KEY_ID,
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY,
-    }
+    },
   },
 });

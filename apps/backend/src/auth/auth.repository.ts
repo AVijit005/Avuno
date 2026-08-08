@@ -69,4 +69,12 @@ export class AuthRepository extends BaseRepository<User> {
       data: { lastLoginAt: new Date() },
     });
   }
+
+  /** Used to transparently upgrade a legacy hash after a successful login. */
+  async updatePasswordHash(id: string, passwordHash: string): Promise<void> {
+    await this.prisma.user.update({
+      where: { id },
+      data: { passwordHash },
+    });
+  }
 }

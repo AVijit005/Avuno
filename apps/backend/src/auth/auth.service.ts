@@ -1,15 +1,9 @@
-import { ForbiddenException, Injectable, UnauthorizedException } from '@nestjs/common';
+import { ForbiddenException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { ConflictException, NotFoundException } from '../common';
 import { AuthRepository } from './auth.repository';
-import {
-  AuthResponseDto,
-  InternalAuthResult,
-  LoginDto,
-  RegisterDto,
-  UserResponseDto,
-} from './dto';
+import { AuthResponseDto, InternalAuthResult, LoginDto, RegisterDto, UserResponseDto } from './dto';
 import { RedisService } from '../redis/redis.service';
 import { TokenRevocationService } from './services/token-revocation.service';
 import {
@@ -26,6 +20,8 @@ const LOCKOUT_MINUTES = 15;
 
 @Injectable()
 export class AuthService {
+  private readonly logger = new Logger(AuthService.name);
+
   constructor(
     private readonly authRepository: AuthRepository,
     private readonly passwordService: PasswordService,
@@ -76,7 +72,12 @@ export class AuthService {
     }
 
     const user = await this.authRepository.findByEmail(dto.email);
+
     if (!user || !user.passwordHash) {
+      // Burn comparable CPU before failing. Returning immediately made an
+      // unknown address answer in ~1ms while a known one took ~40ms, which is
+      // a reliable timing oracle for enumerating registered emails.
+      await this.passwordService.dummyCompare();
       await this.recordFailedAttempt(emailKey);
       await this.recordFailedAttempt(ipKey);
       throw new UnauthorizedException('Invalid credentials');
@@ -87,6 +88,18 @@ export class AuthService {
       await this.recordFailedAttempt(emailKey);
       await this.recordFailedAttempt(ipKey);
       throw new UnauthorizedException('Invalid credentials');
+    }
+
+    // Transparently upgrade legacy scrypt hashes (and weaker argon2
+    // parameters) now that the plaintext is available and verified.
+    if (this.passwordService.needsRehash(user.passwordHash)) {
+      try {
+        const upgraded = await this.passwordService.hash(dto.password);
+        await this.authRepository.updatePasswordHash(user.id, upgraded);
+      } catch (error) {
+        // Never fail a valid login because the upgrade failed.
+        this.logger.warn(`Password rehash failed for user ${user.id}`, error as Error);
+      }
     }
 
     await redisClient.del(emailKey);
@@ -174,9 +187,7 @@ export class AuthService {
    * when the access token is missing, malformed or already expired, since the
    * user still needs their refresh token and cookie cleared.
    */
-  tryDecodeAccessToken(
-    authorizationHeader?: string,
-  ): { jti?: string; exp?: number } | undefined {
+  tryDecodeAccessToken(authorizationHeader?: string): { jti?: string; exp?: number } | undefined {
     if (!authorizationHeader?.startsWith('Bearer ')) return undefined;
     try {
       const payload = this.jwtTokenService.verifyAccessToken(authorizationHeader.substring(7));

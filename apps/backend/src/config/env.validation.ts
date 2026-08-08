@@ -1,4 +1,4 @@
-import { IsString, IsNumber, IsOptional, IsBoolean, Min, Max, validateSync, MinLength } from 'class-validator';
+import { IsBoolean, IsNumber, IsOptional, IsString, Matches, Max, Min, MinLength, validateSync } from 'class-validator';
 import { plainToInstance } from 'class-transformer';
 
 class EnvironmentVariables {
@@ -53,7 +53,17 @@ class EnvironmentVariables {
   @MinLength(32)
   JWT_REFRESH_SECRET: string;
 
+  /**
+   * 32 bytes as 64 hex characters: openssl rand -hex 32
+   *
+   * Validated here so a missing or short key fails at boot rather than at the
+   * first OAuth login. Optional overall because Google sign-in can be left
+   * unconfigured; the format check applies whenever a value is supplied.
+   */
   @IsString()
+  @Matches(/^[0-9a-fA-F]{64}$/, {
+    message: 'OAUTH_ENCRYPTION_KEY must be 64 hex characters (32 bytes). Generate one with: openssl rand -hex 32',
+  })
   @IsOptional()
   OAUTH_ENCRYPTION_KEY?: string;
 

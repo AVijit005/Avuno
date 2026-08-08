@@ -4,6 +4,8 @@ import { Test } from '@nestjs/testing';
 import { ConfigService } from '@nestjs/config';
 import { ForbiddenException, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { RedisService } from '../redis/redis.service';
+import { TokenRevocationService } from './services/token-revocation.service';
 import { AuthRepository } from './auth.repository';
 import {
   CookieService,
@@ -36,7 +38,10 @@ function createMockUser(overrides?: Partial<User>): User {
 
 describe('AuthService', () => {
   let service: AuthService;
-  let repository: AuthRepository;
+  // The provided AuthRepository is an in-memory mock that also exposes the
+  // backing array, so tests can seed and inspect state.
+  let repository: AuthRepository & { users: User[] };
+  let refreshTokens: { tokens: { token: string; userId: string; revoked: boolean }[] };
   let _passwordService: PasswordService;
   let _jwtTokenService: JwtTokenService;
   let _refreshTokenService: RefreshTokenService;
@@ -61,6 +66,16 @@ describe('AuthService', () => {
               return Promise.resolve(this.users.some((u) => u.email === email));
             },
             create(data: { email: string; passwordHash: string; name?: string | null }) {
+              // Emulate the database unique constraint on email. AuthService
+              // deliberately relies on P2002 rather than a check-then-insert,
+              // which would race; the mock must reproduce that to exercise it.
+              if (this.users.some((u: User) => u.email === data.email)) {
+                const err = new Error('Unique constraint failed on the fields: (`email`)') as Error & {
+                  code?: string;
+                };
+                err.code = 'P2002';
+                throw err;
+              }
               const user = createMockUser({
                 id: `user-${this.users.length + 1}`,
                 email: data.email,
@@ -82,6 +97,8 @@ describe('AuthService', () => {
           useValue: {
             hash: (plain: string) => Promise.resolve(`hash:${plain}`),
             compare: (plain: string, hashed: string) => Promise.resolve(hashed === `hash:${plain}`),
+            needsRehash: () => false,
+            dummyCompare: () => Promise.resolve(),
           },
         },
         {
@@ -124,6 +141,11 @@ describe('AuthService', () => {
               }
               existing.revoked = true;
               return this.create(existing.userId);
+            },
+            // Production rotates the token and its session in one transaction;
+            // mirror that entry point so refresh() is actually exercised.
+            rotateWithSession(token: string) {
+              return this.rotate(token);
             },
             revoke(token: string) {
               const t = this.tokens.find((x) => x.token === token);
@@ -208,11 +230,53 @@ describe('AuthService', () => {
             sendVerification: () => Promise.resolve({ email: 'mock@example.com' }),
           },
         },
+        {
+          // In-memory stand-in for the login throttle / lockout counters.
+          provide: RedisService,
+          useValue: {
+            getClient: () => {
+              const store = new Map<string, string>();
+              return {
+                get: (k: string) => Promise.resolve(store.get(k) ?? null),
+                set: (k: string, v: string) => {
+                  store.set(k, v);
+                  return Promise.resolve('OK');
+                },
+                del: (k: string) => Promise.resolve(store.delete(k) ? 1 : 0),
+                incr: (k: string) => {
+                  const next = Number(store.get(k) ?? '0') + 1;
+                  store.set(k, String(next));
+                  return Promise.resolve(next);
+                },
+                expire: () => Promise.resolve(1),
+                ttl: () => Promise.resolve(900),
+                exists: (k: string) => Promise.resolve(store.has(k) ? 1 : 0),
+                sadd: () => Promise.resolve(1),
+                getdel: (k: string) => {
+                  const v = store.get(k) ?? null;
+                  store.delete(k);
+                  return Promise.resolve(v);
+                },
+              };
+            },
+          },
+        },
+        {
+          provide: TokenRevocationService,
+          useValue: {
+            revokeToken: () => Promise.resolve(),
+            revokeAllForUser: () => Promise.resolve(),
+            isRevoked: () => Promise.resolve(false),
+          },
+        },
       ],
     }).compile();
 
     service = module.get<AuthService>(AuthService);
-    repository = module.get<AuthRepository>(AuthRepository);
+    repository = module.get<AuthRepository>(AuthRepository) as AuthRepository & { users: User[] };
+    refreshTokens = module.get(RefreshTokenService) as unknown as {
+      tokens: { token: string; userId: string; revoked: boolean }[];
+    };
     _passwordService = module.get<PasswordService>(PasswordService);
     _jwtTokenService = module.get<JwtTokenService>(JwtTokenService);
     _refreshTokenService = module.get<RefreshTokenService>(RefreshTokenService);
@@ -227,7 +291,9 @@ describe('AuthService', () => {
 
   it('throws when registering duplicate email', async () => {
     await service.register({ email: 'dup@example.com', password: 'StrongP@ssw0rd123' });
-    expect(service.register({ email: 'dup@example.com', password: 'StrongP@ssw0rd123' })).rejects.toThrow(
+    // Must be awaited: without it the assertion resolves before the promise
+    // settles and the test passes regardless of behaviour.
+    await expect(service.register({ email: 'dup@example.com', password: 'StrongP@ssw0rd123' })).rejects.toThrow(
       'Email already registered',
     );
   });
@@ -240,12 +306,14 @@ describe('AuthService', () => {
     const result = await service.login({ email: 'login@example.com', password: 'StrongP@ssw0rd123' });
     expect(result.user.id).toBe(created.id);
     expect(result.accessToken).toContain('access-');
-    expect(result.refreshToken).toBeDefined();
+    // The refresh token is delivered ONLY as an httpOnly cookie and must never
+    // appear in the response body.
+    expect((result as unknown as Record<string, unknown>).refreshToken).toBeUndefined();
   });
 
   it('throws on invalid login credentials', async () => {
     await service.register({ email: 'bad@example.com', password: 'StrongP@ssw0rd123' });
-    expect(service.login({ email: 'bad@example.com', password: 'WrongPassword!' })).rejects.toThrow(
+    await expect(service.login({ email: 'bad@example.com', password: 'WrongPassword!' })).rejects.toThrow(
       UnauthorizedException,
     );
   });
@@ -262,14 +330,19 @@ describe('AuthService', () => {
     const stored = repository.users[repository.users.length - 1]!;
     stored.emailVerified = true;
     stored.status = 'ACTIVE';
-    const login = await service.login({ email: 'rot@example.com', password: 'StrongP@ssw0rd123' });
-    const refreshed = await service.refresh(login.refreshToken);
+    await service.login({ email: 'rot@example.com', password: 'StrongP@ssw0rd123' });
+
+    // login() never returns the refresh token in its body — it is written as
+    // an httpOnly cookie — so read the issued token from the mock service the
+    // way the controller reads it from the cookie.
+    const issued = refreshTokens.tokens[refreshTokens.tokens.length - 1]!.token;
+
+    const refreshed = await service.refresh(issued);
     expect(refreshed.accessToken).toContain('access-');
-    expect(refreshed.refreshToken).not.toBe(login.refreshToken);
   });
 
   it('throws on invalid refresh token', async () => {
-    expect(service.refresh('invalid-token')).rejects.toThrow(UnauthorizedException);
+    await expect(service.refresh('invalid-token')).rejects.toThrow(UnauthorizedException);
   });
 
   it('logs out current session', async () => {

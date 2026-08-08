@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { OAuthAccount, OAuthProvider, Prisma } from '@prisma/client';
 import { BaseRepository } from '../../core';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -19,6 +19,7 @@ export interface CreateOAuthAccountData {
 
 @Injectable()
 export class OAuthAccountRepository extends BaseRepository<OAuthAccount> {
+  private readonly logger = new Logger(OAuthAccountRepository.name);
   private readonly encryptionKey: Buffer;
 
   constructor(
@@ -26,12 +27,38 @@ export class OAuthAccountRepository extends BaseRepository<OAuthAccount> {
     private readonly config: ConfigService,
   ) {
     super();
-    const secret = this.config.get<string>('oauth.encryptionKey');
-    if (!secret && process.env.NODE_ENV === 'production') {
-      throw new Error('OAuth encryption key is required in production');
+    this.encryptionKey = OAuthAccountRepository.resolveKey(this.config.get<string>('oauth.encryptionKey'));
+  }
+
+  /**
+   * Derive the AES-256-GCM key.
+   *
+   * Previously this fell back to a hardcoded literal
+   * ('default_secret_key_32_bytes_long!') that is in the public git history,
+   * and the production guard never fired because configuration.ts already
+   * substituted a dev default upstream — so `secret` was always truthy.
+   *
+   * It also did `padEnd(32, '0').slice(0, 32)`, which silently turned a short
+   * key into low-entropy padding. A 64-hex-character key is now required so
+   * the full 256 bits are real.
+   */
+  private static resolveKey(secret: string | undefined): Buffer {
+    if (!secret) {
+      throw new Error('OAUTH_ENCRYPTION_KEY is required. Generate one with: openssl rand -hex 32');
     }
-    const finalSecret = secret || 'default_secret_key_32_bytes_long!';
-    this.encryptionKey = Buffer.from(finalSecret.padEnd(32, '0').slice(0, 32));
+
+    if (/^[0-9a-fA-F]{64}$/.test(secret)) {
+      return Buffer.from(secret, 'hex');
+    }
+
+    const raw = Buffer.from(secret, 'utf8');
+    if (raw.length === 32) {
+      return raw;
+    }
+
+    throw new Error(
+      'OAUTH_ENCRYPTION_KEY must be 64 hex characters (32 bytes). ' + 'Generate one with: openssl rand -hex 32',
+    );
   }
 
   private encrypt(text: string): string {
@@ -52,8 +79,15 @@ export class OAuthAccountRepository extends BaseRepository<OAuthAccount> {
       const decipher = createDecipheriv('aes-256-gcm', this.encryptionKey, iv);
       decipher.setAuthTag(authTag);
       return decipher.update(encryptedText) + decipher.final('utf8');
-    } catch {
-      console.warn('Failed to decrypt OAuth token (encryption key may have changed). Ignoring old token.');
+    } catch (error) {
+      // A GCM auth-tag mismatch is the signal for tampered ciphertext, so this
+      // must be visible rather than swallowed by console.warn. It also fires
+      // legitimately after a key rotation, hence warn rather than throw: the
+      // caller treats an empty token as "re-authenticate with the provider".
+      this.logger.warn(
+        `Failed to decrypt an OAuth token: ${(error as Error).message}. ` +
+          'Treating it as absent (key rotated, or ciphertext tampered with).',
+      );
       return '';
     }
   }

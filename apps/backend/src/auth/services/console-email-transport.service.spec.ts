@@ -25,7 +25,10 @@ describe('ConsoleEmailTransportService', () => {
     expect(message).toContain('Verification email');
     expect(message).toContain('To: alice@example.com');
     expect(message).toContain('http://localhost:3000/api/auth/email/verify?token=raw-token-abc');
-    expect(message).toContain('Raw token: raw-token-abc');
+    // The bare token must NOT be logged separately. c995a15 removed it
+    // deliberately: log aggregators retain these lines, and a verification
+    // token is an account-takeover primitive for its full 24h lifetime.
+    expect(message).not.toContain('Raw token:');
   });
 
   it('includes displayName greeting when provided', async () => {
