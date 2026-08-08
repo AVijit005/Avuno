@@ -11,3 +11,4 @@ export * from './verification-token.service';
 export * from './email-verification.service';
 export * from './google-oauth.service';
 export * from './resend-email-transport.service';
+export * from './oauth-state.service';

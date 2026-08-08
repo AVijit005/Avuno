@@ -22,13 +22,22 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   ) {
     const clientID = (config.get<string>('google.clientId') || '').trim();
     const clientSecret = (config.get<string>('google.clientSecret') || '').trim();
-    const callbackURL = (config.get<string>('google.callbackUrl') || 'https://www.avuno.xyz/api/auth/google/callback').trim();
+    const callbackURL = (
+      config.get<string>('google.callbackUrl') || 'https://www.avuno.xyz/api/auth/google/callback'
+    ).trim();
 
     super({
       clientID,
       clientSecret,
       callbackURL,
       scope: ['email', 'profile'],
+      // Passport's own state store is disabled because it requires
+      // express-session, which conflicts with this app's stateless JWT setup
+      // (see the reverted attempts in commits 0973b23 / f17d53b / 9d900b5).
+      //
+      // CSRF state is NOT absent: it is minted by GoogleOAuthGuard and
+      // verified server-side in GoogleOAuthController before any credential is
+      // issued. See OAuthStateService.
       state: false,
     });
   }

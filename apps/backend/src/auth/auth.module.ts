@@ -11,7 +11,7 @@ import { GoogleOAuthController, EmailVerificationController } from './controller
 import { AuthService } from './auth.service';
 import { AuthRepository } from './auth.repository';
 import { EmailVerificationTokenRepository, OAuthAccountRepository } from './repositories';
-import { JwtAuthGuard } from './guards';
+import { JwtAuthGuard, GoogleOAuthGuard } from './guards';
 import { GoogleStrategy } from './strategies/google.strategy';
 import {
   ConsoleEmailTransportService,
@@ -26,6 +26,7 @@ import {
   GoogleOAuthService,
   AuthAuditService,
   ResendEmailTransportService,
+  OAuthStateService,
   EMAIL_TRANSPORT,
 } from './services';
 
@@ -54,6 +55,8 @@ import {
     EmailVerificationService,
     GoogleOAuthService,
     GoogleStrategy,
+    OAuthStateService,
+    GoogleOAuthGuard,
     AuthAuditService,
     ConsoleEmailTransportService,
     JwtAuthGuard,
@@ -61,10 +64,14 @@ import {
     {
       provide: EMAIL_TRANSPORT,
       inject: [ConfigService, ResendEmailTransportService, ConsoleEmailTransportService],
-      useFactory: (config: ConfigService, resend: ResendEmailTransportService, console: ConsoleEmailTransportService) => {
+      useFactory: (
+        config: ConfigService,
+        resend: ResendEmailTransportService,
+        console: ConsoleEmailTransportService,
+      ) => {
         const env = config.get('NODE_ENV') || config.get('nodeEnv') || process.env.NODE_ENV;
         return env === 'development' || env === 'test' ? console : resend;
-      }
+      },
     },
   ],
   exports: [JwtTokenService, AuthService, JwtAuthGuard, CookieService, EmailVerificationService, GoogleOAuthService],

@@ -6,3 +6,4 @@ export * from './auth-response.dto';
 export * from './google-profile.dto';
 export * from './verify-email.dto';
 export * from './resend-verification.dto';
+export * from './exchange-code.dto';

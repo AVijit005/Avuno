@@ -4,7 +4,7 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
-import { AuthResponseDto, LoginDto, RefreshAccessTokenDto, RegisterDto, UserResponseDto } from './dto';
+import { AuthResponseDto, ExchangeCodeDto, LoginDto, RefreshAccessTokenDto, RegisterDto, UserResponseDto } from './dto';
 import type { AccessTokenPayload } from './services/jwt-token.service';
 import { REFRESH_TOKEN_COOKIE, CookieService } from './services/cookie.service';
 
@@ -35,10 +35,7 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(200)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
-  async refresh(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<AuthResponseDto> {
+  async refresh(@Req() request: Request, @Res({ passthrough: true }) response: Response): Promise<AuthResponseDto> {
     const refreshToken = request.cookies?.[REFRESH_TOKEN_COOKIE];
     return this.authService.refresh(
       refreshToken,
@@ -52,10 +49,10 @@ export class AuthController {
   @HttpCode(200)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   async exchange(
-    @Body('code') code: string,
+    @Body() dto: ExchangeCodeDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<AuthResponseDto> {
-    return this.authService.exchangeCode(code, response);
+    return this.authService.exchangeCode(dto.code, response);
   }
 
   @Post('logout')

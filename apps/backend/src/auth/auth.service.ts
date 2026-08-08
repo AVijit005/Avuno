@@ -3,7 +3,13 @@ import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { ConflictException, NotFoundException } from '../common';
 import { AuthRepository } from './auth.repository';
-import { AuthResponseDto, LoginDto, RegisterDto, UserResponseDto } from './dto';
+import {
+  AuthResponseDto,
+  InternalAuthResult,
+  LoginDto,
+  RegisterDto,
+  UserResponseDto,
+} from './dto';
 import { RedisService } from '../redis/redis.service';
 import {
   CookieService,
@@ -57,7 +63,7 @@ export class AuthService {
     const emailKey = `auth:attempts:${dto.email.toLowerCase().trim()}`;
     const ipKey = `auth:attempts:ip:${ipAddress || 'unknown'}`;
     const redisClient = this.redis.getClient();
-    
+
     const attempts = parseInt((await redisClient.get(emailKey)) || '0', 10);
     const ipAttempts = parseInt((await redisClient.get(ipKey)) || '0', 10);
     if (attempts >= MAX_LOGIN_ATTEMPTS || ipAttempts >= MAX_LOGIN_ATTEMPTS) {
@@ -182,7 +188,7 @@ export class AuthService {
     ipAddress?: string,
     userAgent?: string,
     response?: Response,
-  ): Promise<AuthResponseDto> {
+  ): Promise<InternalAuthResult> {
     const dbUser = await this.authRepository.findById(user.sub);
     if (!dbUser) {
       throw new NotFoundException('User not found');
@@ -213,28 +219,46 @@ export class AuthService {
       accessToken,
       expiresIn,
       refreshToken,
-    } as any;
+    };
   }
 
   async exchangeCode(code: string, response: Response): Promise<AuthResponseDto> {
     const redisClient = this.redis.getClient();
-    const dataStr = await redisClient.get(`oauth:code:${code}`);
+    const key = `oauth:code:${code}`;
+
+    // Atomic read-and-delete: a separate GET then DEL leaves a window in which
+    // two concurrent requests both read the same code and each mint a session
+    // from it. GETDEL guarantees exactly one redemption.
+    let dataStr: string | null;
+    try {
+      dataStr = await redisClient.getdel(key);
+    } catch {
+      // Redis < 6.2 has no GETDEL.
+      dataStr = await redisClient.get(key);
+      if (dataStr !== null) await redisClient.del(key);
+    }
+
     if (!dataStr) {
       throw new UnauthorizedException('Invalid or expired code');
     }
-    await redisClient.del(`oauth:code:${code}`);
 
-    const data = JSON.parse(dataStr);
+    const data = JSON.parse(dataStr) as Partial<InternalAuthResult>;
+
+    if (!data.accessToken || !data.user) {
+      throw new UnauthorizedException('Invalid or expired code');
+    }
 
     if (data.refreshToken) {
       const refreshExpirySeconds = this.config.get<number>('jwt.refreshExpirySeconds') ?? 604800;
       this.cookieService.writeRefreshToken(response, data.refreshToken, refreshExpirySeconds);
     }
 
+    // Note the refresh token is deliberately absent from the response body:
+    // it is delivered only as an httpOnly cookie above.
     return {
       user: data.user,
       accessToken: data.accessToken,
-      expiresIn: data.expiresIn,
+      expiresIn: data.expiresIn ?? 0,
     };
   }
 
@@ -275,6 +299,9 @@ export class AuthService {
   }
 
   logForgotPasswordRequest(email: string): void {
-    this.redis.getClient().sadd('auth:forgot_password_requests', email).catch(() => {});
+    this.redis
+      .getClient()
+      .sadd('auth:forgot_password_requests', email)
+      .catch(() => {});
   }
 }

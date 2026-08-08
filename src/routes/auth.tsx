@@ -350,15 +350,12 @@ function AuthPage() {
               <button
                 type="button"
                 onClick={() => {
-                  const state = crypto.randomUUID();
-                  try {
-                    sessionStorage.setItem("oauth_state", state);
-                  } catch {
-                    // Storage unavailable (private mode). The redirect still
-                    // carries the state param; the callback will fail closed
-                    // if it cannot verify it.
-                  }
-                  window.location.href = `${API_BASE_URL}/auth/google?state=${encodeURIComponent(state)}`;
+                  // The CSRF state is minted and verified server-side (see
+                  // GoogleOAuthGuard / OAuthStateService). Passing a client
+                  // -generated `state` here would override the server's value
+                  // and defeat the check, which is what made the previous
+                  // implementation ineffective.
+                  window.location.href = `${API_BASE_URL}/auth/google`;
                 }}
                 className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-all duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
                 style={{
