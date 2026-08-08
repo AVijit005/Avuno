@@ -1,4 +1,15 @@
-import { IsBoolean, IsIn, IsOptional, IsString, MaxLength, IsArray, ValidateNested } from 'class-validator';
+import {
+  ArrayMaxSize,
+  ArrayNotEmpty,
+  IsArray,
+  IsBoolean,
+  IsIn,
+  IsOptional,
+  IsString,
+  IsUUID,
+  MaxLength,
+  ValidateNested,
+} from 'class-validator';
 import { Type } from 'class-transformer';
 
 const VISIBILITY_OPTIONS = ['PRIVATE', 'PUBLIC', 'UNLISTED', 'FOLLOWERS_ONLY'] as const;
@@ -115,8 +126,15 @@ export class AddCollectionItemDto {
 }
 
 export class ReorderItemsDto {
+  /**
+   * IDs must be UUIDs and the list is capped: it was previously an unbounded
+   * array of arbitrary strings, so a single request could open a transaction
+   * containing tens of thousands of writes.
+   */
   @IsArray()
-  @IsString({ each: true })
+  @ArrayNotEmpty()
+  @ArrayMaxSize(500)
+  @IsUUID('4', { each: true })
   itemIds: string[];
 }
 

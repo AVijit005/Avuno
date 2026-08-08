@@ -1,4 +1,5 @@
 import { IsBoolean, IsIn, IsOptional, IsString, MaxLength, IsArray } from 'class-validator';
+import { JOURNAL_MEDIA_TYPES, type JournalMediaType } from '../journal.media-types';
 
 const MOOD_OPTIONS = [
   'VERY_HAPPY',
@@ -414,4 +415,18 @@ export class JournalStatisticsDto {
   timelineEventCount: number;
   favoriteQuoteCount: number;
   highlightCount: number;
+}
+
+/**
+ * Validates the `?type=` query param on the quote and highlight endpoints.
+ *
+ * That value selects a Prisma delegate at runtime, so accepting an arbitrary
+ * string was arbitrary delegate access. The allowlist lives with the lookup
+ * table it mirrors.
+ */
+export class MediaTypeQueryDto {
+  @IsIn(JOURNAL_MEDIA_TYPES as unknown as string[], {
+    message: `type must be one of: ${JOURNAL_MEDIA_TYPES.join(', ')}`,
+  })
+  type: JournalMediaType;
 }

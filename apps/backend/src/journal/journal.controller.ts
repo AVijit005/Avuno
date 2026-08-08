@@ -20,6 +20,7 @@ import {
   UpdateHighlightDto,
   HighlightResponseDto,
   JournalStatisticsDto,
+  MediaTypeQueryDto,
 } from './dto';
 
 @ApiTags('Journal')
@@ -147,13 +148,7 @@ export class JournalController {
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
   ) {
-    return this.journalService.findTimelineEvents(
-      user.sub,
-      undefined,
-      undefined,
-      cursor,
-      safeParseInt(limit, 50),
-    );
+    return this.journalService.findTimelineEvents(user.sub, undefined, undefined, cursor, safeParseInt(limit, 50));
   }
 
   @Get('timeline/:year')
@@ -198,10 +193,12 @@ export class JournalController {
   async createQuote(
     @CurrentUser() user: AccessTokenPayload,
     @Param('id') id: string,
-    @Query('type') type: string,
+    // Validated via DTO: `type` selects a Prisma delegate, so a bare string
+    // would be arbitrary delegate access.
+    @Query() query: MediaTypeQueryDto,
     @Body() dto: CreateQuoteDto,
   ): Promise<QuoteResponseDto> {
-    return this.journalService.createQuote(user.sub, id, dto, type);
+    return this.journalService.createQuote(user.sub, id, dto, query.type);
   }
 
   @Patch('library/:id/quotes/:quoteId')
@@ -227,10 +224,10 @@ export class JournalController {
   async createHighlight(
     @CurrentUser() user: AccessTokenPayload,
     @Param('id') id: string,
-    @Query('type') type: string,
+    @Query() query: MediaTypeQueryDto,
     @Body() dto: CreateHighlightDto,
   ): Promise<HighlightResponseDto> {
-    return this.journalService.createHighlight(user.sub, id, dto, type);
+    return this.journalService.createHighlight(user.sub, id, dto, query.type);
   }
 
   @Patch('library/:id/highlights/:highlightId')

@@ -113,7 +113,7 @@ export class CollectionsRepository {
 
     await this.prisma.$transaction([
       this.prismaAny().collectionItem.deleteMany({ where: { collectionId: id } }),
-      this.prismaAny().collection.delete({ where: { id } })
+      this.prismaAny().collection.delete({ where: { id } }),
     ]);
     return true;
   }
@@ -181,15 +181,36 @@ export class CollectionsRepository {
     const collection = await this.prismaAny().collection.findUnique({ where: { id: collectionId } });
     if (!collection || collection.userId !== userId) return false;
 
-    // Atomic update: set position based on array index
-    const queries = itemIds.map((itemId, i) =>
-      this.prismaAny().collectionItem.update({
-        where: { id: itemId },
-        data: { position: i },
-      })
-    );
-    await this.prisma.$transaction(queries);
-    return true;
+    // Scope every write to this collection.
+    //
+    // Ownership was previously verified on the container only, while the
+    // updates ran with `where: { id: itemId }` — no collectionId. Any
+    // authenticated user could therefore reorder items belonging to another
+    // user's collection simply by listing their item IDs, rewriting `position`
+    // across the table and scrambling other people's curated ordering.
+    //
+    // Verify membership before writing anything, inside the same interactive
+    // transaction, so a batch containing a foreign ID is rejected outright
+    // rather than partially applied.
+    return this.prisma.$transaction(async (tx) => {
+      const txAny = tx as unknown as Record<string, any>;
+
+      const owned = await txAny.collectionItem.findMany({
+        where: { id: { in: itemIds }, collectionId },
+        select: { id: true },
+      });
+
+      if (owned.length !== itemIds.length) return false;
+
+      for (const [i, itemId] of itemIds.entries()) {
+        await txAny.collectionItem.update({
+          where: { id: itemId },
+          data: { position: i },
+        });
+      }
+
+      return true;
+    });
   }
 
   // ─── Shelves ───────────────────────────────────────────────────────────────
@@ -268,7 +289,7 @@ export class CollectionsRepository {
 
     await this.prisma.$transaction([
       this.prismaAny().shelfItem.deleteMany({ where: { shelfId: id } }),
-      this.prismaAny().shelf.delete({ where: { id } })
+      this.prismaAny().shelf.delete({ where: { id } }),
     ]);
     return true;
   }

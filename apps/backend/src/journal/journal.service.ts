@@ -5,6 +5,7 @@ import { JournalEventService } from './journal-event.service';
 import { TimelineEventFactory } from './timeline-event-factory';
 import { JournalStatisticsService } from './journal-statistics.service';
 import { PromptService } from './prompt.service';
+export { JOURNAL_MEDIA_TYPES, type JournalMediaType } from './journal.media-types';
 import type {
   CreateJournalEntryDto,
   UpdateJournalEntryDto,
@@ -117,26 +118,41 @@ export class JournalService {
       location: dto.location,
     });
 
-    // Attach media if provided
-    const _mediaIds = dto.mediaIds ?? [];
-    for (const libId of _mediaIds) {
-      let foundType: string | null = null;
-      let foundMediaId: string | null = null;
-      
-      for (const [type, cfg] of Object.entries(MEDIA_LOOKUP)) {
-        const delegate = (this.repository as any).prismaAny()?.[cfg.delegate];
-        if (delegate) {
-          const item = await delegate.findUnique({ where: { id: libId }, select: { [cfg.idField]: true } });
-          if (item) {
-            foundType = type;
-            foundMediaId = item[cfg.idField];
-            break;
-          }
+    // Attach media if provided.
+    //
+    // Scoped to userId: this previously resolved library rows by ID alone, so
+    // a caller could attach another user's library items to their own memory.
+    //
+    // Also restructured from O(N x 8) sequential findUnique calls — 20 media
+    // IDs meant up to 160 round-trips in one request — to one batched query
+    // per media type, run in parallel.
+    const requestedIds = dto.mediaIds ?? [];
+    if (requestedIds.length > 0) {
+      const prismaAny = (this.repository as any).prismaAny();
+
+      const perType = await Promise.all(
+        Object.entries(MEDIA_LOOKUP).map(async ([type, cfg]) => {
+          const delegate = prismaAny?.[cfg.delegate];
+          if (!delegate) return [];
+          const rows = await delegate.findMany({
+            where: { id: { in: requestedIds }, userId, deletedAt: null },
+            select: { id: true, [cfg.idField]: true },
+          });
+          return rows.map((row: Record<string, any>) => ({
+            libraryId: row.id as string,
+            type,
+            mediaId: row[cfg.idField] as string,
+          }));
+        }),
+      );
+
+      // Preserve the caller's ordering rather than the per-type query order.
+      const byLibraryId = new Map(perType.flat().map((m) => [m.libraryId, m]));
+      for (const libId of requestedIds) {
+        const match = byLibraryId.get(libId);
+        if (match?.mediaId) {
+          await this.repository.addMemoryMedia(memory.id, match.type, match.mediaId);
         }
-      }
-      
-      if (foundType && foundMediaId) {
-        await this.repository.addMemoryMedia(memory.id, foundType, foundMediaId);
       }
     }
 
@@ -232,8 +248,8 @@ export class JournalService {
     dto: CreateQuoteDto,
     mediaType: string,
   ): Promise<QuoteResponseDto> {
-    // Resolve the media id from the library item
-    const libItem = await this.findLibraryMediaId(libraryId, mediaType);
+    // Resolve the media id from the CALLER'S library item.
+    const libItem = await this.findLibraryMediaId(libraryId, mediaType, userId);
     if (!libItem) throw new NotFoundException('Library item not found');
 
     const mediaId = libItem[`${mediaType}Id`];
@@ -300,7 +316,7 @@ export class JournalService {
     dto: CreateHighlightDto,
     mediaType: string,
   ): Promise<HighlightResponseDto> {
-    const libItem = await this.findLibraryMediaId(libraryId, mediaType);
+    const libItem = await this.findLibraryMediaId(libraryId, mediaType, userId);
     if (!libItem) throw new NotFoundException('Library item not found');
 
     const mediaId = libItem[`${mediaType}Id`];
@@ -379,12 +395,28 @@ export class JournalService {
 
   // ─── Helpers ──────────────────────────────────────────────────────────────
 
-  private async findLibraryMediaId(libraryId: string, type: string): Promise<Record<string, any> | null> {
+  /**
+   * Resolve the catalog media ID behind one of the caller's library items.
+   *
+   * userId is required. Without it this looked up any library row by ID, so
+   * POST /library/<another-user's-item-id>/quotes both leaked the existence of
+   * that row (201 vs 404 is an oracle) and bound its media into the caller's
+   * own quote. Every other journal query is user-scoped; these two were the
+   * outliers.
+   */
+  private async findLibraryMediaId(
+    libraryId: string,
+    type: string,
+    userId: string,
+  ): Promise<Record<string, any> | null> {
     const cfg = MEDIA_LOOKUP[type];
     if (!cfg) return null;
     const delegate = (this.repository as any).prismaAny()?.[cfg.delegate];
     if (!delegate) return null;
-    return delegate.findUnique({ where: { id: libraryId }, select: { [cfg.idField]: true } });
+    return delegate.findFirst({
+      where: { id: libraryId, userId, deletedAt: null },
+      select: { [cfg.idField]: true },
+    });
   }
 
   private toEntryResponse(e: any): JournalEntryResponseDto {
