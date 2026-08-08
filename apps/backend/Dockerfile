@@ -28,13 +28,17 @@ FROM node:${NODE_VERSION}-alpine AS deps
 
 WORKDIR /app
 
+# Toolchain for native modules (argon2). Present only in this stage; the
+# runtime image below never installs a compiler.
 RUN apk add --no-cache python3 make g++
 
 COPY package.json ./
 RUN npm install --omit=dev
 
-COPY prisma ./prisma
-RUN npx prisma generate
+# Deliberately no `prisma generate` here: the `prisma` CLI is a devDependency
+# and is absent after --omit=dev. The builder stage already generated the
+# client, so the runtime stage copies that artefact across instead of
+# re-running generation with a CLI this stage does not have.
 
 # ── Stage 3: Runtime ──
 FROM node:${NODE_VERSION}-alpine AS runner
@@ -55,6 +59,11 @@ COPY --from=builder --chown=chronicle:chronicle /app/dist ./dist
 COPY --from=deps    --chown=chronicle:chronicle /app/node_modules ./node_modules
 COPY --from=builder --chown=chronicle:chronicle /app/package.json ./
 COPY --from=builder --chown=chronicle:chronicle /app/prisma ./prisma
+
+# The generated Prisma client, taken from the builder (which has the CLI).
+# Copied after node_modules so it is not overwritten by the prod-deps tree.
+COPY --from=builder --chown=chronicle:chronicle /app/node_modules/.prisma ./node_modules/.prisma
+COPY --from=builder --chown=chronicle:chronicle /app/node_modules/@prisma/client ./node_modules/@prisma/client
 
 USER chronicle
 

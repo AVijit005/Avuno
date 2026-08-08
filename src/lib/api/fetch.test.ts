@@ -124,6 +124,45 @@ describe("apiFetch — auth retry on 401", () => {
   });
 });
 
+describe("apiFetch — anonymous traffic", () => {
+  it("does not attempt a refresh when there is no session", async () => {
+    setAccessToken(null);
+
+    const calls: string[] = [];
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL) => {
+        calls.push(String(input));
+        return jsonResponse({ statusCode: 401, message: "Unauthorized" }, 401);
+      }),
+    );
+
+    // A 401 for a logged-out visitor is the expected answer, not an expiry.
+    // Refreshing here would fail and bounce a first-time visitor to /auth.
+    await expect(apiGet("/library")).rejects.toMatchObject({
+      status: 401,
+      code: "UNAUTHORIZED",
+    });
+    expect(calls.filter((c) => c.includes("/auth/refresh"))).toHaveLength(0);
+  });
+
+  it("sends no Authorization header when there is no session", async () => {
+    setAccessToken(null);
+
+    let sentAuth: string | null = "sentinel";
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (_input: RequestInfo | URL, init?: RequestInit) => {
+        sentAuth = new Headers(init?.headers).get("Authorization");
+        return ok({ ok: true });
+      }),
+    );
+
+    await apiGet("/media");
+    expect(sentAuth).toBeNull();
+  });
+});
+
 describe("apiFetch — transport retries", () => {
   it("does NOT replay a failed POST (non-idempotent)", async () => {
     setAccessToken(futureJwt());

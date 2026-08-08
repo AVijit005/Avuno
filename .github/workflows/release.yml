@@ -1,10 +1,13 @@
 name: Release
 
 on:
-  workflow_run:
-    workflows: ["CI"]
-    types: [completed]
-    branches: [main]
+  # NOTE: workflow_run cannot be filtered to tags — its `branches` filter only
+  # matches branch refs, so a tag-triggered CI run would never satisfy it and
+  # releases would silently never fire. Instead this triggers on the tag push
+  # directly and then waits for that exact commit's CI to succeed (see the
+  # "Wait for CI" step), which gives the same gate without the dead filter.
+  push:
+    tags: ["v*"]
   # Manual re-run for a tag whose CI already passed.
   workflow_dispatch:
     inputs:
@@ -25,26 +28,33 @@ jobs:
   release:
     name: Release ${{ github.event.inputs.tag || github.ref_name }}
     runs-on: ubuntu-latest
-    # Gate on CI. Previously this workflow triggered directly on a tag push
-    # with no `needs:`, so a tag on a commit that never passed CI would build
-    # and publish an image straight to GHCR.
-    if: >-
-      github.event_name == 'workflow_dispatch' ||
-      (github.event.workflow_run.conclusion == 'success' &&
-       startsWith(github.event.workflow_run.head_branch, 'v'))
     environment: production
     permissions:
       contents: write
       packages: write
+      checks: read
+      actions: read
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.inputs.tag || github.event.workflow_run.head_branch }}
+          ref: ${{ github.event.inputs.tag || github.ref_name }}
+
+      # Hard gate on CI. Previously this workflow published to GHCR with no
+      # dependency on CI at all, so a tag on a commit that never passed (or
+      # never even ran) CI would ship.
+      - name: Wait for CI to succeed on this commit
+        uses: lewagon/wait-on-check-action@v1.4.0
+        with:
+          ref: ${{ github.sha }}
+          check-name: "Launch Gate (Production Proof)"
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 20
+          allowed-conclusions: success
 
       - name: Resolve release tag
         id: meta
         run: |
-          TAG="${{ github.event.inputs.tag || github.event.workflow_run.head_branch }}"
+          TAG="${{ github.event.inputs.tag || github.ref_name }}"
           echo "tag=$TAG" >> "$GITHUB_OUTPUT"
           # Only a clean semver tag may move :latest. A hotfix or pre-release
           # tag cut from an older commit must not overwrite it.

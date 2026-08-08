@@ -1,4 +1,12 @@
 {
   "extends": "./tsconfig.json",
-  "exclude": ["node_modules", "test", "dist", "**/*.spec.ts"]
+  // rootDir pins the output layout. Without it, seed-demo-data.ts at the
+  // package root widens the inferred rootDir to the whole package and the
+  // compiler emits dist/src/main.js instead of dist/main.js — which does not
+  // match `node dist/main` in package.json or the Dockerfile CMD, so the
+  // production container could not start.
+  "compilerOptions": {
+    "rootDir": "./src"
+  },
+  "exclude": ["node_modules", "test", "dist", "seed-demo-data.ts", "**/*.spec.ts"]
 }

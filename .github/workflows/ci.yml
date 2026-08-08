@@ -80,6 +80,18 @@ jobs:
       - name: Typecheck
         run: bunx tsc --noEmit -p tsconfig.json
       - run: bun run build
+      # The Dockerfile CMD and `start:prod` both run `node dist/main`. A stray
+      # .ts file outside src/ widens the inferred rootDir and silently moves
+      # the entrypoint to dist/src/main.js, which would make the production
+      # container fail to start with no build error.
+      - name: Verify entrypoint location
+        run: |
+          if [ ! -f dist/main.js ]; then
+            echo "FAILED: dist/main.js not found. Emitted layout:"
+            find dist -maxdepth 2 -name 'main.js'
+            exit 1
+          fi
+          echo "OK: dist/main.js present"
 
   backend-test:
     name: Backend Tests

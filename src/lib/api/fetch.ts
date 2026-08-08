@@ -154,14 +154,20 @@ function isTokenExpired(token: string): boolean {
 }
 
 async function getValidToken(): Promise<string | null> {
+  // There is no session to refresh during SSR: the refresh token lives in an
+  // httpOnly cookie on the browser, and the token store is deliberately inert
+  // on the server. Bail out before attempting a refresh that cannot succeed.
+  if (typeof window === "undefined") return null;
+
   const stored = getAccessToken();
   if (stored && !isTokenExpired(stored)) return stored;
-  if (!stored && typeof window !== "undefined") {
-    // No token at all: let the request go out unauthenticated rather than
-    // firing a refresh for anonymous traffic.
-    return null;
-  }
 
+  // No token at all: this is anonymous traffic (landing, pricing, auth pages).
+  // Send the request unauthenticated instead of firing a refresh that would
+  // 401 and then push the visitor to /auth.
+  if (!stored) return null;
+
+  // A token exists but is expired or near-expiry: refresh it.
   try {
     return await forceRefreshValidToken();
   } catch {
@@ -217,6 +223,9 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
   const maxAuthRetries = 1;
 
   let authRetriesUsed = 0;
+  // Whether this request was sent with credentials. Drives the 401 handling
+  // below: recover a real session, but do not treat anonymous 401s as expiry.
+  let hadSession = false;
 
   for (let attempt = 0; ; attempt++) {
     const controller = new AbortController();
@@ -244,6 +253,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
         const token = await getValidToken();
         if (token) {
           headers.set("Authorization", `Bearer ${token}`);
+          hadSession = true;
         }
       }
 
@@ -267,6 +277,12 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
       }
 
       if (response.status === 401 && !skipAuth && !shouldSkipRefreshOn401(path)) {
+        // Only attempt recovery if we actually had a session. A 401 on
+        // anonymous traffic is the expected answer, not an expiry: refreshing
+        // would fail and bounce a first-time visitor to /auth.
+        if (!hadSession) {
+          throw new ApiError("Unauthorized", 401, "UNAUTHORIZED");
+        }
         if (authRetriesUsed >= maxAuthRetries) {
           setAccessToken(null);
           notifySessionExpired();
