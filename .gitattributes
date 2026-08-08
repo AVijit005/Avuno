@@ -1,0 +1,36 @@
+# Normalize all text files to LF in the repository and working tree.
+# This is the single source of truth for line endings and binds every
+# contributor and CI runner, unlike the machine-local core.autocrlf.
+* text=auto eol=lf
+
+# Windows-only scripts must keep CRLF or they will not execute.
+*.bat  text eol=crlf
+*.cmd  text eol=crlf
+*.ps1  text eol=crlf
+
+# Binary assets: never touch, never diff.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.avif  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.otf   binary
+*.pdf   binary
+*.zip   binary
+*.mp4   binary
+*.webm  binary
+
+# Text formats that are commonly misdetected.
+*.svg text eol=lf
+*.md  text eol=lf
+*.sh  text eol=lf
+
+# Generated / lock files: keep them out of diffs and language stats.
+bun.lock              -diff linguist-generated
+apps/backend/bun.lock -diff linguist-generated
+src/routeTree.gen.ts  -diff linguist-generated
