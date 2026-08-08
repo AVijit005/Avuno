@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { analytics } from "../lib/analytics";
 import { queryKeys } from "../lib/api/query-keys";
 import { authApi } from "../lib/api";
-import { setAccessToken, getAccessToken } from "../lib/api/fetch";
+import { setAccessToken, getAccessToken, AUTH_EXPIRED_EVENT } from "../lib/api/fetch";
 import { ErrorBoundary } from "../components/common/ErrorBoundary";
 import { PageSkeleton } from "../components/common/PageSkeleton";
 
@@ -170,6 +170,22 @@ function RootComponent() {
       setIsRestoring(false);
     }
     return () => { mounted = false; };
+  }, [queryClient]);
+
+  // Terminal session expiry: the refresh token is gone or rejected, so no
+  // amount of retrying will recover. Clear cached user data and send the user
+  // to /auth once, instead of leaving the SPA in a logged-in-looking state
+  // where every request 401s.
+  useEffect(() => {
+    const onExpired = () => {
+      queryClient.removeQueries({ queryKey: queryKeys.auth.me() });
+      const { pathname } = window.location;
+      if (pathname.startsWith("/auth")) return;
+      const next = encodeURIComponent(pathname + window.location.search);
+      window.location.replace(`/auth?next=${next}`);
+    };
+    window.addEventListener(AUTH_EXPIRED_EVENT, onExpired);
+    return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired);
   }, [queryClient]);
 
   // Apply theme on boot

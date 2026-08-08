@@ -36,8 +36,15 @@ export class ApiError extends Error {
 }
 
 export class NetworkError extends Error {
-  constructor(message = 'Network error. Please check your connection.') {
-    super(message);
+  /**
+   * `message` stays user-facing; the underlying failure is preserved on
+   * `cause` so diagnostics are not lost when the original error is wrapped.
+   */
+  constructor(
+    message = 'Network error. Please check your connection.',
+    options?: { cause?: unknown },
+  ) {
+    super(message, options);
     this.name = 'NetworkError';
   }
 }
