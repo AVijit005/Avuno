@@ -1,0 +1,37 @@
+# Root build context guard. Mirrors apps/backend/.dockerignore so a build run
+# from the repo root cannot pick up secrets or bloat.
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+secrets/
+
+node_modules
+**/node_modules
+dist
+**/dist
+.output
+.wrangler
+.tanstack
+.nitro
+
+.git
+.gitignore
+.github
+.husky
+
+# AI tooling scratch directories
+.qoder
+.commandcode
+.kilo
+.kombai
+.opencode
+.local
+
+coverage
+media-output
+tests/visual/output
+*.log
+.DS_Store
+Thumbs.db

@@ -1,0 +1,51 @@
+# SECURITY: .env holds live JWT signing secrets, the OAuth encryption key and
+# the database URL. Dockerfile.dev does `COPY . .`, so without this file those
+# secrets are written into an immutable image layer and remain readable via
+# `docker history` / layer extraction even if a later layer deletes them.
+.env
+.env.*
+!.env.example
+
+# Never ship credentials or keys of any kind.
+*.pem
+*.key
+*.p12
+secrets/
+
+# Dependencies and build output are produced inside the image. Copying the
+# host's node_modules (600+ MB) also uploads it to the daemon on every build.
+node_modules
+dist
+build
+.turbo
+
+# Version control and CI
+.git
+.gitignore
+.github
+.husky
+
+# Tests and load tests are not needed at runtime
+test
+**/*.spec.ts
+**/*.test.ts
+coverage
+loadtests
+
+# Local runtime artefacts
+backups
+uploads
+logs
+*.log
+tmp
+
+# Compose / Docker definitions do not belong in the build context
+docker-compose*.yml
+Dockerfile*
+.dockerignore
+
+# Editor / OS noise
+.vscode
+.idea
+.DS_Store
+Thumbs.db

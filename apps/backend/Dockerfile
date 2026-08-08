@@ -3,7 +3,7 @@
 
 ARG NODE_VERSION=22
 
-# ── Stage 1: Build ──
+# ── Stage 1: Build (dev dependencies present) ──
 FROM node:${NODE_VERSION}-alpine AS builder
 
 WORKDIR /app
@@ -20,7 +20,23 @@ COPY src ./src
 RUN npx prisma generate
 RUN npm run build
 
-# ── Stage 2: Production ──
+# ── Stage 2: Production dependencies only ──
+# Built separately so the runtime image does not ship @nestjs/cli, eslint,
+# prettier, typescript, husky and the rest of devDependencies. The previous
+# image copied the builder's full node_modules (~700 MB).
+FROM node:${NODE_VERSION}-alpine AS deps
+
+WORKDIR /app
+
+RUN apk add --no-cache python3 make g++
+
+COPY package.json ./
+RUN npm install --omit=dev
+
+COPY prisma ./prisma
+RUN npx prisma generate
+
+# ── Stage 3: Runtime ──
 FROM node:${NODE_VERSION}-alpine AS runner
 
 WORKDIR /app
@@ -28,12 +44,15 @@ WORKDIR /app
 ENV NODE_ENV=production
 ENV PORT=3000
 
+# wget backs the HEALTHCHECK below.
+RUN apk add --no-cache wget
+
 # Create non-root user
 RUN addgroup --system --gid 1001 chronicle && \
     adduser --system --uid 1001 chronicle
 
 COPY --from=builder --chown=chronicle:chronicle /app/dist ./dist
-COPY --from=builder --chown=chronicle:chronicle /app/node_modules ./node_modules
+COPY --from=deps    --chown=chronicle:chronicle /app/node_modules ./node_modules
 COPY --from=builder --chown=chronicle:chronicle /app/package.json ./
 COPY --from=builder --chown=chronicle:chronicle /app/prisma ./prisma
 
