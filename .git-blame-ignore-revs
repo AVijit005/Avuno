@@ -1,0 +1,4 @@
+# Bulk line-ending normalization (CRLF -> LF). No functional changes.
+# Configure once with:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+5f0f8f8fb81ec783262d941afbd28bd8194ea1c9
