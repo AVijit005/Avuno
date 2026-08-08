@@ -2,7 +2,24 @@ node_modules
 dist
 .output
 .vinxi
+.wrangler
+.tanstack
 pnpm-lock.yaml
 package-lock.json
 bun.lock
 routeTree.gen.ts
+
+# Separate workspace with its own prettier config.
+apps
+
+# Vendored / tool-generated scratch directories, not project source.
+.local
+.opencode
+.qoder
+.commandcode
+.kilo
+.kombai
+
+# Binary test fixtures
+tests/visual/baselines
+media-output
