@@ -11,6 +11,7 @@ import { PrivacyService } from './services/privacy.service';
 import { AvatarService } from './services/avatar.service';
 import { UserAuditLogService } from './services/user-audit-log.service';
 import { UserAgentParser } from './services/user-agent-parser';
+import { hashSessionToken } from '../auth/services/session-token';
 import {
   UserPreferencesUpdatedEvent,
   UserPrivacyUpdatedEvent,
@@ -273,8 +274,10 @@ describe('UsersService', () => {
     });
 
     it('marks the session whose token matches the refresh token as isCurrent', async () => {
-      const s1 = createSession({ id: 's-1', token: 'refresh-A' });
-      const s2 = createSession({ id: 's-2', token: 'refresh-B' });
+      // sessions.token now holds sha256(token), not the raw value, so the
+      // fixtures must be hashed for the comparison to be meaningful.
+      const s1 = createSession({ id: 's-1', token: hashSessionToken('refresh-A') });
+      const s2 = createSession({ id: 's-2', token: hashSessionToken('refresh-B') });
       (users.findSessionsByUserId as ReturnType<typeof mock>).mockResolvedValueOnce([s1, s2]);
 
       const result = await service.listSessions('user-1', 'refresh-B');
@@ -285,7 +288,7 @@ describe('UsersService', () => {
     });
 
     it('no session is current when refreshToken is undefined', async () => {
-      const s = createSession({ token: 'refresh-X' });
+      const s = createSession({ token: hashSessionToken('refresh-X') });
       (users.findSessionsByUserId as ReturnType<typeof mock>).mockResolvedValueOnce([s]);
       const result = await service.listSessions('user-1');
       expect(result[0].isCurrent).toBe(false);

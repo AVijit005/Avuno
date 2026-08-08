@@ -18,6 +18,7 @@ import {
   UserProfileUpdatedEvent,
 } from './users.types';
 import { UsersRepository } from './users.repository';
+import { sessionTokenMatches } from '../auth/services/session-token';
 
 export interface RequestMetadata {
   ipAddress?: string;
@@ -153,7 +154,9 @@ export class UsersService {
       os: parsed.os ?? null,
       ipAddress: session.ipAddress ?? null,
       lastSeen: session.updatedAt,
-      isCurrent: Boolean(refreshToken) && session.token === refreshToken,
+      // session.token holds a SHA-256 hash, so the raw cookie value must be
+      // hashed before comparison — and compared in constant time.
+      isCurrent: sessionTokenMatches(refreshToken, session.token),
       status: session.status,
       createdAt: session.createdAt,
     };

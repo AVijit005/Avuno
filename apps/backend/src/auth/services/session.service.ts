@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { Session } from '@prisma/client';
 import { PrismaService } from '../../prisma/prisma.service';
 import { TokenFactory } from './token.factory';
+import { hashSessionToken } from './session-token';
 
 @Injectable()
 export class SessionService {
@@ -20,7 +21,9 @@ export class SessionService {
     return this.prisma.session.create({
       data: {
         userId,
-        token: sessionToken,
+        // Stored hashed: see session-token.ts. The column keeps its `token`
+        // name to avoid a rename migration, but it holds a SHA-256 digest.
+        token: hashSessionToken(sessionToken),
         expiresAt,
         ipAddress: ipAddress ?? null,
         userAgent: userAgent ?? null,
@@ -30,7 +33,9 @@ export class SessionService {
   }
 
   async validate(token: string): Promise<Session | null> {
-    const session = await this.prisma.session.findUnique({ where: { token } });
+    const session = await this.prisma.session.findUnique({
+      where: { token: hashSessionToken(token) },
+    });
     if (!session) return null;
     if (session.status !== 'ACTIVE') return null;
     if (session.expiresAt < new Date()) return null;
@@ -40,7 +45,7 @@ export class SessionService {
 
   async invalidateByToken(token: string): Promise<void> {
     await this.prisma.session.updateMany({
-      where: { token },
+      where: { token: hashSessionToken(token) },
       data: { status: 'REVOKED' },
     });
   }

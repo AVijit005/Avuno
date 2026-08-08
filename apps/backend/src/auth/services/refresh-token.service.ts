@@ -5,6 +5,7 @@ import { RefreshToken } from '@prisma/client';
 import { ForbiddenException } from '../../common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { TokenFactory } from './token.factory';
+import { hashSessionToken } from './session-token';
 
 export interface RefreshTokenResult {
   token: string;
@@ -82,11 +83,7 @@ export class RefreshTokenService {
     return result;
   }
 
-  async rotateWithSession(
-    token: string,
-    ipAddress?: string,
-    userAgent?: string,
-  ): Promise<RefreshTokenResult> {
+  async rotateWithSession(token: string, ipAddress?: string, userAgent?: string): Promise<RefreshTokenResult> {
     const tokenHash = this.hashToken(token);
 
     // Atomic rotate with session management in a single transaction
@@ -125,9 +122,10 @@ export class RefreshTokenService {
         },
       });
 
-      // Invalidate old session in the same transaction
+      // Invalidate old session in the same transaction.
+      // Sessions store a hash, not the raw token (see session-token.ts).
       await tx.session.updateMany({
-        where: { token },
+        where: { token: hashSessionToken(token) },
         data: { status: 'REVOKED' },
       });
 
@@ -138,7 +136,7 @@ export class RefreshTokenService {
       await tx.session.create({
         data: {
           userId: existing.userId,
-          token: newToken,
+          token: hashSessionToken(newToken),
           expiresAt: sessionExpiresAt,
           ipAddress: ipAddress ?? null,
           userAgent: userAgent ?? null,
