@@ -10,19 +10,27 @@ interface Props {
 
 export function MemoryInsights({ className, max = 4 }: Props) {
   const { data: insights } = useInsights();
-  
+
   if (!insights) return null;
 
   const lines = [
     `Your most active weekday is usually ${insights.mostActiveWeekday}.`,
-    insights.favoriteGenre ? `You tend to gravitate towards ${insights.favoriteGenre} stories.` : null,
-    insights.mostProductiveMonth ? `Your most productive month for consumption was ${insights.mostProductiveMonth}.` : null,
-    insights.longestBinge ? `Your longest uninterrupted binge lasted ${insights.longestBinge}.` : null,
-    insights.averageCompletionTime ? `You average ${insights.averageCompletionTime} days to complete a story.` : null,
+    insights.favoriteGenre
+      ? `You tend to gravitate towards ${insights.favoriteGenre} stories.`
+      : null,
+    insights.mostProductiveMonth
+      ? `Your most productive month for consumption was ${insights.mostProductiveMonth}.`
+      : null,
+    insights.longestBinge
+      ? `Your longest uninterrupted binge lasted ${insights.longestBinge}.`
+      : null,
+    insights.averageCompletionTime
+      ? `You average ${insights.averageCompletionTime} days to complete a story.`
+      : null,
   ].filter(Boolean) as string[];
 
   const displayLines = lines.slice(0, max);
-  
+
   if (displayLines.length === 0) return null;
 
   return (

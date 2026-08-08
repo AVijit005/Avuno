@@ -34,7 +34,11 @@ export const Route = createFileRoute("/app")({
   },
   component: () => (
     <AppShell>
-      <ErrorBoundary fallback={<div className="p-8 text-center text-muted-foreground">App content could not load.</div>}>
+      <ErrorBoundary
+        fallback={
+          <div className="p-8 text-center text-muted-foreground">App content could not load.</div>
+        }
+      >
         <Outlet />
       </ErrorBoundary>
     </AppShell>

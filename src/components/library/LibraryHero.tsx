@@ -12,11 +12,19 @@ export function LibraryHero() {
   const posters = collageRecent(9);
 
   const byStatusRaw = stats?.byStatus || {};
-  const total = stats?.total ?? (c.completed + c.in_progress + c.planning + c.paused + c.dropped + c.rewatching + c.archived);
+  const total =
+    stats?.total ??
+    c.completed + c.in_progress + c.planning + c.paused + c.dropped + c.rewatching + c.archived;
   const completed = stats ? (byStatusRaw.COMPLETED ?? 0) : c.completed;
-  const inProgress = stats ? ((byStatusRaw.WATCHING ?? 0) + (byStatusRaw.READING ?? 0) + (byStatusRaw.PLAYING ?? 0) + (byStatusRaw.LISTENING ?? 0) + (byStatusRaw.LEARNING ?? 0)) : c.in_progress;
+  const inProgress = stats
+    ? (byStatusRaw.WATCHING ?? 0) +
+      (byStatusRaw.READING ?? 0) +
+      (byStatusRaw.PLAYING ?? 0) +
+      (byStatusRaw.LISTENING ?? 0) +
+      (byStatusRaw.LEARNING ?? 0)
+    : c.in_progress;
   const planning = stats ? (byStatusRaw.PLANNING ?? 0) : c.planning;
-  
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
@@ -36,7 +44,7 @@ export function LibraryHero() {
         <div className="absolute inset-0 bg-gradient-to-t from-background/80 via-background/20 to-transparent" />
       </div>
 
-      <PremiumGlass 
+      <PremiumGlass
         interactive
         variant="strong"
         className="relative overflow-hidden rounded-[40px] p-10 md:p-16 transform-gpu isolate"
@@ -59,8 +67,8 @@ export function LibraryHero() {
               { l: "In Progress", v: inProgress },
               { l: "Planning", v: planning },
             ].map((s) => (
-              <PremiumGlass 
-                key={s.l} 
+              <PremiumGlass
+                key={s.l}
                 interactive
                 variant="subtle"
                 className="relative z-10 overflow-hidden p-4 cursor-pointer press-scale"

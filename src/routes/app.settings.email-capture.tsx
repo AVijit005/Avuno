@@ -20,7 +20,7 @@ function EmailCapturePage() {
     if (!email) return;
     setLoading(true);
     // Use real API call
-    apiPatch('/notifications/preferences', { marketingEnabled: true })
+    apiPatch("/notifications/preferences", { marketingEnabled: true })
       .then(() => {
         toast.success("Thank you! We'll be in touch soon.");
         navigate({ to: "/app/settings" });
@@ -64,10 +64,7 @@ function EmailCapturePage() {
               className="w-full rounded-xl border border-border/50 bg-background/50 px-4 py-3 text-sm focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary"
             />
           </div>
-          <PremiumButton
-            className="w-full"
-            loading={loading}
-          >
+          <PremiumButton className="w-full" loading={loading}>
             Request Access
           </PremiumButton>
         </form>

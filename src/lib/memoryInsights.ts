@@ -59,9 +59,23 @@ export interface MemoryHighlight {
 export const HIGHLIGHTS: MemoryHighlight[] = [];
 
 export const TAGS = [
-  "Comfort", "Healing", "Adventure", "Mind-blowing", "Dark", "Funny",
-  "Late Night", "Rainy Day", "Winter", "Childhood", "Family", "Friends",
-  "College", "Travel", "Hope", "Loss", "Growth",
+  "Comfort",
+  "Healing",
+  "Adventure",
+  "Mind-blowing",
+  "Dark",
+  "Funny",
+  "Late Night",
+  "Rainy Day",
+  "Winter",
+  "Childhood",
+  "Family",
+  "Friends",
+  "College",
+  "Travel",
+  "Hope",
+  "Loss",
+  "Growth",
 ] as const;
 export type MemoryTag = (typeof TAGS)[number];
 
@@ -130,7 +144,9 @@ export function getFavoriteYears(items: MediaItem[]) {
     const y = p.memory.finishedAt.slice(0, 4);
     counts[y] = (counts[y] ?? 0) + 1;
   }
-  return Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 4);
+  return Object.entries(counts)
+    .sort((a, b) => b[1] - a[1])
+    .slice(0, 4);
 }
 
 export function getBiggestMonth(items: MediaItem[]) {

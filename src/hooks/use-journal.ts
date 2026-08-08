@@ -1,9 +1,13 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
-import { journalApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { CreateJournalEntryInput, UpdateJournalEntryInput, CreateMemoryInput } from '@/lib/api/journal';
-import { analytics } from '@/lib/analytics';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { journalApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type {
+  CreateJournalEntryInput,
+  UpdateJournalEntryInput,
+  CreateMemoryInput,
+} from "@/lib/api/journal";
+import { analytics } from "@/lib/analytics";
 
 export function useJournalEntries(params?: { cursor?: string; limit?: number }) {
   const { data: user } = useCurrentUser();
@@ -11,8 +15,9 @@ export function useJournalEntries(params?: { cursor?: string; limit?: number }) 
   return useInfiniteQuery({
     queryKey: queryKeys.journal.entries(params),
     enabled: !!user,
-    queryFn: ({ pageParam }) => journalApi.listJournalEntries({ ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    queryFn: ({ pageParam }) =>
+      journalApi.listJournalEntries({ ...params, cursor: pageParam as string | undefined }),
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     initialPageParam: undefined as string | undefined,
   });
 }
@@ -45,10 +50,10 @@ export function useCreateJournalEntry() {
       queryClient.invalidateQueries({ queryKey: queryKeys.journal.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.analytics.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.timeline.all });
-      
-      if (typeof window !== 'undefined' && !localStorage.getItem('chronicle_first_entry_tracked')) {
-        analytics.track('first_entry');
-        localStorage.setItem('chronicle_first_entry_tracked', 'true');
+
+      if (typeof window !== "undefined" && !localStorage.getItem("chronicle_first_entry_tracked")) {
+        analytics.track("first_entry");
+        localStorage.setItem("chronicle_first_entry_tracked", "true");
       }
     },
   });
@@ -84,8 +89,9 @@ export function useMemories(params?: { cursor?: string; limit?: number }) {
   return useInfiniteQuery({
     queryKey: queryKeys.memories.list(params),
     enabled: !!user,
-    queryFn: ({ pageParam }) => journalApi.listMemories({ ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    queryFn: ({ pageParam }) =>
+      journalApi.listMemories({ ...params, cursor: pageParam as string | undefined }),
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     initialPageParam: undefined as string | undefined,
   });
 }
@@ -126,7 +132,7 @@ export function useJournalPrompts() {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: [...queryKeys.journal.all, 'prompts'] as const,
+    queryKey: [...queryKeys.journal.all, "prompts"] as const,
     enabled: !!user,
     queryFn: () => journalApi.getJournalPrompts(),
     staleTime: 60 * 60_000,

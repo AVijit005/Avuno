@@ -13,7 +13,8 @@ export function CompletionReflection({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">How it ended for you</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        The final thoughts on {item.title} — what stayed, what faded, and what you would tell someone just starting.
+        The final thoughts on {item.title} — what stayed, what faded, and what you would tell
+        someone just starting.
       </p>
     </PremiumGlass>
   );

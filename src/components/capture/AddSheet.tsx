@@ -45,8 +45,7 @@ const STATUS: { value: MediaStatus; label: string; hint: string }[] = [
   { value: "paused", label: "Paused", hint: "Begun but set aside." },
 ];
 
-const DEFAULT_POSTER =
-  "";
+const DEFAULT_POSTER = "";
 
 export function AddSheet({
   open,

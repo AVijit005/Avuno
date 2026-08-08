@@ -36,7 +36,13 @@ export function StatusOverviewRow() {
   const apiCounts: Record<string, number> = {
     favorite: stats?.favoriteCount ?? localFavs.length,
     completed: (byStatusRaw.COMPLETED ?? 0) + (byStatusRaw.completed ?? 0),
-    in_progress: (byStatusRaw.WATCHING ?? 0) + (byStatusRaw.READING ?? 0) + (byStatusRaw.PLAYING ?? 0) + (byStatusRaw.LISTENING ?? 0) + (byStatusRaw.LEARNING ?? 0) + (byStatusRaw.in_progress ?? 0),
+    in_progress:
+      (byStatusRaw.WATCHING ?? 0) +
+      (byStatusRaw.READING ?? 0) +
+      (byStatusRaw.PLAYING ?? 0) +
+      (byStatusRaw.LISTENING ?? 0) +
+      (byStatusRaw.LEARNING ?? 0) +
+      (byStatusRaw.in_progress ?? 0),
     planning: (byStatusRaw.PLANNING ?? 0) + (byStatusRaw.planning ?? 0),
     paused: (byStatusRaw.PAUSED ?? 0) + (byStatusRaw.paused ?? 0),
     dropped: (byStatusRaw.DROPPED ?? 0) + (byStatusRaw.dropped ?? 0),
@@ -46,9 +52,15 @@ export function StatusOverviewRow() {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
       {CARDS.map((c) => {
-        const apiItems = c.status === "favorite" ? rawApiItems.filter((i) => i.favorite) : rawApiItems.filter((i) => i.status === c.status);
-        const items = apiItems.length > 0 ? apiItems : (c.status === "favorite" ? localFavs : byStatus(c.status));
-        const count = apiCounts[c.status] ?? (c.status === "favorite" ? localFavs.length : localCounts[c.status] ?? 0);
+        const apiItems =
+          c.status === "favorite"
+            ? rawApiItems.filter((i) => i.favorite)
+            : rawApiItems.filter((i) => i.status === c.status);
+        const items =
+          apiItems.length > 0 ? apiItems : c.status === "favorite" ? localFavs : byStatus(c.status);
+        const count =
+          apiCounts[c.status] ??
+          (c.status === "favorite" ? localFavs.length : (localCounts[c.status] ?? 0));
         const tint = STATUS_TINT[c.status];
         const label = c.status === "favorite" ? "Favorites" : STATUS_LABEL[c.status];
         const collage = items.slice(0, 3).map((m) => m.poster);

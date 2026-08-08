@@ -1,6 +1,23 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useProfile, useUpdateProfile, useUpdatePrivacy, useSessions, useRevokeSession } from "@/hooks/use-users";
-import { Download, ArrowUpRight, Monitor, Moon, Sun, Lock, Globe, EyeOff, Shield, LogOut } from "lucide-react";
+import {
+  useProfile,
+  useUpdateProfile,
+  useUpdatePrivacy,
+  useSessions,
+  useRevokeSession,
+} from "@/hooks/use-users";
+import {
+  Download,
+  ArrowUpRight,
+  Monitor,
+  Moon,
+  Sun,
+  Lock,
+  Globe,
+  EyeOff,
+  Shield,
+  LogOut,
+} from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { useState, useEffect } from "react";
 
@@ -18,14 +35,17 @@ function Page() {
 
   useEffect(() => {
     if (profile?.themePreference) setTheme(profile.themePreference);
-    if (profile?.privacy?.profileVisibility) setPrivacy(profile.privacy.profileVisibility as string);
+    if (profile?.privacy?.profileVisibility)
+      setPrivacy(profile.privacy.profileVisibility as string);
   }, [profile]);
 
-  const applyTheme = (t: 'light'|'dark'|'system') => {
+  const applyTheme = (t: "light" | "dark" | "system") => {
     setTheme(t);
-    const isLight = t === 'light' || (t === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
-    document.documentElement.classList.toggle('light', isLight);
-    document.documentElement.classList.toggle('dark', !isLight);
+    const isLight =
+      t === "light" ||
+      (t === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+    document.documentElement.classList.toggle("light", isLight);
+    document.documentElement.classList.toggle("dark", !isLight);
     updateProfile.mutate({ themePreference: t });
   };
 
@@ -90,7 +110,9 @@ function Page() {
           </h2>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="grid gap-2">
-              <label htmlFor="language" className="text-sm font-medium">Language</label>
+              <label htmlFor="language" className="text-sm font-medium">
+                Language
+              </label>
               <select
                 id="language"
                 value={profile?.language || "en"}
@@ -104,7 +126,9 @@ function Page() {
               </select>
             </div>
             <div className="grid gap-2">
-              <label htmlFor="timezone" className="text-sm font-medium">Timezone</label>
+              <label htmlFor="timezone" className="text-sm font-medium">
+                Timezone
+              </label>
               <select
                 id="timezone"
                 value={profile?.timezone || "UTC"}
@@ -133,7 +157,9 @@ function Page() {
               <Globe className="mt-0.5 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Public</div>
-                <div className="text-[13px] text-muted-foreground mt-0.5">Anyone can view your profile and collections.</div>
+                <div className="text-[13px] text-muted-foreground mt-0.5">
+                  Anyone can view your profile and collections.
+                </div>
               </div>
             </button>
             <button
@@ -143,7 +169,9 @@ function Page() {
               <Lock className="mt-0.5 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Private</div>
-                <div className="text-[13px] text-muted-foreground mt-0.5">Only you can see your activity and library.</div>
+                <div className="text-[13px] text-muted-foreground mt-0.5">
+                  Only you can see your activity and library.
+                </div>
               </div>
             </button>
             <button
@@ -153,7 +181,9 @@ function Page() {
               <EyeOff className="mt-0.5 h-5 w-5" />
               <div className="text-left">
                 <div className="font-medium">Followers Only</div>
-                <div className="text-[13px] text-muted-foreground mt-0.5">Only approved followers can view your library.</div>
+                <div className="text-[13px] text-muted-foreground mt-0.5">
+                  Only approved followers can view your library.
+                </div>
               </div>
             </button>
           </div>
@@ -164,7 +194,10 @@ function Page() {
             <Lock className="h-4 w-4 text-primary" /> Notifications & Connected Accounts
           </h2>
           <div className="text-sm text-muted-foreground rounded-lg bg-white/5 p-4">
-            <p>Notification preferences and connected account management are not currently supported by the backend API.</p>
+            <p>
+              Notification preferences and connected account management are not currently supported
+              by the backend API.
+            </p>
           </div>
         </PremiumGlass>
 
@@ -173,10 +206,18 @@ function Page() {
             <h2 className="font-display text-lg tracking-tight mb-4">Active Sessions</h2>
             <div className="space-y-3">
               {sessions.map((s) => (
-                <div key={s.id} className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4">
+                <div
+                  key={s.id}
+                  className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4"
+                >
                   <div>
                     <div className="font-medium text-sm flex items-center gap-2">
-                      {s.os} · {s.browser} {s.isCurrent && <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-primary">Current</span>}
+                      {s.os} · {s.browser}{" "}
+                      {s.isCurrent && (
+                        <span className="rounded bg-primary/20 px-1.5 py-0.5 text-[10px] uppercase tracking-wider text-primary">
+                          Current
+                        </span>
+                      )}
                     </div>
                     <div className="mt-1 text-[12px] text-muted-foreground">
                       Last active: {new Date(s.lastSeen).toLocaleDateString()} · {s.ipAddress}

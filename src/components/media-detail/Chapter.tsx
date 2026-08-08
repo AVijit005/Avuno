@@ -85,7 +85,10 @@ export function Chapter({
             {open ? "Collapse" : "Read more"}
             <ChevronDown
               className={`h-3.5 w-3.5 transition-transform ${open ? "rotate-180" : ""}`}
-              style={{ transitionDuration: `${dur.large * 1000}ms`, transitionTimingFunction: `cubic-bezier(${ease.reveal.join(",")})` }}
+              style={{
+                transitionDuration: `${dur.large * 1000}ms`,
+                transitionTimingFunction: `cubic-bezier(${ease.reveal.join(",")})`,
+              }}
             />
           </button>
         )}

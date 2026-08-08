@@ -28,6 +28,3 @@ export function MemoryLayer({ item }: { item: MediaItem }) {
     </ul>
   );
 }
-
-
-

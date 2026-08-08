@@ -38,8 +38,8 @@ export function FavoritesGallery({ items }: { items: MediaItem[] }) {
                 <Heart className="h-2.5 w-2.5 fill-current" /> Favorite
               </div>
               <div className="absolute inset-x-2 bottom-2 flex items-center gap-1 text-[10px] text-white/80">
-                <Star className="h-2.5 w-2.5 fill-amber-300 text-amber-300" /> {(m.rating ?? 0).toFixed(1)}{" "}
-                · {m.year}
+                <Star className="h-2.5 w-2.5 fill-amber-300 text-amber-300" />{" "}
+                {(m.rating ?? 0).toFixed(1)} · {m.year}
               </div>
             </div>
             <div className="mt-3">

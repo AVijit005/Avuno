@@ -5,19 +5,31 @@ import { useIntelligence } from "@/hooks/use-analytics";
 import { TrendingUp, Loader2 } from "lucide-react";
 import type { EvolutionItem } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
-const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })));
-const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })));
-const XAxis = lazy(() => import("recharts").then((m) => ({ default: m.XAxis as unknown as RechartsComponent })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() =>
+  import("recharts").then((m) => ({
+    default: m.ResponsiveContainer as unknown as RechartsComponent,
+  })),
+);
+const AreaChart = lazy(() =>
+  import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })),
+);
+const Area = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })),
+);
+const XAxis = lazy(() =>
+  import("recharts").then((m) => ({ default: m.XAxis as unknown as RechartsComponent })),
+);
+const Tooltip = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })),
+);
 
 export function MediaEvolution() {
   const { data: intelligence, isLoading } = useIntelligence();
   const rawData = intelligence?.mediaEvolution ?? [];
   const data = rawData.map((d: EvolutionItem) => ({
     year: d.year ?? d.focus ?? "",
-    "Media": d.mediaCount ?? 0,
-    "Hours": d.hoursSpent ?? 0,
+    Media: d.mediaCount ?? 0,
+    Hours: d.hoursSpent ?? 0,
   }));
 
   if (isLoading) {
@@ -65,7 +77,12 @@ export function MediaEvolution() {
                 <stop offset="95%" stopColor="var(--primary)" stopOpacity={0} />
               </linearGradient>
             </defs>
-            <XAxis dataKey="year" axisLine={false} tickLine={false} tick={{ fontSize: 11, fill: "oklch(1 0 0 / 0.4)" }} />
+            <XAxis
+              dataKey="year"
+              axisLine={false}
+              tickLine={false}
+              tick={{ fontSize: 11, fill: "oklch(1 0 0 / 0.4)" }}
+            />
             <Tooltip
               contentStyle={{
                 background: "oklch(0.15 0 0 / 0.95)",
@@ -74,7 +91,14 @@ export function MediaEvolution() {
                 fontSize: "12px",
               }}
             />
-            <Area type="monotone" dataKey="Media" stroke="var(--primary)" strokeWidth={2} fill="url(#colorMedia)" dot={{ r: 3, fill: "var(--primary)" }} />
+            <Area
+              type="monotone"
+              dataKey="Media"
+              stroke="var(--primary)"
+              strokeWidth={2}
+              fill="url(#colorMedia)"
+              dot={{ r: 3, fill: "var(--primary)" }}
+            />
           </AreaChart>
         </ResponsiveContainer>
       </div>

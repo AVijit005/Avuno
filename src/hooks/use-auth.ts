@@ -1,8 +1,8 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { authApi } from '@/lib/api';
-import { setAccessToken } from '@/lib/api/fetch';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { LoginInput, RegisterInput, AuthResponse, UserResponse } from '@/lib/api/auth';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { authApi } from "@/lib/api";
+import { setAccessToken } from "@/lib/api/fetch";
+import { queryKeys } from "@/lib/api/query-keys";
+import type { LoginInput, RegisterInput, AuthResponse, UserResponse } from "@/lib/api/auth";
 
 export function useCurrentUser() {
   return useQuery<UserResponse>({

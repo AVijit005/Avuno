@@ -67,7 +67,10 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
 
         <div className="mt-4">
           <div className="flex items-baseline justify-between">
-            <label htmlFor={completionId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+            <label
+              htmlFor={completionId}
+              className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+            >
               Completion
             </label>
             <span className="font-display text-2xl tabular-nums">{pct}%</span>
@@ -84,7 +87,10 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
         </div>
 
         <div className="mt-4">
-          <label htmlFor={labelId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label
+            htmlFor={labelId}
+            className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+          >
             Where are you
           </label>
           <input
@@ -97,7 +103,10 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
         </div>
 
         <div className="mt-3">
-          <label htmlFor={noteId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label
+            htmlFor={noteId}
+            className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+          >
             Note
           </label>
           <textarea

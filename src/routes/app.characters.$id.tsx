@@ -23,7 +23,9 @@ function CharacterPage() {
     character: NonNullable<ReturnType<typeof getCharacter>>;
   };
   const { data: item } = useLibraryItem(character.mediaId);
-  const media = item?.media ? { id: item.media.id, title: item.media.title, poster: item.media.posterUrl || undefined } : null;
+  const media = item?.media
+    ? { id: item.media.id, title: item.media.title, poster: item.media.posterUrl || undefined }
+    : null;
 
   return (
     <div className="space-y-6 pb-16">

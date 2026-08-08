@@ -81,7 +81,9 @@ export function CreateCollectionModal({
             <div className="text-[10px] uppercase tracking-[0.22em] text-primary/90">
               New collection
             </div>
-            <h2 id="modal-title" className="mt-2 font-display text-3xl tracking-tight">Curate a new shelf</h2>
+            <h2 id="modal-title" className="mt-2 font-display text-3xl tracking-tight">
+              Curate a new shelf
+            </h2>
             <p className="mt-2 text-sm text-muted-foreground">
               A collection becomes a small story of its own.
             </p>

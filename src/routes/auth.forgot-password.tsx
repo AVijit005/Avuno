@@ -34,7 +34,9 @@ function ForgotPasswordPage() {
       <AtmosphereBackground intensity="soft" />
       <LiquidGlassCard className="w-full max-w-md">
         <h1 className="font-display text-2xl tracking-tight mb-2">Reset your password</h1>
-        <p className="text-white/60 text-sm">Enter your email and we'll send you a link to get back into your account.</p>
+        <p className="text-white/60 text-sm">
+          Enter your email and we'll send you a link to get back into your account.
+        </p>
         <form onSubmit={handleSubmit} className="mt-6 space-y-4">
           <input
             type="email"
@@ -53,7 +55,10 @@ function ForgotPasswordPage() {
             {isSubmitting ? "Sending..." : "Send reset link"}
           </button>
         </form>
-        <Link to="/auth" className="text-white/40 hover:text-white/80 text-xs mt-4 block text-center">
+        <Link
+          to="/auth"
+          className="text-white/40 hover:text-white/80 text-xs mt-4 block text-center"
+        >
           Back to login
         </Link>
       </LiquidGlassCard>

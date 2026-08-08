@@ -8,9 +8,15 @@ import { cn } from "@/lib/utils";
 interface Props {
   className?: string;
   goal?: {
-    id: string; title: string; description: string;
-    current: number; target: number; reward: string;
-    accent: string; startedAt: string; priority: string;
+    id: string;
+    title: string;
+    description: string;
+    current: number;
+    target: number;
+    reward: string;
+    accent: string;
+    startedAt: string;
+    priority: string;
   } | null;
 }
 
@@ -20,8 +26,10 @@ export function GoalHero({ className, goal }: Props) {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }} aria-label="Current goal"
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6 }}
+      aria-label="Current goal"
       className={cn("relative", className)}
     >
       <PremiumGlass variant="strong" glow={goal.accent}>
@@ -34,7 +42,8 @@ export function GoalHero({ className, goal }: Props) {
           <div className="mt-6 flex items-end justify-between gap-4">
             <div>
               <div className="font-display text-2xl tracking-tight">
-                {goal.current}<span className="text-muted-foreground"> / {goal.target}</span>
+                {goal.current}
+                <span className="text-muted-foreground"> / {goal.target}</span>
               </div>
               <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/80">
                 {pct}% — {goal.reward}
@@ -51,6 +60,3 @@ export function GoalHero({ className, goal }: Props) {
     </motion.section>
   );
 }
-
-
-

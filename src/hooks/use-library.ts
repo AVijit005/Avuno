@@ -1,8 +1,12 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from '@tanstack/react-query';
-import { libraryApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { AddToLibraryInput, UpdateLibraryItemInput, LibraryFilterParams } from '@/lib/api/library';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
+import { libraryApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type {
+  AddToLibraryInput,
+  UpdateLibraryItemInput,
+  LibraryFilterParams,
+} from "@/lib/api/library";
 
 export function useLibrary(params?: LibraryFilterParams) {
   const { data: user } = useCurrentUser();
@@ -10,8 +14,9 @@ export function useLibrary(params?: LibraryFilterParams) {
   return useInfiniteQuery({
     queryKey: queryKeys.library.list(params),
     enabled: !!user,
-    queryFn: ({ pageParam }) => libraryApi.listLibrary({ ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    queryFn: ({ pageParam }) =>
+      libraryApi.listLibrary({ ...params, cursor: pageParam as string | undefined }),
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     initialPageParam: undefined as string | undefined,
   });
 }
@@ -22,8 +27,12 @@ export function useLibraryByStatus(status: string, params?: LibraryFilterParams)
   return useInfiniteQuery({
     queryKey: queryKeys.library.byStatus(status, params),
     enabled: !!user,
-    queryFn: ({ pageParam }) => libraryApi.listLibraryByStatus(status, { ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    queryFn: ({ pageParam }) =>
+      libraryApi.listLibraryByStatus(status, {
+        ...params,
+        cursor: pageParam as string | undefined,
+      }),
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     initialPageParam: undefined as string | undefined,
   });
 }
@@ -34,8 +43,9 @@ export function useLibraryByType(type: string, params?: LibraryFilterParams) {
   return useInfiniteQuery({
     queryKey: queryKeys.library.byType(type, params),
     enabled: !!user,
-    queryFn: ({ pageParam }) => libraryApi.listLibraryByType(type, { ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => lastPage.hasMore ? lastPage.nextCursor : undefined,
+    queryFn: ({ pageParam }) =>
+      libraryApi.listLibraryByType(type, { ...params, cursor: pageParam as string | undefined }),
+    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
     initialPageParam: undefined as string | undefined,
   });
 }

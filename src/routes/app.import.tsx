@@ -153,8 +153,8 @@ function ImportExportPage() {
       </Link>
       <h1 className="mt-2 font-display text-3xl tracking-tight">Import & Export</h1>
       <p className="mt-1 text-sm text-muted-foreground">
-        Move your story library in and out of Avuno. JSON exports include every status,
-        reflection, shelf, and collection you've made.
+        Move your story library in and out of Avuno. JSON exports include every status, reflection,
+        shelf, and collection you've made.
       </p>
 
       <section className="mt-8 rounded-3xl border border-border/60 bg-white/[0.02] p-6">

@@ -13,7 +13,11 @@ const items = [
 export function MobileNav({ onOpenSearch }: { onOpenSearch: () => void }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   return (
-    <nav aria-label="Mobile navigation" className="glass-strong fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-2 py-2 pb-safe lg:hidden" style={{ bottom: "env(safe-area-inset-bottom, 12px)" }}>
+    <nav
+      aria-label="Mobile navigation"
+      className="glass-strong fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-2 py-2 pb-safe lg:hidden"
+      style={{ bottom: "env(safe-area-inset-bottom, 12px)" }}
+    >
       {items.map((it) => {
         const active = it.to === "/app" ? pathname === "/app" : pathname.startsWith(it.to);
         if (it.fab) {

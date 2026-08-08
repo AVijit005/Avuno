@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPatch, apiDelete } from './fetch';
+import { apiGet, apiPost, apiPatch, apiDelete } from "./fetch";
 
 export interface JournalEntryResponse {
   id: string;
@@ -170,20 +170,25 @@ export interface UpdateHighlightInput {
 function buildQueryString(params: Record<string, unknown>): string {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       searchParams.set(key, String(value));
     }
   }
   const qs = searchParams.toString();
-  return qs ? `?${qs}` : '';
+  return qs ? `?${qs}` : "";
 }
 
 // Journal Entries
-export async function createJournalEntry(input: CreateJournalEntryInput): Promise<JournalEntryResponse> {
-  return apiPost<JournalEntryResponse>('/journal', input);
+export async function createJournalEntry(
+  input: CreateJournalEntryInput,
+): Promise<JournalEntryResponse> {
+  return apiPost<JournalEntryResponse>("/journal", input);
 }
 
-export async function listJournalEntries(params?: { cursor?: string; limit?: number }): Promise<{ items: JournalEntryResponse[]; hasMore: boolean; nextCursor?: string }> {
+export async function listJournalEntries(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ items: JournalEntryResponse[]; hasMore: boolean; nextCursor?: string }> {
   return apiGet(`/journal${buildQueryString(params ?? {})}`);
 }
 
@@ -191,7 +196,10 @@ export async function getJournalEntry(id: string): Promise<JournalEntryResponse>
   return apiGet<JournalEntryResponse>(`/journal/${id}`);
 }
 
-export async function updateJournalEntry(id: string, input: UpdateJournalEntryInput): Promise<JournalEntryResponse> {
+export async function updateJournalEntry(
+  id: string,
+  input: UpdateJournalEntryInput,
+): Promise<JournalEntryResponse> {
   return apiPatch<JournalEntryResponse>(`/journal/${id}`, input);
 }
 
@@ -201,10 +209,13 @@ export async function deleteJournalEntry(id: string): Promise<void> {
 
 // Memories
 export async function createMemory(input: CreateMemoryInput): Promise<MemoryResponse> {
-  return apiPost<MemoryResponse>('/memories', input);
+  return apiPost<MemoryResponse>("/memories", input);
 }
 
-export async function listMemories(params?: { cursor?: string; limit?: number }): Promise<{ data: MemoryResponse[]; hasMore: boolean; nextCursor?: string }> {
+export async function listMemories(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ data: MemoryResponse[]; hasMore: boolean; nextCursor?: string }> {
   return apiGet(`/memories${buildQueryString(params ?? {})}`);
 }
 
@@ -221,26 +232,44 @@ export async function deleteMemory(id: string): Promise<void> {
 }
 
 // Timeline
-export async function createTimelineEvent(input: CreateTimelineEventInput): Promise<TimelineEventResponse> {
-  return apiPost<TimelineEventResponse>('/timeline/events', input);
+export async function createTimelineEvent(
+  input: CreateTimelineEventInput,
+): Promise<TimelineEventResponse> {
+  return apiPost<TimelineEventResponse>("/timeline/events", input);
 }
 
-export async function listTimelineEvents(params?: { year?: number; month?: number }): Promise<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }> {
+export async function listTimelineEvents(params?: {
+  year?: number;
+  month?: number;
+}): Promise<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }> {
   if (params?.year && params?.month) {
-    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(`/timeline/${params.year}/${params.month}`);
+    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
+      `/timeline/${params.year}/${params.month}`,
+    );
   }
   if (params?.year) {
-    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(`/timeline/${params.year}`);
+    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
+      `/timeline/${params.year}`,
+    );
   }
-  return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>('/timeline');
+  return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
+    "/timeline",
+  );
 }
 
 // Quotes
-export async function createQuote(libraryId: string, input: CreateQuoteInput): Promise<QuoteResponse> {
+export async function createQuote(
+  libraryId: string,
+  input: CreateQuoteInput,
+): Promise<QuoteResponse> {
   return apiPost<QuoteResponse>(`/library/${libraryId}/quotes`, input);
 }
 
-export async function updateQuote(libraryId: string, quoteId: string, input: UpdateQuoteInput): Promise<QuoteResponse> {
+export async function updateQuote(
+  libraryId: string,
+  quoteId: string,
+  input: UpdateQuoteInput,
+): Promise<QuoteResponse> {
   return apiPatch<QuoteResponse>(`/library/${libraryId}/quotes/${quoteId}`, input);
 }
 
@@ -249,11 +278,18 @@ export async function deleteQuote(libraryId: string, quoteId: string): Promise<v
 }
 
 // Highlights
-export async function createHighlight(libraryId: string, input: CreateHighlightInput): Promise<HighlightResponse> {
+export async function createHighlight(
+  libraryId: string,
+  input: CreateHighlightInput,
+): Promise<HighlightResponse> {
   return apiPost<HighlightResponse>(`/library/${libraryId}/highlights`, input);
 }
 
-export async function updateHighlight(libraryId: string, highlightId: string, input: UpdateHighlightInput): Promise<HighlightResponse> {
+export async function updateHighlight(
+  libraryId: string,
+  highlightId: string,
+  input: UpdateHighlightInput,
+): Promise<HighlightResponse> {
   return apiPatch<HighlightResponse>(`/library/${libraryId}/highlights/${highlightId}`, input);
 }
 
@@ -263,10 +299,10 @@ export async function deleteHighlight(libraryId: string, highlightId: string): P
 
 // Stats
 export async function getJournalStats(): Promise<JournalStatsResponse> {
-  return apiGet<JournalStatsResponse>('/journal/stats');
+  return apiGet<JournalStatsResponse>("/journal/stats");
 }
 
 // Journal Prompts
 export async function getJournalPrompts(): Promise<string[]> {
-  return apiGet<string[]>('/journal/prompts');
+  return apiGet<string[]>("/journal/prompts");
 }

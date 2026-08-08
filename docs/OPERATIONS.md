@@ -5,29 +5,38 @@
 ### Health Monitoring
 
 \`\`\`bash
+
 # Basic health
+
 curl http://localhost:3000/api/health
 
 # Full health check
+
 curl http://localhost:3000/api/metrics/health
 
 # Prometheus metrics
+
 curl http://localhost:3000/api/metrics
 
 # System metrics
+
 curl http://localhost:3000/api/metrics/system
 \`\`\`
 
 ### Database Maintenance
 
 \`\`\`bash
+
 # Run Prisma migrations
+
 npx prisma db push
 
 # Generate Prisma client
+
 npx prisma generate
 
 # View database via Prisma Studio
+
 npx prisma studio
 \`\`\`
 
@@ -36,7 +45,9 @@ npx prisma studio
 BullMQ queues are managed automatically. To inspect:
 
 \`\`\`bash
+
 # Redis queue inspection
+
 redis-cli keys 'chronicle:*'
 redis-cli llen chronicle:notification:wait
 \`\`\`

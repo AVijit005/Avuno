@@ -51,6 +51,10 @@ export function ParticleBurst({ active, origin = "center" }: Props) {
         opacity: 0.6 + r() * 0.4,
       };
     });
+    // `active` is intentional: it is not read inside the factory, but each
+    // re-trigger must produce a fresh random burst rather than replaying the
+    // previous particle set.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [active, origin]);
 
   return (
@@ -72,8 +76,8 @@ export function ParticleBurst({ active, origin = "center" }: Props) {
                 opacity: p.opacity,
               }}
               animate={{
-                left: `${p.x + (p.vx / 6)}%`,
-                top: `${p.y + (p.vy / 6)}%`,
+                left: `${p.x + p.vx / 6}%`,
+                top: `${p.y + p.vy / 6}%`,
                 scale: [0, 1, 1, 0],
                 opacity: [p.opacity, p.opacity, 0.4, 0],
               }}

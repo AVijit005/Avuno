@@ -13,7 +13,8 @@ export function RewatchIntelligence({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Should you revisit {item.title}?</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Based on your viewing patterns and the passage of time, here is when this story might hit differently.
+        Based on your viewing patterns and the passage of time, here is when this story might hit
+        differently.
       </p>
     </PremiumGlass>
   );

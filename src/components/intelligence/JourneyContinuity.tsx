@@ -37,7 +37,7 @@ export function JourneyContinuity({ journey, steps: propSteps }: Props) {
 
         <div className="flex flex-col sm:flex-row gap-6 sm:gap-4 justify-between relative z-10">
           {steps.map((step: JourneyStep, i: number) => (
-            <motion.div 
+            <motion.div
               key={step.id}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -45,11 +45,17 @@ export function JourneyContinuity({ journey, steps: propSteps }: Props) {
               className="flex-1 flex flex-row sm:flex-col items-center gap-4 group"
             >
               <div className="w-16 sm:w-full max-w-[120px] aspect-[2/3] shrink-0 overflow-hidden rounded-lg relative">
-                <img src={step.poster} alt={step.title} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+                <img
+                  src={step.poster}
+                  alt={step.title}
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                />
                 <div className="absolute inset-0 ring-1 ring-inset ring-white/10 rounded-lg pointer-events-none" />
               </div>
               <div className="flex flex-col sm:items-center sm:text-center mt-2">
-                <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">{step.year}</span>
+                <span className="text-[10px] uppercase tracking-widest text-muted-foreground mb-1">
+                  {step.year}
+                </span>
                 <span className="text-sm font-medium leading-tight">{step.title}</span>
               </div>
             </motion.div>

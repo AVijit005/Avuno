@@ -28,10 +28,34 @@ export function LivingStats({ className }: { className?: string }) {
   }
 
   const STATS_LIST = [
-    { label: "Hours", to: Math.round(overview?.hoursSpent ?? 0), suffix: "h", accent: "var(--primary)", glow: "oklch(0.72 0.18 255 / 0.35)" },
-    { label: "Streak", to: streaks?.currentStreak ?? 0, suffix: "", accent: "oklch(0.65 0.22 295)", glow: "oklch(0.65 0.22 295 / 0.35)" },
-    { label: "Total", to: overview?.totalItems ?? 0, suffix: "", accent: "oklch(0.72 0.16 160)", glow: "oklch(0.72 0.16 160 / 0.35)" },
-    { label: "Journals", to: overview?.journalEntries ?? 0, suffix: "", accent: "oklch(0.82 0.16 80)", glow: "oklch(0.82 0.16 80 / 0.35)" },
+    {
+      label: "Hours",
+      to: Math.round(overview?.hoursSpent ?? 0),
+      suffix: "h",
+      accent: "var(--primary)",
+      glow: "oklch(0.72 0.18 255 / 0.35)",
+    },
+    {
+      label: "Streak",
+      to: streaks?.currentStreak ?? 0,
+      suffix: "",
+      accent: "oklch(0.65 0.22 295)",
+      glow: "oklch(0.65 0.22 295 / 0.35)",
+    },
+    {
+      label: "Total",
+      to: overview?.totalItems ?? 0,
+      suffix: "",
+      accent: "oklch(0.72 0.16 160)",
+      glow: "oklch(0.72 0.16 160 / 0.35)",
+    },
+    {
+      label: "Journals",
+      to: overview?.journalEntries ?? 0,
+      suffix: "",
+      accent: "oklch(0.82 0.16 80)",
+      glow: "oklch(0.82 0.16 80 / 0.35)",
+    },
   ];
 
   return (

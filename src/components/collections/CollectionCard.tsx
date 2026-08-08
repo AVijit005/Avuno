@@ -29,7 +29,11 @@ export function CollectionCard({
     size === "lg" ? "aspect-[16/10]" : size === "sm" ? "aspect-square" : "aspect-[4/5]";
 
   const accent = c.color ?? "var(--primary)";
-  const coverImages = c.items?.slice(0, 4).map((item) => item.posterUrl).filter(Boolean) as string[] ?? [];
+  const coverImages =
+    (c.items
+      ?.slice(0, 4)
+      .map((item) => item.posterUrl)
+      .filter(Boolean) as string[]) ?? [];
   const coverSrc = c.cover ?? coverImages[0] ?? "";
 
   return (
@@ -69,7 +73,7 @@ export function CollectionCard({
           aria-hidden
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(180deg, transparent 35%, ${accent.startsWith('var(') ? `color-mix(in oklch, ${accent}, transparent 58%)` : `${accent}66`}, oklch(0 0 0 / 0.9))`,
+            background: `linear-gradient(180deg, transparent 35%, ${accent.startsWith("var(") ? `color-mix(in oklch, ${accent}, transparent 58%)` : `${accent}66`}, oklch(0 0 0 / 0.9))`,
           }}
         />
         {/* reflection */}

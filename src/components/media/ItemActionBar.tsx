@@ -72,17 +72,23 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
   const reduced = useReducedMotion();
   const heroMotion =
     variant === "hero" && !reduced
-      ? { whileHover: { scale: 1.03, transition: motionT.spring }, whileTap: { scale: 0.96, transition: motionT.spring } }
+      ? {
+          whileHover: { scale: 1.03, transition: motionT.spring },
+          whileTap: { scale: 0.96, transition: motionT.spring },
+        }
       : {};
 
   const status = meta?.status;
   const fav = !!meta?.favorite;
 
-  const s = useCallback((next: typeof status, msg: string) => {
-    if (!next) return;
-    useLibraryStore.getState().setStatus(id, next);
-    toast.success(msg, { description: title });
-  }, [id, title]);
+  const s = useCallback(
+    (next: typeof status, msg: string) => {
+      if (!next) return;
+      useLibraryStore.getState().setStatus(id, next);
+      toast.success(msg, { description: title });
+    },
+    [id, title],
+  );
 
   const handleToggleFavorite = useCallback(() => {
     useLibraryStore.getState().toggleFavorite(id);
@@ -244,10 +250,12 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
             variant === "overlay"
               ? "flex aspect-square flex-1 items-center justify-center rounded-full bg-white/[0.10] text-white ring-1 ring-white/15 hover:-translate-y-[2px] hover:bg-white hover:text-black hover:shadow-[0_8px_16px_-4px_var(--primary)]"
               : "inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-medium text-primary-foreground",
-            variant === "hero" ? "px-4 py-2 text-sm" : variant === "inline" ? "px-3 py-1.5" : ""
+            variant === "hero" ? "px-4 py-2 text-sm" : variant === "inline" ? "px-3 py-1.5" : "",
           )}
         >
-          <v.icon className={cn("shrink-0", variant === "overlay" ? "h-3.5 w-3.5" : "h-3.5 w-3.5")} /> 
+          <v.icon
+            className={cn("shrink-0", variant === "overlay" ? "h-3.5 w-3.5" : "h-3.5 w-3.5")}
+          />
           {variant !== "overlay" && <span>{v.label}</span>}
         </motion.button>
       ))}
@@ -264,8 +272,12 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
             : "grid h-8 w-8 place-items-center rounded-full ring-1 ring-white/10",
           variant === "hero" && "tap-target",
           fav
-            ? variant === "overlay" ? "bg-rose-500/30 text-rose-300 hover:bg-rose-500/40 hover:ring-rose-500/50" : "bg-rose-500/20 text-rose-300"
-            : variant === "overlay" ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20" : "bg-white/[0.06] text-muted-foreground hover:bg-white/[0.15] hover:text-foreground",
+            ? variant === "overlay"
+              ? "bg-rose-500/30 text-rose-300 hover:bg-rose-500/40 hover:ring-rose-500/50"
+              : "bg-rose-500/20 text-rose-300"
+            : variant === "overlay"
+              ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20"
+              : "bg-white/[0.06] text-muted-foreground hover:bg-white/[0.15] hover:text-foreground",
         )}
       >
         <Heart className={cn("h-3.5 w-3.5", fav && "fill-current")} />
@@ -283,8 +295,12 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
             : "grid h-8 w-8 place-items-center rounded-full ring-1 ring-white/10",
           variant === "hero" && "tap-target",
           bookmarked
-            ? variant === "overlay" ? "bg-primary/30 text-primary-foreground hover:bg-primary/40 hover:ring-primary/50" : "bg-primary/15 text-primary"
-            : variant === "overlay" ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20" : "bg-white/[0.06] text-muted-foreground hover:bg-white/[0.15] hover:text-foreground",
+            ? variant === "overlay"
+              ? "bg-primary/30 text-primary-foreground hover:bg-primary/40 hover:ring-primary/50"
+              : "bg-primary/15 text-primary"
+            : variant === "overlay"
+              ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20"
+              : "bg-white/[0.06] text-muted-foreground hover:bg-white/[0.15] hover:text-foreground",
         )}
       >
         <Bookmark className={cn("h-3.5 w-3.5", bookmarked && "fill-current")} />

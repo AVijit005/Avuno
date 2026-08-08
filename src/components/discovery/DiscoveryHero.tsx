@@ -9,10 +9,18 @@ import { cn } from "@/lib/utils";
 interface Props {
   className?: string;
   recommendedToday?: {
-    mediaId: string; mediaTitle: string; mediaSlug: string; mediaType: string;
-    posterUrl: string | null; accent: string | null; reason: string;
-    confidence: number; discoveryTags: string[]; year: number;
-    rating: number | null; genres: string[];
+    mediaId: string;
+    mediaTitle: string;
+    mediaSlug: string;
+    mediaType: string;
+    posterUrl: string | null;
+    accent: string | null;
+    reason: string;
+    confidence: number;
+    discoveryTags: string[];
+    year: number;
+    rating: number | null;
+    genres: string[];
   } | null;
 }
 
@@ -24,7 +32,8 @@ export function DiscoveryHero({ className, recommendedToday: rec }: Props) {
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.7 }}
       aria-label="Today's recommendation"
       className={cn("relative", className)}
@@ -42,12 +51,19 @@ export function DiscoveryHero({ className, recommendedToday: rec }: Props) {
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-primary/80">
               <Sparkles className="h-3 w-3" /> Today's pick
             </div>
-            <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">{rec.mediaTitle}</h2>
+            <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">
+              {rec.mediaTitle}
+            </h2>
             <p className="mt-2 text-sm text-muted-foreground">{rec.reason}</p>
             {rec.genres?.length > 0 && (
               <div className="mt-3 flex flex-wrap gap-1">
                 {rec.genres.map((g) => (
-                  <span key={g} className="glass-subtle rounded-full px-2 py-0.5 text-[10px] text-muted-foreground">{g}</span>
+                  <span
+                    key={g}
+                    className="glass-subtle rounded-full px-2 py-0.5 text-[10px] text-muted-foreground"
+                  >
+                    {g}
+                  </span>
                 ))}
               </div>
             )}
@@ -55,8 +71,12 @@ export function DiscoveryHero({ className, recommendedToday: rec }: Props) {
               <Link to="/app/media/$id" params={{ id: rec.mediaId }}>
                 <PremiumButton>See details</PremiumButton>
               </Link>
-              <button className={secondaryBtnClass}><BookmarkPlus className="h-3 w-3" /> Save</button>
-              <button className={secondaryBtnClass}><NotebookPen className="h-3 w-3" /> Journal</button>
+              <button className={secondaryBtnClass}>
+                <BookmarkPlus className="h-3 w-3" /> Save
+              </button>
+              <button className={secondaryBtnClass}>
+                <NotebookPen className="h-3 w-3" /> Journal
+              </button>
             </div>
           </div>
         </div>
@@ -64,6 +84,3 @@ export function DiscoveryHero({ className, recommendedToday: rec }: Props) {
     </motion.section>
   );
 }
-
-
-

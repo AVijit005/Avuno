@@ -65,11 +65,10 @@ const cardLine = {
   },
 };
 
-
-
 function AuthLayout() {
   const matchRoute = useMatchRoute();
-  const isChildRoute = matchRoute({ to: "/auth/callback" }) || matchRoute({ to: "/auth/forgot-password" });
+  const isChildRoute =
+    matchRoute({ to: "/auth/callback" }) || matchRoute({ to: "/auth/forgot-password" });
 
   if (isChildRoute) {
     return <Outlet />;
@@ -88,7 +87,10 @@ function AuthPage() {
 
   const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(() => {
-    return () => timeoutRefs.current.forEach(clearTimeout);
+    // Capture the array identity now: reading timeoutRefs.current inside the
+    // cleanup would see whatever the ref points at on unmount.
+    const pending = timeoutRefs.current;
+    return () => pending.forEach(clearTimeout);
   }, []);
   const safeTimeout = (cb: () => void, ms: number) => {
     const id = setTimeout(cb, ms);
@@ -128,7 +130,7 @@ function AuthPage() {
           password: values.password,
           name: values.fullName,
         });
-        
+
         try {
           const user = await loginMutation.mutateAsync({
             email: values.email,
@@ -139,7 +141,10 @@ function AuthPage() {
           setStatus("success");
           safeTimeout(() => navigate({ to: "/app" }), 700);
         } catch (loginErr: unknown) {
-          if ((loginErr as { message?: string; status?: number })?.message === "Email not verified" || (loginErr as { message?: string; status?: number })?.status === 403) {
+          if (
+            (loginErr as { message?: string; status?: number })?.message === "Email not verified" ||
+            (loginErr as { message?: string; status?: number })?.status === 403
+          ) {
             analytics.track("signup");
             setStatus("success");
             setErrorMessage("Account created! Please check your email to verify your account.");
@@ -196,13 +201,9 @@ function AuthPage() {
           y: reduced ? 0 : (ay as never),
         }}
         animate={
-          reduced
-            ? undefined
-            : { scale: [1, 1.07, 0.97, 1], opacity: [0.85, 1, 0.88, 0.85] }
+          reduced ? undefined : { scale: [1, 1.07, 0.97, 1], opacity: [0.85, 1, 0.88, 0.85] }
         }
-        transition={
-          reduced ? undefined : { duration: 18, repeat: Infinity, ease: "easeInOut" }
-        }
+        transition={reduced ? undefined : { duration: 18, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* warm counter-leak */}
@@ -210,20 +211,15 @@ function AuthPage() {
         aria-hidden
         className="pointer-events-none absolute bottom-[-22%] right-[6%] z-[2] hidden h-[560px] w-[560px] rounded-full lg:block"
         style={{
-          background:
-            "radial-gradient(circle, oklch(0.80 0.18 35 / 0.24) 0%, transparent 68%)",
+          background: "radial-gradient(circle, oklch(0.80 0.18 35 / 0.24) 0%, transparent 68%)",
           filter: "blur(75px)",
           x: reduced ? 0 : (ax as never),
           y: reduced ? 0 : (ay as never),
         }}
         animate={
-          reduced
-            ? undefined
-            : { scale: [1, 1.05, 0.98, 1], opacity: [0.7, 0.95, 0.75, 0.7] }
+          reduced ? undefined : { scale: [1, 1.05, 0.98, 1], opacity: [0.7, 0.95, 0.75, 0.7] }
         }
-        transition={
-          reduced ? undefined : { duration: 14, repeat: Infinity, ease: "easeInOut" }
-        }
+        transition={reduced ? undefined : { duration: 14, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* cool top-right leak */}
@@ -231,23 +227,15 @@ function AuthPage() {
         aria-hidden
         className="pointer-events-none absolute -top-[8%] right-[10%] z-[2] hidden h-[480px] w-[480px] rounded-full lg:block"
         style={{
-          background:
-            "radial-gradient(circle, oklch(0.70 0.20 220 / 0.18) 0%, transparent 70%)",
+          background: "radial-gradient(circle, oklch(0.70 0.20 220 / 0.18) 0%, transparent 70%)",
           filter: "blur(80px)",
         }}
-        animate={
-          reduced
-            ? undefined
-            : { opacity: [0.6, 0.9, 0.6], scale: [1, 1.04, 1] }
-        }
-        transition={
-          reduced ? undefined : { duration: 20, repeat: Infinity, ease: "easeInOut" }
-        }
+        animate={reduced ? undefined : { opacity: [0.6, 0.9, 0.6], scale: [1, 1.04, 1] }}
+        transition={reduced ? undefined : { duration: 20, repeat: Infinity, ease: "easeInOut" }}
       />
 
       {/* === FLOATING CARD ZONE === */}
       <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-8 lg:items-center lg:justify-end lg:px-0 lg:py-0 lg:pr-[5vw] xl:pr-[7vw]">
-
         {/* Ambient light depth — violet halo that drifts slowly behind the card */}
         {!reduced && (
           <motion.div
@@ -275,12 +263,7 @@ function AuthPage() {
           <ParticleBurst active={status === "success"} />
 
           {/* Staggered card content */}
-          <motion.div
-            className="relative"
-            variants={cardContainer}
-            initial="hidden"
-            animate="show"
-          >
+          <motion.div className="relative" variants={cardContainer} initial="hidden" animate="show">
             {/* Mobile brand */}
             <motion.div variants={cardLine}>
               <Link to="/" className="mb-5 inline-flex items-center gap-2 lg:hidden">
@@ -301,14 +284,16 @@ function AuthPage() {
                   backdropFilter: "blur(12px)",
                   WebkitBackdropFilter: "blur(12px)",
                   border: "1px solid rgba(255,255,255,0.10)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 12px rgba(130,110,255,0.08)",
+                  boxShadow:
+                    "inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 12px rgba(130,110,255,0.08)",
                   color: "rgba(255,255,255,0.52)",
                 }}
               >
                 <span
                   className="inline-block h-1.5 w-1.5 rounded-full"
                   style={{
-                    background: "radial-gradient(circle, rgba(180,165,255,0.95) 0%, rgba(140,120,240,0.70) 100%)",
+                    background:
+                      "radial-gradient(circle, rgba(180,165,255,0.95) 0%, rgba(140,120,240,0.70) 100%)",
                     boxShadow: "0 0 6px rgba(160,145,255,0.60)",
                     animation: "pulse 2s cubic-bezier(0.4,0,0.6,1) infinite",
                   }}
@@ -356,8 +341,7 @@ function AuthPage() {
                   textShadow: "0 1px 2px rgba(0,0,0,0.25)",
                 }}
               >
-                Your personal media sanctuary.{" "}
-                Track, collect, and curate your digital history.
+                Your personal media sanctuary. Track, collect, and curate your digital history.
               </p>
             </motion.div>
 
@@ -367,11 +351,19 @@ function AuthPage() {
                 type="button"
                 onClick={() => {
                   const state = crypto.randomUUID();
-                  try { sessionStorage.setItem("oauth_state", state); } catch {}
+                  try {
+                    sessionStorage.setItem("oauth_state", state);
+                  } catch {
+                    // Storage unavailable (private mode). The redirect still
+                    // carries the state param; the callback will fail closed
+                    // if it cannot verify it.
+                  }
                   window.location.href = `${API_BASE_URL}/auth/google?state=${encodeURIComponent(state)}`;
                 }}
                 className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-all duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
-                style={{ boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)" }}
+                style={{
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)",
+                }}
               >
                 <GoogleColorIcon />
                 Continue with Google
@@ -387,10 +379,7 @@ function AuthPage() {
             </motion.div>
 
             {/* Divider */}
-            <motion.div
-              variants={cardLine}
-              className="my-6 flex items-center gap-3"
-            >
+            <motion.div variants={cardLine} className="my-6 flex items-center gap-3">
               <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
               <span className="text-[9px] uppercase tracking-[0.28em] text-white/30">
                 or with email
@@ -414,15 +403,20 @@ function AuthPage() {
                   transition={{ type: "spring", stiffness: 340, damping: 32 }}
                   style={{
                     background: "rgba(255,255,255,0.05)",
-                    boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.18)",
+                    boxShadow:
+                      "inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.18)",
                   }}
                 />
                 <motion.button
                   type="button"
                   onClick={() => switchMode("signin")}
                   className="relative z-10 flex-1 rounded-full py-2 text-[11.5px] font-medium tracking-wide"
-                  style={{ color: mode === "signin" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)" }}
-                  whileHover={{ color: mode === "signin" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)" }}
+                  style={{
+                    color: mode === "signin" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
+                  }}
+                  whileHover={{
+                    color: mode === "signin" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)",
+                  }}
                   transition={{ duration: 0.2 }}
                 >
                   Sign In
@@ -431,8 +425,12 @@ function AuthPage() {
                   type="button"
                   onClick={() => switchMode("signup")}
                   className="relative z-10 flex-1 rounded-full py-2 text-[11.5px] font-medium tracking-wide"
-                  style={{ color: mode === "signup" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)" }}
-                  whileHover={{ color: mode === "signup" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)" }}
+                  style={{
+                    color: mode === "signup" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
+                  }}
+                  whileHover={{
+                    color: mode === "signup" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)",
+                  }}
                   transition={{ duration: 0.2 }}
                 >
                   Create Account
@@ -578,75 +576,70 @@ function PremiumButton({
       <motion.button
         type="submit"
         disabled={status !== "idle" && status !== "error"}
-      className="group relative mt-2 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-[#F8F8F5] px-5 py-3.5 text-[13.5px] font-medium tracking-wide text-black disabled:opacity-95"
-      style={{
-        boxShadow:
-          "0 18px 50px -18px rgba(255,255,255,0.50), inset 0 1px 0 rgba(255,255,255,0.85)",
-      }}
-      animate={
-        status === "idle"
-          ? {
-              boxShadow: [
-                "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
-                "0 22px 65px -14px rgba(255,255,255,0.72), inset 0 1px 0 rgba(255,255,255,0.90)",
-                "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
-              ],
-            }
-          : {}
-      }
-      transition={
-        status === "idle"
-          ? { duration: 3.5, repeat: Infinity, ease: "easeInOut" }
-          : {}
-      }
-      whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-      whileTap={{ scale: 0.975, transition: { duration: 0.12 } }}
-    >
-      {/* shimmer sweep */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-all duration-[900ms] ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
+        className="group relative mt-2 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-[#F8F8F5] px-5 py-3.5 text-[13.5px] font-medium tracking-wide text-black disabled:opacity-95"
         style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)",
+          boxShadow:
+            "0 18px 50px -18px rgba(255,255,255,0.50), inset 0 1px 0 rgba(255,255,255,0.85)",
         }}
-      />
-      <AnimatePresence mode="wait">
-        {status === "idle" && (
-          <motion.span
-            key="i"
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            className="inline-flex items-center gap-2"
-          >
-            {label}
-            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-          </motion.span>
-        )}
-        {status === "loading" && (
-          <motion.span
-            key="l"
-            initial={{ opacity: 0, y: 4 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -4 }}
-            className="inline-flex items-center gap-2"
-          >
-            <Loader2 className="h-4 w-4 animate-spin" /> Entering…
-          </motion.span>
-        )}
-        {status === "success" && (
-          <motion.span
-            key="s"
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="inline-flex items-center gap-2"
-          >
-            <Check className="h-4 w-4" /> Welcome
-          </motion.span>
-        )}
-      </AnimatePresence>
-    </motion.button>
+        animate={
+          status === "idle"
+            ? {
+                boxShadow: [
+                  "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
+                  "0 22px 65px -14px rgba(255,255,255,0.72), inset 0 1px 0 rgba(255,255,255,0.90)",
+                  "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
+                ],
+              }
+            : {}
+        }
+        transition={status === "idle" ? { duration: 3.5, repeat: Infinity, ease: "easeInOut" } : {}}
+        whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
+        whileTap={{ scale: 0.975, transition: { duration: 0.12 } }}
+      >
+        {/* shimmer sweep */}
+        <span
+          aria-hidden
+          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-all duration-[900ms] ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
+          style={{
+            background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)",
+          }}
+        />
+        <AnimatePresence mode="wait">
+          {status === "idle" && (
+            <motion.span
+              key="i"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="inline-flex items-center gap-2"
+            >
+              {label}
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+            </motion.span>
+          )}
+          {status === "loading" && (
+            <motion.span
+              key="l"
+              initial={{ opacity: 0, y: 4 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              className="inline-flex items-center gap-2"
+            >
+              <Loader2 className="h-4 w-4 animate-spin" /> Entering…
+            </motion.span>
+          )}
+          {status === "success" && (
+            <motion.span
+              key="s"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="inline-flex items-center gap-2"
+            >
+              <Check className="h-4 w-4" /> Welcome
+            </motion.span>
+          )}
+        </AnimatePresence>
+      </motion.button>
     </>
   );
 }

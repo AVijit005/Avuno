@@ -50,5 +50,3 @@ export function Collage({ items }: { items: CollageItem[] }) {
     </div>
   );
 }
-
-

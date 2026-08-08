@@ -10,7 +10,13 @@ interface Props {
   onNextPrompt: () => void;
 }
 
-export function JournalPrompt({ promptIndex, timeContext, prompts = [], onStartWriting, onNextPrompt }: Props) {
+export function JournalPrompt({
+  promptIndex,
+  timeContext,
+  prompts = [],
+  onStartWriting,
+  onNextPrompt,
+}: Props) {
   return (
     <PremiumGlass
       interactive
@@ -42,7 +48,9 @@ export function JournalPrompt({ promptIndex, timeContext, prompts = [], onStartW
         >
           <div className="flex h-full w-full items-center justify-center gap-3">
             <NotebookPen className="h-5 w-5 text-primary drop-shadow-[0_0_12px_currentColor] transition-transform duration-500 ease-out group-hover:rotate-12 group-hover:scale-110" />
-            <span className="font-display text-lg font-medium text-foreground tracking-wide">Start writing</span>
+            <span className="font-display text-lg font-medium text-foreground tracking-wide">
+              Start writing
+            </span>
           </div>
         </PremiumGlass>
 

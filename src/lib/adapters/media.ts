@@ -12,7 +12,8 @@ import type { MediaResponse } from "@/lib/api/media";
 import type { LibraryItemResponse } from "@/lib/api/library";
 import type { ContinueItem, RecentActivityItem } from "@/lib/api/analytics";
 
-const PLACEHOLDER_POSTER = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450' fill='%231a1a2e'%3E%3Crect width='300' height='450'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-family='system-ui' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
+const PLACEHOLDER_POSTER =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450' fill='%231a1a2e'%3E%3Crect width='300' height='450'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23555' font-family='system-ui' font-size='14'%3ENo Image%3C/text%3E%3C/svg%3E";
 
 function formatRuntime(minutes: number | null): string | null {
   if (!minutes) return null;

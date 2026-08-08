@@ -36,6 +36,3 @@ export function AchievementHero({ className }: { className?: string }) {
     </motion.section>
   );
 }
-
-
-

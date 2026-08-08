@@ -23,6 +23,9 @@ export function getCharacter(id: string): Character | undefined {
   return CHARACTERS.find((c) => c.id === id);
 }
 
-export function getCharacterMedia(_character: Character, _items: MediaItem[]): MediaItem | undefined {
+export function getCharacterMedia(
+  _character: Character,
+  _items: MediaItem[],
+): MediaItem | undefined {
   return undefined;
 }

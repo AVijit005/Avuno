@@ -13,7 +13,8 @@ export function CompanionStories({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Stories that go together</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        {item.title} pairs well with these other stories — whether as a double feature or a thematic companion.
+        {item.title} pairs well with these other stories — whether as a double feature or a thematic
+        companion.
       </p>
     </PremiumGlass>
   );

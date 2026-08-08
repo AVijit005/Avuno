@@ -21,9 +21,7 @@ function OnboardingPage() {
   const [step, setStep] = useState(1);
 
   const toggle = (id: string) => {
-    setSelected((prev) =>
-      prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]
-    );
+    setSelected((prev) => (prev.includes(id) ? prev.filter((i) => i !== id) : [...prev, id]));
   };
 
   const handleNext = () => {
@@ -56,7 +54,9 @@ function OnboardingPage() {
                     key={t.id}
                     onClick={() => toggle(t.id)}
                     className={`press-scale relative flex flex-col items-center gap-3 rounded-2xl border border-white/10 p-6 transition-all duration-[var(--dur-normal)] ${
-                      isActive ? "bg-white/[0.08] shadow-[0_0_20px_var(--accent)]" : "bg-black/20 hover:bg-white/[0.04]"
+                      isActive
+                        ? "bg-white/[0.08] shadow-[0_0_20px_var(--accent)]"
+                        : "bg-black/20 hover:bg-white/[0.04]"
                     }`}
                     style={{ "--accent": t.accent } as CSSProperties}
                   >
@@ -90,7 +90,8 @@ function OnboardingPage() {
               Your library is ready.
             </h1>
             <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              Start by adding your first story. Search for a movie you recently watched, a book you're reading, or a game you love.
+              Start by adding your first story. Search for a movie you recently watched, a book
+              you're reading, or a game you love.
             </p>
             <div className="mt-10">
               <PremiumButton onClick={handleNext} size="lg">

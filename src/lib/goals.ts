@@ -54,26 +54,46 @@ export function adaptGoal(apiGoal: ApiGoal): Goal {
     current: apiGoal.current,
     target: apiGoal.target,
     deadline: apiGoal.deadline,
-    priority: (["low", "med", "high"].includes(apiGoal.priority) ? apiGoal.priority : "med") as Goal["priority"],
+    priority: (["low", "med", "high"].includes(apiGoal.priority)
+      ? apiGoal.priority
+      : "med") as Goal["priority"],
     reward: apiGoal.reward,
     reason: apiGoal.reason,
-    status: (["Planning", "Active", "Paused", "Completed", "Archived"].includes(apiGoal.status) ? apiGoal.status : "Planning") as GoalStatus,
+    status: (["Planning", "Active", "Paused", "Completed", "Archived"].includes(apiGoal.status)
+      ? apiGoal.status
+      : "Planning") as GoalStatus,
     startedAt: apiGoal.startedAt,
     completedAt: apiGoal.completedAt,
     accent: apiGoal.accent,
     coverIds: apiGoal.coverIds,
     milestones: apiGoal.milestones,
-    kind: (["creator", "count", "collection", "genre", "memory"].includes(apiGoal.kind) ? apiGoal.kind : "count") as Goal["kind"],
+    kind: (["creator", "count", "collection", "genre", "memory"].includes(apiGoal.kind)
+      ? apiGoal.kind
+      : "count") as Goal["kind"],
   };
 }
 
 // Goals feature not yet connected to backend API
 // Consumers handle null/empty gracefully (GoalCard checks `if (!g) return null`)
 
-export function getCurrentGoals(): Goal[] { return []; }
-export function getCompletedGoals(): Goal[] { return []; }
-export function getUpcomingGoals(): Goal[] { return []; }
-export function getPrimaryGoal(): Goal | null { return null; }
-export function getGoalInsights() { return []; }
-export function rankGoals(): Goal[] { return []; }
-export function getRelatedGoal(_mediaId: string): Goal | null { return null; }
+export function getCurrentGoals(): Goal[] {
+  return [];
+}
+export function getCompletedGoals(): Goal[] {
+  return [];
+}
+export function getUpcomingGoals(): Goal[] {
+  return [];
+}
+export function getPrimaryGoal(): Goal | null {
+  return null;
+}
+export function getGoalInsights() {
+  return [];
+}
+export function rankGoals(): Goal[] {
+  return [];
+}
+export function getRelatedGoal(_mediaId: string): Goal | null {
+  return null;
+}

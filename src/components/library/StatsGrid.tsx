@@ -19,7 +19,13 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
     total: stats?.total || 0,
     favorite: stats?.favoriteCount || 0,
     completed: (byStatusRaw.COMPLETED ?? 0) + (byStatusRaw.completed ?? 0),
-    in_progress: (byStatusRaw.WATCHING ?? 0) + (byStatusRaw.READING ?? 0) + (byStatusRaw.PLAYING ?? 0) + (byStatusRaw.LISTENING ?? 0) + (byStatusRaw.LEARNING ?? 0) + (byStatusRaw.in_progress ?? 0),
+    in_progress:
+      (byStatusRaw.WATCHING ?? 0) +
+      (byStatusRaw.READING ?? 0) +
+      (byStatusRaw.PLAYING ?? 0) +
+      (byStatusRaw.LISTENING ?? 0) +
+      (byStatusRaw.LEARNING ?? 0) +
+      (byStatusRaw.in_progress ?? 0),
     planning: (byStatusRaw.PLANNING ?? 0) + (byStatusRaw.planning ?? 0),
     paused: (byStatusRaw.PAUSED ?? 0) + (byStatusRaw.paused ?? 0),
     dropped: (byStatusRaw.DROPPED ?? 0) + (byStatusRaw.dropped ?? 0),
@@ -31,16 +37,16 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
       {ITEMS.map((it) => {
         const tint = STATUS_TINT[it.key === "total" ? "in_progress" : it.key];
         const trend =
-          it.key === "total" || it.key === "favorite" ? 0 : trendFor(it.key as MediaStatus) ?? 0;
+          it.key === "total" || it.key === "favorite" ? 0 : (trendFor(it.key as MediaStatus) ?? 0);
         const TrendIcon = trend > 0 ? ArrowUp : trend < 0 ? ArrowDown : Minus;
         return (
-          <button 
-            key={it.key} 
+          <button
+            key={it.key}
             className="group/pill relative flex flex-col items-start justify-between min-w-[120px] flex-1 sm:flex-none overflow-hidden rounded-[2rem] px-5 py-4 text-left transition-all duration-400 ease-out hover:-translate-y-1.5 hover:scale-[1.02]"
-            style={{ 
+            style={{
               background: "rgba(255, 255, 255, 0.02)",
               backdropFilter: "blur(24px)",
-              boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${tint} 20%, transparent), 0 8px 32px -8px rgba(0,0,0,0.4)`
+              boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${tint} 20%, transparent), 0 8px 32px -8px rgba(0,0,0,0.4)`,
             }}
           >
             {/* Native radial bloom, correctly inheriting corner radius */}
@@ -49,7 +55,7 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
               className="pointer-events-none absolute inset-0 opacity-20 transition-opacity duration-500 ease-out group-hover/pill:opacity-70"
               style={{
                 borderRadius: "inherit",
-                background: `radial-gradient(120px circle at 50% 100%, color-mix(in oklab, ${tint} 50%, transparent), transparent 100%)`
+                background: `radial-gradient(120px circle at 50% 100%, color-mix(in oklab, ${tint} 50%, transparent), transparent 100%)`,
               }}
             />
             {/* Native outer glow simulating edge bleed (native shadow) */}
@@ -58,12 +64,12 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
               className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 ease-out group-hover/pill:opacity-100"
               style={{
                 borderRadius: "inherit",
-                boxShadow: `0 0 24px -4px color-mix(in oklab, ${tint} 40%, transparent)`
+                boxShadow: `0 0 24px -4px color-mix(in oklab, ${tint} 40%, transparent)`,
               }}
             />
-            
+
             <div className="relative z-10 w-full mb-3">
-              <span 
+              <span
                 className="text-[10px] font-semibold uppercase tracking-[0.25em]"
                 style={{ color: `color-mix(in oklab, ${tint} 85%, white)` }}
               >
@@ -82,7 +88,7 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
                   style={{
                     background: `color-mix(in oklab, ${tint} 25%, transparent)`,
                     color: "white",
-                    boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${tint} 40%, transparent)`
+                    boxShadow: `inset 0 0 0 1px color-mix(in oklab, ${tint} 40%, transparent)`,
                   }}
                 >
                   <TrendIcon className="h-2.5 w-2.5" />

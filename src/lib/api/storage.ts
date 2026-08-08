@@ -1,4 +1,4 @@
-import { apiPost, apiDelete, apiUpload } from './fetch';
+import { apiPost, apiDelete, apiUpload } from "./fetch";
 
 export interface UploadResponse {
   id: string;
@@ -19,17 +19,20 @@ export interface SignedUrlResponse {
 
 export async function uploadFile(file: File, category?: string): Promise<UploadResponse> {
   const formData = new FormData();
-  formData.append('file', file);
-  const qs = category ? `?category=${encodeURIComponent(category)}` : '';
+  formData.append("file", file);
+  const qs = category ? `?category=${encodeURIComponent(category)}` : "";
   return apiUpload<UploadResponse>(`/storage/upload${qs}`, formData);
 }
 
-export async function uploadMultipleFiles(files: File[], category?: string): Promise<UploadResponse[]> {
+export async function uploadMultipleFiles(
+  files: File[],
+  category?: string,
+): Promise<UploadResponse[]> {
   const formData = new FormData();
   for (const file of files) {
-    formData.append('files', file);
+    formData.append("files", file);
   }
-  const qs = category ? `?category=${encodeURIComponent(category)}` : '';
+  const qs = category ? `?category=${encodeURIComponent(category)}` : "";
   return apiUpload<UploadResponse[]>(`/storage/upload/multipart${qs}`, formData);
 }
 
@@ -43,12 +46,12 @@ export async function generateSignedUrl(path: string): Promise<SignedUrlResponse
 
 export async function uploadAvatar(file: File): Promise<UploadResponse> {
   const formData = new FormData();
-  formData.append('file', file);
-  return apiUpload<UploadResponse>('/storage/avatar', formData);
+  formData.append("file", file);
+  return apiUpload<UploadResponse>("/storage/avatar", formData);
 }
 
 export async function uploadCover(file: File): Promise<UploadResponse> {
   const formData = new FormData();
-  formData.append('file', file);
-  return apiUpload<UploadResponse>('/storage/cover', formData);
+  formData.append("file", file);
+  return apiUpload<UploadResponse>("/storage/cover", formData);
 }

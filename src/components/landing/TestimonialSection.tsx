@@ -3,9 +3,21 @@ import { SceneSection } from "./SceneSection";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 
 const TESTIMONIALS = [
-  { quote: "It replaced Letterboxd, Goodreads, and Backloggd for me. It's so quiet and beautiful.", author: "Alex", role: "Designer" },
-  { quote: "Finally, a place to log what I play and read without it feeling like a competition.", author: "Sam", role: "Software Engineer" },
-  { quote: "The timeline feature makes me actually want to reflect on the media I consume.", author: "Taylor", role: "Writer" },
+  {
+    quote: "It replaced Letterboxd, Goodreads, and Backloggd for me. It's so quiet and beautiful.",
+    author: "Alex",
+    role: "Designer",
+  },
+  {
+    quote: "Finally, a place to log what I play and read without it feeling like a competition.",
+    author: "Sam",
+    role: "Software Engineer",
+  },
+  {
+    quote: "The timeline feature makes me actually want to reflect on the media I consume.",
+    author: "Taylor",
+    role: "Writer",
+  },
 ];
 
 export function TestimonialSection() {

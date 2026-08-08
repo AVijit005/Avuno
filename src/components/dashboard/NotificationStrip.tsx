@@ -39,6 +39,3 @@ export function NotificationStrip({ className }: { className?: string }) {
     </section>
   );
 }
-
-
-

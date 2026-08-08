@@ -12,7 +12,8 @@ export function StoryUniverse({ mediaId }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">The world this story belongs to</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Explore the broader universe — shared worlds, connected narratives, and the larger tapestry this story weaves into.
+        Explore the broader universe — shared worlds, connected narratives, and the larger tapestry
+        this story weaves into.
       </p>
     </PremiumGlass>
   );

@@ -3,13 +3,7 @@ import { type MediaItem, type MediaKind } from "@/lib/types";
 import { useLibraryStore } from "@/lib/store/libraryStore";
 
 export type MediaStatus =
-  | "in_progress"
-  | "completed"
-  | "planning"
-  | "paused"
-  | "dropped"
-  | "rewatching"
-  | "archived";
+  "in_progress" | "completed" | "planning" | "paused" | "dropped" | "rewatching" | "archived";
 
 export interface LibraryMeta {
   status: MediaStatus;
@@ -39,7 +33,6 @@ function liveItems(): MediaItem[] {
 function liveMeta(id: string): Partial<LibraryMeta> {
   return useLibraryStore.getState().meta[id] ?? {};
 }
-
 
 export function metaOf(id: string): LibraryMeta {
   const all = liveItems();

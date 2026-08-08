@@ -98,9 +98,7 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
   const filtered = useMemo(() => {
     const term = q.trim().toLowerCase();
     if (!term) return items;
-    return items.filter(
-      (m) => m.title.toLowerCase().includes(term),
-    );
+    return items.filter((m) => m.title.toLowerCase().includes(term));
   }, [items, q]);
 
   return (
@@ -167,20 +165,30 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
             <p className="mt-3 max-w-xl text-sm text-white/75 md:text-base">{c.description}</p>
             <div className="mt-4 flex flex-wrap items-center gap-3 text-xs text-white/65">
               <span className="inline-flex items-center gap-1.5">
-                <CalendarDays className="h-3.5 w-3.5" /> Created {new Date(c.createdAt).toLocaleDateString()}
+                <CalendarDays className="h-3.5 w-3.5" /> Created{" "}
+                {new Date(c.createdAt).toLocaleDateString()}
               </span>
               <span className="inline-flex items-center gap-1.5">
-                <RefreshCcw className="h-3.5 w-3.5" /> Updated {new Date(c.updatedAt).toLocaleDateString()}
+                <RefreshCcw className="h-3.5 w-3.5" /> Updated{" "}
+                {new Date(c.updatedAt).toLocaleDateString()}
               </span>
               <span className="rounded-full border border-white/15 px-2 py-0.5">
                 {c.itemCount} items
               </span>
             </div>
             <div className="mt-6 flex flex-wrap gap-3">
-              <PremiumButton variant="primary" icon={<Pencil className="h-4 w-4" />} onClick={() => toast.info("Collection editing coming soon.")}>
+              <PremiumButton
+                variant="primary"
+                icon={<Pencil className="h-4 w-4" />}
+                onClick={() => toast.info("Collection editing coming soon.")}
+              >
                 Edit collection
               </PremiumButton>
-              <PremiumButton variant="secondary" icon={<Share2 className="h-4 w-4" />} onClick={() => toast.info("Sharing coming soon.")}>
+              <PremiumButton
+                variant="secondary"
+                icon={<Share2 className="h-4 w-4" />}
+                onClick={() => toast.info("Sharing coming soon.")}
+              >
                 Share
               </PremiumButton>
               <PremiumButton variant="secondary" icon={<Heart className="h-4 w-4" />}>
@@ -231,18 +239,12 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
                   />
                   <div className="min-w-0 flex-1">
                     <div className="truncate text-sm">{m.title}</div>
-                    <div className="truncate text-xs text-muted-foreground">
-                      {m.kind}
-                    </div>
+                    <div className="truncate text-xs text-muted-foreground">{m.kind}</div>
                   </div>
                 </Link>
               ) : (
                 <div key={m.id} className="glass rounded-2xl overflow-hidden">
-                  <img
-                    src={m.poster}
-                    alt={m.title}
-                    className="w-full aspect-[2/3] object-cover"
-                  />
+                  <img src={m.poster} alt={m.title} className="w-full aspect-[2/3] object-cover" />
                   <div className="p-3">
                     <div className="truncate text-sm">{m.title}</div>
                     <div className="truncate text-xs text-muted-foreground">{m.kind}</div>

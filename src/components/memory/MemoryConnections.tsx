@@ -51,7 +51,11 @@ export function MemoryConnections({ mediaId, className }: Props) {
                 params={{ id: m.id }}
                 className="flex items-center gap-3 px-3 py-2.5 transition hover:bg-white/[0.03]"
               >
-                <img src={m.poster} alt={m.title} className="h-10 w-7 flex-none rounded object-cover" />
+                <img
+                  src={m.poster}
+                  alt={m.title}
+                  className="h-10 w-7 flex-none rounded object-cover"
+                />
                 <div className="min-w-0 flex-1">
                   <div className="truncate text-sm">{m.title}</div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">

@@ -15,11 +15,17 @@ export function DashboardMood({ className }: { className?: string }) {
 
   return (
     <PremiumGlass
-      variant="subtle" className={className}
-      initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-60px" }} variants={fadeBlurIn}
+      variant="subtle"
+      className={className}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-60px" }}
+      variants={fadeBlurIn}
     >
       <div className="p-6">
-        <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Current atmosphere</div>
+        <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+          Current atmosphere
+        </div>
         <p className="mt-3 font-display text-xl leading-snug tracking-tight">
           Your week leans toward <span className="text-foreground">{genre}</span> —{" "}
           {weekday ? <>{weekday}s are your most active days, </> : ""}
@@ -29,6 +35,3 @@ export function DashboardMood({ className }: { className?: string }) {
     </PremiumGlass>
   );
 }
-
-
-

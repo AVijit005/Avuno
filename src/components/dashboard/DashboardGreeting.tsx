@@ -26,7 +26,7 @@ export function DashboardGreeting({ className }: { className?: string }) {
     name: name,
     streak: streaks?.currentStreak,
     recentCompletions: overview?.moviesCompleted, // using as proxy
-    unfinishedTitle: dashboard?.continueWatching?.[0]?.title
+    unfinishedTitle: dashboard?.continueWatching?.[0]?.title,
   });
   return (
     <section aria-label="Greeting" className={cn("space-y-1", className)}>

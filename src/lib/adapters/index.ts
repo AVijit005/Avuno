@@ -43,11 +43,7 @@ export {
 } from "./media";
 export { adaptCollectionResponse } from "./collection";
 export { adaptDashboardResponse } from "./dashboard";
-export {
-  adaptJournalEntry,
-  adaptMemory,
-  adaptTimelineEvent,
-} from "./journal";
+export { adaptJournalEntry, adaptMemory, adaptTimelineEvent } from "./journal";
 export { adaptSearchResult } from "./search";
 export { adaptNotification } from "./notifications";
 export { adaptOverview, adaptStreaks } from "./analytics";

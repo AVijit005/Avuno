@@ -2,10 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import type { Character } from "@/lib/characters";
 
-export function CharacterProfile({ 
-  character, 
-  media 
-}: { 
+export function CharacterProfile({
+  character,
+  media,
+}: {
   character: Character;
   media?: { id: string; title: string; poster?: string } | null;
 }) {

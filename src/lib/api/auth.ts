@@ -1,4 +1,4 @@
-import { apiPost, apiGet, setAccessToken } from './fetch';
+import { apiPost, apiGet, setAccessToken } from "./fetch";
 
 export interface UserResponse {
   id: string;
@@ -38,25 +38,27 @@ export interface ResendVerificationInput {
 }
 
 export async function register(input: RegisterInput): Promise<UserResponse> {
-  return apiPost<UserResponse>('/auth/register', input, { skipAuth: true });
+  return apiPost<UserResponse>("/auth/register", input, { skipAuth: true });
 }
 
 export async function login(input: LoginInput): Promise<AuthResponse> {
-  const response = await apiPost<AuthResponse>('/auth/login', input, { skipAuth: true });
+  const response = await apiPost<AuthResponse>("/auth/login", input, { skipAuth: true });
   setAccessToken(response.accessToken);
   return response;
 }
 
 export async function verifyEmail(input: VerifyEmailInput): Promise<UserResponse> {
-  return apiPost<UserResponse>('/auth/email/verify', input, { skipAuth: true });
+  return apiPost<UserResponse>("/auth/email/verify", input, { skipAuth: true });
 }
 
-export async function resendVerification(input: ResendVerificationInput): Promise<{ email: string }> {
-  return apiPost<{ email: string }>('/auth/email/resend', input, { skipAuth: true });
+export async function resendVerification(
+  input: ResendVerificationInput,
+): Promise<{ email: string }> {
+  return apiPost<{ email: string }>("/auth/email/resend", input, { skipAuth: true });
 }
 
 export async function getCurrentUser(): Promise<UserResponse> {
-  return await apiGet<UserResponse>('/auth/me');
+  return await apiGet<UserResponse>("/auth/me");
 }
 
 export async function logoutUser(): Promise<void> {
@@ -65,7 +67,7 @@ export async function logoutUser(): Promise<void> {
     // not the bearer token. Without this, logging out with an expired access
     // token would trigger a refresh (rotating the refresh token) just to end
     // the session, and could surface a spurious error on a successful logout.
-    await apiPost<void>('/auth/logout', undefined, { skipAuth: true });
+    await apiPost<void>("/auth/logout", undefined, { skipAuth: true });
   } finally {
     setAccessToken(null);
   }
@@ -75,12 +77,12 @@ export async function logoutAll(): Promise<void> {
   try {
     // Unlike /auth/logout, this endpoint is behind JwtAuthGuard and needs the
     // bearer token, so it must NOT skip auth.
-    await apiPost<void>('/auth/logout-all');
+    await apiPost<void>("/auth/logout-all");
   } finally {
     setAccessToken(null);
   }
 }
 
 export async function forgotPassword(input: { email: string }): Promise<{ message: string }> {
-  return apiPost<{ message: string }>('/auth/forgot-password', input, { skipAuth: true });
+  return apiPost<{ message: string }>("/auth/forgot-password", input, { skipAuth: true });
 }

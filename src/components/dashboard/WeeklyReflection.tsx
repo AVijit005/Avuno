@@ -32,9 +32,17 @@ export function WeeklyReflection({ className, overview }: Props) {
           {hasContent ? (
             <div className="mt-2 text-sm text-muted-foreground">
               {overview.journalEntries > 0
-                ? `${overview.journalEntries} journal entries` : `${overview.totalItems} stories`} tracked.
+                ? `${overview.journalEntries} journal entries`
+                : `${overview.totalItems} stories`}{" "}
+              tracked.
               {overview.hoursSpent > 0 && (
-                <> <span className="text-foreground font-medium">{Math.round(overview.hoursSpent)}h</span> spent across your library. </>
+                <>
+                  {" "}
+                  <span className="text-foreground font-medium">
+                    {Math.round(overview.hoursSpent)}h
+                  </span>{" "}
+                  spent across your library.{" "}
+                </>
               )}
               {overview.completedItems > 0 && (
                 <>{overview.completedItems} completed so far this month.</>

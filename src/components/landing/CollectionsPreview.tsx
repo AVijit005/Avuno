@@ -1,10 +1,38 @@
 import { motion, useReducedMotion } from "motion/react";
 
 const DEMO_COLLECTIONS = [
-  { id: "1", name: "Cyberpunk Vibe", count: 12, cover: "", accent: "var(--primary)", description: "Neon-drenched stories." },
-  { id: "2", name: "Ghibli Magic", count: 8, cover: "", accent: "var(--primary)", description: "Whimsical adventures." },
-  { id: "3", name: "Space Operas", count: 24, cover: "", accent: "var(--primary)", description: "Across the universe." },
-  { id: "4", name: "Comfort Games", count: 5, cover: "", accent: "var(--primary)", description: "Cozy weekends." }
+  {
+    id: "1",
+    name: "Cyberpunk Vibe",
+    count: 12,
+    cover: "",
+    accent: "var(--primary)",
+    description: "Neon-drenched stories.",
+  },
+  {
+    id: "2",
+    name: "Ghibli Magic",
+    count: 8,
+    cover: "",
+    accent: "var(--primary)",
+    description: "Whimsical adventures.",
+  },
+  {
+    id: "3",
+    name: "Space Operas",
+    count: 24,
+    cover: "",
+    accent: "var(--primary)",
+    description: "Across the universe.",
+  },
+  {
+    id: "4",
+    name: "Comfort Games",
+    count: 5,
+    cover: "",
+    accent: "var(--primary)",
+    description: "Cozy weekends.",
+  },
 ];
 
 export function CollectionsPreview() {
@@ -27,7 +55,9 @@ export function CollectionsPreview() {
               alt=""
               className="h-full w-full object-cover"
               animate={reduced ? undefined : { scale: [1, 1.04, 1] }}
-              transition={reduced ? undefined : { duration: 18, repeat: Infinity, ease: "easeInOut" }}
+              transition={
+                reduced ? undefined : { duration: 18, repeat: Infinity, ease: "easeInOut" }
+              }
             />
           ) : (
             <div className="h-full w-full bg-gradient-to-br from-primary/30 to-background/80" />
@@ -35,7 +65,7 @@ export function CollectionsPreview() {
           <div
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(180deg, transparent 40%, ${c.accent.startsWith('var(') ? `color-mix(in oklch, ${c.accent}, transparent 50%)` : `${c.accent}80`}, oklch(0 0 0 / 0.85))`,
+              background: `linear-gradient(180deg, transparent 40%, ${c.accent.startsWith("var(") ? `color-mix(in oklch, ${c.accent}, transparent 50%)` : `${c.accent}80`}, oklch(0 0 0 / 0.85))`,
             }}
           />
           <div

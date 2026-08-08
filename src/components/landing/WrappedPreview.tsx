@@ -32,8 +32,8 @@ export function WrappedPreview() {
           <span className="text-gradient-aurora">Wrapped, but for everything.</span>
         </h2>
         <p className="mt-5 max-w-xl text-muted-foreground md:text-lg">
-          At the end of every year Avuno replays your most-loved stories as a cinematic short —
-          your genres, your binges, the books that stayed.
+          At the end of every year Avuno replays your most-loved stories as a cinematic short — your
+          genres, your binges, the books that stayed.
         </p>
 
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">

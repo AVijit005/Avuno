@@ -16,18 +16,19 @@ import { useOverview, useInsights } from "@/hooks/use-analytics";
 import { adaptOverview, adaptInsights } from "@/lib/adapters/analytics";
 import type { UIOverview, UIInsights, UIWrappedSlide } from "@/lib/adapters/types";
 
-export const Route = createFileRoute("/app/wrapped")({ 
+export const Route = createFileRoute("/app/wrapped")({
   component: WrappedPage,
   pendingComponent: PageSkeleton,
 });
 
 declare global {
-  // eslint-disable-next-line no-var
-  var html2canvas: ((target: HTMLElement, opts?: Record<string, unknown>) => Promise<HTMLCanvasElement>) | undefined;
+  var html2canvas:
+    | ((target: HTMLElement, opts?: Record<string, unknown>) => Promise<HTMLCanvasElement>)
+    | undefined;
 }
 
 function downloadAsImage() {
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
   if (window.html2canvas) {
     captureAndDownload();
     return;
@@ -37,30 +38,35 @@ function downloadAsImage() {
     captureAndDownload();
     return;
   }
-  const script = document.createElement('script');
-  script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js';
-  script.integrity = 'sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSK/6d101tGsAHZI/A94g==';
-  script.crossOrigin = 'anonymous';
+  const script = document.createElement("script");
+  script.src = "https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js";
+  script.integrity =
+    "sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSK/6d101tGsAHZI/A94g==";
+  script.crossOrigin = "anonymous";
   script.onload = () => captureAndDownload();
   script.onerror = () => toast.error("Failed to load image generator. Check your connection.");
   document.head.appendChild(script);
 }
 
 function captureAndDownload() {
-  const el = document.getElementById('avuno-wrapped-root');
+  const el = document.getElementById("avuno-wrapped-root");
   if (!el || !window.html2canvas) {
     toast.error("Failed to generate image.");
     return;
   }
-  const bg = getComputedStyle(document.documentElement).getPropertyValue('--background').trim() || '#090a0f';
-  window.html2canvas(el, { backgroundColor: bg }).then((canvas: HTMLCanvasElement) => {
-    const link = document.createElement('a');
-    link.download = 'avuno-wrapped.png';
-    link.href = canvas.toDataURL();
-    link.click();
-  }).catch((err: unknown) => {
-    toast.error("Failed to generate image.");
-  });
+  const bg =
+    getComputedStyle(document.documentElement).getPropertyValue("--background").trim() || "#090a0f";
+  window
+    .html2canvas(el, { backgroundColor: bg })
+    .then((canvas: HTMLCanvasElement) => {
+      const link = document.createElement("a");
+      link.download = "avuno-wrapped.png";
+      link.href = canvas.toDataURL();
+      link.click();
+    })
+    .catch((err: unknown) => {
+      toast.error("Failed to generate image.");
+    });
 }
 
 function WrappedPage() {
@@ -80,7 +86,15 @@ function WrappedPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[50vh] space-y-4 text-center">
         <p className="text-destructive">Failed to load wrapped.</p>
-        <PremiumButton onClick={() => { oRef(); iRef(); }} variant="secondary">Retry</PremiumButton>
+        <PremiumButton
+          onClick={() => {
+            oRef();
+            iRef();
+          }}
+          variant="secondary"
+        >
+          Retry
+        </PremiumButton>
       </div>
     );
   }
@@ -140,7 +154,13 @@ function WrappedPage() {
       {/* Snap-scroll container */}
       <div className="snap-y snap-mandatory overflow-y-auto">
         {slides.map((s, idx) => (
-          <Slide key={s.key} index={idx} slide={s} last={idx === slides.length - 1} totalSlides={slides.length} />
+          <Slide
+            key={s.key}
+            index={idx}
+            slide={s}
+            last={idx === slides.length - 1}
+            totalSlides={slides.length}
+          />
         ))}
         <ShareSection overview={o} insights={i} />
       </div>
@@ -156,7 +176,17 @@ function WrappedPage() {
   );
 }
 
-function Slide({ slide, index, last, totalSlides }: { slide: UIWrappedSlide; index: number; last: boolean; totalSlides: number }) {
+function Slide({
+  slide,
+  index,
+  last,
+  totalSlides,
+}: {
+  slide: UIWrappedSlide;
+  index: number;
+  last: boolean;
+  totalSlides: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const y = useTransform(scrollYProgress, [0, 1], [80, -80]);
@@ -236,10 +266,22 @@ function Slide({ slide, index, last, totalSlides }: { slide: UIWrappedSlide; ind
                 transition={{ duration: 0.7, delay: 0.6 }}
                 className="mt-10 flex justify-center gap-3"
               >
-                <PremiumButton variant="primary" icon={<Share2 className="h-4 w-4" />} onClick={() => navigator.share?.({ title: "Avuno Wrapped", url: window.location.href }).catch(() => {})}>
+                <PremiumButton
+                  variant="primary"
+                  icon={<Share2 className="h-4 w-4" />}
+                  onClick={() =>
+                    navigator
+                      .share?.({ title: "Avuno Wrapped", url: window.location.href })
+                      .catch(() => {})
+                  }
+                >
                   Share your year
                 </PremiumButton>
-                <PremiumButton variant="secondary" icon={<Download className="h-4 w-4" />} onClick={downloadAsImage}>
+                <PremiumButton
+                  variant="secondary"
+                  icon={<Download className="h-4 w-4" />}
+                  onClick={downloadAsImage}
+                >
                   Download
                 </PremiumButton>
               </motion.div>
@@ -340,7 +382,13 @@ function Slide({ slide, index, last, totalSlides }: { slide: UIWrappedSlide; ind
   );
 }
 
-function ShareSection({ overview: o, insights: i }: { overview: UIOverview; insights: UIInsights }) {
+function ShareSection({
+  overview: o,
+  insights: i,
+}: {
+  overview: UIOverview;
+  insights: UIInsights;
+}) {
   return (
     <section className="relative grid min-h-[100svh] snap-start place-items-center px-6 py-16">
       <PremiumGlass
@@ -370,7 +418,16 @@ function ShareSection({ overview: o, insights: i }: { overview: UIOverview; insi
             ))}
           </div>
           <div className="mt-6 flex justify-center gap-2">
-            <PremiumButton variant="primary" size="sm" icon={<Share2 className="h-3.5 w-3.5" />} onClick={() => navigator.share?.({ title: "Avuno Wrapped", url: window.location.href }).catch(() => {})}>
+            <PremiumButton
+              variant="primary"
+              size="sm"
+              icon={<Share2 className="h-3.5 w-3.5" />}
+              onClick={() =>
+                navigator
+                  .share?.({ title: "Avuno Wrapped", url: window.location.href })
+                  .catch(() => {})
+              }
+            >
               Share
             </PremiumButton>
             <PremiumButton

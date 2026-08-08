@@ -3,7 +3,11 @@
  */
 
 import type { UIJournalEntry, UIMemory, UITimelineEvent } from "./types";
-import type { JournalEntryResponse, MemoryResponse, TimelineEventResponse } from "@/lib/api/journal";
+import type {
+  JournalEntryResponse,
+  MemoryResponse,
+  TimelineEventResponse,
+} from "@/lib/api/journal";
 
 const MOOD_MAP: Record<string, string> = {
   VERY_HAPPY: "Happy",

@@ -46,7 +46,10 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
               {[
                 { l: "Entries", v: stats?.journalCount ?? 0 },
                 { l: "Current streak", v: stats?.writingStreak ?? 0, s: "d" },
-                { l: "Words written", v: entries.reduce((acc, cur) => acc + countWords(cur.content), 0) },
+                {
+                  l: "Words written",
+                  v: entries.reduce((acc, cur) => acc + countWords(cur.content), 0),
+                },
                 { l: "Favorite mood", v: favoriteMood ?? "—" },
               ].map((s) => (
                 <PremiumGlass
@@ -61,7 +64,11 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
                     {s.l}
                   </div>
                   <div className="mt-2 font-display text-3xl tracking-tight">
-                    {typeof s.v === "number" ? <CountUp to={s.v} suffix={(s as { s?: string }).s ?? ""} /> : s.v}
+                    {typeof s.v === "number" ? (
+                      <CountUp to={s.v} suffix={(s as { s?: string }).s ?? ""} />
+                    ) : (
+                      s.v
+                    )}
                   </div>
                 </PremiumGlass>
               ))}

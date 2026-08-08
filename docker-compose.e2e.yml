@@ -9,11 +9,11 @@ services:
       POSTGRES_PASSWORD: chronicle
       POSTGRES_DB: chronicle
     healthcheck:
-      test: ['CMD-SHELL', 'pg_isready -U chronicle -d chronicle']
+      test: ["CMD-SHELL", "pg_isready -U chronicle -d chronicle"]
       interval: 5s
       timeout: 5s
       retries: 5
-  
+
   redis:
     image: redis:7-alpine
     container_name: chronicle-redis-e2e
@@ -21,7 +21,7 @@ services:
       - "6379:6379"
     command: redis-server --appendonly yes
     healthcheck:
-      test: ['CMD', 'redis-cli', 'ping']
+      test: ["CMD", "redis-cli", "ping"]
       interval: 5s
       timeout: 5s
       retries: 5
@@ -81,5 +81,3 @@ services:
       - app
     environment:
       - CI=1
-
-

@@ -11,14 +11,13 @@ interface Props {
 }
 
 export function SeasonalRecommendations({ items = [], season = "Winter" }: Props) {
-
   return (
     <PremiumGlass className="relative overflow-hidden p-6 sm:p-8">
       {/* Decorative background element for "Season" */}
       <div className="pointer-events-none absolute -right-20 -top-20 opacity-10">
         <CloudSnow size={240} />
       </div>
-      
+
       <div className="relative z-10 flex flex-col md:flex-row gap-8">
         <div className="md:w-1/3 flex flex-col justify-center">
           <div className="flex items-center gap-2 text-sm font-medium uppercase tracking-widest text-blue-400 mb-2">
@@ -35,7 +34,7 @@ export function SeasonalRecommendations({ items = [], season = "Winter" }: Props
             See all 12 recommendations
           </button>
         </div>
-        
+
         <div className="md:w-2/3 grid grid-cols-3 gap-4">
           {items.map((item: UIMediaItem, i: number) => (
             <motion.div

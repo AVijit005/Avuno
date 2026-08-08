@@ -52,7 +52,7 @@ function PausedPage() {
                 >
                   <Play className="h-3 w-3 fill-current" /> Resume
                 </Link>
-                <button 
+                <button
                   className="press-scale glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1 text-[11px] text-muted-foreground hover:text-foreground"
                   onClick={() => useLibraryStore.getState().setStatus(m.id, "archived")}
                 >

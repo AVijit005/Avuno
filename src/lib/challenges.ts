@@ -3,14 +3,7 @@
 import type { UIMediaKind } from "@/lib/adapters/types";
 
 export type ChallengeKind =
-  | "Monthly"
-  | "Season"
-  | "Weekend"
-  | "Creator"
-  | "Genre"
-  | "Memory"
-  | "Journal"
-  | "Comfort";
+  "Monthly" | "Season" | "Weekend" | "Creator" | "Genre" | "Memory" | "Journal" | "Comfort";
 
 export interface ChallengeSuggestion {
   id: string;
@@ -48,7 +41,18 @@ interface ApiChallenge {
 export function adaptChallenge(apiChallenge: ApiChallenge): Challenge {
   return {
     id: apiChallenge.id,
-    kind: (["Monthly", "Season", "Weekend", "Creator", "Genre", "Memory", "Journal", "Comfort"].includes(apiChallenge.kind) ? apiChallenge.kind : "Monthly") as ChallengeKind,
+    kind: ([
+      "Monthly",
+      "Season",
+      "Weekend",
+      "Creator",
+      "Genre",
+      "Memory",
+      "Journal",
+      "Comfort",
+    ].includes(apiChallenge.kind)
+      ? apiChallenge.kind
+      : "Monthly") as ChallengeKind,
     title: apiChallenge.title,
     description: apiChallenge.description,
     target: apiChallenge.target,

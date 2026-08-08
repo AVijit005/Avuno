@@ -33,7 +33,13 @@ const KIND_GLYPH: Record<UIMediaKind, LucideIcon> = {
   youtube: Youtube,
 };
 
-export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "sm" | "md" | "lg" | "full" }) {
+export function MediaCard({
+  item,
+  size = "full",
+}: {
+  item: UIMediaItem;
+  size?: "sm" | "md" | "lg" | "full";
+}) {
   const w = size === "full" ? "w-full" : size === "sm" ? "w-36" : size === "lg" ? "w-56" : "w-44";
   const rating = item.rating ?? 0;
   const accent = item.accent ?? "var(--primary)";
@@ -59,13 +65,23 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
           className="relative aspect-[2/3] overflow-hidden rounded-2xl"
           style={{ boxShadow: "0 20px 40px -20px oklch(0 0 0 / 0.7)" }}
         >
-          <Link to="/app/media/$id" params={{ id: item.mediaId || item.id }} className="absolute inset-0 z-10" aria-label={`View ${item.title}`} />
+          <Link
+            to="/app/media/$id"
+            params={{ id: item.mediaId || item.id }}
+            className="absolute inset-0 z-10"
+            aria-label={`View ${item.title}`}
+          />
           {errored ? (
             <div className="absolute inset-0 grid h-full w-full place-items-center bg-gradient-to-br from-white/[0.06] to-white/[0.02]">
               <Glyph className="h-8 w-8 text-muted-foreground/40" />
             </div>
           ) : (
-            <motion.div initial="hidden" animate={loaded ? "visible" : "hidden"} variants={imageReveal} className="absolute inset-0 h-full w-full">
+            <motion.div
+              initial="hidden"
+              animate={loaded ? "visible" : "hidden"}
+              variants={imageReveal}
+              className="absolute inset-0 h-full w-full"
+            >
               <motion.img
                 layoutId={`poster-${item.mediaId || item.id}`}
                 src={item.poster}
@@ -90,7 +106,8 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
           {/* Rating chip */}
           {rating > 0 && (
             <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/80 px-2 py-0.5 text-[10px] text-white/90">
-              <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" /> {rating.toFixed(1)}
+              <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" />{" "}
+              {rating.toFixed(1)}
             </div>
           )}
 
@@ -115,9 +132,7 @@ export function MediaCard({ item, size = "full" }: { item: UIMediaItem; size?: "
             </div>
           )}
         </motion.div>
-        <div
-          className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center opacity-0 translate-y-2 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100"
-        >
+        <div className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center opacity-0 translate-y-2 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100">
           <div className="pointer-events-auto w-full max-w-[220px]">
             <ItemActionBar id={item.id} title={item.title} variant="overlay" />
           </div>

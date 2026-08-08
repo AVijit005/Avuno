@@ -3,7 +3,12 @@
  */
 
 import type { UIDashboard, UIContinueItem, UIRecentActivity, UIPinnedCollection } from "./types";
-import type { DashboardResponse, ContinueItem, RecentActivityItem, PinnedCollection } from "@/lib/api/analytics";
+import type {
+  DashboardResponse,
+  ContinueItem,
+  RecentActivityItem,
+  PinnedCollection,
+} from "@/lib/api/analytics";
 
 function adaptContinueItem(item: ContinueItem): UIContinueItem {
   return {

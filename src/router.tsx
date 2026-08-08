@@ -17,7 +17,11 @@ export const getRouter = () => {
       <div className="p-8">
         <PremiumErrorState
           title="Unexpected Error"
-          description={error instanceof Error ? error.message : "An unexpected error occurred while loading this page."}
+          description={
+            error instanceof Error
+              ? error.message
+              : "An unexpected error occurred while loading this page."
+          }
         />
       </div>
     ),

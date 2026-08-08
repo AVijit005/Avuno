@@ -67,5 +67,3 @@ export function FeaturedCollections() {
     </div>
   );
 }
-
-

@@ -5,9 +5,9 @@ import {
   API_RETRY_DELAY_MS,
   REFRESH_ENDPOINT,
   LOGOUT_ENDPOINT,
-} from './constants';
-import { ApiError, NetworkError, TimeoutError } from './errors';
-import { analytics } from '../analytics';
+} from "./constants";
+import { ApiError, NetworkError, TimeoutError } from "./errors";
+import { analytics } from "../analytics";
 
 interface ApiResponse<T> {
   data: T;
@@ -29,12 +29,12 @@ interface ApiErrorResponse {
  * (see __root.tsx) redirect to /auth. Without this, a mid-session expiry
  * leaves the SPA looking authenticated while every request 401s.
  */
-export const AUTH_EXPIRED_EVENT = 'auth:expired';
+export const AUTH_EXPIRED_EVENT = "auth:expired";
 
 let sessionExpiredNotified = false;
 
 function notifySessionExpired(): void {
-  if (typeof window === 'undefined' || sessionExpiredNotified) return;
+  if (typeof window === "undefined" || sessionExpiredNotified) return;
   sessionExpiredNotified = true;
   window.dispatchEvent(new CustomEvent(AUTH_EXPIRED_EVENT));
 }
@@ -46,19 +46,19 @@ export function setAccessToken(token: string | null): void {
   // Guarded: on the server these module globals are shared by every
   // concurrent request, so writing a per-user token here would leak it
   // across requests.
-  if (typeof window === 'undefined') return;
+  if (typeof window === "undefined") return;
 
   modAccessToken = token;
   if (token) {
     sessionExpiredNotified = false;
     try {
-      sessionStorage.setItem('accessToken', token);
+      sessionStorage.setItem("accessToken", token);
     } catch {
       // Private mode / storage disabled — the in-memory copy still works.
     }
   } else {
     try {
-      sessionStorage.removeItem('accessToken');
+      sessionStorage.removeItem("accessToken");
     } catch {
       // Nothing to do; the in-memory copy is already cleared.
     }
@@ -66,10 +66,10 @@ export function setAccessToken(token: string | null): void {
 }
 
 export function getAccessToken(): string | null {
-  if (typeof window === 'undefined') return null;
+  if (typeof window === "undefined") return null;
   if (modAccessToken) return modAccessToken;
   try {
-    const stored = sessionStorage.getItem('accessToken');
+    const stored = sessionStorage.getItem("accessToken");
     if (stored) {
       modAccessToken = stored;
       return stored;
@@ -89,15 +89,15 @@ async function refreshAccessToken(): Promise<string> {
 
   try {
     const response = await fetch(`${API_BASE_URL}${REFRESH_ENDPOINT}`, {
-      method: 'POST',
-      credentials: 'include',
-      headers: { 'Content-Type': 'application/json' },
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({}),
       signal: controller.signal,
     });
 
     if (!response.ok) {
-      throw new ApiError('Session expired. Please log in again.', 401, 'TOKEN_EXPIRED');
+      throw new ApiError("Session expired. Please log in again.", 401, "TOKEN_EXPIRED");
     }
 
     const body = (await response.json()) as ApiResponse<{
@@ -117,8 +117,8 @@ async function refreshAccessToken(): Promise<string> {
  * burn more than one refresh-token rotation at a time.
  */
 function forceRefreshValidToken(): Promise<string> {
-  if (typeof window === 'undefined') {
-    return Promise.reject(new ApiError('No session on server', 401, 'NO_SESSION'));
+  if (typeof window === "undefined") {
+    return Promise.reject(new ApiError("No session on server", 401, "NO_SESSION"));
   }
   if (!modRefreshPromise) {
     modRefreshPromise = refreshAccessToken().finally(() => {
@@ -130,11 +130,11 @@ function forceRefreshValidToken(): Promise<string> {
 
 /** base64url -> JSON. JWT segments are base64url, which plain atob rejects. */
 function decodeJwtPayload(token: string): Record<string, unknown> | null {
-  const segment = token.split('.')[1];
+  const segment = token.split(".")[1];
   if (!segment) return null;
   try {
-    const base64 = segment.replace(/-/g, '+').replace(/_/g, '/');
-    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=');
+    const base64 = segment.replace(/-/g, "+").replace(/_/g, "/");
+    const padded = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), "=");
     const binary = atob(padded);
     const bytes = Uint8Array.from(binary, (c) => c.charCodeAt(0));
     return JSON.parse(new TextDecoder().decode(bytes)) as Record<string, unknown>;
@@ -149,14 +149,14 @@ function isTokenExpired(token: string): boolean {
   // "expired" here would trigger a refresh on every single request.
   if (!payload) return false;
   const exp = payload.exp;
-  if (typeof exp !== 'number') return false;
+  if (typeof exp !== "number") return false;
   return exp * 1000 <= Date.now() + 30_000;
 }
 
 async function getValidToken(): Promise<string | null> {
   const stored = getAccessToken();
   if (stored && !isTokenExpired(stored)) return stored;
-  if (!stored && typeof window !== 'undefined') {
+  if (!stored && typeof window !== "undefined") {
     // No token at all: let the request go out unauthenticated rather than
     // firing a refresh for anonymous traffic.
     return null;
@@ -191,7 +191,7 @@ async function delay(ms: number): Promise<void> {
 const NO_REFRESH_ON_401_PATHS = new Set<string>([REFRESH_ENDPOINT, LOGOUT_ENDPOINT]);
 
 function shouldSkipRefreshOn401(path: string): boolean {
-  const withoutQuery = path.split('?')[0].replace(/\/+$/, '');
+  const withoutQuery = path.split("?")[0].replace(/\/+$/, "");
   return NO_REFRESH_ON_401_PATHS.has(withoutQuery);
 }
 
@@ -204,9 +204,9 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
     ...fetchOptions
   } = options;
 
-  const url = path.startsWith('http') ? path : `${API_BASE_URL}${path}`;
-  const method = (fetchOptions.method || 'GET').toUpperCase();
-  const isIdempotent = method === 'GET' || method === 'HEAD' || method === 'OPTIONS';
+  const url = path.startsWith("http") ? path : `${API_BASE_URL}${path}`;
+  const method = (fetchOptions.method || "GET").toUpperCase();
+  const isIdempotent = method === "GET" || method === "HEAD" || method === "OPTIONS";
 
   // Transport retries replay the request, so they are only safe when the
   // request has no side effects. An auth retry is different: a 401 means the
@@ -235,31 +235,31 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
     try {
       const headers = new Headers(fetchOptions.headers);
       if (import.meta.env.DEV) {
-        headers.set('ngrok-skip-browser-warning', 'true');
+        headers.set("ngrok-skip-browser-warning", "true");
       }
 
-      headers.set('X-Requested-With', 'XMLHttpRequest');
+      headers.set("X-Requested-With", "XMLHttpRequest");
 
       if (!skipAuth) {
         const token = await getValidToken();
         if (token) {
-          headers.set('Authorization', `Bearer ${token}`);
+          headers.set("Authorization", `Bearer ${token}`);
         }
       }
 
       if (
         fetchOptions.body &&
-        !headers.has('Content-Type') &&
+        !headers.has("Content-Type") &&
         !(fetchOptions.body instanceof FormData)
       ) {
-        headers.set('Content-Type', 'application/json');
+        headers.set("Content-Type", "application/json");
       }
 
       const response = await fetch(url, {
         ...fetchOptions,
         headers,
         signal,
-        credentials: 'include',
+        credentials: "include",
       });
 
       if (response.status === 204) {
@@ -270,7 +270,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
         if (authRetriesUsed >= maxAuthRetries) {
           setAccessToken(null);
           notifySessionExpired();
-          throw new ApiError('Session expired', 401, 'SESSION_EXPIRED');
+          throw new ApiError("Session expired", 401, "SESSION_EXPIRED");
         }
         authRetriesUsed++;
         try {
@@ -289,9 +289,9 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
       // Body is read before the timeout is cleared (see finally): a server
       // that sends headers then stalls the body must still hit the timeout.
       let responseBody: unknown;
-      const contentType = response.headers.get('content-type');
+      const contentType = response.headers.get("content-type");
 
-      if (contentType && contentType.includes('application/json')) {
+      if (contentType && contentType.includes("application/json")) {
         responseBody = await response.json();
       } else {
         const text = await response.text();
@@ -306,14 +306,14 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
 
       if (!response.ok) {
         const errorBody = responseBody as ApiErrorResponse;
-        analytics.track('API Error', {
+        analytics.track("API Error", {
           status: response.status,
           path: errorBody.path || path,
         });
         throw new ApiError(
           Array.isArray(errorBody.message)
-            ? errorBody.message.join(', ')
-            : (errorBody.message ?? 'Request failed'),
+            ? errorBody.message.join(", ")
+            : (errorBody.message ?? "Request failed"),
           response.status,
           errorBody.code,
           errorBody.requestId,
@@ -332,7 +332,7 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
         throw error;
       }
 
-      if (error instanceof DOMException && error.name === 'AbortError') {
+      if (error instanceof DOMException && error.name === "AbortError") {
         if (externalSignal?.aborted) {
           throw error;
         }
@@ -355,13 +355,13 @@ export async function apiFetch<T>(path: string, options: FetchOptions = {}): Pro
 }
 
 export function apiGet<T>(path: string, options?: FetchOptions): Promise<T> {
-  return apiFetch<T>(path, { ...options, method: 'GET' });
+  return apiFetch<T>(path, { ...options, method: "GET" });
 }
 
 export function apiPost<T>(path: string, body?: unknown, options?: FetchOptions): Promise<T> {
   return apiFetch<T>(path, {
     ...options,
-    method: 'POST',
+    method: "POST",
     // `body !== undefined`, not `body ?`: 0, "" and false are valid payloads.
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
@@ -370,28 +370,24 @@ export function apiPost<T>(path: string, body?: unknown, options?: FetchOptions)
 export function apiPatch<T>(path: string, body?: unknown, options?: FetchOptions): Promise<T> {
   return apiFetch<T>(path, {
     ...options,
-    method: 'PATCH',
+    method: "PATCH",
     body: body !== undefined ? JSON.stringify(body) : undefined,
   });
 }
 
 export function apiDelete<T = void>(path: string, options?: FetchOptions): Promise<T> {
-  return apiFetch<T>(path, { ...options, method: 'DELETE' });
+  return apiFetch<T>(path, { ...options, method: "DELETE" });
 }
 
-export function apiUpload<T>(
-  path: string,
-  formData: FormData,
-  options?: FetchOptions,
-): Promise<T> {
+export function apiUpload<T>(path: string, formData: FormData, options?: FetchOptions): Promise<T> {
   // Preserve caller headers but strip Content-Type so the browser can set the
   // multipart boundary itself.
   const headers = new Headers(options?.headers);
-  headers.delete('Content-Type');
+  headers.delete("Content-Type");
 
   return apiFetch<T>(path, {
     ...options,
-    method: 'POST',
+    method: "POST",
     body: formData as unknown as BodyInit,
     headers,
   });
@@ -422,8 +418,8 @@ function anySignal(signals: AbortSignal[]): { signal: AbortSignal; release: () =
       controller.abort(signal.reason);
       release();
     };
-    signal.addEventListener('abort', onAbort, { once: true });
-    cleanups.push(() => signal.removeEventListener('abort', onAbort));
+    signal.addEventListener("abort", onAbort, { once: true });
+    cleanups.push(() => signal.removeEventListener("abort", onAbort));
   }
 
   return { signal: controller.signal, release };

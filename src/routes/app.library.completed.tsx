@@ -22,8 +22,15 @@ function CompletedPage() {
     .slice()
     .sort((a, b) => {
       if (sort === "Highest Rated") return (b.rating ?? 0) - (a.rating ?? 0);
-      if (sort === "Most Rewatched") return ((b as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0) - ((a as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0);
-      return new Date(metaOf(b.id).completedAt ?? 0).getTime() - new Date(metaOf(a.id).completedAt ?? 0).getTime();
+      if (sort === "Most Rewatched")
+        return (
+          ((b as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0) -
+          ((a as { stats?: { rewatches?: number } }).stats?.rewatches ?? 0)
+        );
+      return (
+        new Date(metaOf(b.id).completedAt ?? 0).getTime() -
+        new Date(metaOf(a.id).completedAt ?? 0).getTime()
+      );
     });
   return (
     <StatusPageShell

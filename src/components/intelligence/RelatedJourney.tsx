@@ -26,5 +26,3 @@ export function RelatedJourney({ mediaId, className }: { mediaId: string; classN
     </section>
   );
 }
-
-

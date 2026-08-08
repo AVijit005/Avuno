@@ -33,9 +33,9 @@ export function LiveStatsStrip({
       </div>
       <div className="mt-4 grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         {cells.map((c) => (
-          <PremiumGlass 
-            key={c.l} 
-            interactive 
+          <PremiumGlass
+            key={c.l}
+            interactive
             reflection={false}
             variant="default"
             glow={c.a}

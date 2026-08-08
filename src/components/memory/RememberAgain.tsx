@@ -8,7 +8,8 @@ export function RememberAgain() {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Stories worth revisiting</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Based on your history, these are the stories that deserve another look — because the second time hits different.
+        Based on your history, these are the stories that deserve another look — because the second
+        time hits different.
       </p>
     </PremiumGlass>
   );

@@ -23,8 +23,13 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { data: notifications } = useNotifications();
   const { data: user } = useCurrentUser();
   const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
-    : user?.email?.slice(0, 2).toUpperCase() ?? "U";
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : (user?.email?.slice(0, 2).toUpperCase() ?? "U");
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const isHome = pathname === "/app" || pathname === "/app/";
   const meta =
@@ -134,4 +139,3 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
     </motion.header>
   );
 }
-

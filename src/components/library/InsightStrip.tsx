@@ -4,11 +4,12 @@ import { PremiumGlass } from "@/components/ui/PremiumGlass";
 
 export function InsightStrip() {
   const { data: insights } = useInsights();
-  
+
   const items = [];
   if (insights?.mostActiveWeekday) items.push(`Most active on ${insights.mostActiveWeekday}s`);
   if (insights?.favoriteGenre) items.push(`Favorite genre is ${insights.favoriteGenre}`);
-  if (insights?.mostProductiveMonth) items.push(`Most productive in ${insights.mostProductiveMonth}`);
+  if (insights?.mostProductiveMonth)
+    items.push(`Most productive in ${insights.mostProductiveMonth}`);
   if (insights?.totalUniqueMedia) items.push(`Tracked ${insights.totalUniqueMedia} items total`);
 
   if (!items.length) return null;

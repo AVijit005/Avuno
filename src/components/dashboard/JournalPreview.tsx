@@ -40,7 +40,11 @@ export function JournalPreview() {
           <div className="relative">
             <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               <span>{new Date(j.createdAt).toLocaleDateString()}</span>
-              {j.mood && <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px]">{j.mood}</span>}
+              {j.mood && (
+                <span className="rounded-full bg-white/[0.06] px-2 py-0.5 text-[9px]">
+                  {j.mood}
+                </span>
+              )}
             </div>
             <div className="mt-3 font-display text-2xl leading-tight">{j.title ?? "Untitled"}</div>
             <div className="text-[11px] text-muted-foreground">{j.location ?? ""}</div>

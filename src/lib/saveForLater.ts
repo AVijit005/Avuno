@@ -2,13 +2,7 @@
 const KEY = "chronicle:save-for-later:v1";
 
 export type SaveKind =
-  | "media"
-  | "collection"
-  | "journal-prompt"
-  | "course"
-  | "book"
-  | "game"
-  | "video";
+  "media" | "collection" | "journal-prompt" | "course" | "book" | "game" | "video";
 export type SavePriority = "low" | "med" | "high";
 
 export interface SavedItem {
@@ -38,7 +32,7 @@ function writem(list: SavedItem[]) {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(list));
   } catch (e) {
-    console.error('Failed to save items', e);
+    console.error("Failed to save items", e);
   }
 }
 
@@ -49,7 +43,7 @@ export function listSaved(): SavedItem[] {
 export function saveForLater(item: Omit<SavedItem, "id" | "createdAt">) {
   const next: SavedItem = {
     ...item,
-    id: `sv_${crypto.randomUUID().slice(0,8)}`,
+    id: `sv_${crypto.randomUUID().slice(0, 8)}`,
     createdAt: new Date().toISOString(),
   };
   writem([next, ...read()]);

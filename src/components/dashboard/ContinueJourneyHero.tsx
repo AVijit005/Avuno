@@ -37,7 +37,9 @@ export function ContinueJourneyHero({ className }: { className?: string }) {
               Continue your journey
             </div>
             <h2 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">{j.title}</h2>
-            <p className="mt-2 max-w-prose text-sm text-muted-foreground">Continue where you left off.</p>
+            <p className="mt-2 max-w-prose text-sm text-muted-foreground">
+              Continue where you left off.
+            </p>
 
             <div className="mt-4 grid grid-cols-2 gap-3 text-xs text-muted-foreground md:grid-cols-3">
               <Meta k="Progress" v={`${j.progressPercentage ?? 0}%`} />
@@ -59,15 +61,21 @@ export function ContinueJourneyHero({ className }: { className?: string }) {
                   Continue
                 </Link>
               </PremiumButton>
-              <PremiumButton variant="ghost" size="sm" icon={<NotebookPen className="h-3.5 w-3.5" />} asChild>
-                <Link to="/app/journal">
-                  Journal
-                </Link>
+              <PremiumButton
+                variant="ghost"
+                size="sm"
+                icon={<NotebookPen className="h-3.5 w-3.5" />}
+                asChild
+              >
+                <Link to="/app/journal">Journal</Link>
               </PremiumButton>
-              <PremiumButton variant="ghost" size="sm" icon={<Clock className="h-3.5 w-3.5" />} asChild>
-                <Link to="/app/timeline">
-                  Timeline
-                </Link>
+              <PremiumButton
+                variant="ghost"
+                size="sm"
+                icon={<Clock className="h-3.5 w-3.5" />}
+                asChild
+              >
+                <Link to="/app/timeline">Timeline</Link>
               </PremiumButton>
               <Link
                 to="/app/media/$id"
@@ -92,6 +100,3 @@ function Meta({ k, v }: { k: string; v: string }) {
     </div>
   );
 }
-
-
-

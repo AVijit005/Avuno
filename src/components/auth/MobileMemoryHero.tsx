@@ -9,13 +9,21 @@ import { MemoryQuote } from "./MemoryQuote";
  */
 export function MobileMemoryHero() {
   const reduced = useReducedMotion();
-  const hero = { id: "interstellar", title: "Interstellar", rating: 4.8, poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)" };
-  const second = { id: "one-piece", title: "One Piece", rating: 4.9, poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)" };
+  const hero = {
+    id: "interstellar",
+    title: "Interstellar",
+    rating: 4.8,
+    poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
+  };
+  const second = {
+    id: "one-piece",
+    title: "One Piece",
+    rating: 4.9,
+    poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
+  };
 
   return (
-    <div
-      className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[48vh] overflow-hidden lg:hidden"
-    >
+    <div className="pointer-events-none absolute inset-x-0 top-0 z-[1] h-[48vh] overflow-hidden lg:hidden">
       {/* atmospheric wash */}
       <div
         aria-hidden
@@ -49,8 +57,7 @@ export function MobileMemoryHero() {
         <div
           className="absolute inset-0"
           style={{
-            background:
-              "linear-gradient(180deg, transparent 40%, oklch(0.10 0.02 270 / 0.65))",
+            background: "linear-gradient(180deg, transparent 40%, oklch(0.10 0.02 270 / 0.65))",
           }}
         />
         <div className="absolute bottom-1.5 left-2 right-2 flex items-center justify-between text-[9px] text-white/75">
@@ -95,8 +102,7 @@ export function MobileMemoryHero() {
         aria-hidden
         className="absolute inset-x-0 bottom-0 h-32"
         style={{
-          background:
-            "linear-gradient(180deg, transparent, oklch(0.08 0.02 270 / 0.95))",
+          background: "linear-gradient(180deg, transparent, oklch(0.08 0.02 270 / 0.95))",
         }}
       />
       {/* film grain (very subtle on mobile) */}

@@ -27,7 +27,10 @@ export function QuietRecommendations({ className, insights }: Props) {
         viewport={{ once: true, margin: "-60px" }}
         variants={fadeBlurIn}
       >
-        <PremiumGlass variant="subtle" className="flex flex-col items-center gap-3 p-8 text-center text-muted-foreground">
+        <PremiumGlass
+          variant="subtle"
+          className="flex flex-col items-center gap-3 p-8 text-center text-muted-foreground"
+        >
           <span className="grid h-10 w-10 place-items-center rounded-xl bg-white/[0.05] text-primary ring-1 ring-white/10">
             <Compass className="h-4 w-4" />
           </span>
@@ -38,13 +41,22 @@ export function QuietRecommendations({ className, insights }: Props) {
                 {insights.favoriteDecade ? `${insights.favoriteDecade}s` : insights.favoriteGenre}
               </span>
               {insights.favoriteGenre && insights.favoriteDecade && (
-                <> <span className="text-foreground font-medium">{insights.favoriteGenre}</span></>
+                <>
+                  {" "}
+                  <span className="text-foreground font-medium">{insights.favoriteGenre}</span>
+                </>
               )}
               . Your library is mostly{" "}
-              <span className="text-foreground font-medium">{insights.totalUniqueMedia} stories</span> deep.
+              <span className="text-foreground font-medium">
+                {insights.totalUniqueMedia} stories
+              </span>{" "}
+              deep.
             </p>
           ) : (
-            <p>Nothing quiet to surface yet — keep exploring and this space will start noticing patterns.</p>
+            <p>
+              Nothing quiet to surface yet — keep exploring and this space will start noticing
+              patterns.
+            </p>
           )}
         </PremiumGlass>
       </motion.div>

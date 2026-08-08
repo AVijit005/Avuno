@@ -49,11 +49,28 @@ function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">This page didn't load</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Something went wrong on our end. You can try refreshing or head back home.</p>
+        <h1 className="text-xl font-semibold tracking-tight text-foreground">
+          This page didn't load
+        </h1>
+        <p className="mt-2 text-sm text-muted-foreground">
+          Something went wrong on our end. You can try refreshing or head back home.
+        </p>
         <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button onClick={() => { router.invalidate(); reset(); }} className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90">Try again</button>
-          <a href="/" className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent">Go home</a>
+          <button
+            onClick={() => {
+              router.invalidate();
+              reset();
+            }}
+            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Try again
+          </button>
+          <a
+            href="/"
+            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
+          >
+            Go home
+          </a>
         </div>
       </div>
     </div>
@@ -66,7 +83,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
       { title: "Avuno — Every story you finish becomes part of your story" },
-      { name: "description", content: "Avuno is a personal media journal for movies, anime, books, games, music and more. Organize, remember and rediscover everything you experience." },
+      {
+        name: "description",
+        content:
+          "Avuno is a personal media journal for movies, anime, books, games, music and more. Organize, remember and rediscover everything you experience.",
+      },
       { name: "author", content: "Avuno" },
       { name: "theme-color", content: "#0d0d14" },
       { property: "og:site_name", content: "Avuno" },
@@ -77,17 +98,27 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:image", content: "https://avuno.xyz/og-image.png" },
       { property: "og:image:width", content: "1536" },
       { property: "og:image:height", content: "864" },
-      { property: "og:image:alt", content: "Avuno — a cinematic memory journal for everything you watch, read, play and listen to." },
+      {
+        property: "og:image:alt",
+        content:
+          "Avuno — a cinematic memory journal for everything you watch, read, play and listen to.",
+      },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Avuno — Your personal media journal" },
-      { name: "twitter:description", content: "Every story you finish becomes part of your story." },
+      {
+        name: "twitter:description",
+        content: "Every story you finish becomes part of your story.",
+      },
       { name: "twitter:image", content: "https://avuno.xyz/og-image.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap",
+      },
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "icon", href: "/icon.svg", type: "image/svg+xml" },
     ],
@@ -97,14 +128,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         children: JSON.stringify({
           "@context": "https://schema.org",
           "@type": "WebApplication",
-          "name": "Avuno",
-          "description": "A quiet place to remember every story you've lived.",
-          "url": "https://avuno.xyz",
-          "image": "https://avuno.xyz/og-image.png",
-          "applicationCategory": "LifestyleApplication",
-          "operatingSystem": "Web",
-          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-          "publisher": { "@type": "Organization", "name": "Avuno", "url": "https://avuno.xyz" },
+          name: "Avuno",
+          description: "A quiet place to remember every story you've lived.",
+          url: "https://avuno.xyz",
+          image: "https://avuno.xyz/og-image.png",
+          applicationCategory: "LifestyleApplication",
+          operatingSystem: "Web",
+          offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+          publisher: { "@type": "Organization", name: "Avuno", url: "https://avuno.xyz" },
         }),
       },
     ],
@@ -138,7 +169,10 @@ function RootShell({ children }: { children: ReactNode }) {
         />
         <HeadContent />
       </head>
-      <body>{children}<Scripts /></body>
+      <body>
+        {children}
+        <Scripts />
+      </body>
     </html>
   );
 }
@@ -169,7 +203,9 @@ function RootComponent() {
     } else {
       setIsRestoring(false);
     }
-    return () => { mounted = false; };
+    return () => {
+      mounted = false;
+    };
   }, [queryClient]);
 
   // Terminal session expiry: the refresh token is gone or rejected, so no
@@ -191,20 +227,22 @@ function RootComponent() {
   // Apply theme on boot
   useEffect(() => {
     const saved = queryClient.getQueryData<{ themePreference?: string }>(queryKeys.auth.me());
-    const pref = saved?.themePreference || localStorage.getItem('theme') || 'system';
-    
-    const isLight = pref === 'light' || (pref === 'system' && window.matchMedia('(prefers-color-scheme: light)').matches);
-    
+    const pref = saved?.themePreference || localStorage.getItem("theme") || "system";
+
+    const isLight =
+      pref === "light" ||
+      (pref === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+
     if (isLight) {
-      document.documentElement.classList.add('light');
-      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
     } else {
-      document.documentElement.classList.add('dark');
-      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
     }
-    
-    if (pref !== 'system' && localStorage.getItem('theme') !== pref) {
-      localStorage.setItem('theme', pref);
+
+    if (pref !== "system" && localStorage.getItem("theme") !== pref) {
+      localStorage.setItem("theme", pref);
     }
   }, [queryClient]);
 

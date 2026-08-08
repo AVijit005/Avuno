@@ -18,9 +18,18 @@ function AuthCallback() {
 
     // Verify OAuth state to prevent login CSRF / session fixation
     const expectedState = (() => {
-      try { return sessionStorage.getItem("oauth_state"); } catch { return null; }
+      try {
+        return sessionStorage.getItem("oauth_state");
+      } catch {
+        return null;
+      }
     })();
-    try { sessionStorage.removeItem("oauth_state"); } catch {}
+    try {
+      sessionStorage.removeItem("oauth_state");
+    } catch {
+      // Storage unavailable (private mode). The state comparison below still
+      // runs against the value already read into `expectedState`.
+    }
 
     const isStateValid = !!(state && expectedState && state === expectedState);
 
@@ -39,10 +48,7 @@ function AuthCallback() {
         const retryParams = new URLSearchParams(window.location.search);
         const retryToken = retryParams.get("token");
         const retryState = retryParams.get("state");
-        const retryExpected = (() => {
-          try { return sessionStorage.getItem("oauth_state"); } catch { return null; }
-        })();
-        const retryValid = !!(retryState && retryExpected && retryState === retryExpected);
+        const retryValid = !!(retryState && expectedState && retryState === expectedState);
         if (retryToken && retryToken.trim().length > 0 && retryValid) {
           setAccessToken(retryToken.trim());
           window.history.replaceState({}, "", "/auth/callback");
@@ -65,7 +71,9 @@ function AuthCallback() {
           <span className="font-display text-xl font-bold leading-none">A</span>
         </div>
         <h2 className="mt-4 font-display text-xl">Logging you into Avuno…</h2>
-        <p className="mt-2 text-xs text-muted-foreground">Setting up your personal media universe</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Setting up your personal media universe
+        </p>
       </div>
     </div>
   );

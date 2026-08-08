@@ -34,7 +34,7 @@ function read(): Bookmark[] {
     const raw = window.localStorage.getItem(KEY);
     return raw ? (JSON.parse(raw) as Bookmark[]) : [];
   } catch (e) {
-    console.error('Failed to read bookmarks', e);
+    console.error("Failed to read bookmarks", e);
     return [];
   }
 }
@@ -43,7 +43,7 @@ function writem(list: Bookmark[]) {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(list));
   } catch (e) {
-    console.error('Failed to write bookmarks', e);
+    console.error("Failed to write bookmarks", e);
   }
 }
 
@@ -62,7 +62,11 @@ export function toggleBookmark(b: Omit<Bookmark, "id" | "createdAt">): boolean {
     writem(list);
     return false;
   }
-  list.unshift({ ...b, id: `bm_${crypto.randomUUID().slice(0,8)}`, createdAt: new Date().toISOString() });
+  list.unshift({
+    ...b,
+    id: `bm_${crypto.randomUUID().slice(0, 8)}`,
+    createdAt: new Date().toISOString(),
+  });
   writem(list);
   return true;
 }

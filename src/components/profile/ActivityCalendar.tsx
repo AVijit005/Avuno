@@ -3,12 +3,12 @@ import { useActivity } from "@/hooks/use-analytics";
 
 export function ActivityCalendar() {
   const { data: activity } = useActivity();
-  
+
   const cols = 30;
   // If we have heatmap, we just take the last 30 or generate 30.
   // The heatmap is an array of { date, count }.
   const heatmap = activity?.heatmap || [];
-  
+
   // Pad or slice to 30 days
   const recent30 = heatmap.slice(-30);
   while (recent30.length < 30) {
@@ -16,7 +16,7 @@ export function ActivityCalendar() {
   }
 
   const max = Math.max(1, ...recent30.map((a) => a.count));
-  
+
   return (
     <PremiumGlass variant="subtle">
       <div className="p-5">

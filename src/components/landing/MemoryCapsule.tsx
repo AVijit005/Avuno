@@ -2,19 +2,34 @@ import { motion } from "motion/react";
 
 const MEMORIES = [
   {
-    media: { id: "interstellar", title: "Interstellar", backdrop: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)", poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)" },
+    media: {
+      id: "interstellar",
+      title: "Interstellar",
+      backdrop: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
+      poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
+    },
     moment: "Late 2017 · Studio City",
     note: "Watched alone at 2 AM. Felt small in the best way.",
     mood: "Awe",
   },
   {
-    media: { id: "elden-ring", title: "Elden Ring", backdrop: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)", poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)" },
+    media: {
+      id: "elden-ring",
+      title: "Elden Ring",
+      backdrop: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+      poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+    },
     moment: "Winter 2021 · Long flight",
     note: "12 hours, one save file. Lost track of time entirely.",
     mood: "Immersed",
   },
   {
-    media: { id: "dark-side", title: "The Dark Side of the Moon", backdrop: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)", poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)" },
+    media: {
+      id: "dark-side",
+      title: "The Dark Side of the Moon",
+      backdrop: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
+      poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
+    },
     moment: "Spring 2019 · Roadtrip",
     note: "On loop crossing Arizona. Still tastes like that summer.",
     mood: "Wistful",
@@ -31,8 +46,8 @@ export function MemoryCapsule() {
           <span className="italic text-muted-foreground">you'll remember why you watched it.</span>
         </h2>
         <p className="mx-auto mt-5 max-w-xl text-muted-foreground">
-          Avuno holds the feeling, not just the file. Notes, moods, moments — preserved beside
-          every story.
+          Avuno holds the feeling, not just the file. Notes, moods, moments — preserved beside every
+          story.
         </p>
       </div>
 

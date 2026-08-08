@@ -1,6 +1,5 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 
-
 export function FranchiseTimeline({
   events,
 }: {
@@ -30,6 +29,3 @@ export function FranchiseTimeline({
     </PremiumGlass>
   );
 }
-
-
-

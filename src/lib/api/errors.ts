@@ -7,7 +7,7 @@ export class ApiError extends Error {
     public readonly path?: string,
   ) {
     super(message);
-    this.name = 'ApiError';
+    this.name = "ApiError";
   }
 
   get isUnauthorized(): boolean {
@@ -41,17 +41,17 @@ export class NetworkError extends Error {
    * `cause` so diagnostics are not lost when the original error is wrapped.
    */
   constructor(
-    message = 'Network error. Please check your connection.',
+    message = "Network error. Please check your connection.",
     options?: { cause?: unknown },
   ) {
     super(message, options);
-    this.name = 'NetworkError';
+    this.name = "NetworkError";
   }
 }
 
 export class TimeoutError extends Error {
-  constructor(message = 'Request timed out. Please try again.') {
+  constructor(message = "Request timed out. Please try again.") {
     super(message);
-    this.name = 'TimeoutError';
+    this.name = "TimeoutError";
   }
 }

@@ -11,12 +11,51 @@ interface Props {
 
 export function ComfortStories({ items = [] }: Props) {
   // Use mock items if none provided
-  const displayItems = items.length > 0 ? items : [
-    { id: "cs1", mediaId: "cs1", _mediaId: "cs1", title: "Spirited Away", poster: "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)", mediaType: "movie", rewatchCount: 5, accent: "var(--primary)" },
-    { id: "cs2", mediaId: "cs2", _mediaId: "cs2", title: "The Office", poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)", mediaType: "tv", rewatchCount: 8, accent: "var(--primary)" },
-    { id: "cs3", mediaId: "cs3", _mediaId: "cs3", title: "Stardew Valley", poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)", mediaType: "game", rewatchCount: 12, accent: "var(--primary)" },
-    { id: "cs4", mediaId: "cs4", _mediaId: "cs4", title: "Harry Potter", poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)", mediaType: "book", rewatchCount: 3, accent: "var(--primary)" },
-  ] as unknown as UIMediaItem[];
+  const displayItems =
+    items.length > 0
+      ? items
+      : ([
+          {
+            id: "cs1",
+            mediaId: "cs1",
+            _mediaId: "cs1",
+            title: "Spirited Away",
+            poster: "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
+            mediaType: "movie",
+            rewatchCount: 5,
+            accent: "var(--primary)",
+          },
+          {
+            id: "cs2",
+            mediaId: "cs2",
+            _mediaId: "cs2",
+            title: "The Office",
+            poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
+            mediaType: "tv",
+            rewatchCount: 8,
+            accent: "var(--primary)",
+          },
+          {
+            id: "cs3",
+            mediaId: "cs3",
+            _mediaId: "cs3",
+            title: "Stardew Valley",
+            poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
+            mediaType: "game",
+            rewatchCount: 12,
+            accent: "var(--primary)",
+          },
+          {
+            id: "cs4",
+            mediaId: "cs4",
+            _mediaId: "cs4",
+            title: "Harry Potter",
+            poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+            mediaType: "book",
+            rewatchCount: 3,
+            accent: "var(--primary)",
+          },
+        ] as unknown as UIMediaItem[]);
 
   if (displayItems.length === 0) return null;
 
@@ -46,7 +85,10 @@ export function ComfortStories({ items = [] }: Props) {
             >
               <PosterCard item={item} />
               <div className="mt-2 text-center text-xs text-muted-foreground">
-                <span className="font-medium text-foreground">{"rewatchCount" in item ? item.rewatchCount : 0}</span> revisits
+                <span className="font-medium text-foreground">
+                  {"rewatchCount" in item ? item.rewatchCount : 0}
+                </span>{" "}
+                revisits
               </div>
             </motion.div>
           ))}
@@ -55,5 +97,3 @@ export function ComfortStories({ items = [] }: Props) {
     </div>
   );
 }
-
-

@@ -2,14 +2,7 @@
 const KEY = "chronicle:notes:v1";
 
 export type NoteEntityKind =
-  | "media"
-  | "collection"
-  | "achievement"
-  | "goal"
-  | "timeline"
-  | "character"
-  | "creator"
-  | "quote";
+  "media" | "collection" | "achievement" | "goal" | "timeline" | "character" | "creator" | "quote";
 
 export interface Note {
   id: string;
@@ -33,7 +26,7 @@ function writem(list: Note[]) {
   try {
     window.localStorage.setItem(KEY, JSON.stringify(list));
   } catch (e) {
-    console.error('Failed to save notes', e);
+    console.error("Failed to save notes", e);
   }
 }
 
@@ -45,7 +38,7 @@ export function listNotes(kind?: NoteEntityKind, refId?: string): Note[] {
 
 export function addNote(kind: NoteEntityKind, refId: string, text: string) {
   const note: Note = {
-    id: `n_${crypto.randomUUID().slice(0,8)}`,
+    id: `n_${crypto.randomUUID().slice(0, 8)}`,
     kind,
     refId,
     text,

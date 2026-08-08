@@ -1,8 +1,8 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { notificationsApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { UpdateNotificationPreferences } from '@/lib/api/notifications';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { notificationsApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type { UpdateNotificationPreferences } from "@/lib/api/notifications";
 
 export function useNotifications(params?: { cursor?: string; limit?: number }) {
   const { data: user } = useCurrentUser();

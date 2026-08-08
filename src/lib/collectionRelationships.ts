@@ -2,8 +2,6 @@
 import { type Collection } from "@/lib/types";
 const COLLECTIONS: Collection[] = [];
 
-
-
 export interface Relation {
   kind: string;
   label: string;

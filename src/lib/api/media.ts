@@ -1,5 +1,4 @@
-import { apiGet } from './fetch';
-
+import { apiGet } from "./fetch";
 
 export interface MediaResponse {
   id: string;
@@ -47,7 +46,7 @@ export interface MediaSearchParams {
   cursor?: string;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 export interface MediaFilterParams {
@@ -65,12 +64,12 @@ export interface MediaFilterParams {
 function buildQueryString(params: Record<string, unknown>): string {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       searchParams.set(key, String(value));
     }
   }
   const qs = searchParams.toString();
-  return qs ? `?${qs}` : '';
+  return qs ? `?${qs}` : "";
 }
 
 export async function listMedia(params?: MediaFilterParams): Promise<MediaListResponse> {
@@ -81,11 +80,12 @@ export async function searchMedia(params: MediaSearchParams): Promise<MediaListR
   return apiGet<MediaListResponse>(`/media/search${buildQueryString(params)}`);
 }
 
-export async function listMediaByType(type: string, params?: MediaFilterParams): Promise<MediaListResponse> {
+export async function listMediaByType(
+  type: string,
+  params?: MediaFilterParams,
+): Promise<MediaListResponse> {
   return apiGet<MediaListResponse>(`/media/type/${type}${buildQueryString(params ?? {})}`);
 }
-
-
 
 export async function getMedia(id: string): Promise<MediaResponse> {
   return apiGet<MediaResponse>(`/media/${id}`);

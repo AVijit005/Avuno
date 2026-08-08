@@ -20,7 +20,11 @@ export function RelationshipCard({
         className,
       )}
     >
-      <img src={media.poster || undefined} alt={media.title} className="h-14 w-10 flex-none rounded-md object-cover" />
+      <img
+        src={media.poster || undefined}
+        alt={media.title}
+        className="h-14 w-10 flex-none rounded-md object-cover"
+      />
       <div className="min-w-0">
         <div className="text-[10px] uppercase tracking-[0.18em] text-primary/75">{label}</div>
         <div className="truncate text-sm">{media.title}</div>

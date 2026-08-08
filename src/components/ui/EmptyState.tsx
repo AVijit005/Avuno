@@ -47,7 +47,7 @@ export function EmptyState({
           style={{
             backgroundColor: isLight ? "oklch(0 0 0 / 0.04)" : "oklch(1 0 0 / 0.04)",
             boxShadow: `inset 0 1px 0 ${isLight ? "oklch(0 0 0 / 0.08)" : "oklch(1 0 0 / 0.08)"}`,
-            borderColor: isLight ? "oklch(0 0 0 / 0.1)" : "oklch(1 0 0 / 0.1)"
+            borderColor: isLight ? "oklch(0 0 0 / 0.1)" : "oklch(1 0 0 / 0.1)",
           }}
         >
           {icon}

@@ -8,8 +8,16 @@ export function MediaStatistics({ item }: { item: UIMediaItem }) {
   const cards = [
     { icon: Repeat, label: "Rewatches", value: item.rewatchCount ?? 0, suffix: "" },
     { icon: Clock, label: "Total hours", value: 0, suffix: "h" },
-    { icon: Eye, label: "First seen", text: item.lastInteractionAt ? new Date(item.lastInteractionAt).toLocaleDateString() : "—" },
-    { icon: History, label: "Last revisited", text: item.lastInteractionAt ? new Date(item.lastInteractionAt).toLocaleDateString() : "—" },
+    {
+      icon: Eye,
+      label: "First seen",
+      text: item.lastInteractionAt ? new Date(item.lastInteractionAt).toLocaleDateString() : "—",
+    },
+    {
+      icon: History,
+      label: "Last revisited",
+      text: item.lastInteractionAt ? new Date(item.lastInteractionAt).toLocaleDateString() : "—",
+    },
   ] as const;
   return (
     <div className="grid grid-cols-2 gap-3 md:grid-cols-4">

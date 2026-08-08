@@ -20,7 +20,9 @@ export function PremiumProgress({ value, accent, className, height = 6 }: Props)
       <motion.div
         initial={reduced ? { width: `${v}%` } : { width: 0 }}
         animate={{ width: `${v}%` }}
-        transition={reduced ? { duration: 0 } : { duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }}
+        transition={
+          reduced ? { duration: 0 } : { duration: 1.1, ease: [0.22, 1, 0.36, 1], delay: 0.15 }
+        }
         className="relative h-full rounded-full"
         style={{
           background: `linear-gradient(90deg, color-mix(in oklab, ${fill} 60%, transparent), ${fill})`,

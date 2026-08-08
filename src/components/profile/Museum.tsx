@@ -9,12 +9,14 @@ import { adaptLibraryItem } from "@/lib/adapters/media";
 export function Museum() {
   const galleries = getMuseum();
   const { data: libraryData } = useLibrary();
-  const libraryItems = libraryData?.pages.flatMap(p => p.data).map(adaptLibraryItem) || [];
+  const libraryItems = libraryData?.pages.flatMap((p) => p.data).map(adaptLibraryItem) || [];
 
   return (
     <div className="space-y-6">
       {galleries.map((g) => {
-        const items = g.items.map((m) => libraryItems.find(x => x.id === m.id)).filter((x): x is UIMediaItem => !!x);
+        const items = g.items
+          .map((m) => libraryItems.find((x) => x.id === m.id))
+          .filter((x): x is UIMediaItem => !!x);
         if (items.length === 0) return null;
 
         return (
@@ -60,6 +62,3 @@ export function Museum() {
     </div>
   );
 }
-
-
-

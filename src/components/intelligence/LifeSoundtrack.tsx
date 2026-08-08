@@ -15,15 +15,23 @@ function seededRandom(seed: number): number {
   return x - Math.floor(x);
 }
 
-export function LifeSoundtrack({ topAlbum = "Interstellar (Original Motion Picture Soundtrack)", artist = "Hans Zimmer", hoursPlayed = 42 }: Props) {
+export function LifeSoundtrack({
+  topAlbum = "Interstellar (Original Motion Picture Soundtrack)",
+  artist = "Hans Zimmer",
+  hoursPlayed = 42,
+}: Props) {
   const reduced = useReducedMotion();
   // Generate deterministic random heights for the waveform — stable across renders
-  const bars = useMemo(() => Array.from({ length: 40 }).map((_, i) => ({
-    id: i,
-    height: 20 + seededRandom(i) * 80,
-    delay: seededRandom(i + 100) * 1.5,
-    duration: 0.8 + seededRandom(i + 200) * 0.8
-  })), []);
+  const bars = useMemo(
+    () =>
+      Array.from({ length: 40 }).map((_, i) => ({
+        id: i,
+        height: 20 + seededRandom(i) * 80,
+        delay: seededRandom(i + 100) * 1.5,
+        duration: 0.8 + seededRandom(i + 200) * 0.8,
+      })),
+    [],
+  );
 
   return (
     <PremiumGlass className="p-6 relative overflow-hidden group">
@@ -45,18 +53,20 @@ export function LifeSoundtrack({ topAlbum = "Interstellar (Original Motion Pictu
               className="w-full bg-[oklch(0.72_0.18_255)]/40 rounded-t-sm"
               initial={{ height: "10%" }}
               animate={{ height: `${bar.height}%` }}
-              transition={reduced
-                ? { duration: 0 }
-                : {
-                    duration: bar.duration,
-                    delay: bar.delay,
-                    repeat: Infinity,
-                    repeatType: "reverse",
-                    ease: "easeInOut"
-                  }}
+              transition={
+                reduced
+                  ? { duration: 0 }
+                  : {
+                      duration: bar.duration,
+                      delay: bar.delay,
+                      repeat: Infinity,
+                      repeatType: "reverse",
+                      ease: "easeInOut",
+                    }
+              }
               style={{
                 // Make the center bars taller on average
-                maxHeight: `${Math.sin((bar.id / 40) * Math.PI) * 100 + 20}%`
+                maxHeight: `${Math.sin((bar.id / 40) * Math.PI) * 100 + 20}%`,
               }}
             />
           ))}
@@ -73,7 +83,7 @@ export function LifeSoundtrack({ topAlbum = "Interstellar (Original Motion Pictu
           </div>
         </div>
       </div>
-      
+
       {/* Glow effect */}
       <div className="absolute inset-x-0 bottom-0 h-32 bg-[oklch(0.72_0.18_255)]/5 blur-3xl rounded-full" />
     </PremiumGlass>

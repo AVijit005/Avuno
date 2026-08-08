@@ -21,10 +21,7 @@ export function MemoryQuote({ className = "" }: { className?: string }) {
   }, [reduced]);
 
   return (
-    <div
-      aria-live="polite"
-      className={`relative min-h-[3.25rem] max-w-md ${className}`}
-    >
+    <div aria-live="polite" className={`relative min-h-[3.25rem] max-w-md ${className}`}>
       <AnimatePresence mode="wait">
         <motion.p
           key={i}

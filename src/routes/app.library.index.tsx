@@ -40,9 +40,16 @@ export const Route = createFileRoute("/app/library/")({
 
 function LibraryIndex() {
   const { data: stats } = useLibraryStats();
-  const { data: inProgressData, isLoading: isLoadingContinue } = useLibraryByStatus("WATCHING", { limit: 8 });
-  const { data: planningData, isLoading: isLoadingPlanning } = useLibraryByStatus("PLANNING", { limit: 5 });
-  const { data: favoritesData, isLoading: isLoadingFavorites } = useLibrary({ favorite: true, limit: 8 });
+  const { data: inProgressData, isLoading: isLoadingContinue } = useLibraryByStatus("WATCHING", {
+    limit: 8,
+  });
+  const { data: planningData, isLoading: isLoadingPlanning } = useLibraryByStatus("PLANNING", {
+    limit: 5,
+  });
+  const { data: favoritesData, isLoading: isLoadingFavorites } = useLibrary({
+    favorite: true,
+    limit: 8,
+  });
   const { data: allData, isLoading: isLoadingAll } = useLibrary({ limit: 8 });
   const { data: collections } = useCollections();
   const { data: challengesData } = useChallenges();

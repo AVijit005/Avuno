@@ -17,7 +17,9 @@ const GENRE_COLORS: Record<string, string> = {
 
 export function LibraryMap() {
   const { data: intelligence, isLoading } = useIntelligence();
-  const tags: Array<{ name: string; count: number; color: string }> = (intelligence?.tasteProfile?.favoriteGenres ?? []).map((g: TasteGenre) => ({
+  const tags: Array<{ name: string; count: number; color: string }> = (
+    intelligence?.tasteProfile?.favoriteGenres ?? []
+  ).map((g: TasteGenre) => ({
     name: g.name,
     count: g.count,
     color: GENRE_COLORS[g.name] ?? "var(--primary)",
@@ -77,7 +79,9 @@ export function LibraryMap() {
                 boxShadow: `0 4px 12px color-mix(in oklch, ${tag.color} 20%, transparent)`,
               }}
             >
-              <span className="font-display font-medium tracking-tight drop-shadow-md">{tag.name}</span>
+              <span className="font-display font-medium tracking-tight drop-shadow-md">
+                {tag.name}
+              </span>
             </motion.div>
           );
         })}

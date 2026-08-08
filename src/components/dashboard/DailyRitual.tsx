@@ -55,9 +55,13 @@ export function DailyRitual({ className, insights }: Props) {
         <div className="group/empty relative z-10 flex flex-col items-center gap-4 rounded-2xl border border-white/[0.03] bg-white/[0.02] p-10 text-center shadow-2xl backdrop-blur-xl transition duration-500 ease-out hover:border-white/[0.08] hover:bg-white/[0.04]">
           <PremiumSquircle icon={<TrendingUp />} size="lg" variant="glass" />
           <p className="text-sm text-foreground/70">
-            Your most active day is <span className="text-foreground font-medium">{insights.mostActiveWeekday}</span>
+            Your most active day is{" "}
+            <span className="text-foreground font-medium">{insights.mostActiveWeekday}</span>
             {insights.favoriteGenre ? (
-              <>. You've spent most of your time in <span className="text-foreground font-medium">{insights.favoriteGenre}</span>.</>
+              <>
+                . You've spent most of your time in{" "}
+                <span className="text-foreground font-medium">{insights.favoriteGenre}</span>.
+              </>
             ) : (
               ". Today's a good day to pick up where you left off."
             )}

@@ -22,7 +22,7 @@ export interface MemoryJournal {
 }
 
 export type MomentKind =
-  | "quote" | "scene" | "character" | "episode" | "chapter" | "song" | "mission" | "boss";
+  "quote" | "scene" | "character" | "episode" | "chapter" | "song" | "mission" | "boss";
 
 export interface FavoriteMoment {
   kind: MomentKind;
@@ -105,8 +105,23 @@ const QUOTES = [
   "All we have to decide is what to do with the time given to us.",
 ];
 
-const TRAVEL = ["Home", "Trip to the coast", "Weekend away", "Festival visit", "Vacation", "Daily commute"];
-const OCCASIONS = ["Exam Week", "Summer Break", "Winter Holiday", "A long weekend", "Quiet evenings", "A rainy month", "First week of a new job"];
+const TRAVEL = [
+  "Home",
+  "Trip to the coast",
+  "Weekend away",
+  "Festival visit",
+  "Vacation",
+  "Daily commute",
+];
+const OCCASIONS = [
+  "Exam Week",
+  "Summer Break",
+  "Winter Holiday",
+  "A long weekend",
+  "Quiet evenings",
+  "A rainy month",
+  "First week of a new job",
+];
 const SUMMARIES = [
   "Some stories arrive at exactly the right time. This one did.",
   "I don't think I'll talk about this with anyone soon — it's still settling.",
@@ -151,8 +166,20 @@ function buildExtensions(item: MediaItem, memory: MediaMemory): MemoryExtensions
   };
   const moments: FavoriteMoment[] = (kindMomentMap[item.kind] ?? ["quote"]).map((kind) => ({
     kind,
-    label: pick(rng, ["The third act", "The opening", "The reunion", "The first night", "The last hour", "The reveal"]),
-    detail: pick(rng, ["Held still for the whole room.", "Earned every minute it took.", "Quiet, then loud, then quiet.", "Reframed everything before it."]),
+    label: pick(rng, [
+      "The third act",
+      "The opening",
+      "The reunion",
+      "The first night",
+      "The last hour",
+      "The reveal",
+    ]),
+    detail: pick(rng, [
+      "Held still for the whole room.",
+      "Earned every minute it took.",
+      "Quiet, then loud, then quiet.",
+      "Reframed everything before it.",
+    ]),
   }));
 
   const arcLen = 4 + Math.floor(rng() * 2);
@@ -162,8 +189,13 @@ function buildExtensions(item: MediaItem, memory: MediaMemory): MemoryExtensions
   }));
 
   const scores: EmotionScores = {
-    comfort: rng(), excitement: rng(), sadness: rng(), wonder: rng(),
-    inspiration: rng(), addiction: rng(), relaxation: rng(),
+    comfort: rng(),
+    excitement: rng(),
+    sadness: rng(),
+    wonder: rng(),
+    inspiration: rng(),
+    addiction: rng(),
+    relaxation: rng(),
   };
 
   const hasQuote = rng() > 0.4;
@@ -172,7 +204,8 @@ function buildExtensions(item: MediaItem, memory: MediaMemory): MemoryExtensions
     : null;
 
   const reflection: MemoryReflectionData = {
-    changed: "It softened how I read endings. I wait longer now, before I decide what a story meant.",
+    changed:
+      "It softened how I read endings. I wait longer now, before I decide what a story meant.",
     recommend: memory.wouldRevisit
       ? "Yes — but only to someone who likes a quiet middle and an honest ending."
       : "Once, in the right week of your life.",

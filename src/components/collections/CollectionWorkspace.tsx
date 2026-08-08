@@ -1,5 +1,10 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { getWorkspace, type WorkspaceNote, type WorkspaceQuote, type WorkspaceMemory } from "@/lib/collectionWorkspace";
+import {
+  getWorkspace,
+  type WorkspaceNote,
+  type WorkspaceQuote,
+  type WorkspaceMemory,
+} from "@/lib/collectionWorkspace";
 import type { Collection } from "@/lib/types";
 
 export function CollectionWorkspace({ collection }: { collection: Collection }) {

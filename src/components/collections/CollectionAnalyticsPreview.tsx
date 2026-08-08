@@ -7,11 +7,23 @@ import { CountUp } from "@/components/landing/CountUp";
 import { Activity, Clock } from "lucide-react";
 import type { CollectionStats } from "@/lib/types/collection";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
-const BarChart = lazy(() => import("recharts").then((m) => ({ default: m.BarChart as unknown as RechartsComponent })));
-const Bar = lazy(() => import("recharts").then((m) => ({ default: m.Bar as unknown as RechartsComponent })));
-const Cell = lazy(() => import("recharts").then((m) => ({ default: m.Cell as unknown as RechartsComponent })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() =>
+  import("recharts").then((m) => ({
+    default: m.ResponsiveContainer as unknown as RechartsComponent,
+  })),
+);
+const BarChart = lazy(() =>
+  import("recharts").then((m) => ({ default: m.BarChart as unknown as RechartsComponent })),
+);
+const Bar = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Bar as unknown as RechartsComponent })),
+);
+const Cell = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Cell as unknown as RechartsComponent })),
+);
+const Tooltip = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })),
+);
 
 interface Props {
   collection: {
@@ -37,13 +49,17 @@ export function CollectionAnalyticsPreview({ collection }: Props) {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="rounded-2xl bg-white/5 p-4">
-          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Items</div>
+          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Items
+          </div>
           <div className="mt-1 font-display text-2xl font-medium tracking-tight">
             <CountUp to={stats?.itemCount ?? stats?.totalItems ?? collection.itemCount ?? 0} />
           </div>
         </div>
         <div className="rounded-2xl bg-white/5 p-4">
-          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">Time Spent</div>
+          <div className="text-xs font-medium uppercase tracking-widest text-muted-foreground">
+            Time Spent
+          </div>
           <div className="mt-1 flex items-baseline gap-1 font-display text-2xl font-medium tracking-tight">
             <CountUp to={stats?.totalHours ?? 0} />
             <span className="text-sm text-muted-foreground">hrs</span>
@@ -57,7 +73,11 @@ export function CollectionAnalyticsPreview({ collection }: Props) {
             <BarChart data={weeklyActivity}>
               <Tooltip
                 cursor={{ fill: "rgba(255,255,255,0.05)" }}
-                contentStyle={{ background: "rgba(0,0,0,0.8)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 8 }}
+                contentStyle={{
+                  background: "rgba(0,0,0,0.8)",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  borderRadius: 8,
+                }}
               />
               <Bar dataKey="value" radius={[4, 4, 4, 4]}>
                 {weeklyActivity.map((_entry, index: number) => (

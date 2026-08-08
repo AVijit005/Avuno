@@ -33,7 +33,7 @@ function LibraryKind() {
   const data = Route.useLoaderData() as { kind: MediaKind };
   const kind = data.kind;
   const { data: libraryData, isLoading } = useLibraryByType(kind);
-  const items = libraryData?.pages.flatMap(p => p.data) || [];
+  const items = libraryData?.pages.flatMap((p) => p.data) || [];
   return (
     <div className="pt-2">
       <div className="mb-8 flex items-end justify-between">
@@ -52,8 +52,10 @@ function LibraryKind() {
           description="When you add something here, it'll appear with all the cinematic care it deserves."
           icon={<Search className="h-6 w-6 text-muted-foreground" />}
           action={
-            <button 
-              onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { metaKey: true, key: 'k' }))}
+            <button
+              onClick={() =>
+                window.dispatchEvent(new KeyboardEvent("keydown", { metaKey: true, key: "k" }))
+              }
               className="press-scale rounded-full bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-medium text-primary-foreground"
             >
               Search to add

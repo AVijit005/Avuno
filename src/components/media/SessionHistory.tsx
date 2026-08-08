@@ -13,7 +13,8 @@ export function SessionHistory({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Your sessions with {item.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        A timeline of when you engaged with this story — sessions, breaks, and the rhythm of your experience.
+        A timeline of when you engaged with this story — sessions, breaks, and the rhythm of your
+        experience.
       </p>
     </PremiumGlass>
   );

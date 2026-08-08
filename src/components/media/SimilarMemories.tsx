@@ -13,7 +13,8 @@ export function SimilarMemories({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Stories that feel alike</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Based on your experience with {item.title}, here are other stories that share a similar emotional fingerprint.
+        Based on your experience with {item.title}, here are other stories that share a similar
+        emotional fingerprint.
       </p>
     </PremiumGlass>
   );

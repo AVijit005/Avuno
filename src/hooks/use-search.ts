@@ -1,8 +1,8 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { searchApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { SearchParams } from '@/lib/api/search';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { searchApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type { SearchParams } from "@/lib/api/search";
 
 export function useSearch(params: SearchParams, enabled = true) {
   const { data: user } = useCurrentUser();

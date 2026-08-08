@@ -23,6 +23,7 @@
 ### 3. Redis Data Loss
 
 Redis is a cache — no permanent data loss. BullMQ jobs may retry.
+
 1. Restart Redis: \`docker compose restart redis\`
 2. Verify connectivity via health endpoint
 

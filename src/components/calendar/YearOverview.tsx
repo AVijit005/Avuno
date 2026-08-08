@@ -47,4 +47,3 @@ export function YearOverview({ monthIdx, onSelectMonth, months = [] }: Props) {
     </div>
   );
 }
-

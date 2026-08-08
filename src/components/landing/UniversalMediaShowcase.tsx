@@ -27,8 +27,7 @@ const TYPES: {
     label: "Movies",
     tagline: "Films that stayed with you.",
     icon: Film,
-    poster:
-      "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
+    poster: "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
     tilt: -3,
     offset: "md:mt-0",
   },
@@ -37,8 +36,7 @@ const TYPES: {
     label: "Anime",
     tagline: "Long arcs, longer memories.",
     icon: Sparkles,
-    poster:
-      "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
+    poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
     tilt: 2,
     offset: "md:mt-10",
   },
@@ -47,8 +45,7 @@ const TYPES: {
     label: "Series",
     tagline: "Stories told in seasons.",
     icon: Tv,
-    poster:
-      "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
+    poster: "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
     tilt: -2,
     offset: "md:mt-4",
   },
@@ -57,8 +54,7 @@ const TYPES: {
     label: "Books",
     tagline: "The ones that changed you.",
     icon: BookOpen,
-    poster:
-      "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+    poster: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
     tilt: 3,
     offset: "md:mt-16",
   },
@@ -67,8 +63,7 @@ const TYPES: {
     label: "Manga",
     tagline: "Panels you keep returning to.",
     icon: BookOpen,
-    poster:
-      "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
+    poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
     tilt: -2,
     offset: "md:mt-2",
   },
@@ -77,8 +72,7 @@ const TYPES: {
     label: "Games",
     tagline: "Worlds you lived inside.",
     icon: Gamepad2,
-    poster:
-      "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
+    poster: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
     tilt: 3,
     offset: "md:mt-12",
   },
@@ -87,8 +81,7 @@ const TYPES: {
     label: "Music",
     tagline: "Albums you wore out.",
     icon: Music2,
-    poster:
-      "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    poster: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     tilt: -3,
     offset: "md:mt-6",
   },
@@ -97,8 +90,7 @@ const TYPES: {
     label: "Podcasts",
     tagline: "Voices you walked with.",
     icon: Mic,
-    poster:
-      "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
+    poster: "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
     tilt: 2,
     offset: "md:mt-14",
   },
@@ -107,8 +99,7 @@ const TYPES: {
     label: "Courses",
     tagline: "Skills, season by season.",
     icon: GraduationCap,
-    poster:
-      "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
+    poster: "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
     tilt: -2,
     offset: "md:mt-2",
   },
@@ -117,8 +108,7 @@ const TYPES: {
     label: "YouTube",
     tagline: "Long-watched, well-loved.",
     icon: PlaySquare,
-    poster:
-      "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
+    poster: "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
     tilt: 3,
     offset: "md:mt-10",
   },

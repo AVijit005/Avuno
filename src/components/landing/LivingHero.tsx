@@ -8,7 +8,11 @@ import { MagneticButton } from "./MagneticButton";
 const heroCards = [
   {
     id: "movie",
-    item: { title: "Interstellar", kind: "movie", poster: "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)" },
+    item: {
+      title: "Interstellar",
+      kind: "movie",
+      poster: "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
+    },
     x: -36,
     y: -8,
     rot: -8,
@@ -16,7 +20,11 @@ const heroCards = [
   },
   {
     id: "anime",
-    item: { title: "One Piece", kind: "anime", poster: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)" },
+    item: {
+      title: "One Piece",
+      kind: "anime",
+      poster: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    },
     x: -14,
     y: 18,
     rot: 4,
@@ -24,7 +32,11 @@ const heroCards = [
   },
   {
     id: "book",
-    item: { title: "Harry Potter", kind: "book", poster: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)" },
+    item: {
+      title: "Harry Potter",
+      kind: "book",
+      poster: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
+    },
     x: 14,
     y: -14,
     rot: -3,
@@ -32,13 +44,28 @@ const heroCards = [
   },
   {
     id: "game",
-    item: { title: "Elden Ring", kind: "game", poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)" },
+    item: {
+      title: "Elden Ring",
+      kind: "game",
+      poster: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
+    },
     x: 36,
     y: 10,
     rot: 6,
     depth: 0.55,
   },
-  { id: "music", item: { title: "The Dark Side of the Moon", kind: "music", poster: "https://i.scdn.co/image/ab67616d0000b273ea7caaff71dea1051d49b2fe" }, x: 0, y: 28, rot: 0, depth: 1 },
+  {
+    id: "music",
+    item: {
+      title: "The Dark Side of the Moon",
+      kind: "music",
+      poster: "https://i.scdn.co/image/ab67616d0000b273ea7caaff71dea1051d49b2fe",
+    },
+    x: 0,
+    y: 28,
+    rot: 0,
+    depth: 1,
+  },
 ];
 
 export function LivingHero() {
@@ -95,8 +122,8 @@ export function LivingHero() {
             transition={{ duration: 0.8, delay: 1.2 }}
             className="mx-auto mt-8 max-w-xl text-base text-muted-foreground md:text-lg"
           >
-            Avuno is a cinematic memory journal for everything you watch, read, play and listen
-            to — beautifully organized, gently remembered.
+            Avuno is a cinematic memory journal for everything you watch, read, play and listen to —
+            beautifully organized, gently remembered.
           </motion.p>
 
           <motion.div
@@ -207,13 +234,13 @@ function HeroCard({
         className="relative aspect-[2/3] w-32 overflow-hidden rounded-2xl shadow-2xl ring-1 ring-white/10 md:w-44 bg-gradient-to-br from-white/[0.06] to-white/[0.02]"
       >
         {!errored ? (
-          <img 
-            src={c.item.poster} 
-            alt={c.item.title} 
+          <img
+            src={c.item.poster}
+            alt={c.item.title}
             loading="lazy"
             decoding="async"
             onError={() => setErrored(true)}
-            className="h-full w-full object-cover" 
+            className="h-full w-full object-cover"
           />
         ) : (
           <div className="grid h-full w-full place-items-center">

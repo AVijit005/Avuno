@@ -53,7 +53,11 @@ export function CollectionsHero() {
         {/* floating collage */}
         <div className="relative h-[360px] md:h-[440px]">
           {drift.map((c, i) => {
-            const covers = c.items?.slice(0, 4).map((item) => item.posterUrl).filter(Boolean) as string[] ?? [];
+            const covers =
+              (c.items
+                ?.slice(0, 4)
+                .map((item) => item.posterUrl)
+                .filter(Boolean) as string[]) ?? [];
             const coverImg = c.cover ?? covers[0] ?? "";
             const top = `${10 + (i % 3) * 28}%`;
             const left = `${5 + ((i * 14) % 75)}%`;

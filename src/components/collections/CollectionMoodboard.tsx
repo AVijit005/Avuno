@@ -14,7 +14,7 @@ export function CollectionMoodboard({ collection }: Props) {
     "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1534294228306-bd54eb9a7ba8?q=80&w=2000&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=2000&auto=format&fit=crop",
-    "https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=2000&auto=format&fit=crop"
+    "https://images.unsplash.com/photo-1505909182942-e2f09aee3e89?q=80&w=2000&auto=format&fit=crop",
   ];
 
   return (
@@ -36,9 +36,9 @@ export function CollectionMoodboard({ collection }: Props) {
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent z-10" />
-            <img 
-              src={img} 
-              alt="Moodboard visual" 
+            <img
+              src={img}
+              alt="Moodboard visual"
               className="aspect-square w-full h-full object-cover transition-transform duration-700 hover:scale-110"
             />
           </motion.div>

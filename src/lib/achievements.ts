@@ -38,4 +38,3 @@ export const getMilestones = (): Achievement[] => [];
 export function getAchievementsByCategory(): Record<AchievementCategory, Achievement[]> {
   return {} as Record<AchievementCategory, Achievement[]>;
 }
-

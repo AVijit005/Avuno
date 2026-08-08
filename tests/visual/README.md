@@ -41,7 +41,7 @@ bun run test:visual:update
   — it surfaces exactly which pixels moved. Most drift is a sibling
   component bleeding global styles into the premium primitives.
 
-## What is *not* covered
+## What is _not_ covered
 
 These tests are scoped to premium interaction primitives. Page-level layout,
 typography, and unrelated component visuals are out of scope — the fast

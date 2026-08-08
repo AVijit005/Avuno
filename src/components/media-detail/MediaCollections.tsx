@@ -9,9 +9,7 @@ export function MediaCollections({ item }: { item: UIMediaItem }) {
   const { data: collections, isLoading } = useCollections();
   const allCollections = collections?.map(adaptCollectionResponse) ?? [];
   // Find collections that contain this media item
-  const cols = allCollections.filter((c) =>
-    c.items?.some((i) => i.mediaId === item.mediaId)
-  );
+  const cols = allCollections.filter((c) => c.items?.some((i) => i.mediaId === item.mediaId));
 
   if (isLoading) {
     return (

@@ -38,16 +38,8 @@ export function RecentlyFinishedTimeline({ limit }: { limit?: number }) {
                 {groups[b].map((m) => {
                   const meta = metaOf(m.id);
                   return (
-                    <Link
-                      key={m.id}
-                      to="/app/media/$id"
-                      params={{ id: m.id }}
-                      className="block"
-                    >
-                      <PremiumGlass 
-                        interactive 
-                        className="flex items-center gap-3 rounded-2xl p-3"
-                      >
+                    <Link key={m.id} to="/app/media/$id" params={{ id: m.id }} className="block">
+                      <PremiumGlass interactive className="flex items-center gap-3 rounded-2xl p-3">
                         <img
                           src={m.poster || undefined}
                           alt={m.title}

@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "motion/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Search,
   ArrowRight,
@@ -16,21 +16,58 @@ import {
   Clock,
   Command as CmdKey,
 } from "lucide-react";
-import {
-  SEARCHABLE_SETTINGS,
-  type MediaItem,
-  type MediaKind,
-} from "@/lib/types";
+import { SEARCHABLE_SETTINGS, type MediaItem, type MediaKind } from "@/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { useSearch, useRecentSearches, useTrending } from "@/hooks/use-search";
 import { analytics } from "@/lib/analytics";
 
 type Row =
-  | { kind: "media"; group: string; item: { id: string; title: string; kind: string; poster?: string | null; creator?: string; year?: number }; onSelect: () => void }
-  | { kind: "collection"; group: string; col: { id: string; name: string; description?: string; accent?: string; count?: number; category?: string }; onSelect: () => void }
-  | { kind: "journal"; group: string; j: { id: string; title: string; excerpt?: string; date?: string; media?: string; mood?: string }; onSelect: () => void }
-  | { kind: "setting"; group: string; s: (typeof SEARCHABLE_SETTINGS)[number]; onSelect: () => void; }
+  | {
+      kind: "media";
+      group: string;
+      item: {
+        id: string;
+        title: string;
+        kind: string;
+        poster?: string | null;
+        creator?: string;
+        year?: number;
+      };
+      onSelect: () => void;
+    }
+  | {
+      kind: "collection";
+      group: string;
+      col: {
+        id: string;
+        name: string;
+        description?: string;
+        accent?: string;
+        count?: number;
+        category?: string;
+      };
+      onSelect: () => void;
+    }
+  | {
+      kind: "journal";
+      group: string;
+      j: {
+        id: string;
+        title: string;
+        excerpt?: string;
+        date?: string;
+        media?: string;
+        mood?: string;
+      };
+      onSelect: () => void;
+    }
+  | {
+      kind: "setting";
+      group: string;
+      s: (typeof SEARCHABLE_SETTINGS)[number];
+      onSelect: () => void;
+    }
   | { kind: "action"; group: string; label: string; onSelect: () => void }
   | { kind: "recent"; group: string; term: string; onSelect: () => void }
   | { kind: "trending"; group: string; title: string; subtitle?: string; onSelect: () => void };
@@ -108,11 +145,16 @@ export function CommandPalette({
     };
   }, [open]);
 
-  const close = () => onOpenChange(false);
-  const go = (path: Record<string, unknown>) => () => {
-    close();
-    navigate(path as never);
-  };
+  const close = useCallback(() => onOpenChange(false), [onOpenChange]);
+  // Stable identity so the `rows` memo below can depend on it without being
+  // invalidated on every render.
+  const go = useCallback(
+    (path: Record<string, unknown>) => () => {
+      close();
+      navigate(path as never);
+    },
+    [close, navigate],
+  );
 
   const rows: { title: string; rows: Row[] }[] = useMemo(() => {
     const term = debouncedQ.trim().toLowerCase();
@@ -184,7 +226,7 @@ export function CommandPalette({
     }
 
     const out: { title: string; rows: Row[] }[] = [];
-    
+
     if (searchData && searchData.items.length > 0) {
       // Group by type
       const groups = new Map<string, typeof searchData.items>();
@@ -192,7 +234,7 @@ export function CommandPalette({
         if (!groups.has(item.type)) groups.set(item.type, []);
         groups.get(item.type)!.push(item);
       }
-      
+
       const groupLabels: Record<string, string> = {
         movie: "Movies",
         series: "Series",
@@ -208,7 +250,7 @@ export function CommandPalette({
 
       for (const [type, items] of groups.entries()) {
         const title = groupLabels[type] || type;
-        
+
         if (type === "collection") {
           out.push({
             title,
@@ -223,7 +265,7 @@ export function CommandPalette({
             ),
           });
         } else if (type === "journal") {
-           out.push({
+          out.push({
             title,
             rows: items.map(
               (item) =>
@@ -243,7 +285,13 @@ export function CommandPalette({
                 ({
                   kind: "media",
                   group: title,
-                  item: { id: item.id, title: item.title, kind: type, poster: item.imageUrl || "", creator: item.subtitle },
+                  item: {
+                    id: item.id,
+                    title: item.title,
+                    kind: type,
+                    poster: item.imageUrl || "",
+                    creator: item.subtitle,
+                  },
                   onSelect: go({ to: "/app/media/$id", params: { id: item.id } }),
                 }) as Row,
             ),
@@ -269,9 +317,9 @@ export function CommandPalette({
             }) as Row,
         ),
       });
-      
+
     return out;
-  }, [debouncedQ, recentData, trendingData, searchData]);
+  }, [debouncedQ, recentData, trendingData, searchData, go]);
 
   const flat = useMemo(() => rows.flatMap((g) => g.rows), [rows]);
   useEffect(() => {
@@ -366,7 +414,13 @@ export function CommandPalette({
             <div aria-live="polite" aria-atomic="true" className="sr-only">
               {flat.length} results found
             </div>
-            <div ref={listRef} id="search-listbox" role="listbox" aria-label="Search results" className="max-h-[60vh] overflow-y-auto p-3">
+            <div
+              ref={listRef}
+              id="search-listbox"
+              role="listbox"
+              aria-label="Search results"
+              className="max-h-[60vh] overflow-y-auto p-3"
+            >
               {rows.length === 0 ? (
                 <EmptyState
                   icon={<Search className="h-6 w-6" />}
@@ -375,25 +429,27 @@ export function CommandPalette({
                 />
               ) : (
                 rows.map((g, gIdx) => {
-                  const offset = rows.slice(0, gIdx).reduce((acc, prevG) => acc + prevG.rows.length, 0);
+                  const offset = rows
+                    .slice(0, gIdx)
+                    .reduce((acc, prevG) => acc + prevG.rows.length, 0);
                   return (
-                  <Section key={g.title} title={g.title}>
-                    {g.rows.map((r, rIdx) => {
-                      const i = offset + rIdx;
-                      const focused = i === active;
-                      return (
-                        <RowView
-                          key={i}
-                          index={i}
-                          focused={focused}
-                          onMouseEnter={() => setActive(i)}
-                          onClick={r.onSelect}
-                        >
-                          <RowContent row={r} />
-                        </RowView>
-                      );
-                    })}
-                  </Section>
+                    <Section key={g.title} title={g.title}>
+                      {g.rows.map((r, rIdx) => {
+                        const i = offset + rIdx;
+                        const focused = i === active;
+                        return (
+                          <RowView
+                            key={i}
+                            index={i}
+                            focused={focused}
+                            onMouseEnter={() => setActive(i)}
+                            onClick={r.onSelect}
+                          >
+                            <RowContent row={r} />
+                          </RowView>
+                        );
+                      })}
+                    </Section>
                   );
                 })
               )}
@@ -482,7 +538,9 @@ function RowContent({ row }: { row: Row }) {
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm">{row.item.title}</div>
           <div className="truncate text-xs text-muted-foreground">
-            {[row.item.creator, row.item.year, row.item.kind].filter(x => x != null && x !== "" && x !== "undefined").join(" · ")}
+            {[row.item.creator, row.item.year, row.item.kind]
+              .filter((x) => x != null && x !== "" && x !== "undefined")
+              .join(" · ")}
           </div>
         </div>
         <Icon className="h-3.5 w-3.5 text-muted-foreground" />
@@ -500,7 +558,9 @@ function RowContent({ row }: { row: Row }) {
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm">{row.col.name}</div>
           <div className="truncate text-xs text-muted-foreground">
-            {[row.col.count ? `${row.col.count} items` : null, row.col.category].filter(x => x != null && x !== "" && x !== "undefined").join(" · ")}
+            {[row.col.count ? `${row.col.count} items` : null, row.col.category]
+              .filter((x) => x != null && x !== "" && x !== "undefined")
+              .join(" · ")}
           </div>
         </div>
         <Layers className="h-3.5 w-3.5 text-muted-foreground" />
@@ -516,7 +576,9 @@ function RowContent({ row }: { row: Row }) {
         <div className="min-w-0 flex-1">
           <div className="truncate text-sm">{row.j.title}</div>
           <div className="truncate text-xs text-muted-foreground">
-            {[row.j.date, row.j.media].filter(x => x != null && x !== "" && x !== "undefined").join(" · ")}
+            {[row.j.date, row.j.media]
+              .filter((x) => x != null && x !== "" && x !== "undefined")
+              .join(" · ")}
           </div>
         </div>
       </>
@@ -581,4 +643,3 @@ function Hint({ k, children }: { k: string; children: React.ReactNode }) {
     </span>
   );
 }
-

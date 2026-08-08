@@ -58,7 +58,9 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
             <ImageOff className="h-6 w-6 text-foreground/30" />
           </div>
         ) : (
-          <div className={`transition-opacity duration-[var(--dur-large)] ${loaded ? "opacity-100" : "opacity-0"}`}>
+          <div
+            className={`transition-opacity duration-[var(--dur-large)] ${loaded ? "opacity-100" : "opacity-0"}`}
+          >
             <img
               src={item.poster || undefined}
               alt=""
@@ -103,17 +105,20 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
         </div>
         {/* metadata */}
         {showMeta && (
-          <div aria-hidden className="absolute inset-x-0 bottom-0 p-3 text-white transition-transform duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:-translate-y-0.5 motion-reduce:group-hover:translate-y-0">
+          <div
+            aria-hidden
+            className="absolute inset-x-0 bottom-0 p-3 text-white transition-transform duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:-translate-y-0.5 motion-reduce:group-hover:translate-y-0"
+          >
             <div className="truncate font-display text-base leading-tight">{item.title}</div>
             <div className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-white/65">
               {item.kind} · {item.year}
             </div>
-            {(item.progress ?? 0) !== undefined && (item.progress ?? 0) < 100 && (
+            {item.progress != null && item.progress > 0 && item.progress < 100 && (
               <div className="mt-2 h-0.5 overflow-hidden rounded-full bg-white/20">
                 <div
                   className="h-full rounded-full transition-opacity duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:opacity-100"
                   style={{
-                    width: `${(item.progress ?? 0)}%`,
+                    width: `${item.progress ?? 0}%`,
                     background: item.accent ?? "var(--primary)",
                     boxShadow: `0 0 8px ${item.accent ?? "var(--primary)"}`,
                   }}

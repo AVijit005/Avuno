@@ -1,4 +1,4 @@
-import { apiGet, apiDelete } from './fetch';
+import { apiGet, apiDelete } from "./fetch";
 
 export interface SearchResultItem {
   id: string;
@@ -58,7 +58,7 @@ export interface FilterOptions {
 export interface SearchParams {
   [key: string]: unknown;
   q: string;
-  mode?: 'global' | 'library' | 'media' | 'journal' | 'collections' | 'timeline';
+  mode?: "global" | "library" | "media" | "journal" | "collections" | "timeline";
   type?: string;
   genre?: string;
   status?: string;
@@ -73,12 +73,12 @@ export interface SearchParams {
 function buildQueryString(params: Record<string, unknown>): string {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       searchParams.set(key, String(value));
     }
   }
   const qs = searchParams.toString();
-  return qs ? `?${qs}` : '';
+  return qs ? `?${qs}` : "";
 }
 
 export async function search(params: SearchParams): Promise<SearchResponse> {
@@ -90,17 +90,17 @@ export async function getSuggestions(q: string, limit?: number): Promise<Suggest
 }
 
 export async function getRecentSearches(): Promise<string[]> {
-  return apiGet<string[]>('/search/recent');
+  return apiGet<string[]>("/search/recent");
 }
 
 export async function clearRecentSearches(): Promise<void> {
-  return apiDelete('/search/recent');
+  return apiDelete("/search/recent");
 }
 
 export async function getTrending(): Promise<TrendingItem[]> {
-  return apiGet<TrendingItem[]>('/search/trending');
+  return apiGet<TrendingItem[]>("/search/trending");
 }
 
 export async function getFilterOptions(): Promise<FilterOptions> {
-  return apiGet<FilterOptions>('/search/filter-options');
+  return apiGet<FilterOptions>("/search/filter-options");
 }

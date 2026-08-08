@@ -130,7 +130,10 @@ export function StatCardPremium({
         </div>
         {delta != null && (
           <div className="mt-1 text-xs text-muted-foreground">
-            <span className={delta < 0 ? "text-rose-400/90" : "text-emerald-300/90"}>{delta > 0 ? `+${delta}` : delta}</span> · vs last period
+            <span className={delta < 0 ? "text-rose-400/90" : "text-emerald-300/90"}>
+              {delta > 0 ? `+${delta}` : delta}
+            </span>{" "}
+            · vs last period
           </div>
         )}
       </div>
@@ -155,17 +158,25 @@ export function ProgressRing({
   const r = (size - stroke) / 2;
   const c = 2 * Math.PI * r;
   const v = Number.isNaN(value) ? 0 : Math.max(0, Math.min(100, value));
-  
+
   return (
-    <div className="relative flex items-center justify-center mb-5" style={{ width: size, height: size }}>
+    <div
+      className="relative flex items-center justify-center mb-5"
+      style={{ width: size, height: size }}
+    >
       {/* Detached Glow Layer (.ring-glow-layer) */}
-      <div 
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 pointer-events-none rounded-full" 
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-4/5 pointer-events-none rounded-full"
         style={{ zIndex: 0, filter: `blur(24px)`, background: accent, opacity: 0.25 }}
       />
 
       {/* Primary Rings */}
-      <svg width={size} height={size} className="-rotate-90 relative z-10" style={{ overflow: "visible" }}>
+      <svg
+        width={size}
+        height={size}
+        className="-rotate-90 relative z-10"
+        style={{ overflow: "visible" }}
+      >
         <circle
           cx={size / 2}
           cy={size / 2}
@@ -185,7 +196,7 @@ export function ProgressRing({
           strokeDasharray={c}
           initial={{ strokeDashoffset: c }}
           animate={{ strokeDashoffset: c - (c * v) / 100 }}
-          
+
           transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
         />
       </svg>

@@ -85,10 +85,25 @@ export interface MediaDetail {
 }
 
 export const SEARCHABLE_SETTINGS = [
-  { id: "settings", label: "Settings", hint: "Theme, privacy, and active sessions", to: "/app/settings", icon: "settings" },
-  { id: "import", label: "Import & Export", hint: "Bring your library in from JSON or CSV", to: "/app/import", icon: "download" },
-  { id: "profile", label: "Profile", hint: "View your public profile", to: "/app/profile", icon: "user" },
+  {
+    id: "settings",
+    label: "Settings",
+    hint: "Theme, privacy, and active sessions",
+    to: "/app/settings",
+    icon: "settings",
+  },
+  {
+    id: "import",
+    label: "Import & Export",
+    hint: "Bring your library in from JSON or CSV",
+    to: "/app/import",
+    icon: "download",
+  },
+  {
+    id: "profile",
+    label: "Profile",
+    hint: "View your public profile",
+    to: "/app/profile",
+    icon: "user",
+  },
 ];
-
-
-

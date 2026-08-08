@@ -1,5 +1,5 @@
-import { apiGet, apiPost, apiPatch, apiDelete } from './fetch';
-import type { MediaItem } from '@/lib/types';
+import { apiGet, apiPost, apiPatch, apiDelete } from "./fetch";
+import type { MediaItem } from "@/lib/types";
 
 export interface LibraryItemMedia {
   id: string;
@@ -74,45 +74,54 @@ export interface LibraryFilterParams {
   cursor?: string;
   limit?: number;
   sortBy?: string;
-  sortOrder?: 'asc' | 'desc';
+  sortOrder?: "asc" | "desc";
 }
 
 function buildQueryString(params: Record<string, unknown>): string {
   const searchParams = new URLSearchParams();
   for (const [key, value] of Object.entries(params)) {
-    if (value !== undefined && value !== null && value !== '') {
+    if (value !== undefined && value !== null && value !== "") {
       searchParams.set(key, String(value));
     }
   }
   const qs = searchParams.toString();
-  return qs ? `?${qs}` : '';
+  return qs ? `?${qs}` : "";
 }
 
 export async function addToLibrary(input: AddToLibraryInput): Promise<LibraryItemResponse> {
-  return apiPost<LibraryItemResponse>('/library', input);
+  return apiPost<LibraryItemResponse>("/library", input);
 }
 
 export async function listLibrary(params?: LibraryFilterParams): Promise<LibraryListResponse> {
   return apiGet<LibraryListResponse>(`/library${buildQueryString(params ?? {})}`);
 }
 
-export async function listLibraryByStatus(status: string, params?: LibraryFilterParams): Promise<LibraryListResponse> {
+export async function listLibraryByStatus(
+  status: string,
+  params?: LibraryFilterParams,
+): Promise<LibraryListResponse> {
   return apiGet<LibraryListResponse>(`/library/status/${status}${buildQueryString(params ?? {})}`);
 }
 
-export async function listLibraryByType(type: string, params?: LibraryFilterParams): Promise<LibraryListResponse> {
+export async function listLibraryByType(
+  type: string,
+  params?: LibraryFilterParams,
+): Promise<LibraryListResponse> {
   return apiGet<LibraryListResponse>(`/library/type/${type}${buildQueryString(params ?? {})}`);
 }
 
 export async function getLibraryStats(): Promise<LibraryStatsResponse> {
-  return apiGet<LibraryStatsResponse>('/library/stats');
+  return apiGet<LibraryStatsResponse>("/library/stats");
 }
 
 export async function getLibraryItem(id: string): Promise<LibraryItemResponse> {
   return apiGet<LibraryItemResponse>(`/library/${id}`);
 }
 
-export async function updateLibraryItem(id: string, input: UpdateLibraryItemInput): Promise<LibraryItemResponse> {
+export async function updateLibraryItem(
+  id: string,
+  input: UpdateLibraryItemInput,
+): Promise<LibraryItemResponse> {
   return apiPatch<LibraryItemResponse>(`/library/${id}`, input);
 }
 

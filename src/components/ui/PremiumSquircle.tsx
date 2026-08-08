@@ -27,12 +27,17 @@ const variants: Record<Variant, string> = {
 
 export function PremiumSquircle({ icon, size = "md", variant = "glass", className }: Props) {
   return (
-    <div className={cn("group/squircle inline-flex cursor-pointer items-center justify-center", className)}>
+    <div
+      className={cn(
+        "group/squircle inline-flex cursor-pointer items-center justify-center",
+        className,
+      )}
+    >
       <span
         className={cn(
           "grid place-items-center transition-all duration-500 ease-out active:scale-95 group-hover/squircle:scale-110",
           variants[variant],
-          sizes[size]
+          sizes[size],
         )}
       >
         <span className="flex items-center justify-center transition-transform duration-500 group-hover/squircle:rotate-12">

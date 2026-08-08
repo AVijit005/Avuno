@@ -16,7 +16,19 @@ interface Props {
   onSeal: () => void;
 }
 
-export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], journalText, isSealing, isDraftSaved, textareaRef, onTextChange, onClose, onSeal }: Props) {
+export function WriteOverlay({
+  isOpen,
+  promptIndex,
+  timeContext,
+  prompts = [],
+  journalText,
+  isSealing,
+  isDraftSaved,
+  textareaRef,
+  onTextChange,
+  onClose,
+  onSeal,
+}: Props) {
   if (typeof document === "undefined") return null;
 
   return createPortal(
@@ -76,7 +88,7 @@ export function WriteOverlay({ isOpen, promptIndex, timeContext, prompts = [], j
               placeholder="Start typing..."
               aria-label="Journal entry text"
               onKeyDown={(e) => {
-                if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+                if (e.key === "Enter" && (e.metaKey || e.ctrlKey)) {
                   e.preventDefault();
                   if (journalText.length > 5 && !isSealing) onSeal();
                 }

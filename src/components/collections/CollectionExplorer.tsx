@@ -27,7 +27,7 @@ export function CollectionExplorer({ collections }: Props) {
               onClick={() => setActiveFilter(f)}
               className="relative rounded-full px-4 py-2 text-sm font-medium tracking-wide transition-colors"
               style={{
-                color: activeFilter === f ? "#000" : "rgba(255,255,255,0.6)"
+                color: activeFilter === f ? "#000" : "rgba(255,255,255,0.6)",
               }}
             >
               {activeFilter === f && (
@@ -41,7 +41,7 @@ export function CollectionExplorer({ collections }: Props) {
             </button>
           ))}
         </div>
-        
+
         <PremiumGlass className="flex items-center gap-2 rounded-full px-4 py-2">
           <Search size={14} className="text-muted-foreground" aria-hidden="true" />
           <input
@@ -68,7 +68,11 @@ export function CollectionExplorer({ collections }: Props) {
                 {/* Fallback card content, since the actual SmartCollectionCard takes a specific collection */}
                 <PremiumGlass className="h-48 rounded-2xl p-6 flex flex-col justify-end relative overflow-hidden group cursor-pointer">
                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10" />
-                  <img src={c.cover || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"} alt="" className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-50" />
+                  <img
+                    src={c.cover || "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe"}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-50"
+                  />
                   <div className="relative z-20">
                     <h3 className="font-display text-xl">{c.name}</h3>
                     <p className="text-sm text-white/60 line-clamp-1 mt-1">{c.description}</p>
@@ -77,7 +81,12 @@ export function CollectionExplorer({ collections }: Props) {
               </motion.div>
             ))
           ) : (
-            <motion.div layout initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="col-span-full py-12 text-center text-muted-foreground">
+            <motion.div
+              layout
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="col-span-full py-12 text-center text-muted-foreground"
+            >
               No collections found matching your criteria.
             </motion.div>
           )}

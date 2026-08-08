@@ -5,9 +5,17 @@ import type { RechartsComponent } from "@/lib/types/collection";
 import { useOverview, useStreaks } from "@/hooks/use-analytics";
 import { CountUp } from "@/components/landing/CountUp";
 
-const Area = lazy(() => import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })));
-const AreaChart = lazy(() => import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })));
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
+const Area = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Area as unknown as RechartsComponent })),
+);
+const AreaChart = lazy(() =>
+  import("recharts").then((m) => ({ default: m.AreaChart as unknown as RechartsComponent })),
+);
+const ResponsiveContainer = lazy(() =>
+  import("recharts").then((m) => ({
+    default: m.ResponsiveContainer as unknown as RechartsComponent,
+  })),
+);
 
 type Item = {
   key: string;

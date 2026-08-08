@@ -1,5 +1,12 @@
 import { useState, useEffect } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { useUpdateProfile } from "@/hooks/use-users";
 import type { UIProfile } from "@/lib/adapters/types";
@@ -7,14 +14,14 @@ import type { UIProfile } from "@/lib/adapters/types";
 export function EditProfileDialog({
   open,
   onOpenChange,
-  profile
+  profile,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   profile: UIProfile | null;
 }) {
   const updateProfile = useUpdateProfile();
-  
+
   const [displayName, setDisplayName] = useState("");
   const [username, setUsername] = useState("");
   const [bio, setBio] = useState("");
@@ -28,15 +35,18 @@ export function EditProfileDialog({
   }, [profile, open]);
 
   const handleSave = () => {
-    updateProfile.mutate({
-      displayName,
-      username,
-      bio,
-    }, {
-      onSuccess: () => {
-        onOpenChange(false);
-      }
-    });
+    updateProfile.mutate(
+      {
+        displayName,
+        username,
+        bio,
+      },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+        },
+      },
+    );
   };
 
   return (
@@ -50,7 +60,9 @@ export function EditProfileDialog({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
-            <label htmlFor="displayName" className="text-sm font-medium">Display Name</label>
+            <label htmlFor="displayName" className="text-sm font-medium">
+              Display Name
+            </label>
             <input
               id="displayName"
               value={displayName}
@@ -59,7 +71,9 @@ export function EditProfileDialog({
             />
           </div>
           <div className="grid gap-2">
-            <label htmlFor="username" className="text-sm font-medium">Username</label>
+            <label htmlFor="username" className="text-sm font-medium">
+              Username
+            </label>
             <input
               id="username"
               value={username}
@@ -68,7 +82,9 @@ export function EditProfileDialog({
             />
           </div>
           <div className="grid gap-2">
-            <label htmlFor="bio" className="text-sm font-medium">Bio</label>
+            <label htmlFor="bio" className="text-sm font-medium">
+              Bio
+            </label>
             <textarea
               id="bio"
               value={bio}
@@ -78,7 +94,9 @@ export function EditProfileDialog({
           </div>
         </div>
         <DialogFooter>
-          <PremiumButton variant="ghost" onClick={() => onOpenChange(false)}>Cancel</PremiumButton>
+          <PremiumButton variant="ghost" onClick={() => onOpenChange(false)}>
+            Cancel
+          </PremiumButton>
           <PremiumButton variant="primary" onClick={handleSave} disabled={updateProfile.isPending}>
             {updateProfile.isPending ? "Saving..." : "Save changes"}
           </PremiumButton>

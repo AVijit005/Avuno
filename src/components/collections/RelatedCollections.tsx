@@ -43,7 +43,7 @@ function Mini({ c }: { c: UICollection }) {
       <div
         className="absolute inset-0"
         style={{
-          background: `linear-gradient(180deg, transparent 40%, ${accent.startsWith('var(') ? `color-mix(in oklch, ${accent}, transparent 60%)` : `${accent}66`}, oklch(0 0 0 / 0.85))`,
+          background: `linear-gradient(180deg, transparent 40%, ${accent.startsWith("var(") ? `color-mix(in oklch, ${accent}, transparent 60%)` : `${accent}66`}, oklch(0 0 0 / 0.85))`,
         }}
       />
       <div className="absolute inset-x-0 bottom-0 p-4">

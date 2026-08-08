@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiPatch, apiDelete } from './fetch';
+import { apiGet, apiPost, apiPatch, apiDelete } from "./fetch";
 
 export interface CollectionItemResponse {
   id: string;
@@ -95,18 +95,21 @@ export interface UpdateShelfInput {
 }
 
 export async function createCollection(input: CreateCollectionInput): Promise<CollectionResponse> {
-  return apiPost<CollectionResponse>('/collections', input);
+  return apiPost<CollectionResponse>("/collections", input);
 }
 
 export async function listCollections(): Promise<CollectionResponse[]> {
-  return apiGet<CollectionResponse[]>('/collections');
+  return apiGet<CollectionResponse[]>("/collections");
 }
 
 export async function getCollection(id: string): Promise<CollectionResponse> {
   return apiGet<CollectionResponse>(`/collections/${id}`);
 }
 
-export async function updateCollection(id: string, input: UpdateCollectionInput): Promise<CollectionResponse> {
+export async function updateCollection(
+  id: string,
+  input: UpdateCollectionInput,
+): Promise<CollectionResponse> {
   return apiPatch<CollectionResponse>(`/collections/${id}`, input);
 }
 
@@ -114,7 +117,10 @@ export async function deleteCollection(id: string): Promise<void> {
   return apiDelete(`/collections/${id}`);
 }
 
-export async function addCollectionItem(collectionId: string, input: AddCollectionItemInput): Promise<CollectionItemResponse> {
+export async function addCollectionItem(
+  collectionId: string,
+  input: AddCollectionItemInput,
+): Promise<CollectionItemResponse> {
   return apiPost<CollectionItemResponse>(`/collections/${collectionId}/items`, input);
 }
 
@@ -122,20 +128,25 @@ export async function removeCollectionItem(collectionId: string, itemId: string)
   return apiDelete(`/collections/${collectionId}/items/${itemId}`);
 }
 
-export async function reorderCollectionItems(collectionId: string, itemIds: string[]): Promise<void> {
+export async function reorderCollectionItems(
+  collectionId: string,
+  itemIds: string[],
+): Promise<void> {
   return apiPatch(`/collections/${collectionId}/items/reorder`, { itemIds });
 }
 
-export async function getCollectionStats(collectionId: string): Promise<CollectionResponse['stats']> {
+export async function getCollectionStats(
+  collectionId: string,
+): Promise<CollectionResponse["stats"]> {
   return apiGet(`/collections/${collectionId}/stats`);
 }
 
 export async function createShelf(input: CreateShelfInput): Promise<ShelfResponse> {
-  return apiPost<ShelfResponse>('/shelves', input);
+  return apiPost<ShelfResponse>("/shelves", input);
 }
 
 export async function listShelves(): Promise<ShelfResponse[]> {
-  return apiGet<ShelfResponse[]>('/shelves');
+  return apiGet<ShelfResponse[]>("/shelves");
 }
 
 export async function getShelf(id: string): Promise<ShelfResponse> {

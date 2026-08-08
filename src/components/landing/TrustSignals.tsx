@@ -1,12 +1,5 @@
 import { motion } from "motion/react";
-import {
-  Shield,
-  CreditCard,
-  Download,
-  Eye,
-  Zap,
-  Infinity as InfinityIcon,
-} from "lucide-react";
+import { Shield, CreditCard, Download, Eye, Zap, Infinity as InfinityIcon } from "lucide-react";
 
 const SIGNALS = [
   {
@@ -61,9 +54,8 @@ export function TrustSignals() {
             <span className="italic text-muted-foreground">Just a quiet, honest tool.</span>
           </h2>
           <p className="mt-5 text-base text-muted-foreground md:text-lg">
-            We believe the best products don't need to trap you. Avuno earns your
-            attention by being genuinely useful — not by locking your data behind
-            paywalls.
+            We believe the best products don't need to trap you. Avuno earns your attention by being
+            genuinely useful — not by locking your data behind paywalls.
           </p>
         </motion.div>
 
@@ -99,9 +91,7 @@ export function TrustSignals() {
                   <h3 className="font-display text-base tracking-tight text-foreground">
                     {s.label}
                   </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">
-                    {s.detail}
-                  </p>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{s.detail}</p>
                 </div>
               </div>
             </motion.div>
@@ -114,8 +104,7 @@ export function TrustSignals() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
         style={{
-          background:
-            "linear-gradient(180deg, transparent, oklch(0.14 0.012 270 / 0.6))",
+          background: "linear-gradient(180deg, transparent, oklch(0.14 0.012 270 / 0.6))",
         }}
       />
     </section>

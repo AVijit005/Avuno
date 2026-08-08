@@ -57,9 +57,7 @@ export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?
   };
 
   // Number keys jump straight to a chapter — this component renders once per page.
-  useShortcuts(
-    Object.fromEntries(chapters.map((c, i) => [String(i + 1), () => go(c.id)])),
-  );
+  useShortcuts(Object.fromEntries(chapters.map((c, i) => [String(i + 1), () => go(c.id)])));
 
   const showSticky = Boolean(title) && progress > 0.06;
 

@@ -28,9 +28,11 @@ const ICONS: Record<string, typeof Film> = {
 
 export function ActivityFeed({ className, limit = 10 }: { className?: string; limit?: number }) {
   const { data, isLoading } = useActivity();
-  
+
   if (isLoading) {
-    return <div className="p-5 text-muted-foreground animate-pulse text-sm">Loading activity...</div>;
+    return (
+      <div className="p-5 text-muted-foreground animate-pulse text-sm">Loading activity...</div>
+    );
   }
 
   const feed = (data?.timeline ?? []).slice(0, limit);
@@ -57,7 +59,7 @@ export function ActivityFeed({ className, limit = 10 }: { className?: string; li
                 <div className="min-w-0 flex-1">
                   <div className="text-sm">{a.title}</div>
                   <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
-                    {new Date(a.date).toLocaleDateString()}  {a.type}
+                    {new Date(a.date).toLocaleDateString()} {a.type}
                   </div>
                 </div>
               </div>
@@ -65,7 +67,11 @@ export function ActivityFeed({ className, limit = 10 }: { className?: string; li
             return (
               <li key={a.id}>
                 {a.metadata?.mediaId ? (
-                  <Link to="/app/media/$id" params={{ id: String(a.metadata.mediaId) }} className="block">
+                  <Link
+                    to="/app/media/$id"
+                    params={{ id: String(a.metadata.mediaId) }}
+                    className="block"
+                  >
                     {node}
                   </Link>
                 ) : (

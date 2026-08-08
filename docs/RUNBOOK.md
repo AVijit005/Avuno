@@ -51,9 +51,13 @@
 ## Rollback Procedure
 
 \`\`\`bash
+
 # Revert to previous Docker image
+
 docker compose stop api
 docker compose -f docker-compose.prod.yml up -d api
+
 # If using orchestration:
+
 kubectl rollout undo deployment/chronicle-api
 \`\`\`

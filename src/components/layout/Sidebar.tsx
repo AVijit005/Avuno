@@ -5,11 +5,11 @@ import { NAV, GROUP_LABELS, NAV_GROUP_ORDER } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 
-export function Sidebar({ 
-  onOpenSearch, 
-  collapsed, 
-  onToggle 
-}: { 
+export function Sidebar({
+  onOpenSearch,
+  collapsed,
+  onToggle,
+}: {
   onOpenSearch: () => void;
   collapsed: boolean;
   onToggle: () => void;
@@ -129,4 +129,3 @@ export function Sidebar({
     </motion.aside>
   );
 }
-

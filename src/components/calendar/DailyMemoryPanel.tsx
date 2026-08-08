@@ -100,7 +100,12 @@ export function DailyMemoryPanel({
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={onAddMemory}
-                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onAddMemory(); } }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    onAddMemory();
+                  }
+                }}
               >
                 <Plus className="h-3 w-3" /> Add memory
               </PremiumGlass>
@@ -114,8 +119,12 @@ export function DailyMemoryPanel({
                     <Sparkles className="h-4 w-4 text-amber-300" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 font-semibold mb-0.5">Mood</span>
-                    <span className="font-display text-lg tracking-tight text-foreground/90 leading-none">{mood}</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 font-semibold mb-0.5">
+                      Mood
+                    </span>
+                    <span className="font-display text-lg tracking-tight text-foreground/90 leading-none">
+                      {mood}
+                    </span>
                   </div>
                 </motion.div>
 
@@ -128,8 +137,12 @@ export function DailyMemoryPanel({
                     <CloudSun className="h-4 w-4 text-sky-300" />
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 font-semibold mb-0.5">Weather</span>
-                    <span className="font-display text-lg tracking-tight text-foreground/90 leading-none">{weather}</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/60 font-semibold mb-0.5">
+                      Weather
+                    </span>
+                    <span className="font-display text-lg tracking-tight text-foreground/90 leading-none">
+                      {weather}
+                    </span>
                   </div>
                 </motion.div>
               </div>

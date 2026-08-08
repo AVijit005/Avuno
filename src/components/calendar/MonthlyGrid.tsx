@@ -3,7 +3,6 @@ import { useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Trophy } from "lucide-react";
 
-
 interface CellData {
   day: number;
   hasMedia: boolean;
@@ -33,15 +32,12 @@ export function MonthlyGrid({ monthIdx, grid, selectedDay, onSelectDay }: Props)
     [grid],
   );
 
-  const focusCell = useCallback(
-    (day: number | null) => {
-      if (day === null || !gridRef.current) return;
-      const buttons = gridRef.current.querySelectorAll<HTMLButtonElement>("[data-day]");
-      const target = Array.from(buttons).find((b) => Number(b.dataset.day) === day);
-      target?.focus();
-    },
-    [],
-  );
+  const focusCell = useCallback((day: number | null) => {
+    if (day === null || !gridRef.current) return;
+    const buttons = gridRef.current.querySelectorAll<HTMLButtonElement>("[data-day]");
+    const target = Array.from(buttons).find((b) => Number(b.dataset.day) === day);
+    target?.focus();
+  }, []);
 
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent, cellDay: number) => {
@@ -83,9 +79,14 @@ export function MonthlyGrid({ monthIdx, grid, selectedDay, onSelectDay }: Props)
 
   return (
     <PremiumGlass className="p-6 md:p-8">
-      <div className="mb-3 grid grid-cols-7 text-[10px] uppercase tracking-[0.18em] text-muted-foreground" role="row">
+      <div
+        className="mb-3 grid grid-cols-7 text-[10px] uppercase tracking-[0.18em] text-muted-foreground"
+        role="row"
+      >
         {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
-          <div key={i} className="text-center" role="columnheader">{d}</div>
+          <div key={i} className="text-center" role="columnheader">
+            {d}
+          </div>
         ))}
       </div>
       <AnimatePresence mode="wait">
@@ -125,25 +126,41 @@ export function MonthlyGrid({ monthIdx, grid, selectedDay, onSelectDay }: Props)
               >
                 {c.hasMedia && (
                   <>
-                    <img src={c.poster} alt="" aria-hidden className="absolute inset-0 h-full w-full object-cover scale-100 transition-transform duration-500 group-hover:scale-110" />
+                    <img
+                      src={c.poster}
+                      alt=""
+                      aria-hidden
+                      className="absolute inset-0 h-full w-full object-cover scale-100 transition-transform duration-500 group-hover:scale-110"
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/20" />
                   </>
                 )}
                 <div className="absolute inset-0 grid place-items-center z-10">
-                  <span className={`text-xs font-semibold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${isSel || c.hasMedia ? "text-white" : "text-foreground/90"}`}>
+                  <span
+                    className={`text-xs font-semibold tracking-wide drop-shadow-[0_2px_4px_rgba(0,0,0,0.8)] ${isSel || c.hasMedia ? "text-white" : "text-foreground/90"}`}
+                  >
                     {c.day}
                   </span>
                 </div>
                 {c.hasJournal && (
-                  <span className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)] z-10" aria-hidden />
+                  <span
+                    className="absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full bg-rose-400 shadow-[0_0_8px_rgba(251,113,133,0.8)] z-10"
+                    aria-hidden
+                  />
                 )}
                 {c.hasAchievement && (
-                  <Trophy className="absolute left-1.5 top-1.5 h-2.5 w-2.5 text-amber-300 drop-shadow-[0_0_6px_rgba(252,211,77,0.8)] z-10" aria-hidden />
+                  <Trophy
+                    className="absolute left-1.5 top-1.5 h-2.5 w-2.5 text-amber-300 drop-shadow-[0_0_6px_rgba(252,211,77,0.8)] z-10"
+                    aria-hidden
+                  />
                 )}
                 <div
                   aria-hidden
                   className="absolute inset-0 pointer-events-none rounded-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 mix-blend-overlay z-20"
-                  style={{ background: "linear-gradient(110deg, transparent 15%, rgba(255,255,255,0.5) 30%, transparent 45%)" }}
+                  style={{
+                    background:
+                      "linear-gradient(110deg, transparent 15%, rgba(255,255,255,0.5) 30%, transparent 45%)",
+                  }}
                 />
               </motion.button>
             );
@@ -152,17 +169,18 @@ export function MonthlyGrid({ monthIdx, grid, selectedDay, onSelectDay }: Props)
       </AnimatePresence>
       <div className="mt-5 flex items-center gap-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
         <span className="flex items-center gap-1.5" aria-hidden>
-          <span className="h-2 w-2 rounded-full bg-primary/70" />media
+          <span className="h-2 w-2 rounded-full bg-primary/70" />
+          media
         </span>
         <span className="flex items-center gap-1.5" aria-hidden>
-          <span className="h-2 w-2 rounded-full bg-rose-300/80" />journal
+          <span className="h-2 w-2 rounded-full bg-rose-300/80" />
+          journal
         </span>
         <span className="flex items-center gap-1.5" aria-hidden>
-          <Trophy className="h-3 w-3 text-amber-300" />achievement
+          <Trophy className="h-3 w-3 text-amber-300" />
+          achievement
         </span>
       </div>
     </PremiumGlass>
   );
 }
-
-

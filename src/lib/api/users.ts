@@ -1,4 +1,4 @@
-import { apiGet, apiPatch, apiPost, apiDelete, apiUpload } from './fetch';
+import { apiGet, apiPatch, apiPost, apiDelete, apiUpload } from "./fetch";
 
 export interface ProfileResponse {
   id: string;
@@ -37,23 +37,23 @@ export interface UpdateProfileInput {
 }
 
 export interface UpdatePreferencesInput {
-  defaultLandingPage?: 'home' | 'library' | 'timeline' | 'dashboard';
-  gridListPreference?: 'grid' | 'list';
+  defaultLandingPage?: "home" | "library" | "timeline" | "dashboard";
+  gridListPreference?: "grid" | "list";
   autoplay?: boolean;
   reduceMotion?: boolean;
-  preferredMediaView?: 'card' | 'compact' | 'poster';
-  defaultSort?: 'recent' | 'title' | 'rating' | 'releaseDate';
+  preferredMediaView?: "card" | "compact" | "poster";
+  defaultSort?: "recent" | "title" | "rating" | "releaseDate";
   defaultFilters?: Record<string, unknown>;
-  defaultLibraryView?: 'all' | 'inProgress' | 'completed' | 'favorites';
+  defaultLibraryView?: "all" | "inProgress" | "completed" | "favorites";
 }
 
 export interface UpdatePrivacyInput {
-  profileVisibility?: 'public' | 'followers' | 'private';
-  collectionVisibility?: 'public' | 'followers' | 'private';
-  journalVisibility?: 'public' | 'followers' | 'private';
-  timelineVisibility?: 'public' | 'followers' | 'private';
-  wrappedVisibility?: 'public' | 'followers' | 'private';
-  searchVisibility?: 'public' | 'followers' | 'private';
+  profileVisibility?: "public" | "followers" | "private";
+  collectionVisibility?: "public" | "followers" | "private";
+  journalVisibility?: "public" | "followers" | "private";
+  timelineVisibility?: "public" | "followers" | "private";
+  wrappedVisibility?: "public" | "followers" | "private";
+  searchVisibility?: "public" | "followers" | "private";
 }
 
 export interface SessionResponse {
@@ -68,33 +68,33 @@ export interface SessionResponse {
 }
 
 export async function getProfile(): Promise<ProfileResponse> {
-  return apiGet<ProfileResponse>('/users/me');
+  return apiGet<ProfileResponse>("/users/me");
 }
 
 export async function updateProfile(input: UpdateProfileInput): Promise<ProfileResponse> {
-  return apiPatch<ProfileResponse>('/users/me', input);
+  return apiPatch<ProfileResponse>("/users/me", input);
 }
 
 export async function updatePreferences(input: UpdatePreferencesInput): Promise<ProfileResponse> {
-  return apiPatch<ProfileResponse>('/users/me/preferences', input);
+  return apiPatch<ProfileResponse>("/users/me/preferences", input);
 }
 
 export async function updatePrivacy(input: UpdatePrivacyInput): Promise<ProfileResponse> {
-  return apiPatch<ProfileResponse>('/users/me/privacy', input);
+  return apiPatch<ProfileResponse>("/users/me/privacy", input);
 }
 
 export async function uploadAvatar(file: File): Promise<{ url: string }> {
   const formData = new FormData();
-  formData.append('file', file);
-  return apiUpload<{ url: string }>('/users/me/avatar', formData);
+  formData.append("file", file);
+  return apiUpload<{ url: string }>("/users/me/avatar", formData);
 }
 
 export async function deleteAvatar(): Promise<void> {
-  return apiDelete('/users/me/avatar');
+  return apiDelete("/users/me/avatar");
 }
 
 export async function getSessions(): Promise<SessionResponse[]> {
-  return apiGet<SessionResponse[]>('/users/me/sessions');
+  return apiGet<SessionResponse[]>("/users/me/sessions");
 }
 
 export async function revokeSession(sessionId: string): Promise<void> {

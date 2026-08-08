@@ -69,5 +69,3 @@ export function DiscoveryCollections({ className }: Props) {
     </section>
   );
 }
-
-

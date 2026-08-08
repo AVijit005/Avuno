@@ -44,9 +44,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
             onError={() => setBackdropErrored(true)}
             initial={{ scale: 1.08, opacity: 0, filter: "blur(14px)" }}
             animate={
-              backdropLoaded
-                ? { scale: 1.04, opacity: 1, filter: "blur(0px)" }
-                : { opacity: 0 }
+              backdropLoaded ? { scale: 1.04, opacity: 1, filter: "blur(0px)" } : { opacity: 0 }
             }
             transition={{ duration: 1.4, ease }}
             className="h-full w-full object-cover"
@@ -160,7 +158,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
             className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-black/30 px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-white/75 backdrop-blur"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-            {(item.status === "in_progress")
+            {item.status === "in_progress"
               ? "Currently in your story"
               : item.status === "completed"
                 ? "A chapter you finished"

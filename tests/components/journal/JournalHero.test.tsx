@@ -19,7 +19,14 @@ describe("JournalHero", () => {
   });
 
   it("shows stats when loaded", () => {
-    render(<JournalHero isLoading={false} stats={{ journalCount: 5, writingStreak: 3 }} entries={[]} favoriteMood="Happy" />);
+    render(
+      <JournalHero
+        isLoading={false}
+        stats={{ journalCount: 5, writingStreak: 3 }}
+        entries={[]}
+        favoriteMood="Happy"
+      />,
+    );
     expect(screen.getByText("5")).toBeInTheDocument();
     expect(screen.getByText("Happy")).toBeInTheDocument();
   });

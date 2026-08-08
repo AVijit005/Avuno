@@ -5,12 +5,26 @@ import { useIntelligence } from "@/hooks/use-analytics";
 import { Dna, Loader2 } from "lucide-react";
 import type { ImpactItem } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
-const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })));
-const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })));
-const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })));
-const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })));
-const Tooltip = lazy(() => import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() =>
+  import("recharts").then((m) => ({
+    default: m.ResponsiveContainer as unknown as RechartsComponent,
+  })),
+);
+const PolarAngleAxis = lazy(() =>
+  import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })),
+);
+const PolarGrid = lazy(() =>
+  import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })),
+);
+const Radar = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })),
+);
+const RadarChart = lazy(() =>
+  import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })),
+);
+const Tooltip = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Tooltip as unknown as RechartsComponent })),
+);
 
 export function MemoryDNA() {
   const { data: intelligence, isLoading } = useIntelligence();
@@ -38,7 +52,9 @@ export function MemoryDNA() {
           </div>
           <div>
             <h3 className="font-display text-xl tracking-tight">Memory DNA</h3>
-            <p className="text-xs text-muted-foreground">Add journal entries to reveal your profile</p>
+            <p className="text-xs text-muted-foreground">
+              Add journal entries to reveal your profile
+            </p>
           </div>
         </div>
       </PremiumGlass>
@@ -62,7 +78,14 @@ export function MemoryDNA() {
           <RadarChart data={data} cx="50%" cy="50%" outerRadius="75%">
             <PolarGrid stroke="oklch(1 0 0 / 0.1)" />
             <PolarAngleAxis dataKey="trait" tick={{ fontSize: 10, fill: "oklch(1 0 0 / 0.5)" }} />
-            <Radar name="Profile" dataKey="value" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} strokeWidth={2} />
+            <Radar
+              name="Profile"
+              dataKey="value"
+              stroke="var(--primary)"
+              fill="var(--primary)"
+              fillOpacity={0.3}
+              strokeWidth={2}
+            />
           </RadarChart>
         </ResponsiveContainer>
       </div>

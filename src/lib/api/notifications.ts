@@ -1,4 +1,4 @@
-import { apiGet, apiPatch, apiDelete, apiPost } from './fetch';
+import { apiGet, apiPatch, apiDelete, apiPost } from "./fetch";
 
 export interface NotificationResponse {
   id: string;
@@ -42,12 +42,15 @@ export interface NotificationListResponse {
   cursor: string | null;
 }
 
-export async function listNotifications(params?: { cursor?: string; limit?: number }): Promise<NotificationListResponse> {
+export async function listNotifications(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<NotificationListResponse> {
   const qs = new URLSearchParams();
-  if (params?.cursor) qs.set('cursor', params.cursor);
-  if (params?.limit) qs.set('limit', String(params.limit));
+  if (params?.cursor) qs.set("cursor", params.cursor);
+  if (params?.limit) qs.set("limit", String(params.limit));
   const qsStr = qs.toString();
-  return apiGet<NotificationListResponse>(`/notifications${qsStr ? `?${qsStr}` : ''}`);
+  return apiGet<NotificationListResponse>(`/notifications${qsStr ? `?${qsStr}` : ""}`);
 }
 
 export async function markNotificationRead(id: string): Promise<void> {
@@ -55,7 +58,7 @@ export async function markNotificationRead(id: string): Promise<void> {
 }
 
 export async function markAllNotificationsRead(): Promise<void> {
-  return apiPatch('/notifications/read-all');
+  return apiPatch("/notifications/read-all");
 }
 
 export async function deleteNotification(id: string): Promise<void> {
@@ -63,13 +66,19 @@ export async function deleteNotification(id: string): Promise<void> {
 }
 
 export async function getNotificationPreferences(): Promise<NotificationPreferences> {
-  return apiGet<NotificationPreferences>('/notifications/preferences');
+  return apiGet<NotificationPreferences>("/notifications/preferences");
 }
 
-export async function updateNotificationPreferences(input: UpdateNotificationPreferences): Promise<NotificationPreferences> {
-  return apiPatch<NotificationPreferences>('/notifications/preferences', input);
+export async function updateNotificationPreferences(
+  input: UpdateNotificationPreferences,
+): Promise<NotificationPreferences> {
+  return apiPatch<NotificationPreferences>("/notifications/preferences", input);
 }
 
-export async function sendTestNotification(title: string, body: string, type?: string): Promise<void> {
-  return apiPost('/notifications/test', { title, body, type });
+export async function sendTestNotification(
+  title: string,
+  body: string,
+  type?: string,
+): Promise<void> {
+  return apiPost("/notifications/test", { title, body, type });
 }

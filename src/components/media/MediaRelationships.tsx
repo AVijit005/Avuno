@@ -13,7 +13,8 @@ export function MediaRelationships({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Connected to {item.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Explore how this story relates to others in your library — sequels, prequels, adaptations, and more.
+        Explore how this story relates to others in your library — sequels, prequels, adaptations,
+        and more.
       </p>
     </PremiumGlass>
   );

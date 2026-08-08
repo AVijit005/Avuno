@@ -1,4 +1,4 @@
-import { apiGet, apiPost, apiDelete } from './fetch';
+import { apiGet, apiPost, apiDelete } from "./fetch";
 
 export interface WrappedCard {
   rank: number;
@@ -55,11 +55,11 @@ export interface WrappedShare {
 }
 
 export async function generateWrapped(year: number): Promise<WrappedResponse> {
-  return apiPost<WrappedResponse>('/wrapped/generate', { year });
+  return apiPost<WrappedResponse>("/wrapped/generate", { year });
 }
 
 export async function listWrapped(): Promise<WrappedSummary[]> {
-  const response = await apiGet<{ items: WrappedSummary[] }>('/wrapped');
+  const response = await apiGet<{ items: WrappedSummary[] }>("/wrapped");
   return response.items;
 }
 

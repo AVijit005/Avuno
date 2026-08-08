@@ -50,9 +50,7 @@ export function FAQSection() {
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           className="mx-auto max-w-2xl text-center"
         >
-          <div className="text-[11px] uppercase tracking-[0.24em] text-primary/90">
-            Questions
-          </div>
+          <div className="text-[11px] uppercase tracking-[0.24em] text-primary/90">Questions</div>
           <h2 className="mt-3 font-display text-4xl leading-[1.05] tracking-tight md:text-5xl">
             Everything you'd want to know.
           </h2>
@@ -127,8 +125,7 @@ export function FAQSection() {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 bottom-0 h-32"
         style={{
-          background:
-            "linear-gradient(180deg, transparent, oklch(0.14 0.012 270 / 0.6))",
+          background: "linear-gradient(180deg, transparent, oklch(0.14 0.012 270 / 0.6))",
         }}
       />
     </section>

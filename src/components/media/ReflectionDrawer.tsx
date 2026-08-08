@@ -106,7 +106,10 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
         </div>
 
         <div className="mt-4">
-          <label htmlFor={reflectionId} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+          <label
+            htmlFor={reflectionId}
+            className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground"
+          >
             A paragraph for your future self
           </label>
           <textarea

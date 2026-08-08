@@ -1,4 +1,4 @@
-import { apiGet, apiPatch, apiPost, apiDelete } from './fetch';
+import { apiGet, apiPatch, apiPost, apiDelete } from "./fetch";
 
 export interface RatingResponse {
   rating: number | null;
@@ -50,19 +50,31 @@ export async function updateRating(libraryId: string, rating: number): Promise<R
   return apiPatch<RatingResponse>(`/library/${libraryId}/rating`, { rating });
 }
 
-export async function toggleFavorite(libraryId: string, favorite: boolean): Promise<FavoriteResponse> {
+export async function toggleFavorite(
+  libraryId: string,
+  favorite: boolean,
+): Promise<FavoriteResponse> {
   return apiPatch<FavoriteResponse>(`/library/${libraryId}/favorite`, { favorite });
 }
 
-export async function toggleBookmark(libraryId: string, bookmark: boolean): Promise<BookmarkResponse> {
+export async function toggleBookmark(
+  libraryId: string,
+  bookmark: boolean,
+): Promise<BookmarkResponse> {
   return apiPatch<BookmarkResponse>(`/library/${libraryId}/bookmark`, { bookmark });
 }
 
-export async function createReview(libraryId: string, input: CreateReviewInput): Promise<ReviewResponse> {
+export async function createReview(
+  libraryId: string,
+  input: CreateReviewInput,
+): Promise<ReviewResponse> {
   return apiPost<ReviewResponse>(`/library/${libraryId}/review`, input);
 }
 
-export async function updateReview(libraryId: string, input: UpdateReviewInput): Promise<ReviewResponse> {
+export async function updateReview(
+  libraryId: string,
+  input: UpdateReviewInput,
+): Promise<ReviewResponse> {
   return apiPatch<ReviewResponse>(`/library/${libraryId}/review`, input);
 }
 
@@ -70,30 +82,42 @@ export async function deleteReview(libraryId: string): Promise<void> {
   return apiDelete(`/library/${libraryId}/review`);
 }
 
-export async function listReviews(params?: { cursor?: string; limit?: number }): Promise<{ data: ReviewResponse[]; hasMore: boolean; cursor: string | null }> {
+export async function listReviews(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ data: ReviewResponse[]; hasMore: boolean; cursor: string | null }> {
   const qs = new URLSearchParams();
-  if (params?.cursor) qs.set('cursor', params.cursor);
-  if (params?.limit) qs.set('limit', String(params.limit));
+  if (params?.cursor) qs.set("cursor", params.cursor);
+  if (params?.limit) qs.set("limit", String(params.limit));
   return apiGet(`/library/reviews?${qs.toString()}`);
 }
 
-export async function listFavorites(params?: { cursor?: string; limit?: number }): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
+export async function listFavorites(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
   const qs = new URLSearchParams();
-  if (params?.cursor) qs.set('cursor', params.cursor);
-  if (params?.limit) qs.set('limit', String(params.limit));
+  if (params?.cursor) qs.set("cursor", params.cursor);
+  if (params?.limit) qs.set("limit", String(params.limit));
   return apiGet(`/library/favorites?${qs.toString()}`);
 }
 
-export async function listBookmarks(params?: { cursor?: string; limit?: number }): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
+export async function listBookmarks(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
   const qs = new URLSearchParams();
-  if (params?.cursor) qs.set('cursor', params.cursor);
-  if (params?.limit) qs.set('limit', String(params.limit));
+  if (params?.cursor) qs.set("cursor", params.cursor);
+  if (params?.limit) qs.set("limit", String(params.limit));
   return apiGet(`/library/bookmarks?${qs.toString()}`);
 }
 
-export async function listHistory(params?: { cursor?: string; limit?: number }): Promise<{ data: HistoryEvent[]; hasMore: boolean; cursor: string | null }> {
+export async function listHistory(params?: {
+  cursor?: string;
+  limit?: number;
+}): Promise<{ data: HistoryEvent[]; hasMore: boolean; cursor: string | null }> {
   const qs = new URLSearchParams();
-  if (params?.cursor) qs.set('cursor', params.cursor);
-  if (params?.limit) qs.set('limit', String(params.limit));
+  if (params?.cursor) qs.set("cursor", params.cursor);
+  if (params?.limit) qs.set("limit", String(params.limit));
   return apiGet(`/library/history?${qs.toString()}`);
 }

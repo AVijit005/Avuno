@@ -63,9 +63,12 @@ beforeEach(async () => {
     dispatchEvent: () => true,
   });
   vi.stubGlobal("sessionStorage", storage);
-  vi.stubGlobal("CustomEvent", class {
-    constructor(public type: string) {}
-  });
+  vi.stubGlobal(
+    "CustomEvent",
+    class {
+      constructor(public type: string) {}
+    },
+  );
 
   const mod = await import("./fetch");
   apiPost = mod.apiPost;
@@ -152,7 +155,12 @@ describe("apiFetch — transport retries", () => {
   it("preserves the underlying error as `cause`", async () => {
     setAccessToken(futureJwt());
     const underlying = new TypeError("Failed to fetch");
-    vi.stubGlobal("fetch", vi.fn(async () => { throw underlying; }));
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async () => {
+        throw underlying;
+      }),
+    );
 
     await expect(apiPost("/library", {})).rejects.toMatchObject({ cause: underlying });
   });

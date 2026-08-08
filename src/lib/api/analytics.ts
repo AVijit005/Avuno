@@ -1,4 +1,4 @@
-import { apiGet } from './fetch';
+import { apiGet } from "./fetch";
 
 export interface ContinueItem {
   libraryId: string;
@@ -116,39 +116,39 @@ export interface InsightsResponse {
 }
 
 export async function getDashboard(): Promise<DashboardResponse> {
-  return apiGet<DashboardResponse>('/analytics/dashboard');
+  return apiGet<DashboardResponse>("/analytics/dashboard");
 }
 
 export async function getOverview(): Promise<OverviewResponse> {
-  return apiGet<OverviewResponse>('/analytics/overview');
+  return apiGet<OverviewResponse>("/analytics/overview");
 }
 
 export async function getStreaks(): Promise<StreaksResponse> {
-  return apiGet<StreaksResponse>('/analytics/streaks');
+  return apiGet<StreaksResponse>("/analytics/streaks");
 }
 
 export async function getMediaAnalytics(): Promise<MediaAnalyticsResponse> {
-  return apiGet<MediaAnalyticsResponse>('/analytics/media');
+  return apiGet<MediaAnalyticsResponse>("/analytics/media");
 }
 
 export async function getGenreAnalytics(): Promise<GenreAnalyticsResponse> {
-  return apiGet<GenreAnalyticsResponse>('/analytics/genres');
+  return apiGet<GenreAnalyticsResponse>("/analytics/genres");
 }
 
 export async function getActivity(): Promise<ActivityResponse> {
-  return apiGet<ActivityResponse>('/analytics/activity');
+  return apiGet<ActivityResponse>("/analytics/activity");
 }
 
 export async function getCalendar(year?: number, month?: number): Promise<CalendarResponse> {
   const params = new URLSearchParams();
-  if (year) params.set('year', String(year));
-  if (month) params.set('month', String(month));
+  if (year) params.set("year", String(year));
+  if (month) params.set("month", String(month));
   const qs = params.toString();
-  return apiGet<CalendarResponse>(`/analytics/calendar${qs ? `?${qs}` : ''}`);
+  return apiGet<CalendarResponse>(`/analytics/calendar${qs ? `?${qs}` : ""}`);
 }
 
 export async function getInsights(): Promise<InsightsResponse> {
-  return apiGet<InsightsResponse>('/analytics/insights');
+  return apiGet<InsightsResponse>("/analytics/insights");
 }
 
 export interface ConstellationEntry {
@@ -218,7 +218,13 @@ export interface CalendarYearUpcomingResponse {
 
 export interface CalendarDayResponse {
   date: string;
-  mediaItems: { id: string; title: string; posterUrl: string | null; mediaType: string; note: string }[];
+  mediaItems: {
+    id: string;
+    title: string;
+    posterUrl: string | null;
+    mediaType: string;
+    note: string;
+  }[];
   journalEntry: { id: string; content: string; mood: string | null } | null;
 }
 
@@ -239,8 +245,18 @@ export interface DiscoveryResponse {
   continueFranchises: FranchiseItem[];
   comfortStories: RecommendationItem[];
   seasonalStories: RecommendationItem[];
-  genreExpansion: { genre: string; recommendation: RecommendationItem | null; yourTopMedia: { id: string; title: string; posterUrl: string | null }[] }[];
-  creatorRecommendations: { creator: string; accent: string; completedCount: number; totalWorks: number; topPick: { id: string; title: string; posterUrl: string | null } | null }[];
+  genreExpansion: {
+    genre: string;
+    recommendation: RecommendationItem | null;
+    yourTopMedia: { id: string; title: string; posterUrl: string | null }[];
+  }[];
+  creatorRecommendations: {
+    creator: string;
+    accent: string;
+    completedCount: number;
+    totalWorks: number;
+    topPick: { id: string; title: string; posterUrl: string | null } | null;
+  }[];
   trendingInLibrary: RecommendationItem[];
   undiscoveredFavorites: RecommendationItem[];
   shortWeekendStories: RecommendationItem[];
@@ -276,7 +292,7 @@ export interface FranchiseItem {
 }
 
 export async function getDiscovery(): Promise<DiscoveryResponse> {
-  return apiGet<DiscoveryResponse>('/analytics/discovery');
+  return apiGet<DiscoveryResponse>("/analytics/discovery");
 }
 
 // ─── Intelligence ─────────────────────────────
@@ -296,24 +312,59 @@ export interface IntelligenceResponse {
     favoriteCompletionPattern: string;
   };
   personalStatements: { statement: string; confidence: number; evidence: string }[];
-  mediaEvolution: { year: string; focus: string; mediaCount: number; hoursSpent: number; topGenre: string; journalCount: number }[];
+  mediaEvolution: {
+    year: string;
+    focus: string;
+    mediaCount: number;
+    hoursSpent: number;
+    topGenre: string;
+    journalCount: number;
+  }[];
   editorialInsight: string;
   impactSummary: { label: string; value: number; evidence?: string }[];
 }
 
 export async function getIntelligence(): Promise<IntelligenceResponse> {
-  return apiGet<IntelligenceResponse>('/analytics/intelligence');
+  return apiGet<IntelligenceResponse>("/analytics/intelligence");
 }
 
 // ─── Challenges ───────────────────────────────
 
 export interface ChallengesResponse {
-  challenges: { id: string; kind: string; title: string; description: string; target: number; current: number; reward: string; expiresIn?: string; suggestions: { id: string; title: string; posterUrl: string | null; mediaType: string }[]; accent: string }[];
-  goals: { id: string; title: string; description: string; current: number; target: number; deadline?: string; priority: string; reward: string; reason: string; status: string; startedAt: string; completedAt?: string; accent: string; coverIds: string[]; milestones: { label: string; reached: boolean; when?: string }[]; kind: string }[];
+  challenges: {
+    id: string;
+    kind: string;
+    title: string;
+    description: string;
+    target: number;
+    current: number;
+    reward: string;
+    expiresIn?: string;
+    suggestions: { id: string; title: string; posterUrl: string | null; mediaType: string }[];
+    accent: string;
+  }[];
+  goals: {
+    id: string;
+    title: string;
+    description: string;
+    current: number;
+    target: number;
+    deadline?: string;
+    priority: string;
+    reward: string;
+    reason: string;
+    status: string;
+    startedAt: string;
+    completedAt?: string;
+    accent: string;
+    coverIds: string[];
+    milestones: { label: string; reached: boolean; when?: string }[];
+    kind: string;
+  }[];
 }
 
 export async function getChallenges(): Promise<ChallengesResponse> {
-  return apiGet<ChallengesResponse>('/analytics/challenges');
+  return apiGet<ChallengesResponse>("/analytics/challenges");
 }
 
 export interface ConstellationEntry {
@@ -326,9 +377,8 @@ export interface ConstellationEntry {
 export async function getConstellation(categories?: string[]): Promise<ConstellationEntry[]> {
   const params = new URLSearchParams();
   if (categories && categories.length > 0) {
-    params.set('categories', categories.join(','));
+    params.set("categories", categories.join(","));
   }
   const qs = params.toString();
-  return apiGet<ConstellationEntry[]>(`/analytics/constellation${qs ? `?${qs}` : ''}`);
+  return apiGet<ConstellationEntry[]>(`/analytics/constellation${qs ? `?${qs}` : ""}`);
 }
-

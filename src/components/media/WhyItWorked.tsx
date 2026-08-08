@@ -13,7 +13,8 @@ export function WhyItWorked({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Why {item.title} resonated</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Some stories click because of timing, theme, or pure craft. Explore what made this one work for you.
+        Some stories click because of timing, theme, or pure craft. Explore what made this one work
+        for you.
       </p>
     </PremiumGlass>
   );

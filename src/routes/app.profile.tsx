@@ -36,7 +36,11 @@ function ProfilePage() {
   const streaks = rawStreaks ? adaptStreaks(rawStreaks) : null;
   const collections = rawCollections ? rawCollections.map(adaptCollectionResponse) : [];
 
-  const museumCovers = libraryData?.pages.flatMap(p => p.data).map(adaptLibraryItem).slice(0, 4) || [];
+  const museumCovers =
+    libraryData?.pages
+      .flatMap((p) => p.data)
+      .map(adaptLibraryItem)
+      .slice(0, 4) || [];
 
   return (
     <div className="pt-2 pb-20">
@@ -49,8 +53,16 @@ function ProfilePage() {
 
       <div className="mt-2 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Total hours" value={`${(overview?.hoursSpent || 0).toLocaleString()}h`} />
-        <StatCard label="Completed" value={overview?.completedItems || 0} accent="oklch(0.72 0.16 160 / 0.4)" />
-        <StatCard label="Streak" value={`${streaks?.current || 0}d`} accent="oklch(0.82 0.16 80 / 0.4)" />
+        <StatCard
+          label="Completed"
+          value={overview?.completedItems || 0}
+          accent="oklch(0.72 0.16 160 / 0.4)"
+        />
+        <StatCard
+          label="Streak"
+          value={`${streaks?.current || 0}d`}
+          accent="oklch(0.82 0.16 80 / 0.4)"
+        />
         <StatCard
           label="Collections"
           value={collections.length}
@@ -103,8 +115,8 @@ function ProfilePage() {
                 Memory capsules
               </h2>
               <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-foreground/80">
-                Weekends and weeks Avuno quietly folded into a single feeling — opened only when
-                you want them.
+                Weekends and weeks Avuno quietly folded into a single feeling — opened only when you
+                want them.
               </p>
             </div>
           }

@@ -14,7 +14,8 @@ interface Props {
 
 export function LifeChapterCard({ chapter, className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA: UIMediaItem[] = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
+  const MEDIA: UIMediaItem[] =
+    libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   const covers = chapter.coverIds
     .map((id) => MEDIA.find((m) => m.id === id))
     .filter((m): m is NonNullable<typeof m> => !!m);

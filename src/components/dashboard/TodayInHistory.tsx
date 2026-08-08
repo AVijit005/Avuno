@@ -58,6 +58,3 @@ export function TodayInHistory({ className }: { className?: string }) {
     </PremiumGlass>
   );
 }
-
-
-

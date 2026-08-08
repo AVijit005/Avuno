@@ -126,7 +126,9 @@ export const useLibraryStore = create<State & Actions>()(
               status,
               lastActivityAt: "Just now",
               ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
-              ...(status === "rewatching" ? { progress: 0, timesWatched: ((s.meta[id]?.timesWatched ?? 0) + 1) } : {}),
+              ...(status === "rewatching"
+                ? { progress: 0, timesWatched: (s.meta[id]?.timesWatched ?? 0) + 1 }
+                : {}),
             },
           },
         })),
@@ -233,7 +235,7 @@ export const useLibraryStore = create<State & Actions>()(
         }),
 
       createShelf: (name, accent) => {
-        const id = `shelf_${crypto.randomUUID().slice(0,8)}`;
+        const id = `shelf_${crypto.randomUUID().slice(0, 8)}`;
         set((s) => ({ shelves: [...s.shelves, { id, name, accent, itemIds: [] }] }));
         return id;
       },
@@ -282,7 +284,7 @@ export const useLibraryStore = create<State & Actions>()(
         })),
 
       addUserQuote: (text, ref) => {
-        const id = `uq_${crypto.randomUUID().slice(0,8)}`;
+        const id = `uq_${crypto.randomUUID().slice(0, 8)}`;
         set((s) => ({
           userQuotes: [
             {
@@ -402,4 +404,3 @@ export const KIND_LABEL: Record<MediaKind | "article", string> = {
   youtube: "Video",
   article: "Article",
 };
-

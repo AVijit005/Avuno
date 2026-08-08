@@ -95,8 +95,7 @@ export function LiquidGlassCard({ children, className = "" }: Props) {
             background:
               "linear-gradient(120deg, transparent 0%, rgba(155,140,255,0.20) 28%, transparent 52%, rgba(255,175,205,0.13) 76%, transparent 100%)",
             backgroundSize: "230% 230%",
-            backgroundPosition:
-              "calc(var(--lg-x) * 100%) calc(var(--lg-y) * 100%)",
+            backgroundPosition: "calc(var(--lg-x) * 100%) calc(var(--lg-y) * 100%)",
             transition: "background-position 0.05s linear",
           }}
         />
@@ -144,8 +143,7 @@ export function LiquidGlassCard({ children, className = "" }: Props) {
         aria-hidden
         className="pointer-events-none absolute inset-0 rounded-[32px]"
         style={{
-          boxShadow:
-            "inset 0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.18)",
+          boxShadow: "inset 0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.18)",
         }}
       />
 
@@ -165,8 +163,7 @@ export function LiquidGlassCard({ children, className = "" }: Props) {
           aria-hidden
           className="pointer-events-none absolute -top-20 left-1/2 h-60 w-80 -translate-x-1/2 rounded-full"
           style={{
-            background:
-              "radial-gradient(circle, rgba(160,150,255,0.12) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(160,150,255,0.12) 0%, transparent 70%)",
             filter: "blur(30px)",
           }}
           animate={{ opacity: [0.6, 1, 0.6], scale: [1, 1.08, 1] }}

@@ -12,7 +12,8 @@ export function StoryImpact({ mediaId }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">How this story changed things</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        The ripple effect — how this story influenced your tastes, conversations, and the way you see the world.
+        The ripple effect — how this story influenced your tastes, conversations, and the way you
+        see the world.
       </p>
     </PremiumGlass>
   );

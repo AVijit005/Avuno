@@ -13,7 +13,8 @@ export function EmotionJourney({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">How {item.title} made you feel</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Track the emotional arc of your experience — from the first moment to the lasting impression.
+        Track the emotional arc of your experience — from the first moment to the lasting
+        impression.
       </p>
     </PremiumGlass>
   );

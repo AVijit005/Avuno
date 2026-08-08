@@ -1,6 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Bell, Check, CheckCircle2 } from "lucide-react";
-import { useNotifications, useMarkNotificationRead, useMarkAllNotificationsRead } from "@/hooks/use-notifications";
+import {
+  useNotifications,
+  useMarkNotificationRead,
+  useMarkAllNotificationsRead,
+} from "@/hooks/use-notifications";
 import { formatDistanceToNow } from "date-fns";
 import { cn } from "@/lib/utils";
 import { adaptNotification } from "@/lib/adapters/notifications";
@@ -39,15 +43,25 @@ function Page() {
           </div>
         ) : (
           items.map((n) => (
-            <div key={n.id} className={cn("glass flex items-start gap-4 rounded-2xl p-4 transition", !n.isRead && "ring-1 ring-primary/40 bg-primary/5")}>
+            <div
+              key={n.id}
+              className={cn(
+                "glass flex items-start gap-4 rounded-2xl p-4 transition",
+                !n.isRead && "ring-1 ring-primary/40 bg-primary/5",
+              )}
+            >
               <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/[0.06]">
                 <Bell className="h-4 w-4 text-primary" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium">
                   {n.actionUrl ? (
-                    <Link to={n.actionUrl ?? "/app"} className="hover:underline">{n.title}</Link>
-                  ) : n.title}
+                    <Link to={n.actionUrl ?? "/app"} className="hover:underline">
+                      {n.title}
+                    </Link>
+                  ) : (
+                    n.title
+                  )}
                 </div>
                 <div className="text-xs text-muted-foreground">{n.body}</div>
               </div>

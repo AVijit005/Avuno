@@ -14,7 +14,7 @@ import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
 import { useTimelineEvents, useJournalStats } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
-export const Route = createFileRoute("/app/timeline")({ 
+export const Route = createFileRoute("/app/timeline")({
   component: TimelinePage,
   pendingComponent: PageSkeleton,
 });
@@ -32,17 +32,20 @@ function TimelinePage() {
   const { data: timelineData, isLoading } = useTimelineEvents();
   const { data: statsData } = useJournalStats();
 
-  const allEvents = useMemo(() => (timelineData?.items ?? []).map(adaptTimelineEvent), [timelineData]);
-  
+  const allEvents = useMemo(
+    () => (timelineData?.items ?? []).map(adaptTimelineEvent),
+    [timelineData],
+  );
+
   const years = useMemo(() => {
     const y = new Set<string>();
-    allEvents.forEach(e => y.add(new Date(e.eventDate).getFullYear().toString()));
+    allEvents.forEach((e) => y.add(new Date(e.eventDate).getFullYear().toString()));
     if (y.size === 0) y.add(new Date().getFullYear().toString());
     return Array.from(y).sort((a, b) => Number(b) - Number(a));
   }, [allEvents]);
 
   const yearEvents = useMemo(() => {
-    return allEvents.filter(e => new Date(e.eventDate).getFullYear().toString() === year);
+    return allEvents.filter((e) => new Date(e.eventDate).getFullYear().toString() === year);
   }, [allEvents, year]);
 
   return (
@@ -131,23 +134,27 @@ function TimelinePage() {
               <div className="pl-14 md:pl-20 text-muted-foreground">No events for this year.</div>
             )}
             {yearEvents.map((e, i) => {
-               // Map UI event properties from metadata or fallback
-               const rawEvent = (timelineData?.items ?? []).find(d => d.id === e.id);
-                const meta = rawEvent?.metadata ?? {};
-                const media = {
-                  poster: meta.mediaPoster as string | undefined,
-                  title: (meta.mediaTitle as string) || e.title,
-                  creator: (meta.mediaCreator as string) || "Creator",
-                  accent: e.color || "var(--primary)"
-                };
-                const when = new Date(e.eventDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
-                const mood = (meta.mood as string) || e.type;
-                const journal = e.description || (meta.journalExcerpt as string);
-                const rating = meta.rating as number | undefined;
-                const achievement = meta.achievement as string | undefined;
-                const collection = meta.collection as string | undefined;
-               
-               return (
+              // Map UI event properties from metadata or fallback
+              const rawEvent = (timelineData?.items ?? []).find((d) => d.id === e.id);
+              const meta = rawEvent?.metadata ?? {};
+              const media = {
+                poster: meta.mediaPoster as string | undefined,
+                title: (meta.mediaTitle as string) || e.title,
+                creator: (meta.mediaCreator as string) || "Creator",
+                accent: e.color || "var(--primary)",
+              };
+              const when = new Date(e.eventDate).toLocaleDateString("en-US", {
+                month: "short",
+                day: "numeric",
+                year: "numeric",
+              });
+              const mood = (meta.mood as string) || e.type;
+              const journal = e.description || (meta.journalExcerpt as string);
+              const rating = meta.rating as number | undefined;
+              const achievement = meta.achievement as string | undefined;
+              const collection = meta.collection as string | undefined;
+
+              return (
                 <motion.div
                   key={e.id}
                   initial={{ opacity: 0, x: reduced ? 0 : -16 }}
@@ -167,19 +174,18 @@ function TimelinePage() {
                     viewport={{ once: true }}
                     transition={{ duration: reduced ? 0 : 0.6 }}
                   >
-                    <span
-                      className="h-2 w-2 rounded-full"
-                      style={{ background: media.accent }}
-                    />
+                    <span className="h-2 w-2 rounded-full" style={{ background: media.accent }} />
                   </motion.span>
-  
+
                   <PremiumGlass className="flex gap-5 p-5">
                     <img
                       src={media.poster}
                       alt=""
                       loading="lazy"
                       decoding="async"
-                      onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                      onError={(e) => {
+                        e.currentTarget.style.display = "none";
+                      }}
                       className="h-28 w-20 shrink-0 rounded-xl object-cover"
                     />
                     <div className="min-w-0 flex-1">
@@ -236,9 +242,8 @@ function TimelinePage() {
         transition={{ duration: reduced ? 0 : 0.7 }}
         className="mt-24"
       >
-         <ZoneHeading eyebrow="Highlights" title="Editorial highlights" />
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        </div>
+        <ZoneHeading eyebrow="Highlights" title="Editorial highlights" />
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-3"></div>
       </motion.section>
 
       {/* Journey statistics */}

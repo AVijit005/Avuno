@@ -1,8 +1,12 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { usersApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { UpdateProfileInput, UpdatePreferencesInput, UpdatePrivacyInput } from '@/lib/api/users';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { usersApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type {
+  UpdateProfileInput,
+  UpdatePreferencesInput,
+  UpdatePrivacyInput,
+} from "@/lib/api/users";
 
 export function useProfile() {
   const { data: user } = useCurrentUser();

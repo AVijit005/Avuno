@@ -11,7 +11,8 @@ interface Props {
 
 export function MemoryHighlights({ className }: Props) {
   const { data: libraryData } = useLibrary({ limit: 100 });
-  const MEDIA: UIMediaItem[] = libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
+  const MEDIA: UIMediaItem[] =
+    libraryData?.pages.flatMap((p) => p.data.map(adaptLibraryItem)) || [];
   return (
     <section aria-label="Memory highlights" className={cn("space-y-5", className)}>
       <header className="flex items-baseline justify-between">

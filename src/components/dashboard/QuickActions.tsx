@@ -1,4 +1,10 @@
-import { motion, useReducedMotion, useMotionValue, useTransform, useMotionTemplate } from "motion/react";
+import {
+  motion,
+  useReducedMotion,
+  useMotionValue,
+  useTransform,
+  useMotionTemplate,
+} from "motion/react";
 import { ChevronRight, Plus, Search, NotebookPen, Layers } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
@@ -104,8 +110,12 @@ function InteractiveWidget({
         <q.icon className="h-[18px] w-[18px] text-muted-foreground group-hover:text-primary transition-colors duration-300 drop-shadow-sm group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" />
       </div>
       <div className="flex-1 relative z-10">
-        <div className="text-[13px] font-medium text-foreground/90 tracking-tight group-hover:text-white transition-colors drop-shadow-sm">{q.label}</div>
-        <div className="text-[10px] font-bold text-muted-foreground/60 tracking-widest uppercase mt-0.5 transition-colors group-hover:text-primary/70">{q.hint}</div>
+        <div className="text-[13px] font-medium text-foreground/90 tracking-tight group-hover:text-white transition-colors drop-shadow-sm">
+          {q.label}
+        </div>
+        <div className="text-[10px] font-bold text-muted-foreground/60 tracking-widest uppercase mt-0.5 transition-colors group-hover:text-primary/70">
+          {q.hint}
+        </div>
       </div>
       <ChevronRight className="h-4 w-4 text-muted-foreground/40 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary relative z-10" />
     </motion.button>

@@ -112,7 +112,10 @@ export const ImportSchema = z
       data.shelves !== undefined ||
       data.collections !== undefined ||
       data.userQuotes !== undefined,
-    { message: "Import must contain at least one of: meta, customItems, shelves, collections, userQuotes" }
+    {
+      message:
+        "Import must contain at least one of: meta, customItems, shelves, collections, userQuotes",
+    },
   );
 
 export type ValidatedImport = z.infer<typeof ImportSchema>;

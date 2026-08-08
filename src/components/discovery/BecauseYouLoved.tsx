@@ -41,5 +41,3 @@ export function BecauseYouLoved({ anchorId }: { anchorId: string }) {
     </div>
   );
 }
-
-

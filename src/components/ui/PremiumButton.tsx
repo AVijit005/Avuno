@@ -25,7 +25,17 @@ const sizes: Record<Size, string> = {
 
 export const PremiumButton = forwardRef<HTMLButtonElement, Props>(
   (
-    { variant = "primary", size = "md", loading, success, icon, className, children, asChild, ...rest },
+    {
+      variant = "primary",
+      size = "md",
+      loading,
+      success,
+      icon,
+      className,
+      children,
+      asChild,
+      ...rest
+    },
     ref,
   ) => {
     const reduced = useReducedMotion();

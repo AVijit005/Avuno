@@ -2,31 +2,32 @@
  * Analytics adapter: API responses → UIOverview, UIStreak
  */
 
-import type { 
-  UIOverview, 
-  UIStreak, 
-  UIMediaAnalytics, 
-  UIGenreAnalytics, 
-  UIActivity, 
-  UICalendar, 
+import type {
+  UIOverview,
+  UIStreak,
+  UIMediaAnalytics,
+  UIGenreAnalytics,
+  UIActivity,
+  UICalendar,
   UICalendarYear,
-  UIInsights 
+  UIInsights,
 } from "./types";
-import type { 
-  OverviewResponse, 
-  StreaksResponse, 
-  MediaAnalyticsResponse, 
-  GenreAnalyticsResponse, 
-  ActivityResponse, 
+import type {
+  OverviewResponse,
+  StreaksResponse,
+  MediaAnalyticsResponse,
+  GenreAnalyticsResponse,
+  ActivityResponse,
   CalendarResponse,
   CalendarYearResponse,
-  InsightsResponse 
+  InsightsResponse,
 } from "@/lib/api/analytics";
 
 export function adaptOverview(o: OverviewResponse): UIOverview {
   return {
     totalItems: o.totalLibraryItems,
-    completedItems: o.moviesCompleted + o.showsFinished + o.booksRead + o.gamesFinished + o.coursesCompleted,
+    completedItems:
+      o.moviesCompleted + o.showsFinished + o.booksRead + o.gamesFinished + o.coursesCompleted,
     hoursSpent: o.hoursWatched + o.hoursRead + o.hoursPlayed + o.hoursLearned,
     averageRating: o.averageRating,
     favoriteGenre: o.favoriteGenre,
@@ -98,19 +99,40 @@ export function adaptInsights(i: InsightsResponse): UIInsights {
 
 // ─── Calendar Year ──────────────────────────────
 export function adaptCalendarYear(y: CalendarYearResponse): UICalendarYear {
-  const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const monthNames = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
   const monthAccents = [
-    'oklch(0.65 0.2 250)', 'oklch(0.7 0.18 290)', 'oklch(0.78 0.16 130)',
-    'oklch(0.82 0.16 80)', 'oklch(0.7 0.2 35)', 'oklch(0.72 0.18 255)',
-    'oklch(0.78 0.16 80)', 'oklch(0.7 0.2 35)', 'oklch(0.65 0.22 295)',
-    'oklch(0.7 0.18 25)', 'oklch(0.6 0.18 250)', 'oklch(0.68 0.15 280)'
+    "oklch(0.65 0.2 250)",
+    "oklch(0.7 0.18 290)",
+    "oklch(0.78 0.16 130)",
+    "oklch(0.82 0.16 80)",
+    "oklch(0.7 0.2 35)",
+    "oklch(0.72 0.18 255)",
+    "oklch(0.78 0.16 80)",
+    "oklch(0.7 0.2 35)",
+    "oklch(0.65 0.22 295)",
+    "oklch(0.7 0.18 25)",
+    "oklch(0.6 0.18 250)",
+    "oklch(0.68 0.15 280)",
   ];
 
   const rawMonths = y.months ?? [];
   const months = rawMonths.map((m) => {
-    const monthIdx = typeof m.month === 'number' && m.month >= 0 && m.month < 12 ? m.month : 0;
-    const name = monthNames[monthIdx] ?? 'Jan';
-    const accent = monthAccents[monthIdx] ?? 'oklch(0.7 0.18 250)';
+    const monthIdx = typeof m.month === "number" && m.month >= 0 && m.month < 12 ? m.month : 0;
+    const name = monthNames[monthIdx] ?? "Jan";
+    const accent = monthAccents[monthIdx] ?? "oklch(0.7 0.18 250)";
     const daysInMonth = new Date(y.year ?? new Date().getFullYear(), monthIdx + 1, 0).getDate();
     const startDay = new Date(y.year ?? new Date().getFullYear(), monthIdx, 1).getDay();
 
@@ -127,15 +149,15 @@ export function adaptCalendarYear(y: CalendarYearResponse): UICalendarYear {
         hasAchievement: false,
         intensity: 0,
         mediaCount: 0,
-        poster: '',
+        poster: "",
       })),
       accent,
-      favorite: '',
-      genre: '',
+      favorite: "",
+      genre: "",
       mediaCount: m.storyCount ?? 0,
       journalCount: m.journalCount ?? 0,
       hours: m.hoursTracked ?? 0,
-      collage: (m.topMedia ?? []).map((t) => t?.posterUrl ?? ''),
+      collage: (m.topMedia ?? []).map((t) => t?.posterUrl ?? ""),
       dayHits: m.dayHits ?? 0,
     };
   });
@@ -152,13 +174,29 @@ export function adaptCalendarYear(y: CalendarYearResponse): UICalendarYear {
       stories: y.stats?.totalStories ?? 0,
       journals: y.stats?.totalJournals ?? 0,
       longestStreak: y.stats?.longestStreak ?? 0,
-      favoriteMonth: [...months].sort((a, b) => b.dayHits - a.dayHits)[0]?.name ?? '—',
+      favoriteMonth: [...months].sort((a, b) => b.dayHits - a.dayHits)[0]?.name ?? "—",
     },
     months,
     heatmap,
-    highlights: (y.highlights ?? []).map((h) => ({ label: h.label ?? '', value: h.value ?? 0, note: h.note ?? '', media: { poster: h.posterUrl ?? '' } })),
-    streaks: (y.streaks ?? []).map((s) => ({ label: s.label ?? '', value: s.value ?? 0, total: s.total ?? 0, accent: s.accent ?? 'var(--primary)' })),
-    releases: (y.upcoming ?? []).map((u) => ({ title: u.title ?? '', poster: u.posterUrl ?? '', when: u.when ?? '', countdown: u.countdown ?? '', accent: u.accent ?? 'var(--primary)' })),
+    highlights: (y.highlights ?? []).map((h) => ({
+      label: h.label ?? "",
+      value: h.value ?? 0,
+      note: h.note ?? "",
+      media: { poster: h.posterUrl ?? "" },
+    })),
+    streaks: (y.streaks ?? []).map((s) => ({
+      label: s.label ?? "",
+      value: s.value ?? 0,
+      total: s.total ?? 0,
+      accent: s.accent ?? "var(--primary)",
+    })),
+    releases: (y.upcoming ?? []).map((u) => ({
+      title: u.title ?? "",
+      poster: u.posterUrl ?? "",
+      when: u.when ?? "",
+      countdown: u.countdown ?? "",
+      accent: u.accent ?? "var(--primary)",
+    })),
     insights: y.insights ?? [],
   };
 }

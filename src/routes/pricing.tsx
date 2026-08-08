@@ -27,10 +27,10 @@ function PricingPage() {
           {/* Free Tier */}
           <PremiumGlass className="flex flex-col p-8 md:p-10">
             <div className="text-2xl font-medium">Free</div>
-            <div className="mt-4 text-sm text-muted-foreground">
-              For casual explorers.
+            <div className="mt-4 text-sm text-muted-foreground">For casual explorers.</div>
+            <div className="mt-8 font-display text-5xl">
+              $0<span className="text-xl text-muted-foreground">/mo</span>
             </div>
-            <div className="mt-8 font-display text-5xl">$0<span className="text-xl text-muted-foreground">/mo</span></div>
             <ul className="mt-8 flex-1 space-y-4 text-sm">
               {["Track up to 100 items", "Basic timeline", "Standard statistics"].map((f) => (
                 <li key={f} className="flex items-center gap-3">
@@ -39,13 +39,21 @@ function PricingPage() {
                 </li>
               ))}
             </ul>
-            <PremiumButton onClick={() => navigate({ to: "/app" })} className="mt-8 w-full" variant="secondary">
+            <PremiumButton
+              onClick={() => navigate({ to: "/app" })}
+              className="mt-8 w-full"
+              variant="secondary"
+            >
               Current Plan
             </PremiumButton>
           </PremiumGlass>
 
           {/* Plus Tier */}
-          <PremiumGlass variant="strong" glow="oklch(0.72 0.18 255 / 0.4)" className="relative flex flex-col p-8 md:p-10">
+          <PremiumGlass
+            variant="strong"
+            glow="oklch(0.72 0.18 255 / 0.4)"
+            className="relative flex flex-col p-8 md:p-10"
+          >
             <div className="absolute -top-4 right-8 rounded-full bg-primary px-3 py-1 text-[10px] uppercase tracking-wider text-primary-foreground">
               Most Popular
             </div>
@@ -53,7 +61,9 @@ function PricingPage() {
             <div className="mt-4 text-sm text-muted-foreground">
               For complete cinematic journaling.
             </div>
-            <div className="mt-8 font-display text-5xl">$8<span className="text-xl text-muted-foreground">/mo</span></div>
+            <div className="mt-8 font-display text-5xl">
+              $8<span className="text-xl text-muted-foreground">/mo</span>
+            </div>
             <ul className="mt-8 flex-1 space-y-4 text-sm">
               {[
                 "Unlimited library items",

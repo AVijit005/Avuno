@@ -13,7 +13,8 @@ export function CharactersYouLoved({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">The people who stayed with you</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Every great story has characters that become part of your world. These are the ones from {item.title} that you carry forward.
+        Every great story has characters that become part of your world. These are the ones from{" "}
+        {item.title} that you carry forward.
       </p>
     </PremiumGlass>
   );

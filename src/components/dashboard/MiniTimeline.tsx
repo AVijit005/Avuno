@@ -1,5 +1,15 @@
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { Film, NotebookPen, Trophy, Target, Layers, CheckCircle2, Play, Pause, RotateCcw } from "lucide-react";
+import {
+  Film,
+  NotebookPen,
+  Trophy,
+  Target,
+  Layers,
+  CheckCircle2,
+  Play,
+  Pause,
+  RotateCcw,
+} from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useTimelineEvents } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
@@ -29,11 +39,13 @@ export function MiniTimeline({ className }: { className?: string }) {
     return (
       <PremiumGlass variant="subtle" className={className}>
         <div className="p-6">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Lately</div>
+          <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+            Lately
+          </div>
           <div className="mt-4 space-y-3">
-             {Array.from({ length: 5 }).map((_, i) => (
-                <div key={i} className="h-4 w-3/4 animate-pulse rounded bg-white/5" />
-             ))}
+            {Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="h-4 w-3/4 animate-pulse rounded bg-white/5" />
+            ))}
           </div>
         </div>
       </PremiumGlass>
@@ -46,7 +58,9 @@ export function MiniTimeline({ className }: { className?: string }) {
     return (
       <PremiumGlass variant="subtle" className={className}>
         <div className="p-6">
-          <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">Lately</div>
+          <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+            Lately
+          </div>
           <div className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
             <Film className="h-4 w-4 opacity-60" /> No recent activity.
           </div>

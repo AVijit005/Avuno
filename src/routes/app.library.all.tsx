@@ -27,7 +27,15 @@ function AllLibraryPage() {
   const [sort, setSort] = useState<SortKey>("Recently Added");
   const [view, setView] = useState<"grid" | "rows">("grid");
 
-  const { data: libraryData, isLoading, isError, refetch, fetchNextPage, hasNextPage, isFetchingNextPage } = useLibrary({ limit: 50 });
+  const {
+    data: libraryData,
+    isLoading,
+    isError,
+    refetch,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useLibrary({ limit: 50 });
 
   const items = useMemo(() => {
     const rawApiItems = libraryData?.pages.flatMap((page) => page.data.map(adaptLibraryItem)) ?? [];
@@ -69,10 +77,18 @@ function AllLibraryPage() {
         }
         break;
       case "Recently Added":
-        r.sort((a, b) => new Date(metaOf(b.id).addedAt ?? 0).getTime() - new Date(metaOf(a.id).addedAt ?? 0).getTime());
+        r.sort(
+          (a, b) =>
+            new Date(metaOf(b.id).addedAt ?? 0).getTime() -
+            new Date(metaOf(a.id).addedAt ?? 0).getTime(),
+        );
         break;
       case "Recently Finished":
-        r.sort((a, b) => new Date(metaOf(b.id).completedAt ?? 0).getTime() - new Date(metaOf(a.id).completedAt ?? 0).getTime());
+        r.sort(
+          (a, b) =>
+            new Date(metaOf(b.id).completedAt ?? 0).getTime() -
+            new Date(metaOf(a.id).completedAt ?? 0).getTime(),
+        );
         break;
       default:
         break;
@@ -99,7 +115,7 @@ function AllLibraryPage() {
           fetchNextPage();
         }
       },
-      { threshold: 0.1 }
+      { threshold: 0.1 },
     );
     if (loadMoreRef.current) observerRef.current.observe(loadMoreRef.current);
     return () => observerRef.current?.disconnect();

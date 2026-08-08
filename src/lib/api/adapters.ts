@@ -34,7 +34,9 @@ export function mediaResponseToMediaItem(m: MediaResponse): MediaItem {
     id: m.id,
     title: m.title,
     kind: MEDIA_TYPE_TO_KIND[m.mediaType] ?? "movie",
-    year: m.releaseYear ?? (m.releaseDate ? new Date(m.releaseDate).getFullYear() : new Date().getFullYear()),
+    year:
+      m.releaseYear ??
+      (m.releaseDate ? new Date(m.releaseDate).getFullYear() : new Date().getFullYear()),
     poster: m.posterUrl ?? m.coverImage ?? m.thumbnail ?? "",
     backdrop: m.backdropUrl ?? m.bannerUrl ?? undefined,
     rating: 0,

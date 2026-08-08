@@ -23,11 +23,7 @@ export function PremiumErrorState({
           <p className="mx-auto mt-3 max-w-prose text-sm text-muted-foreground">{description}</p>
         )}
         <div className="mt-8 flex flex-col items-center gap-6">
-          {action && (
-            <div className="flex flex-wrap justify-center gap-2">
-              {action}
-            </div>
-          )}
+          {action && <div className="flex flex-wrap justify-center gap-2">{action}</div>}
           <div className="flex flex-wrap justify-center gap-2">
             <Link to="/app">
               <PremiumButton variant={action ? "secondary" : "primary"}>Go home</PremiumButton>

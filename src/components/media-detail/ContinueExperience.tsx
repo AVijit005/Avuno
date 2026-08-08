@@ -41,7 +41,9 @@ export function ContinueExperience({ item }: { item: UIMediaItem }) {
             {continueLabel}
           </div>
           <h3 className="mt-2 font-display text-3xl tracking-tight md:text-4xl">{item.title}</h3>
-          <div className="mt-1 text-sm text-muted-foreground">{item.progressLabel ?? `${item.progress ?? 0}% complete`}</div>
+          <div className="mt-1 text-sm text-muted-foreground">
+            {item.progressLabel ?? `${item.progress ?? 0}% complete`}
+          </div>
           <div className="mt-5">
             <PremiumProgress value={item.progress ?? 0} accent={accent} />
             <div className="mt-2 flex justify-between text-[10px] uppercase tracking-[0.18em] text-muted-foreground tabular-nums">

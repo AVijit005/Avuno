@@ -76,7 +76,10 @@ export function MediaJournalPreview({ item }: { item: UIMediaItem }) {
       )}
       <div className="mt-6 flex items-center justify-between">
         <span className="text-xs text-muted-foreground">
-          {item.genres.slice(0, 3).map((t) => `#${t}`).join(" ")}
+          {item.genres
+            .slice(0, 3)
+            .map((t) => `#${t}`)
+            .join(" ")}
         </span>
         <Link
           to="/app/journal"

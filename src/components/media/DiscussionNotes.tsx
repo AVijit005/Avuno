@@ -13,7 +13,8 @@ export function DiscussionNotes({ item }: Props) {
       </div>
       <h3 className="mt-1 font-display text-xl tracking-tight">Talking points for {item.title}</h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Key themes, questions, and ideas to discuss with friends who have also experienced this story.
+        Key themes, questions, and ideas to discuss with friends who have also experienced this
+        story.
       </p>
     </PremiumGlass>
   );

@@ -6,11 +6,23 @@ import { useIntelligence } from "@/hooks/use-analytics";
 import { ArrowRight, Compass } from "lucide-react";
 import type { TasteGenre } from "@/lib/types/intelligence";
 
-const ResponsiveContainer = lazy(() => import("recharts").then((m) => ({ default: m.ResponsiveContainer as unknown as RechartsComponent })));
-const PolarAngleAxis = lazy(() => import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })));
-const PolarGrid = lazy(() => import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })));
-const Radar = lazy(() => import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })));
-const RadarChart = lazy(() => import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })));
+const ResponsiveContainer = lazy(() =>
+  import("recharts").then((m) => ({
+    default: m.ResponsiveContainer as unknown as RechartsComponent,
+  })),
+);
+const PolarAngleAxis = lazy(() =>
+  import("recharts").then((m) => ({ default: m.PolarAngleAxis as unknown as RechartsComponent })),
+);
+const PolarGrid = lazy(() =>
+  import("recharts").then((m) => ({ default: m.PolarGrid as unknown as RechartsComponent })),
+);
+const Radar = lazy(() =>
+  import("recharts").then((m) => ({ default: m.Radar as unknown as RechartsComponent })),
+);
+const RadarChart = lazy(() =>
+  import("recharts").then((m) => ({ default: m.RadarChart as unknown as RechartsComponent })),
+);
 
 export function GenreExpansion() {
   const { data: intelligence } = useIntelligence();
@@ -32,7 +44,8 @@ export function GenreExpansion() {
             Genre Expansion
           </div>
           <p className="text-muted-foreground text-sm leading-relaxed mb-6">
-            These genres define your collection. The radar shows how your library spans across different categories.
+            These genres define your collection. The radar shows how your library spans across
+            different categories.
           </p>
           <button className="self-start rounded-full bg-white/10 px-5 py-2 text-sm font-medium hover:bg-white/20 transition-colors">
             Explore recommendations <ArrowRight size={14} className="inline ml-1" />
@@ -44,7 +57,14 @@ export function GenreExpansion() {
             <RadarChart data={chartData}>
               <PolarGrid stroke="oklch(1 0 0 / 0.1)" />
               <PolarAngleAxis dataKey="genre" tick={{ fontSize: 10, fill: "oklch(1 0 0 / 0.5)" }} />
-              <Radar name="Genres" dataKey="count" stroke="var(--primary)" fill="var(--primary)" fillOpacity={0.3} strokeWidth={2} />
+              <Radar
+                name="Genres"
+                dataKey="count"
+                stroke="var(--primary)"
+                fill="var(--primary)"
+                fillOpacity={0.3}
+                strokeWidth={2}
+              />
             </RadarChart>
           </ResponsiveContainer>
         </div>

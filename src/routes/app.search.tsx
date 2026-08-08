@@ -8,12 +8,12 @@ function Page() {
   const [isMac, setIsMac] = useState(true);
 
   useEffect(() => {
-    const mac = navigator.userAgent.toUpperCase().indexOf('MAC') >= 0;
+    const mac = navigator.userAgent.toUpperCase().indexOf("MAC") >= 0;
     setIsMac(mac);
     const ev = new KeyboardEvent("keydown", { key: "k", metaKey: mac, ctrlKey: !mac });
     window.dispatchEvent(ev);
   }, []);
-  
+
   return (
     <div className="pt-2">
       <div className="glass grid place-items-center rounded-[40px] p-16 text-center">

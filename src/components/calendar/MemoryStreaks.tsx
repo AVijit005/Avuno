@@ -32,7 +32,11 @@ function StreakCard({ s, idx }: { s: StreakData; idx: number }) {
   return (
     <motion.div
       style={{ rotateX, rotateY, transformPerspective: 1000 }}
-      onMouseMove={handleMouse} onMouseLeave={() => { x.set(0); y.set(0); }}
+      onMouseMove={handleMouse}
+      onMouseLeave={() => {
+        x.set(0);
+        y.set(0);
+      }}
       whileHover={{ y: -6, scale: 1.02, zIndex: 50 }}
       transition={{ type: "spring", stiffness: 400, damping: 25 }}
       className="h-full relative group cursor-pointer"
@@ -42,8 +46,16 @@ function StreakCard({ s, idx }: { s: StreakData; idx: number }) {
       <PremiumGlass className="h-full border-white/[0.04] group-hover:border-white/[0.1] shadow-lg group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 overflow-hidden">
         <div className="flex flex-col items-center justify-between px-4 py-8 h-full relative box-border w-full z-10 min-h-[230px]">
           <div className="relative flex items-center justify-center w-28 h-28 mb-6">
-            <div className="absolute inset-0 rounded-full blur-[24px] opacity-0 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none mix-blend-screen" style={{ backgroundColor: s.accent }} />
-            <svg width="112" height="112" className="-rotate-90 relative z-10" viewBox="0 0 112 112">
+            <div
+              className="absolute inset-0 rounded-full blur-[24px] opacity-0 group-hover:opacity-50 transition-opacity duration-700 pointer-events-none mix-blend-screen"
+              style={{ backgroundColor: s.accent }}
+            />
+            <svg
+              width="112"
+              height="112"
+              className="-rotate-90 relative z-10"
+              viewBox="0 0 112 112"
+            >
               <defs>
                 <linearGradient id={`grad-s-${idx}`} x1="0%" y1="0%" x2="100%" y2="100%">
                   <stop offset="0%" stopColor={s.accent} stopOpacity="0.5" />
@@ -51,22 +63,52 @@ function StreakCard({ s, idx }: { s: StreakData; idx: number }) {
                   <stop offset="100%" stopColor={s.accent} stopOpacity="1" />
                 </linearGradient>
               </defs>
-              <circle cx="56" cy="56" r={r} stroke="oklch(1 1 1 / 0.04)" strokeWidth="12" fill="none" className="transition-colors duration-500 group-hover:stroke-white/10" />
-              <motion.circle cx="56" cy="56" r={r} stroke={`url(#grad-s-${idx})`} strokeWidth="12" strokeLinecap="round" fill="none" strokeDasharray={c}
-                initial={{ strokeDashoffset: c }} whileInView={{ strokeDashoffset: c - (c * Math.max(progress, 1)) / 100 }}
-                viewport={{ once: true }} transition={{ duration: 2.2 + idx * 0.1, ease: easing }}
-                style={{ filter: `drop-shadow(0 4px 12px ${s.accent}80)` }} />
+              <circle
+                cx="56"
+                cy="56"
+                r={r}
+                stroke="oklch(1 1 1 / 0.04)"
+                strokeWidth="12"
+                fill="none"
+                className="transition-colors duration-500 group-hover:stroke-white/10"
+              />
+              <motion.circle
+                cx="56"
+                cy="56"
+                r={r}
+                stroke={`url(#grad-s-${idx})`}
+                strokeWidth="12"
+                strokeLinecap="round"
+                fill="none"
+                strokeDasharray={c}
+                initial={{ strokeDashoffset: c }}
+                whileInView={{ strokeDashoffset: c - (c * Math.max(progress, 1)) / 100 }}
+                viewport={{ once: true }}
+                transition={{ duration: 2.2 + idx * 0.1, ease: easing }}
+                style={{ filter: `drop-shadow(0 4px 12px ${s.accent}80)` }}
+              />
             </svg>
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-10 flex-col">
-              <span className="font-display font-medium text-[22px] text-white tracking-tight drop-shadow-md leading-none"><CountUp to={Math.round(progress)} />%</span>
+              <span className="font-display font-medium text-[22px] text-white tracking-tight drop-shadow-md leading-none">
+                <CountUp to={Math.round(progress)} />%
+              </span>
             </div>
           </div>
           <div className="flex flex-col items-center justify-center text-center mt-auto">
             <div className="flex items-baseline justify-center gap-1.5">
-              <div className="font-display text-[32px] font-medium tracking-tighter text-white drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out"><CountUp to={s.value} /></div>
-              <span className="text-[11px] font-medium text-muted-foreground/60 uppercase tracking-widest">/ {s.total}d</span>
+              <div className="font-display text-[32px] font-medium tracking-tighter text-white drop-shadow-sm group-hover:scale-105 transition-transform duration-500 ease-out">
+                <CountUp to={s.value} />
+              </div>
+              <span className="text-[11px] font-medium text-muted-foreground/60 uppercase tracking-widest">
+                / {s.total}d
+              </span>
             </div>
-            <div className="text-[9px] font-bold uppercase tracking-[0.25em] mt-2 opacity-60 group-hover:opacity-100 transition-opacity duration-500" style={{ color: s.accent, textShadow: `0 0 10px ${s.accent}` }}>{s.label}</div>
+            <div
+              className="text-[9px] font-bold uppercase tracking-[0.25em] mt-2 opacity-60 group-hover:opacity-100 transition-opacity duration-500"
+              style={{ color: s.accent, textShadow: `0 0 10px ${s.accent}` }}
+            >
+              {s.label}
+            </div>
           </div>
         </div>
       </PremiumGlass>

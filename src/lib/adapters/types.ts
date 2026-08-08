@@ -284,7 +284,15 @@ export interface UICalendarMonth {
   short: string;
   daysInMonth: number;
   startDay: number;
-  cells: { day: number; hasMedia: boolean; hasJournal: boolean; hasAchievement: boolean; intensity: number; mediaCount: number; poster: string }[];
+  cells: {
+    day: number;
+    hasMedia: boolean;
+    hasJournal: boolean;
+    hasAchievement: boolean;
+    intensity: number;
+    mediaCount: number;
+    poster: string;
+  }[];
   accent: string;
   favorite: string;
   genre: string;

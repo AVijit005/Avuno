@@ -1,7 +1,7 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery } from '@tanstack/react-query';
-import { analyticsApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery } from "@tanstack/react-query";
+import { analyticsApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
 
 export function useDashboard() {
   const { data: user } = useCurrentUser();
@@ -84,7 +84,7 @@ export function useCalendarYear(year: number) {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: [...queryKeys.analytics.all, 'calendar-rich', year] as const,
+    queryKey: [...queryKeys.analytics.all, "calendar-rich", year] as const,
     enabled: !!user,
     queryFn: () => analyticsApi.getCalendarYear(year),
     staleTime: 5 * 60_000,
@@ -106,7 +106,7 @@ export function useDiscovery() {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: [...queryKeys.analytics.all, 'discovery'] as const,
+    queryKey: [...queryKeys.analytics.all, "discovery"] as const,
     enabled: !!user,
     queryFn: () => analyticsApi.getDiscovery(),
     staleTime: 2 * 60_000,
@@ -117,7 +117,7 @@ export function useChallenges() {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: [...queryKeys.analytics.all, 'challenges'] as const,
+    queryKey: [...queryKeys.analytics.all, "challenges"] as const,
     enabled: !!user,
     queryFn: () => analyticsApi.getChallenges(),
     staleTime: 5 * 60_000,
@@ -128,7 +128,7 @@ export function useIntelligence() {
   const { data: user } = useCurrentUser();
 
   return useQuery({
-    queryKey: [...queryKeys.analytics.all, 'intelligence'] as const,
+    queryKey: [...queryKeys.analytics.all, "intelligence"] as const,
     enabled: !!user,
     queryFn: () => analyticsApi.getIntelligence(),
     staleTime: 5 * 60_000,

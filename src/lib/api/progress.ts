@@ -1,4 +1,4 @@
-import { apiGet, apiPatch, apiPost } from './fetch';
+import { apiGet, apiPatch, apiPost } from "./fetch";
 
 export interface UpdateProgressInput {
   progress?: number;
@@ -61,7 +61,10 @@ export interface RecentProgressItem {
   updatedAt: string;
 }
 
-export async function updateProgress(libraryId: string, input: UpdateProgressInput): Promise<ProgressResponse> {
+export async function updateProgress(
+  libraryId: string,
+  input: UpdateProgressInput,
+): Promise<ProgressResponse> {
   return apiPatch<ProgressResponse>(`/library/${libraryId}/progress`, input);
 }
 
@@ -78,5 +81,5 @@ export async function resetProgress(libraryId: string): Promise<ProgressResponse
 }
 
 export async function getRecentProgress(): Promise<RecentProgressItem[]> {
-  return apiGet<RecentProgressItem[]>('/library/progress/recent');
+  return apiGet<RecentProgressItem[]>("/library/progress/recent");
 }

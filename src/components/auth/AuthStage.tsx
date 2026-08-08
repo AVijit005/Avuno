@@ -212,11 +212,7 @@ export function AuthStage() {
           >
             <motion.div
               className="absolute inset-0"
-              animate={
-                reduced
-                  ? undefined
-                  : { translateY: [0, -drift.range, 0, drift.range, 0] }
-              }
+              animate={reduced ? undefined : { translateY: [0, -drift.range, 0, drift.range, 0] }}
               transition={
                 reduced
                   ? undefined
@@ -229,27 +225,28 @@ export function AuthStage() {
             >
               {items.map((p, i) => {
                 const MOCK_POSTERS: Record<string, string> = {
-                  "succession": "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+                  succession: "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
                   "harry-potter": "linear-gradient(135deg, #1a1e2e 0%, #16313e 50%, #0f5260 100%)",
                   "dark-side": "https://i.scdn.co/image/ab67616d0000b273ea7caaff71dea1051d49b2fe",
-                  "lex": "https://i.scdn.co/image/ab6765630000ba8aa3b02ce859ce87391807d919",
-                  "mkbhd": "https://yt3.googleusercontent.com/ytc/AIdro_m_LwQ6ZpWbE2O5zZ_Yt3o4yP5a0O_L7V9mF6wK7w=s900-c-k-c0x00ffffff-no-rj",
+                  lex: "https://i.scdn.co/image/ab6765630000ba8aa3b02ce859ce87391807d919",
+                  mkbhd:
+                    "https://yt3.googleusercontent.com/ytc/AIdro_m_LwQ6ZpWbE2O5zZ_Yt3o4yP5a0O_L7V9mF6wK7w=s900-c-k-c0x00ffffff-no-rj",
                   "chainsaw-man": "linear-gradient(135deg, #2e2a1e 0%, #4a3d2d 50%, #7a5c3d 100%)",
-                  "interstellar": "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
+                  interstellar: "linear-gradient(135deg, #1a2e2d 0%, #164a4a 50%, #0f7a6f 100%)",
                   "one-piece": "linear-gradient(135deg, #2e1e2a 0%, #4a2d3d 50%, #7a3d5c 100%)",
                   "elden-ring": "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
-                  "dune": "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
-                  "cyberpunk": "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)"
+                  dune: "linear-gradient(135deg, #2d1b2e 0%, #4a1942 50%, #7b2d5c 100%)",
+                  cyberpunk: "linear-gradient(135deg, #1e2a1e 0%, #2d4a2d 50%, #3d7a3d 100%)",
                 };
                 const media = {
                   title: p.id,
-                  poster: MOCK_POSTERS[p.id] || "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
-                  rating: 5
+                  poster:
+                    MOCK_POSTERS[p.id] ||
+                    "linear-gradient(135deg, #2e1a1a 0%, #4a2d2d 50%, #7a3d3d 100%)",
+                  rating: 5,
                 };
-                const blur =
-                  layerNum === 2 ? 4 : layerNum === 3 ? 0 : 0;
-                const opacity =
-                  layerNum === 2 ? 0.42 : layerNum === 3 ? 0.95 : 0.92;
+                const blur = layerNum === 2 ? 4 : layerNum === 3 ? 0 : 0;
+                const opacity = layerNum === 2 ? 0.42 : layerNum === 3 ? 0.95 : 0.92;
                 return (
                   <motion.div
                     key={`${layerNum}-${p.id}-${i}`}
@@ -390,8 +387,7 @@ export function AuthStage() {
         aria-hidden
         className="pointer-events-none absolute inset-y-0 right-0 w-[28%]"
         style={{
-          background:
-            "linear-gradient(90deg, transparent, oklch(0.09 0.02 270 / 0.55))",
+          background: "linear-gradient(90deg, transparent, oklch(0.09 0.02 270 / 0.55))",
         }}
       />
 
@@ -448,11 +444,7 @@ export function AuthStage() {
                   "0 0 0 1px rgba(255,255,255,0.13), 0 10px 28px -8px oklch(0.58 0.26 268 / 0.55)",
               }}
               animate={{
-                filter: [
-                  "hue-rotate(0deg)",
-                  "hue-rotate(20deg)",
-                  "hue-rotate(0deg)",
-                ],
+                filter: ["hue-rotate(0deg)", "hue-rotate(20deg)", "hue-rotate(0deg)"],
               }}
               transition={{ duration: 9, repeat: Infinity, ease: "easeInOut" }}
             >
@@ -465,8 +457,10 @@ export function AuthStage() {
                     "linear-gradient(135deg, rgba(255,255,255,0.22) 0%, rgba(255,255,255,0.04) 45%, transparent 70%)",
                 }}
               />
-              <span className="font-display text-[22px] font-bold text-white leading-none z-10"
-                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}>
+              <span
+                className="font-display text-[22px] font-bold text-white leading-none z-10"
+                style={{ textShadow: "0 1px 8px rgba(0,0,0,0.35)" }}
+              >
                 A
               </span>
             </motion.div>
@@ -540,10 +534,7 @@ export function AuthStage() {
           >
             <span className="text-gradient-aurora">Every story you finish</span>
             <br />
-            <span
-              className="italic"
-              style={{ color: "rgba(255,255,255,0.88)" }}
-            >
+            <span className="italic" style={{ color: "rgba(255,255,255,0.88)" }}>
               becomes part of{" "}
               <span
                 style={{
@@ -625,8 +616,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
             aria-hidden
             className="absolute right-0 top-0 h-3 w-3"
             style={{
-              background:
-                "linear-gradient(225deg, oklch(0.78 0.03 80) 50%, transparent 50%)",
+              background: "linear-gradient(225deg, oklch(0.78 0.03 80) 50%, transparent 50%)",
             }}
           />
         </div>,
@@ -685,9 +675,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
         <div className="relative w-[140px] rounded-xl border border-white/10 bg-[oklch(0.18_0.02_270_/_0.85)] p-2.5 shadow-[0_18px_40px_-16px_oklch(0_0_0/0.8),inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md">
           <div className="flex items-center gap-1.5">
             <Music2 className="h-2.5 w-2.5 text-primary/80" />
-            <span className="text-[9px] font-medium text-foreground/90">
-              {artifact.title}
-            </span>
+            <span className="text-[9px] font-medium text-foreground/90">{artifact.title}</span>
           </div>
           {/* fake waveform */}
           <div className="mt-1.5 flex h-7 items-end gap-[2px]">
@@ -699,10 +687,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
                   className="block w-[2px] rounded-full"
                   style={{
                     height: `${Math.max(8, Math.min(100, h))}%`,
-                    background:
-                      i < 16
-                        ? "var(--primary)"
-                        : "oklch(0.72 0.18 255 / 0.3)",
+                    background: i < 16 ? "var(--primary)" : "oklch(0.72 0.18 255 / 0.3)",
                   }}
                 />
               );
@@ -727,8 +712,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
               className="h-full rounded-full"
               style={{
                 width: `${artifact.pct}%`,
-                background:
-                  "linear-gradient(90deg, var(--primary), var(--primary))",
+                background: "linear-gradient(90deg, var(--primary), var(--primary))",
                 boxShadow: "0 0 12px var(--primary)",
               }}
             />
@@ -759,10 +743,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
           <span className="italic">{artifact.title}</span>
           <span className="flex">
             {Array.from({ length: artifact.rating }).map((_, i) => (
-              <Star
-                key={i}
-                className="h-2.5 w-2.5 fill-amber-200/90 text-amber-200/90"
-              />
+              <Star key={i} className="h-2.5 w-2.5 fill-amber-200/90 text-amber-200/90" />
             ))}
           </span>
         </div>,
@@ -783,4 +764,3 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
 /* Re-export to satisfy tree-shaken icon imports if needed elsewhere. */
 export { Ticket };
-

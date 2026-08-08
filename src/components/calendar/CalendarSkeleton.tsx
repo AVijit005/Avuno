@@ -5,7 +5,7 @@ export function CalendarSkeleton() {
     <div className="pb-32 pt-2 space-y-16 md:space-y-24">
       {/* Hero */}
       <ShimmerSkeleton className="h-[380px] rounded-[40px]" variant="glass" />
-      
+
       {/* Year overview — 12 months */}
       <div>
         <ShimmerSkeleton className="mb-6 h-6 w-48 rounded-full" variant="line" />

@@ -10,7 +10,8 @@ export function IdentityHero() {
         The story of your stories
       </h1>
       <p className="mt-3 mx-auto max-w-md text-sm text-muted-foreground">
-        A living portrait of your media life — the patterns, the preferences, and the moments that shaped you.
+        A living portrait of your media life — the patterns, the preferences, and the moments that
+        shaped you.
       </p>
     </PremiumGlass>
   );

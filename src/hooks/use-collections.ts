@@ -1,8 +1,12 @@
-import { useCurrentUser } from '@/hooks/use-auth';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { collectionsApi } from '@/lib/api';
-import { queryKeys } from '@/lib/api/query-keys';
-import type { CreateCollectionInput, UpdateCollectionInput, AddCollectionItemInput } from '@/lib/api/collections';
+import { useCurrentUser } from "@/hooks/use-auth";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { collectionsApi } from "@/lib/api";
+import { queryKeys } from "@/lib/api/query-keys";
+import type {
+  CreateCollectionInput,
+  UpdateCollectionInput,
+  AddCollectionItemInput,
+} from "@/lib/api/collections";
 
 export function useCollections() {
   const { data: user } = useCurrentUser();
@@ -71,8 +75,13 @@ export function useDeleteCollection() {
 export function useAddCollectionItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ collectionId, input }: { collectionId: string; input: AddCollectionItemInput }) =>
-      collectionsApi.addCollectionItem(collectionId, input),
+    mutationFn: ({
+      collectionId,
+      input,
+    }: {
+      collectionId: string;
+      input: AddCollectionItemInput;
+    }) => collectionsApi.addCollectionItem(collectionId, input),
     onSuccess: (_data, { collectionId }) => {
       queryClient.invalidateQueries({ queryKey: queryKeys.collections.detail(collectionId) });
       queryClient.invalidateQueries({ queryKey: queryKeys.collections.all });
