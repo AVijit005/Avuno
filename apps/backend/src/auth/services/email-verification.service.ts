@@ -2,6 +2,7 @@ import { Inject, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Prisma, User } from '@prisma/client';
 import { ForbiddenException, NotFoundException } from '../../common';
+import { UserStateService } from './user-state.service';
 import { AuthRepository } from '../auth.repository';
 import { UserResponseDto } from '../dto';
 import { AuthAuditService, type AuthAuditMetadata } from './auth-audit.service';
@@ -26,6 +27,7 @@ export class EmailVerificationService {
     private readonly auditService: AuthAuditService,
     private readonly userRepository: AuthRepository,
     private readonly config: ConfigService,
+    private readonly userState: UserStateService,
   ) {}
 
   async sendVerification(
@@ -94,6 +96,10 @@ export class EmailVerificationService {
       emailVerified: true,
       status: existingUser.status === 'PENDING_VERIFICATION' ? 'ACTIVE' : existingUser.status,
     } as User);
+
+    // status may have moved PENDING_VERIFICATION -> ACTIVE; drop the cached
+    // auth state so the guard sees it on the very next request.
+    await this.userState.invalidate(updatedUser.id);
 
     const newValue = {
       emailVerified: updatedUser.emailVerified,

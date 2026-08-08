@@ -27,6 +27,8 @@ import {
   AuthAuditService,
   ResendEmailTransportService,
   OAuthStateService,
+  TokenRevocationService,
+  UserStateService,
   EMAIL_TRANSPORT,
 } from './services';
 
@@ -57,6 +59,8 @@ import {
     GoogleStrategy,
     OAuthStateService,
     GoogleOAuthGuard,
+    TokenRevocationService,
+    UserStateService,
     AuthAuditService,
     ConsoleEmailTransportService,
     JwtAuthGuard,
@@ -74,6 +78,15 @@ import {
       },
     },
   ],
-  exports: [JwtTokenService, AuthService, JwtAuthGuard, CookieService, EmailVerificationService, GoogleOAuthService],
+  exports: [
+    JwtTokenService,
+    AuthService,
+    JwtAuthGuard,
+    CookieService,
+    EmailVerificationService,
+    GoogleOAuthService,
+    TokenRevocationService,
+    UserStateService,
+  ],
 })
 export class AuthModule {}

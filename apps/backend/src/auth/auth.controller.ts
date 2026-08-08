@@ -60,9 +60,18 @@ export class AuthController {
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   async logout(@Req() request: Request, @Res({ passthrough: true }) response: Response): Promise<void> {
     const refreshToken = request.cookies?.[REFRESH_TOKEN_COOKIE];
-    if (refreshToken) {
-      await this.authService.logout(refreshToken, response);
-    }
+
+    // This route is intentionally unguarded so a user with an already-expired
+    // access token can still end their session. The bearer token is therefore
+    // read opportunistically: when present and valid it is denylisted, so the
+    // credential stops working immediately rather than at natural expiry.
+    const accessTokenPayload = this.authService.tryDecodeAccessToken(
+      request.headers.authorization,
+    );
+
+    // Always call through: clearing the cookie and denylisting the access
+    // token must happen even when no refresh cookie was sent.
+    await this.authService.logout(refreshToken, response, accessTokenPayload);
   }
 
   @Post('logout-all')

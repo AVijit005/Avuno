@@ -11,6 +11,10 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "incremental": true,
+    // Keep the cache inside outDir: nest-cli deleteOutDir wipes dist/, and a
+    // tsbuildinfo left outside it makes the next build think everything is
+    // already emitted, producing an empty dist/ and no error.
+    "tsBuildInfoFile": "./dist/.tsbuildinfo",
     "skipLibCheck": true,
     "strictNullChecks": true,
     "noImplicitAny": true,

@@ -6,6 +6,7 @@ import { EmailVerificationService } from './email-verification.service';
 import { VerificationTokenService } from './verification-token.service';
 import { type EmailTransport } from './email-transport.abstraction';
 import { AuthAuditService } from './auth-audit.service';
+import { UserStateService } from './user-state.service';
 import { AuthRepository } from '../auth.repository';
 
 function createMockUser(overrides?: Partial<User>): User {
@@ -60,6 +61,7 @@ describe('EmailVerificationService', () => {
     save: ReturnType<typeof mock>;
   };
   let configMock: { get: ReturnType<typeof mock> };
+  let userStateMock: { invalidate: () => Promise<void>; getState: () => Promise<null> };
 
   beforeEach(() => {
     verificationTokensMock = {
@@ -90,12 +92,15 @@ describe('EmailVerificationService', () => {
       }),
     };
 
+    userStateMock = { invalidate: async () => undefined, getState: async () => null };
+
     service = new EmailVerificationService(
       verificationTokensMock as unknown as VerificationTokenService,
       transportMock as unknown as EmailTransport,
       auditMock as unknown as AuthAuditService,
       userRepoMock as unknown as AuthRepository,
       configMock as never,
+      userStateMock as unknown as UserStateService,
     );
   });
 

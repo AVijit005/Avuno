@@ -11,6 +11,7 @@ import {
   UserResponseDto,
 } from './dto';
 import { RedisService } from '../redis/redis.service';
+import { TokenRevocationService } from './services/token-revocation.service';
 import {
   CookieService,
   EmailVerificationService,
@@ -35,6 +36,7 @@ export class AuthService {
     private readonly emailVerificationService: EmailVerificationService,
     private readonly config: ConfigService,
     private readonly redis: RedisService,
+    private readonly tokenRevocation: TokenRevocationService,
   ) {}
 
   async register(
@@ -165,11 +167,42 @@ export class AuthService {
     };
   }
 
-  async logout(refreshToken: string | undefined, response?: Response): Promise<void> {
+  /**
+   * Best-effort decode of a bearer token for logout.
+   *
+   * Returns undefined rather than throwing: /auth/logout must succeed even
+   * when the access token is missing, malformed or already expired, since the
+   * user still needs their refresh token and cookie cleared.
+   */
+  tryDecodeAccessToken(
+    authorizationHeader?: string,
+  ): { jti?: string; exp?: number } | undefined {
+    if (!authorizationHeader?.startsWith('Bearer ')) return undefined;
+    try {
+      const payload = this.jwtTokenService.verifyAccessToken(authorizationHeader.substring(7));
+      return { jti: payload.jti, exp: payload.exp };
+    } catch {
+      return undefined;
+    }
+  }
+
+  async logout(
+    refreshToken: string | undefined,
+    response?: Response,
+    accessTokenPayload?: { jti?: string; exp?: number },
+  ): Promise<void> {
     if (refreshToken) {
       await this.refreshTokenService.revoke(refreshToken);
       await this.sessionService.invalidateByToken(refreshToken);
     }
+
+    // Also retire the access token. Revoking only the refresh token left the
+    // bearer credential usable for the rest of its lifetime, so "log out" did
+    // not actually end access.
+    if (accessTokenPayload?.jti) {
+      await this.tokenRevocation.revokeToken(accessTokenPayload.jti, accessTokenPayload.exp);
+    }
+
     if (response) {
       this.cookieService.clearRefreshToken(response);
     }
@@ -178,6 +211,12 @@ export class AuthService {
   async logoutAll(userId: string, response?: Response): Promise<void> {
     await this.refreshTokenService.revokeAllForUser(userId);
     await this.sessionService.invalidateAllForUser(userId);
+
+    // Individual jti values are unknown here, so reject every access token
+    // issued before now via the per-user revocation epoch. Without this,
+    // "log out all devices" left a stolen access token working.
+    await this.tokenRevocation.revokeAllForUser(userId);
+
     if (response) {
       this.cookieService.clearRefreshToken(response);
     }

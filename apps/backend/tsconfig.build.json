@@ -1,12 +1,17 @@
 {
   "extends": "./tsconfig.json",
-  // rootDir pins the output layout. Without it, seed-demo-data.ts at the
-  // package root widens the inferred rootDir to the whole package and the
-  // compiler emits dist/src/main.js instead of dist/main.js — which does not
-  // match `node dist/main` in package.json or the Dockerfile CMD, so the
-  // production container could not start.
   "compilerOptions": {
-    "rootDir": "./src"
+    // rootDir pins the output layout. Without it, seed-demo-data.ts at the
+    // package root widens the inferred rootDir to the whole package and the
+    // compiler emits dist/src/main.js instead of dist/main.js — which does not
+    // match `node dist/main` in package.json or the Dockerfile CMD, so the
+    // production container could not start.
+    "rootDir": "./src",
+    // Keep the incremental cache inside outDir. nest-cli deleteOutDir wipes
+    // dist/, so a tsbuildinfo stored outside it survives and makes the next
+    // build believe everything is already emitted — producing an empty dist/
+    // and exit code 0.
+    "tsBuildInfoFile": "./dist/.tsbuildinfo.build"
   },
   "exclude": ["node_modules", "test", "dist", "seed-demo-data.ts", "**/*.spec.ts"]
 }
