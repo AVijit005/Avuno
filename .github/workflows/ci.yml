@@ -215,10 +215,21 @@ jobs:
     needs: [frontend, backend-lint, backend-build, backend-test, docker, security]
     steps:
       - uses: actions/checkout@v4
-      - name: Verify CORS is not open
+      # The previous assertion grepped for "CORS_ORIGIN === 'true'", a string
+      # that does not appear anywhere in the file, so it could never fail.
+      # These check the two conditions that actually made CORS fail open.
+      - name: Verify CORS fails closed
         run: |
-          if grep -q "CORS_ORIGIN === 'true'" apps/backend/src/app.bootstrap.ts; then
-            echo "FAILED: Open CORS reflection detected"
+          if grep -q "allowedOrigins.length === 0 ||" apps/backend/src/app.bootstrap.ts; then
+            echo "FAILED: empty CORS_ORIGIN still allows every origin"
+            exit 1
+          fi
+          if grep -q "allowedOrigins.includes('\*') ||" apps/backend/src/app.bootstrap.ts; then
+            echo "FAILED: wildcard CORS origin still permitted alongside credentials"
+            exit 1
+          fi
+          if ! grep -q "callback(null, allowedOrigins.includes(origin))" apps/backend/src/app.bootstrap.ts; then
+            echo "FAILED: CORS origin check is not an explicit allowlist"
             exit 1
           fi
       - name: Verify CSP scriptSrc
