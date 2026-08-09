@@ -180,7 +180,7 @@ function TimelinePage() {
 
                   <PremiumGlass interactive glow={media.accent} className="flex gap-5 p-5">
                     <PremiumImage
-                      src={media.poster}
+                      src={media.poster || ""}
                       alt=""
                       className="h-28 w-20 shrink-0 rounded-xl object-cover ring-1 ring-white/10"
                       style={{ viewTransitionName: `timeline-poster-${e.id}` }}
