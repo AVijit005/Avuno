@@ -1,4 +1,5 @@
 import { Injectable, ForbiddenException, Logger } from '@nestjs/common';
+import * as nodePath from 'path';
 import { UploadService } from './upload.service';
 import { ImageService } from './image.service';
 import { ImageProcessorService } from './image-processor.service';
@@ -46,7 +47,11 @@ export class StorageService {
   }
 
   async downloadWithMeta(path: string, userId: string): Promise<{ buffer: Buffer; mimeType: string } | null> {
-    const parts = path.split('/');
+    const normalized = nodePath.normalize(path).replace(/\\/g, '/');
+    if (normalized.includes('..')) {
+      throw new ForbiddenException('Invalid file path');
+    }
+    const parts = normalized.split('/');
     if (parts.length >= 3 && parts[1] !== userId) {
       throw new ForbiddenException('You do not have permission to access this file');
     }
@@ -67,7 +72,11 @@ export class StorageService {
 
   async deleteWithOwnershipCheck(path: string, userId: string): Promise<void> {
     // Path format: category/userId/id.ext — verify userId matches
-    const parts = path.split('/');
+    const normalized = nodePath.normalize(path).replace(/\\/g, '/');
+    if (normalized.includes('..')) {
+      throw new ForbiddenException('Invalid file path');
+    }
+    const parts = normalized.split('/');
     if (parts.length < 3 || parts[1] !== userId) {
       throw new ForbiddenException('You do not have permission to delete this file');
     }

@@ -1,6 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { randomUUID } from 'crypto';
 import { RedisService } from '../../redis/redis.service';
+import { z } from 'zod';
 
 export interface OAuthStatePayload {
   /** Origin to send the user back to once the exchange completes. */
@@ -77,10 +78,15 @@ export class OAuthStateService {
 
     if (!raw) return null;
 
+    const OAuthStateSchema = z.object({
+      returnTo: z.string(),
+    });
+
     try {
-      return JSON.parse(raw) as OAuthStatePayload;
+      const parsed = JSON.parse(raw);
+      return OAuthStateSchema.parse(parsed) as OAuthStatePayload;
     } catch {
-      this.logger.warn('Discarding OAuth state with unparseable payload');
+      this.logger.warn('Discarding OAuth state with unparseable or invalid payload');
       return null;
     }
   }

@@ -46,7 +46,11 @@ export class WrappedRepository {
     return delegate(this.host(), 'wrappedStat');
   }
 
-  async createWrappedYear(data: { userId: string; year: number; metadata?: Prisma.JsonValue }): Promise<WrappedYearRow> {
+  async createWrappedYear(data: {
+    userId: string;
+    year: number;
+    metadata?: Prisma.JsonValue;
+  }): Promise<WrappedYearRow> {
     const created = await this.wrappedYear().create({ data });
     return created as unknown as WrappedYearRow;
   }

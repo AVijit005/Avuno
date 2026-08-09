@@ -38,8 +38,4 @@ See [frontend/taste.md](frontend/taste.md)
 - When creating an implementation plan from an audit, include a verification summary table showing the audit's accuracy rate (confirmed vs false-positive claims), organize fixes into independently testable phases ordered by risk level, and append CI guard scripts (grep-based checks, build/type-check commands) at the end. Confidence: 0.75
 
 # workflow
-- Do not commit generated analysis/audit markdown files (e.g., FRONTEND_BUGS_ANALYSIS.md, IMPLEMENTATION_PLAN.md) to the repository — they are ephemeral working documents. Confidence: 0.80
-- Run 'npx tsc --noEmit' after each phase of refactoring to verify TypeScript compilation. Confidence: 0.85
-- When the user asks you to fix pre-existing TypeScript errors before continuing, solve all of them immediately — don't dismiss them as "pre-existing" and move on. Confidence: 0.75
-- Before implementing a new feature or capability, verify what existing infrastructure already exists (theme classes, CSS variables, utility modules) to avoid duplicating work. Confidence: 0.60
-- When debugging a broken system (startup failure, connection issues, crashes), perform full root-cause analysis before modifying any files — do not fix code, edit config, or change .env until diagnosis is complete and user approves the fix plan. Confidence: 0.80
+See [workflow/taste.md](workflow/taste.md)

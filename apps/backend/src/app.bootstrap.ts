@@ -7,7 +7,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { randomUUID } from 'crypto';
-import type { Request, Response, NextFunction } from 'express';
+import { type Request, type Response, type NextFunction, json, urlencoded } from 'express';
 import { AppModule } from './app.module';
 
 export async function createApp(_options?: NestApplicationOptions): Promise<INestApplication> {
@@ -21,6 +21,8 @@ export async function createApp(_options?: NestApplicationOptions): Promise<INes
   app.useLogger(logger);
 
   app.setGlobalPrefix(config.get<string>('apiPrefix') ?? 'api');
+  app.use(json({ limit: '1mb', strict: true }));
+  app.use(urlencoded({ extended: true, limit: '1mb' }));
 
   // Trust proxy for rate limiting behind load balancers
   app.getHttpAdapter().getInstance().set('trust proxy', 1);
@@ -36,6 +38,8 @@ export async function createApp(_options?: NestApplicationOptions): Promise<INes
           connectSrc: ["'self'", 'https:'],
         },
       },
+      crossOriginResourcePolicy: { policy: 'cross-origin' },
+      referrerPolicy: { policy: 'strict-origin-when-cross-origin' },
     }),
   );
   // app.use(compression()); // Handled at CDN/Reverse Proxy level
@@ -44,6 +48,7 @@ export async function createApp(_options?: NestApplicationOptions): Promise<INes
     const requestId = (req.get('x-request-id') ?? randomUUID()) as string;
     req.id = requestId;
     res.setHeader('x-request-id', requestId);
+    res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
     next();
   });
   // Parsed once at boot rather than per request, so a missing value is a

@@ -96,16 +96,12 @@ export class AnalyticsRepository {
       USER_LIB_TYPES.map(async (cfg) => {
         const delegate = this.prismaAny()[cfg.delegate];
         if (!delegate) return { type: cfg.type, h: 0, ep: 0 };
-        const items = await delegate.findMany({
+        const agg = await delegate.aggregate({
           where: { userId, deletedAt: null },
-          select: { hoursSpent: true, minutesSpent: true, currentEpisode: true },
+          _sum: { hoursSpent: true, minutesSpent: true, currentEpisode: true },
         });
-        let h = 0;
-        let ep = 0;
-        for (const item of items) {
-          h += (item.hoursSpent ?? 0) + (item.minutesSpent ?? 0) / 60;
-          if (item.currentEpisode) ep += item.currentEpisode;
-        }
+        const h = (agg._sum.hoursSpent ?? 0) + (agg._sum.minutesSpent ?? 0) / 60;
+        const ep = agg._sum.currentEpisode ?? 0;
         return { type: cfg.type, h, ep };
       }),
     );

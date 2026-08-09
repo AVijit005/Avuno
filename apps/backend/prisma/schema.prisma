@@ -2624,3 +2624,96 @@ enum TimelineEventType {
 
   @@map("timeline_event_types")
 }
+
+model Follow {
+  id          String   @id @default(uuid()) @db.Uuid
+  followerId  String   @map("follower_id") @db.Uuid
+  followingId String   @map("following_id") @db.Uuid
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@unique([followerId, followingId])
+  @@index([followerId])
+  @@index([followingId])
+  @@map("follows")
+}
+
+model Like {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, entityType, entityId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("likes")
+}
+
+model Comment {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  content    String   @map("content")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("comments")
+}
+
+model Review {
+  id         String   @id @default(uuid()) @db.Uuid
+  userId     String   @map("user_id") @db.Uuid
+  mediaType  String   @map("media_type")
+  mediaId    String   @map("media_id")
+  rating     Float    @map("rating")
+  content    String?  @map("content")
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  deletedAt  DateTime? @map("deleted_at")
+
+  @@unique([userId, mediaType, mediaId])
+  @@index([userId])
+  @@index([mediaType, mediaId])
+  @@map("reviews")
+}
+
+model Subscription {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @unique @map("user_id") @db.Uuid
+  planTier  String   @map("plan_tier")
+  status    String   @map("status")
+  stripeId  String?  @map("stripe_id")
+  expiresAt DateTime? @map("expires_at")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("subscriptions")
+}
+
+model TasteSegment {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  segment   String   @map("segment")
+  score     Float    @map("score")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, segment])
+  @@map("taste_segments")
+}
+
+model WrappedShare {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @map("user_id") @db.Uuid
+  year      Int      @map("year")
+  url       String   @unique @map("url")
+  views     Int      @default(0) @map("views")
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@index([userId, year])
+  @@map("wrapped_shares")
+}

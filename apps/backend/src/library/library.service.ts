@@ -32,26 +32,28 @@ export class LibraryService {
       throw new NotFoundException(`${dto.mediaType} with id ${dto.mediaId} not found`);
     }
 
-    const existing = await this.repository.findByUserIdAndMediaId(userId, dto.mediaType, dto.mediaId);
-    if (existing) {
-      throw new ConflictException('Item already exists in library');
+    try {
+      const item = await this.repository.create(dto.mediaType, {
+        userId,
+        mediaId: dto.mediaId,
+        status: dto.status,
+        startedAt:
+          dto.status === 'WATCHING' ||
+          dto.status === 'READING' ||
+          dto.status === 'PLAYING' ||
+          dto.status === 'LISTENING' ||
+          dto.status === 'LEARNING'
+            ? new Date()
+            : undefined,
+      });
+
+      return this.toResponse(item, dto.mediaType);
+    } catch (error: any) {
+      if (error.code === 'P2002') {
+        throw new ConflictException('Item already exists in library');
+      }
+      throw error;
     }
-
-    const item = await this.repository.create(dto.mediaType, {
-      userId,
-      mediaId: dto.mediaId,
-      status: dto.status,
-      startedAt:
-        dto.status === 'WATCHING' ||
-        dto.status === 'READING' ||
-        dto.status === 'PLAYING' ||
-        dto.status === 'LISTENING' ||
-        dto.status === 'LEARNING'
-          ? new Date()
-          : undefined,
-    });
-
-    return this.toResponse(item, dto.mediaType);
   }
 
   async list(userId: string, type: string | undefined, params: LibraryFindManyParams): Promise<LibraryListResult> {
@@ -155,9 +157,7 @@ export class LibraryService {
 
   private toResponse(row: LibraryRow, mediaType: string): LibraryItemResponseDto {
     const media =
-      row.media ??
-      ((row as unknown as Record<string, unknown>)[mediaType] as Record<string, unknown> | null) ??
-      null;
+      row.media ?? ((row as unknown as Record<string, unknown>)[mediaType] as Record<string, unknown> | null) ?? null;
 
     return {
       id: row.id,

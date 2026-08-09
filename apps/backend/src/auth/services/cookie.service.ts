@@ -12,8 +12,8 @@ export class CookieService {
     const isProduction = this.config.get<string>('nodeEnv') === 'production';
     response.cookie(REFRESH_TOKEN_COOKIE, token, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'strict',
       path: '/api/auth',
       maxAge: maxAgeSeconds * 1000,
       domain: this.config.get<string>('cookie.domain') || undefined,
@@ -28,8 +28,8 @@ export class CookieService {
     const isProduction = this.config.get<string>('nodeEnv') === 'production';
     response.clearCookie(REFRESH_TOKEN_COOKIE, {
       httpOnly: true,
-      secure: isProduction,
-      sameSite: 'lax',
+      secure: true,
+      sameSite: 'strict',
       path: '/api/auth',
       domain: this.config.get<string>('cookie.domain') || undefined,
     });

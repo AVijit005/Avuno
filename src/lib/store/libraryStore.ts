@@ -1,6 +1,5 @@
 // Reactive library store — Zustand + localStorage. Frontend-only source of truth.
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 import { type MediaItem, type MediaKind } from "@/lib/types";
 import type { LibraryMeta, MediaStatus } from "@/lib/library";
 
@@ -107,15 +106,13 @@ const initialMeta = (): Record<string, StoredMeta> => {
   return {};
 };
 
-export const useLibraryStore = create<State & Actions>()(
-  persist(
-    (set, get) => ({
+export const useLibraryStore = create<State & Actions>()((set, get) => ({
       meta: initialMeta(),
       customItems: [],
       shelves: [],
       collections: [],
       userQuotes: [],
-      hydrated: false,
+      hydrated: true,
 
       setStatus: (id, status) =>
         set((s) => ({
@@ -352,33 +349,7 @@ export const useLibraryStore = create<State & Actions>()(
       },
       reset: () =>
         set({ meta: initialMeta(), customItems: [], shelves: [], collections: [], userQuotes: [] }),
-    }),
-    {
-      name: "chronicle:library:v2",
-      storage: createJSONStorage(() =>
-        typeof window !== "undefined"
-          ? window.localStorage
-          : ({
-              getItem: () => null,
-              setItem: () => undefined,
-              removeItem: () => undefined,
-              length: 0,
-              clear: () => undefined,
-              key: () => null,
-            } satisfies Storage),
-      ),
-      partialize: (s) => ({
-        meta: s.meta,
-        customItems: s.customItems,
-        shelves: s.shelves,
-        collections: s.collections,
-        userQuotes: s.userQuotes,
-      }),
-      onRehydrateStorage: () => (state) => {
-        if (state) state.hydrated = true;
-      },
-    },
-  ),
+    })
 );
 
 // Convenience selectors (non-reactive snapshot for legacy callers).

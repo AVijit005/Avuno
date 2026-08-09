@@ -42,6 +42,20 @@ function notifySessionExpired(): void {
 let modAccessToken: string | null = null;
 let modRefreshPromise: Promise<string> | null = null;
 
+let authSyncChannel: BroadcastChannel | null = null;
+if (typeof window !== "undefined" && window.BroadcastChannel) {
+  authSyncChannel = new BroadcastChannel("auth_sync");
+  authSyncChannel.onmessage = (event) => {
+    if (event.data === "LOGOUT") {
+      modAccessToken = null;
+      try {
+        sessionStorage.removeItem("accessToken");
+      } catch {}
+      notifySessionExpired();
+    }
+  };
+}
+
 export function setAccessToken(token: string | null): void {
   // Guarded: on the server these module globals are shared by every
   // concurrent request, so writing a per-user token here would leak it
@@ -62,6 +76,7 @@ export function setAccessToken(token: string | null): void {
     } catch {
       // Nothing to do; the in-memory copy is already cleared.
     }
+    authSyncChannel?.postMessage("LOGOUT");
   }
 }
 

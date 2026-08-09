@@ -13,10 +13,9 @@ export class ResendEmailTransportService implements EmailTransport {
   private resend: Resend;
 
   constructor(private configService: ConfigService) {
-    const apiKey = this.configService.get<string>('EMAIL_API_KEY') || 'dummy-key-for-tests';
-    const isProduction = (this.configService.get<string>('NODE_ENV') || process.env.NODE_ENV) === 'production';
-    if (isProduction && apiKey === 'dummy-key-for-tests') {
-      throw new Error('EMAIL_API_KEY must be set in production');
+    const apiKey = this.configService.get<string>('EMAIL_API_KEY');
+    if (!apiKey) {
+      throw new Error('EMAIL_API_KEY environment variable is required');
     }
     this.resend = new Resend(apiKey);
   }
@@ -35,7 +34,7 @@ export class ResendEmailTransportService implements EmailTransport {
       });
       this.logger.log(`Verification email sent to ${to} via Resend`);
     } catch (error) {
-      this.logger.error(`Failed to send email to ${to}: ${error.message}`, error.stack);
+      this.logger.error(`Failed to send email to ${to}: ${(error as Error).message}`);
       throw error;
     }
   }

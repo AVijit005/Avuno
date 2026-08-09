@@ -2,6 +2,7 @@ import { ForbiddenException, Injectable, Logger, UnauthorizedException } from '@
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
 import { createHash } from 'crypto';
+import { z } from 'zod';
 import { ConflictException, NotFoundException } from '../common';
 import { AuthRepository } from './auth.repository';
 import { AuthResponseDto, InternalAuthResult, LoginDto, RegisterDto, UserResponseDto } from './dto';
@@ -304,7 +305,26 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired code');
     }
 
-    const data = JSON.parse(dataStr) as Partial<InternalAuthResult>;
+    const AuthResultSchema = z.object({
+      user: z.record(z.unknown()).optional(),
+      accessToken: z.string().optional(),
+      expiresIn: z.number().optional(),
+      refreshToken: z.string().optional(),
+    }).passthrough();
+
+    let parsed: unknown;
+    try {
+      parsed = JSON.parse(dataStr);
+    } catch {
+      throw new UnauthorizedException('Invalid payload data');
+    }
+
+    const validationResult = AuthResultSchema.safeParse(parsed);
+    if (!validationResult.success) {
+      throw new UnauthorizedException('Malformed payload data');
+    }
+    
+    const data = validationResult.data as Partial<InternalAuthResult>;
 
     if (!data.accessToken || !data.user) {
       throw new UnauthorizedException('Invalid or expired code');

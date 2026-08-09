@@ -5,9 +5,9 @@ services:
     ports:
       - "5432:5432"
     environment:
-      POSTGRES_USER: chronicle
-      POSTGRES_PASSWORD: chronicle
-      POSTGRES_DB: chronicle
+      POSTGRES_USER: ${POSTGRES_USER:-chronicle}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-chronicle}
+      POSTGRES_DB: ${POSTGRES_DB:-chronicle}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U chronicle -d chronicle"]
       interval: 5s
@@ -38,11 +38,11 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       CORS_ORIGIN: http://127.0.0.1:5173,http://localhost:5173
-      OAUTH_ENCRYPTION_KEY: super-secret-key-that-is-at-least-32-chars-long
-      JWT_ACCESS_SECRET: test-secret-super-long-so-it-passes-32-chars-test
-      JWT_REFRESH_SECRET: test-refresh-secret-super-long-so-it-passes-32-chars-test
-      GOOGLE_CLIENT_ID: dummy-client-id
-      GOOGLE_CLIENT_SECRET: dummy-client-secret
+      OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:-super-secret-key-that-is-at-least-32-chars-long}
+      JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-test-secret-super-long-so-it-passes-32-chars-test}
+      JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-test-refresh-secret-super-long-so-it-passes-32-chars-test}
+      GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy-client-id}
+      GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy-client-secret}
       EMAIL_VERIFICATION_REQUIRED: "false"
       GOOGLE_CALLBACK_URL: http://localhost:3000/api/auth/google/callback
     depends_on:
