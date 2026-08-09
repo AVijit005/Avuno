@@ -20,9 +20,10 @@ export class InsightsService {
       const day = dayNames[new Date(date).getDay()];
       weekdayCounts[day] = (weekdayCounts[day] ?? 0) + count;
     }
-    const mostActiveWeekday = Object.keys(weekdayCounts).length > 0 
-      ? Object.entries(weekdayCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? 'Mon'
-      : 'Mon';
+    const mostActiveWeekday =
+      Object.keys(weekdayCounts).length > 0
+        ? (Object.entries(weekdayCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? 'Mon')
+        : 'Mon';
 
     // Favorite genre
     const topGenre = Object.entries(genreData.genreCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null;
@@ -47,4 +48,3 @@ export class InsightsService {
     };
   }
 }
-

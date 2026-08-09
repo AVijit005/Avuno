@@ -1,3 +1,4 @@
+import { describe, it, expect, beforeEach, mock, spyOn } from 'bun:test';
 import { ExecutionContext } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { UserRole } from '@prisma/client';
@@ -13,21 +14,21 @@ describe('RolesGuard', () => {
   });
 
   it('should return true if no roles are required', () => {
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
+    spyOn(reflector, 'getAllAndOverride').mockReturnValue(undefined);
     const context = {
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
-      switchToHttp: jest.fn(),
+      getHandler: mock(),
+      getClass: mock(),
+      switchToHttp: mock(),
     } as unknown as ExecutionContext;
 
     expect(guard.canActivate(context)).toBe(true);
   });
 
   it('should return false if user has no role but roles are required', () => {
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
+    spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
     const context = {
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
+      getHandler: mock(),
+      getClass: mock(),
       switchToHttp: () => ({
         getRequest: () => ({ user: { sub: '123', email: 'test@test.com' } }),
       }),
@@ -37,10 +38,10 @@ describe('RolesGuard', () => {
   });
 
   it('should return false if user role does not match required roles', () => {
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
+    spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
     const context = {
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
+      getHandler: mock(),
+      getClass: mock(),
       switchToHttp: () => ({
         getRequest: () => ({ user: { sub: '123', email: 'test@test.com', role: UserRole.USER } }),
       }),
@@ -50,10 +51,10 @@ describe('RolesGuard', () => {
   });
 
   it('should return true if user role matches required roles', () => {
-    jest.spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
+    spyOn(reflector, 'getAllAndOverride').mockReturnValue([UserRole.ADMIN]);
     const context = {
-      getHandler: jest.fn(),
-      getClass: jest.fn(),
+      getHandler: mock(),
+      getClass: mock(),
       switchToHttp: () => ({
         getRequest: () => ({ user: { sub: '123', email: 'test@test.com', role: UserRole.ADMIN } }),
       }),

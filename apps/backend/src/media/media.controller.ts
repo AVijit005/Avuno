@@ -1,6 +1,6 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
 import { MediaService } from './media.service';
-import { MediaFilterDto, MediaSearchDto, MediaSortDto, IdParamDto, TypeParamDto } from './dto';
+import { MediaFilterDto, MediaSearchDto, IdParamDto, TypeParamDto } from './dto';
 import { MediaResponseDto } from './dto/media-response.dto';
 import type { MediaListResult, SearchResult } from './media.service';
 import type { MediaMetadata } from './media-metadata.service';
@@ -41,10 +41,7 @@ export class MediaController {
   }
 
   @Get('type/:type')
-  async listByType(
-    @Param() params: TypeParamDto,
-    @Query() filter: MediaFilterDto,
-  ): Promise<MediaListResult> {
+  async listByType(@Param() params: TypeParamDto, @Query() filter: MediaFilterDto): Promise<MediaListResult> {
     return this.mediaService.listByType(params.type, {
       genre: filter.genre,
       language: filter.language,

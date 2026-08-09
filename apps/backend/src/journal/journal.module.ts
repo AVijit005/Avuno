@@ -12,7 +12,14 @@ import { PromptService } from './prompt.service';
 @Module({
   imports: [SharedModule, AuthModule],
   controllers: [JournalController],
-  providers: [JournalService, JournalRepository, JournalEventService, TimelineEventFactory, JournalStatisticsService, PromptService],
+  providers: [
+    JournalService,
+    JournalRepository,
+    JournalEventService,
+    TimelineEventFactory,
+    JournalStatisticsService,
+    PromptService,
+  ],
   exports: [JournalService, JournalRepository],
 })
 export class JournalModule {}

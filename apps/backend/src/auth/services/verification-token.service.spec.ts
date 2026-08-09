@@ -50,7 +50,9 @@ describe('VerificationTokenService', () => {
     });
 
     it('delegates to TokenFactory.generateSecureToken(32)', () => {
-      const spy = mock(() => 'fixed-token');
+      // Typed parameter so `spy.mock.calls[0][0]` is inspectable; mock(() => x)
+      // infers a zero-argument signature and an empty call tuple.
+      const spy = mock((_bytes?: number) => 'fixed-token');
       const factory = {
         generateSecureToken: spy,
       } as unknown as TokenFactory;

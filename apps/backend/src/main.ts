@@ -1,7 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { createApp } from './app.bootstrap';
 async function bootstrap(): Promise<void> {
-
   const app = await createApp();
   const config = app.get(ConfigService);
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { describe, it, expect, beforeEach, mock } from 'bun:test';
 import { JournalService } from './journal.service';
 
@@ -203,7 +202,13 @@ describe('JournalService', () => {
       ),
     };
 
-    service = new JournalService(repoMock as any, eventsMock as any, timelineMock as any, statsMock as any);
+    service = new JournalService(
+      repoMock as any,
+      eventsMock as any,
+      timelineMock as any,
+      statsMock as any,
+      { getAllPrompts: () => [], getDailyPrompt: () => '' } as any,
+    );
   });
 
   // ─── Journal Entries ──────────────────────────────────────────────────────

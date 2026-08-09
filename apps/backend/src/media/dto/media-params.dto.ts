@@ -65,7 +65,7 @@ export class MediaSortDto extends SortDto {
 export class MediaSearchDto extends CursorPaginationDto {
   @IsString()
   search!: string;
-  
+
   @IsOptional()
   @IsIn(MEDIA_TYPE_VALUES)
   mediaType?: string;
@@ -89,11 +89,11 @@ export class MediaSearchDto extends CursorPaginationDto {
   @IsOptional()
   @IsIn(CONTENT_STATUS_VALUES)
   status?: string;
-  
+
   @IsOptional()
   @IsIn(['title', 'releaseYear', 'releaseDate', 'createdAt', 'updatedAt', 'runtime', 'duration'])
   sortBy?: 'title' | 'releaseYear' | 'releaseDate' | 'createdAt' | 'updatedAt' | 'runtime' | 'duration';
-  
+
   @IsOptional()
   @IsIn(['asc', 'desc'])
   sortOrder?: 'asc' | 'desc';

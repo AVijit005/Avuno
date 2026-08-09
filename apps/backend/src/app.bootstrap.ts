@@ -1,4 +1,4 @@
-import { NestFactory, HttpAdapterHost } from '@nestjs/core';
+import { NestFactory } from '@nestjs/core';
 import { ConfigService } from '@nestjs/config';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { INestApplication, NestApplicationOptions } from '@nestjs/common';
@@ -8,10 +8,9 @@ import cookieParser from 'cookie-parser';
 import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { randomUUID } from 'crypto';
 import type { Request, Response, NextFunction } from 'express';
-import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 
-export async function createApp(options?: NestApplicationOptions): Promise<INestApplication> {
+export async function createApp(_options?: NestApplicationOptions): Promise<INestApplication> {
   const app = await NestFactory.create(AppModule, {
     bufferLogs: true,
     bodyParser: true,

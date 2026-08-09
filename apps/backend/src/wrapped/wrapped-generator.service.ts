@@ -21,15 +21,16 @@ export class WrappedGeneratorService {
     totalHours: number;
     journalCount: number;
   }> {
-    const [completedByType, totalsByType, totalItems, avgRating, genreData, journalDates, hoursData] = await Promise.all([
-      this.analyticsRepo.countCompletedByType(userId),
-      this.analyticsRepo.countTotalByType(userId),
-      this.analyticsRepo.getTotalLibraryItems(userId),
-      this.analyticsRepo.getAverageRating(userId),
-      this.analyticsRepo.getGenreData(userId),
-      this.analyticsRepo.getJournalEntryDates(userId, 10000),
-      this.analyticsRepo.getHoursAndEpisodesByType(userId),
-    ]);
+    const [completedByType, totalsByType, totalItems, avgRating, genreData, journalDates, hoursData] =
+      await Promise.all([
+        this.analyticsRepo.countCompletedByType(userId),
+        this.analyticsRepo.countTotalByType(userId),
+        this.analyticsRepo.getTotalLibraryItems(userId),
+        this.analyticsRepo.getAverageRating(userId),
+        this.analyticsRepo.getGenreData(userId),
+        this.analyticsRepo.getJournalEntryDates(userId, 10000),
+        this.analyticsRepo.getHoursAndEpisodesByType(userId),
+      ]);
 
     const totalCompleted = Object.values(completedByType).reduce((a, b) => a + b, 0);
     const totalHours = Object.values(hoursData.hours).reduce((a, b) => a + b, 0);
@@ -83,7 +84,12 @@ export class WrappedGeneratorService {
       { title: 'Music Albums', value: String(completedByType['musicAlbum'] ?? 0), icon: 'music', sortOrder: 6 },
       { title: 'Podcasts Listened', value: String(completedByType['podcast'] ?? 0), icon: 'mic', sortOrder: 7 },
       { title: 'Total Items', value: String(totalItems), icon: 'library', sortOrder: 8 },
-      { title: 'Average Rating', value: avgRating !== null && avgRating !== undefined ? avgRating.toFixed(1) : 'N/A', icon: 'star', sortOrder: 9 },
+      {
+        title: 'Average Rating',
+        value: avgRating !== null && avgRating !== undefined ? avgRating.toFixed(1) : 'N/A',
+        icon: 'star',
+        sortOrder: 9,
+      },
       { title: 'Journal Entries', value: String(journalCount), icon: 'book-open', sortOrder: 10 },
     ];
 

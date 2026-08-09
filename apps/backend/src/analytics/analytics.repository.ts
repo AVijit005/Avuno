@@ -63,7 +63,7 @@ export class AnalyticsRepository {
           where: { userId, status: 'COMPLETED', deletedAt: null },
         });
         return { type: cfg.type, count };
-      })
+      }),
     );
     for (const r of results) {
       if (r.count > 0) counts[r.type] = r.count;
@@ -81,7 +81,7 @@ export class AnalyticsRepository {
           where: { userId, deletedAt: null },
         });
         return { type: cfg.type, count };
-      })
+      }),
     );
     for (const r of results) {
       if (r.count > 0) counts[r.type] = r.count;
@@ -89,7 +89,7 @@ export class AnalyticsRepository {
     return counts;
   }
 
-  async getHoursAndEpisodesByType(userId: string): Promise<{ hours: Record<string, number>, episodes: number }> {
+  async getHoursAndEpisodesByType(userId: string): Promise<{ hours: Record<string, number>; episodes: number }> {
     const hours: Record<string, number> = {};
     let episodes = 0;
     const results = await Promise.all(
@@ -107,7 +107,7 @@ export class AnalyticsRepository {
           if (item.currentEpisode) ep += item.currentEpisode;
         }
         return { type: cfg.type, h, ep };
-      })
+      }),
     );
     for (const r of results) {
       hours[r.type] = r.h;
@@ -122,7 +122,7 @@ export class AnalyticsRepository {
         const delegate = this.prismaAny()[cfg.delegate];
         if (!delegate) return 0;
         return delegate.count({ where: { userId, deletedAt: null } });
-      })
+      }),
     );
     return counts.reduce((sum, c) => sum + c, 0);
   }
@@ -145,7 +145,7 @@ export class AnalyticsRepository {
         if (group.progressPercentage === null) continue;
         const pct = group.progressPercentage;
         const count = group._count.progressPercentage;
-        
+
         if (pct === 0) dist['0'] = (dist['0'] ?? 0) + count;
         else if (pct <= 25) dist['1-25'] = (dist['1-25'] ?? 0) + count;
         else if (pct <= 50) dist['26-50'] = (dist['26-50'] ?? 0) + count;
@@ -212,7 +212,7 @@ export class AnalyticsRepository {
         const delegate = this.prismaAny()[cfg.delegate];
         if (!delegate) return 0;
         return delegate.count({ where: { userId, favorite: true, deletedAt: null } });
-      })
+      }),
     );
     return counts.reduce((sum, c) => sum + c, 0);
   }
@@ -232,7 +232,7 @@ export class AnalyticsRepository {
           if (meta?.review) count++;
         }
         return count;
-      })
+      }),
     );
     return counts.reduce((sum, c) => sum + c, 0);
   }
@@ -243,7 +243,7 @@ export class AnalyticsRepository {
         const delegate = this.prismaAny()[cfg.delegate];
         if (!delegate) return 0;
         return delegate.count({ where: { userId, bookmarked: true, deletedAt: null } });
-      })
+      }),
     );
     return counts.reduce((sum, c) => sum + c, 0);
   }
@@ -283,7 +283,7 @@ export class AnalyticsRepository {
           include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
         });
         return items.map((item: any) => ({ ...item, _mediaType: cfg.type }));
-      })
+      }),
     );
     const results = allItems.flat();
     results.sort((a, b) => (b.createdAt?.getTime() || 0) - (a.createdAt?.getTime() || 0));
@@ -302,7 +302,7 @@ export class AnalyticsRepository {
           include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
         });
         return items.map((item: any) => ({ ...item, _mediaType: cfg.type }));
-      })
+      }),
     );
     const results = allItems.flat();
     results.sort((a, b) => (b.updatedAt?.getTime() || 0) - (a.updatedAt?.getTime() || 0));
@@ -419,7 +419,10 @@ export class AnalyticsRepository {
 
     const journal = this.prismaAny().journalEntry;
     const journalPromise = journal
-      ? journal.findMany({ where: { userId, createdAt: { gte: startDate, lte: endDate } }, select: { createdAt: true } })
+      ? journal.findMany({
+          where: { userId, createdAt: { gte: startDate, lte: endDate } },
+          select: { createdAt: true },
+        })
       : Promise.resolve([]);
 
     const memory = this.prismaAny().memory;
@@ -476,16 +479,16 @@ export class AnalyticsRepository {
         if (!delegate) return [];
         const items = await delegate.findMany({
           where: { userId, deletedAt: null },
-          select: { 
-            status: true, 
-            rating: true, 
-            minutesSpent: true, 
+          select: {
+            status: true,
+            rating: true,
+            minutesSpent: true,
             hoursSpent: true,
-            [cfg.mediaDelegate]: { select: { genres: true } }
+            [cfg.mediaDelegate]: { select: { genres: true } },
           },
         });
         return items.map((item: any) => ({ ...item, _mediaDelegateKey: cfg.mediaDelegate }));
-      })
+      }),
     );
 
     for (const items of allItems) {
@@ -560,5 +563,3 @@ interface GenreRawData {
   genreRatings: Record<string, { total: number; count: number }>;
   genreTime: Record<string, number>;
 }
-
-

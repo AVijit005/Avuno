@@ -5,4 +5,4 @@ export * from './analytics-aggregation.service';
 export * from './dashboard.service';
 export * from './streak.service';
 export * from './insights.service';
-export * from './dto';                                                               
+export * from './dto';

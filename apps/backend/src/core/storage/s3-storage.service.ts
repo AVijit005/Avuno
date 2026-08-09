@@ -1,8 +1,13 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
+import {
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  HeadObjectCommand,
+} from '@aws-sdk/client-s3';
 import { StorageFile, StorageService } from './storage.abstraction';
-import { randomUUID } from 'crypto';
 
 @Injectable()
 export class S3StorageService implements StorageService {
@@ -36,7 +41,7 @@ export class S3StorageService implements StorageService {
 
   async upload(path: string, file: StorageFile): Promise<string> {
     const key = path.startsWith('/') ? path.substring(1) : path;
-    
+
     try {
       const command = new PutObjectCommand({
         Bucket: this.bucket,
@@ -56,7 +61,7 @@ export class S3StorageService implements StorageService {
 
   async download(path: string): Promise<Buffer> {
     const key = path.startsWith('/') ? path.substring(1) : path;
-    
+
     try {
       const command = new GetObjectCommand({
         Bucket: this.bucket,
@@ -77,7 +82,7 @@ export class S3StorageService implements StorageService {
 
   async delete(path: string): Promise<void> {
     const key = path.startsWith('/') ? path.substring(1) : path;
-    
+
     try {
       const command = new DeleteObjectCommand({
         Bucket: this.bucket,
@@ -94,7 +99,7 @@ export class S3StorageService implements StorageService {
 
   async exists(path: string): Promise<boolean> {
     const key = path.startsWith('/') ? path.substring(1) : path;
-    
+
     try {
       const command = new HeadObjectCommand({
         Bucket: this.bucket,

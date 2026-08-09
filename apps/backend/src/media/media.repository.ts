@@ -135,7 +135,7 @@ export class MediaRepository {
       return this.executeFindMany(delegate, params);
     }
 
-    const promises = this.getModelKeys().map(key => {
+    const promises = this.getModelKeys().map((key) => {
       const delegate = this.getDelegate(key);
       if (!delegate) return Promise.resolve([]);
       return this.executeFindMany(delegate, params);
@@ -179,7 +179,7 @@ export class MediaRepository {
       return delegate.count({ where: buildWhere(params) as any });
     }
 
-    const promises = this.getModelKeys().map(key => {
+    const promises = this.getModelKeys().map((key) => {
       const delegate = this.getDelegate(key);
       if (!delegate) return Promise.resolve(0);
       return delegate.count({ where: buildWhere(params) as any });

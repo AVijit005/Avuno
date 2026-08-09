@@ -8,17 +8,13 @@ export interface ImageInfo {
   size: number;
 }
 
-const ALLOWED_MIME_TYPES = [
-  'image/jpeg',
-  'image/png',
-  'image/webp',
-  'image/avif',
-  'image/gif',
-] as const;
+const ALLOWED_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/avif', 'image/gif'] as const;
 
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10 MB
 const MAX_AVATAR_SIZE = 2 * 1024 * 1024; // 2 MB
-const MAX_DIMENSION = 16384; // 16384px max width/height (prevents decompression bombs)
+// TODO: not yet enforced — no dimension check runs on upload, so the
+// decompression-bomb protection this implies does not exist.
+export const MAX_DIMENSION = 16384;
 
 export type AllowedMimeType = (typeof ALLOWED_MIME_TYPES)[number];
 
@@ -57,9 +53,7 @@ export class ImageService {
       return 'Unrecognized file format — file may be corrupted';
     }
     if (signatureMime !== file.mimeType) {
-      this.logger.warn(
-        `MIME type mismatch: claimed "${file.mimeType}" but signature indicates "${signatureMime}"`,
-      );
+      this.logger.warn(`MIME type mismatch: claimed "${file.mimeType}" but signature indicates "${signatureMime}"`);
       return 'File content does not match the declared file type';
     }
 
@@ -93,7 +87,9 @@ export class ImageService {
   sanitizeFilename(name: string): string {
     let sanitized = name;
 
-    // Strip path separators and null bytes
+    // Strip path separators and null bytes. The NUL is deliberate — a
+    // filename containing it can truncate paths in downstream C APIs.
+    // eslint-disable-next-line no-control-regex
     sanitized = sanitized.replace(/[/\\:\x00]/g, '_');
 
     // Strip Unicode control characters (RTL override, zero-width, etc.)
@@ -185,13 +181,7 @@ export class ImageService {
     }
 
     // AVIF/HEIF: ftyp box at offset 4
-    if (
-      buffer.length >= 12 &&
-      buffer[4] === 0x66 &&
-      buffer[5] === 0x74 &&
-      buffer[6] === 0x79 &&
-      buffer[7] === 0x70
-    ) {
+    if (buffer.length >= 12 && buffer[4] === 0x66 && buffer[5] === 0x74 && buffer[6] === 0x79 && buffer[7] === 0x70) {
       // Check for AVIF brand
       const brand = buffer.slice(8, 12).toString('ascii');
       if (brand === 'avif' || brand === 'avis' || brand === 'heic' || brand === 'heix') {

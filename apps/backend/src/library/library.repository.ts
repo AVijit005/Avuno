@@ -25,6 +25,10 @@ export interface LibraryRow {
   progressPercentage: number | null;
   createdAt: Date;
   updatedAt: Date;
+  // Soft-delete marker. Read in findById/findAll/update and filtered in every
+  // query, but was missing from the interface — so those reads were untyped
+  // and test fixtures could not set it.
+  deletedAt: Date | null;
   media?: Record<string, any> | null;
 }
 
@@ -161,7 +165,7 @@ export class LibraryRepository {
       return this.executeFindAll(delegate, userId, type, params);
     }
 
-    const promises = this.getTypes().map(t => {
+    const promises = this.getTypes().map((t) => {
       const delegate = this.getDelegate(t);
       if (!delegate) return Promise.resolve([]);
       return this.executeFindAll(delegate, userId, t, params);
@@ -287,9 +291,20 @@ export class LibraryRepository {
 
     // Whitelist: only allow specific fields through for security
     const ALLOWED_UPDATE_FIELDS = [
-      'status', 'progress', 'rating', 'review', 'notes', 'isFavorite',
-      'readAt', 'watchedAt', 'completedAt', 'pausedAt', 'droppedAt',
-      'timesWatched', 'timesRead', 'timesPlayed',
+      'status',
+      'progress',
+      'rating',
+      'review',
+      'notes',
+      'isFavorite',
+      'readAt',
+      'watchedAt',
+      'completedAt',
+      'pausedAt',
+      'droppedAt',
+      'timesWatched',
+      'timesRead',
+      'timesPlayed',
     ];
     const safeData: Record<string, any> = { updatedAt: new Date() };
     for (const key of ALLOWED_UPDATE_FIELDS) {
@@ -337,7 +352,7 @@ export class LibraryRepository {
 
   async countByStatus(userId: string): Promise<Record<string, number>> {
     const counts: Record<string, number> = {};
-    
+
     const promises = this.getTypes().map(async (t) => {
       const delegate = this.getDelegate(t);
       if (!delegate) return [];

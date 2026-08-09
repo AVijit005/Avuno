@@ -1,5 +1,6 @@
+import { describe, it, expect } from 'bun:test';
 import { Test, TestingModule } from '@nestjs/testing';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
 
 /**
  * OAuthAccountRepository now requires a real 32-byte key at construction time
@@ -17,12 +18,6 @@ const TEST_CONFIG: Record<string, string> = {
 };
 import { AuthModule } from './auth.module';
 import { EMAIL_TRANSPORT, ResendEmailTransportService, ConsoleEmailTransportService } from './services';
-import { PrismaModule } from '../prisma/prisma.module';
-import { SharedModule } from '../shared';
-
-jest.mock('../prisma/prisma.module', () => ({
-  PrismaModule: class {},
-}));
 
 describe('AuthModule', () => {
   it('should use ConsoleEmailTransportService when nodeEnv is development', async () => {
@@ -30,7 +25,7 @@ describe('AuthModule', () => {
       imports: [AuthModule],
     })
       .overrideProvider(ConfigService)
-      .useValue({ get: (key) => (key === 'nodeEnv' ? 'development' : (TEST_CONFIG[key] ?? null)) })
+      .useValue({ get: (key: string) => (key === 'nodeEnv' ? 'development' : (TEST_CONFIG[key] ?? null)) })
       .compile();
 
     const transport = module.get(EMAIL_TRANSPORT);
@@ -42,7 +37,7 @@ describe('AuthModule', () => {
       imports: [AuthModule],
     })
       .overrideProvider(ConfigService)
-      .useValue({ get: (key) => (key === 'nodeEnv' ? 'production' : (TEST_CONFIG[key] ?? null)) })
+      .useValue({ get: (key: string) => (key === 'nodeEnv' ? 'production' : (TEST_CONFIG[key] ?? null)) })
       .compile();
 
     const transport = module.get(EMAIL_TRANSPORT);

@@ -1,4 +1,4 @@
-import { Injectable, ForbiddenException, NotFoundException, Logger } from '@nestjs/common';
+import { Injectable, ForbiddenException, Logger } from '@nestjs/common';
 import { UploadService } from './upload.service';
 import { ImageService } from './image.service';
 import { ImageProcessorService } from './image-processor.service';

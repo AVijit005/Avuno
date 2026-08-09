@@ -21,7 +21,7 @@ export class ResendEmailTransportService implements EmailTransport {
     const { link, userDisplayName } = options;
     const fromEmail = this.configService.get<string>('EMAIL_FROM') || 'noreply@chronicle.com';
     const safeName = String(userDisplayName || 'there').replace(/[<>&"']/g, '');
-    
+
     try {
       await this.resend.emails.send({
         from: fromEmail,

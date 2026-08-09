@@ -89,29 +89,23 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({ summary: 'Calendar year data' })
-  async getCalendarYear(
-    @CurrentUser() user: AccessTokenPayload,
-    @Query('year') year: string,
-  ): Promise<any> {
-    return this.analyticsService.getCalendarYear(
-      user.sub,
-      parseInt(year, 10) || new Date().getFullYear(),
-    );
+  async getCalendarYear(@CurrentUser() user: AccessTokenPayload, @Query('year') year: string): Promise<any> {
+    return this.analyticsService.getCalendarYear(user.sub, parseInt(year, 10) || new Date().getFullYear());
   }
 
   @Get('calendar/day')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Calendar day data' })
-  async getCalendarDay(
-    @CurrentUser() user: AccessTokenPayload,
-    @Query('date') date: string,
-  ): Promise<any> {
+  async getCalendarDay(@CurrentUser() user: AccessTokenPayload, @Query('date') date: string): Promise<any> {
     return this.analyticsService.getCalendarDay(user.sub, date);
   }
 
   @Post('pageview')
   @ApiOperation({ summary: 'Record pageview analytics' })
-  async recordPageView(@Body() body: Record<string, any>) {
+  async recordPageView(@Body() _body: Record<string, any>) {
+    // NOTE: pageviews are not persisted. This accepts and discards the
+    // payload so the client's beacon does not error; wiring it to a real
+    // analytics sink is tracked separately.
     return { success: true };
   }
 

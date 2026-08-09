@@ -19,9 +19,19 @@ export class WrappedService {
       throw new ConflictException(`Wrapped for ${year} already exists. Use regenerate to create a new version.`);
     }
 
-    const { cards, stats, insights, summary, sharePayload, totalCompleted, totalHours, journalCount } = await this.generator.generate(userId, year);
+    const { cards, stats, insights, summary, sharePayload, totalCompleted, totalHours, journalCount } =
+      await this.generator.generate(userId, year);
 
-    const metadata = { cards, insights, summary, sharePayload, totalCompleted, totalHours, totalJournalEntries: journalCount, version: 1 };
+    const metadata = {
+      cards,
+      insights,
+      summary,
+      sharePayload,
+      totalCompleted,
+      totalHours,
+      totalJournalEntries: journalCount,
+      version: 1,
+    };
     const wrappedYear = await this.repository.createWrappedYear({
       userId,
       year,
@@ -45,9 +55,19 @@ export class WrappedService {
     const oldMeta = (existing.metadata ?? {}) as Record<string, any>;
     const nextVersion = (oldMeta.version ?? 1) + 1;
 
-    const { cards, stats, insights, summary, sharePayload, totalCompleted, totalHours, journalCount } = await this.generator.generate(userId, year);
+    const { cards, stats, insights, summary, sharePayload, totalCompleted, totalHours, journalCount } =
+      await this.generator.generate(userId, year);
 
-    const metadata = { cards, insights, summary, sharePayload, totalCompleted, totalHours, totalJournalEntries: journalCount, version: nextVersion };
+    const metadata = {
+      cards,
+      insights,
+      summary,
+      sharePayload,
+      totalCompleted,
+      totalHours,
+      totalJournalEntries: journalCount,
+      version: nextVersion,
+    };
     const updated = await this.repository.updateWrappedYear(existing.id, {
       metadata,
       generatedAt: new Date(),

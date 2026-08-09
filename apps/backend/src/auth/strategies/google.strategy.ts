@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, Profile as GoogleProfile } from 'passport-google-oauth20';
+import { Strategy } from 'passport-google-oauth20';
 import { GoogleOAuthService } from '../services/google-oauth.service';
 import { GoogleProfileDto } from '../dto/google-profile.dto';
 

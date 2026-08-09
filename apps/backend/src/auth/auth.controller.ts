@@ -4,15 +4,7 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
-import {
-  AuthResponseDto,
-  ExchangeCodeDto,
-  ForgotPasswordDto,
-  LoginDto,
-  RefreshAccessTokenDto,
-  RegisterDto,
-  UserResponseDto,
-} from './dto';
+import { AuthResponseDto, ExchangeCodeDto, ForgotPasswordDto, LoginDto, RegisterDto, UserResponseDto } from './dto';
 import type { AccessTokenPayload } from './services/jwt-token.service';
 import { REFRESH_TOKEN_COOKIE, CookieService } from './services/cookie.service';
 

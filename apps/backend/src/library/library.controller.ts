@@ -8,7 +8,6 @@ import {
   AddToLibraryDto,
   IdParamDto,
   LibraryFilterDto,
-  LibrarySortDto,
   StatusParamDto,
   TypeParamDto,
   UpdateLibraryItemDto,
@@ -36,10 +35,7 @@ export class LibraryController {
   }
 
   @Get()
-  async list(
-    @CurrentUser() user: AccessTokenPayload,
-    @Query() filter: LibraryFilterDto,
-  ): Promise<LibraryListResult> {
+  async list(@CurrentUser() user: AccessTokenPayload, @Query() filter: LibraryFilterDto): Promise<LibraryListResult> {
     return this.libraryService.list(user.sub, filter.mediaType, {
       status: filter.status,
       favorite: filter.favorite,

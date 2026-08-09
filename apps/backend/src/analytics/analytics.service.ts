@@ -49,7 +49,7 @@ export class AnalyticsService {
     return this.aggregation.getActivity(userId);
   }
 
-    async getCalendarYear(userId: string, year: number): Promise<any> {
+  async getCalendarYear(userId: string, year: number): Promise<any> {
     return this.aggregation.getCalendarYear(userId, year);
   }
 
@@ -65,4 +65,3 @@ export class AnalyticsService {
     return this.insightsService.getInsights(userId);
   }
 }
-

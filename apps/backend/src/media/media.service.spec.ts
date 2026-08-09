@@ -36,12 +36,19 @@ function createMockRow(overrides?: Partial<MediaRow>): MediaRow {
 
 function createMockMeta() {
   return {
-    list: mock(() => ({ data: [], hasMore: false })),
-    listByType: mock(() => ({ data: [], hasMore: false })),
-    search: mock(() => ({ data: [], hasMore: false })),
-    findById: mock(() => Promise.resolve(createMockRow())),
-    findBySlug: mock(() => Promise.resolve(createMockRow())),
-    getRelated: mock(() => Promise.resolve([])),
+    // Return types are annotated so overrides in individual tests
+    // (mockResolvedValueOnce(null), or a populated array) are assignable.
+    // Without them TS infers the narrow literal from the default and rejects
+    // every override as `never`.
+    // MediaRepository.findMany/search resolve to MediaRow[]; the service does
+    // the pagination slicing. The previous default returned a {data,hasMore}
+    // object, which does not match the repository contract.
+    list: mock((): Promise<MediaRow[]> => Promise.resolve([])),
+    listByType: mock((): Promise<MediaRow[]> => Promise.resolve([])),
+    search: mock((): Promise<MediaRow[]> => Promise.resolve([])),
+    findById: mock((): Promise<MediaRow | null> => Promise.resolve(createMockRow())),
+    findBySlug: mock((): Promise<MediaRow | null> => Promise.resolve(createMockRow())),
+    getRelated: mock((): Promise<MediaRow[]> => Promise.resolve([])),
     getMetadata: mock(() =>
       Promise.resolve({
         posterUrl: null,

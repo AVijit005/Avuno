@@ -23,7 +23,7 @@ export const EVENT_PUBLISHER = 'EventPublisher';
       useFactory: (config: ConfigService) => {
         const driver = config.get<string>('storage.driver');
         return driver === 's3' ? new S3StorageService(config) : new LocalStorageService(config);
-      }
+      },
     },
     {
       provide: EVENT_PUBLISHER,

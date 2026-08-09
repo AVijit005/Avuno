@@ -61,7 +61,7 @@ export class JournalController {
 
   @Get('journal/prompts')
   @ApiOperation({ summary: 'Get all journal prompts' })
-  async getPrompts(@CurrentUser() user: AccessTokenPayload): Promise<string[]> {
+  async getPrompts(@CurrentUser() _user: AccessTokenPayload): Promise<string[]> {
     return this.journalService.getAllPrompts();
   }
 

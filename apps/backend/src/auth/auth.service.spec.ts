@@ -57,13 +57,13 @@ describe('AuthService', () => {
           useValue: {
             users: [] as User[],
             findByEmail(email: string) {
-              return Promise.resolve(this.users.find((u) => u.email === email) ?? null);
+              return Promise.resolve(this.users.find((u: User) => u.email === email) ?? null);
             },
             findById(id: string) {
-              return Promise.resolve(this.users.find((u) => u.id === id) ?? null);
+              return Promise.resolve(this.users.find((u: User) => u.id === id) ?? null);
             },
             emailExists(email: string) {
-              return Promise.resolve(this.users.some((u) => u.email === email));
+              return Promise.resolve(this.users.some((u: User) => u.email === email));
             },
             create(data: { email: string; passwordHash: string; name?: string | null }) {
               // Emulate the database unique constraint on email. AuthService
@@ -135,7 +135,9 @@ describe('AuthService', () => {
               });
             },
             rotate(token: string) {
-              const existing = this.tokens.find((t) => t.token === token);
+              const existing = this.tokens.find(
+                (t: { token: string; userId: string; revoked: boolean }) => t.token === token,
+              );
               if (!existing || existing.revoked) {
                 return Promise.reject(new UnauthorizedException('Invalid refresh token'));
               }
@@ -148,12 +150,14 @@ describe('AuthService', () => {
               return this.rotate(token);
             },
             revoke(token: string) {
-              const t = this.tokens.find((x) => x.token === token);
+              const t = this.tokens.find((x: { token: string; userId: string; revoked: boolean }) => x.token === token);
               if (t) t.revoked = true;
               return Promise.resolve();
             },
             revokeAllForUser(userId: string) {
-              this.tokens.filter((t) => t.userId === userId).forEach((t) => (t.revoked = true));
+              this.tokens
+                .filter((t: { token: string; userId: string; revoked: boolean }) => t.userId === userId)
+                .forEach((t: { token: string; userId: string; revoked: boolean }) => (t.revoked = true));
               return Promise.resolve();
             },
           },
@@ -179,7 +183,9 @@ describe('AuthService', () => {
               });
             },
             validate(token: string) {
-              const s = this.sessions.find((x) => x.token === token);
+              const s = this.sessions.find(
+                (x: { token: string; userId: string; revoked: boolean }) => x.token === token,
+              );
               if (!s || s.status !== 'ACTIVE') return Promise.resolve(null);
               return Promise.resolve({
                 id: 's-1',
@@ -195,12 +201,16 @@ describe('AuthService', () => {
               });
             },
             invalidateByToken(token: string) {
-              const s = this.sessions.find((x) => x.token === token);
+              const s = this.sessions.find(
+                (x: { token: string; userId: string; revoked: boolean }) => x.token === token,
+              );
               if (s) s.status = 'REVOKED';
               return Promise.resolve();
             },
             invalidateAllForUser(userId: string) {
-              this.sessions.filter((s) => s.userId === userId).forEach((s) => (s.status = 'REVOKED'));
+              this.sessions
+                .filter((s: { token: string; userId: string; status: string }) => s.userId === userId)
+                .forEach((s: { token: string; userId: string; status: string }) => (s.status = 'REVOKED'));
               return Promise.resolve();
             },
           },
@@ -249,6 +259,26 @@ describe('AuthService', () => {
                   return Promise.resolve(next);
                 },
                 expire: () => Promise.resolve(1),
+                // Fixed-window counters are written via a MULTI pipeline.
+                multi() {
+                  const ops: (() => unknown)[] = [];
+                  const chain = {
+                    incr: (k: string) => {
+                      ops.push(() => {
+                        const next = Number(store.get(k) ?? '0') + 1;
+                        store.set(k, String(next));
+                        return next;
+                      });
+                      return chain;
+                    },
+                    expire: () => {
+                      ops.push(() => 1);
+                      return chain;
+                    },
+                    exec: () => Promise.resolve(ops.map((op) => [null, op()])),
+                  };
+                  return chain;
+                },
                 ttl: () => Promise.resolve(900),
                 exists: (k: string) => Promise.resolve(store.has(k) ? 1 : 0),
                 sadd: () => Promise.resolve(1),
@@ -300,7 +330,7 @@ describe('AuthService', () => {
 
   it('logs in with valid credentials', async () => {
     const created = await service.register({ email: 'login@example.com', password: 'StrongP@ssw0rd123' });
-    const stored = repository.users.find((u) => u.id === created.id)!;
+    const stored = repository.users.find((u: User) => u.id === created.id)!;
     stored.emailVerified = true;
     stored.status = 'ACTIVE';
     const result = await service.login({ email: 'login@example.com', password: 'StrongP@ssw0rd123' });
@@ -350,9 +380,12 @@ describe('AuthService', () => {
     const stored = repository.users[repository.users.length - 1]!;
     stored.emailVerified = true;
     stored.status = 'ACTIVE';
-    const login = await service.login({ email: 'logout@example.com', password: 'StrongP@ssw0rd123' });
-    await service.logout(login.refreshToken);
-    expect(service.refresh(login.refreshToken)).rejects.toThrow(UnauthorizedException);
+    await service.login({ email: 'logout@example.com', password: 'StrongP@ssw0rd123' });
+    // login() returns no refreshToken in its body (httpOnly cookie only), so
+    // read the issued token the way the controller reads it from the cookie.
+    const issued = refreshTokens.tokens[refreshTokens.tokens.length - 1]!.token;
+    await service.logout(issued);
+    await expect(service.refresh(issued)).rejects.toThrow(UnauthorizedException);
   });
 
   it('logs out all devices', async () => {
@@ -361,8 +394,9 @@ describe('AuthService', () => {
     stored.emailVerified = true;
     stored.status = 'ACTIVE';
     const login = await service.login({ email: 'logoutall@example.com', password: 'StrongP@ssw0rd123' });
+    const issuedAll = refreshTokens.tokens[refreshTokens.tokens.length - 1]!.token;
     await service.logoutAll(login.user.id);
-    expect(service.refresh(login.refreshToken)).rejects.toThrow(UnauthorizedException);
+    await expect(service.refresh(issuedAll)).rejects.toThrow(UnauthorizedException);
   });
 
   it('returns current user profile', async () => {

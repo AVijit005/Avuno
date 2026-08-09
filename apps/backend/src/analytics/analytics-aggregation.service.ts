@@ -12,9 +12,6 @@ import type {
 } from './dto';
 
 @Injectable()
-
-
-
 export class AnalyticsAggregationService {
   private convertInternalRatingToApiScale(total: number, count: number): number {
     return Math.round((total / count / 2) * 10) / 10;
@@ -22,19 +19,29 @@ export class AnalyticsAggregationService {
   constructor(private readonly repository: AnalyticsRepository) {}
 
   async getOverview(userId: string): Promise<OverviewDto> {
-    const [completedByType, totalsByType, totalItems, avgRating, journalCount, memoryCount, reviewCount, favoriteCount, hoursData, genreData] =
-      await Promise.all([
-        this.repository.countCompletedByType(userId),
-        this.repository.countTotalByType(userId),
-        this.repository.getTotalLibraryItems(userId),
-        this.repository.getAverageRating(userId),
-        this.repository.getJournalEntryDates(userId, 10000),
-        this.repository.getRecentMemories(userId, 10000),
-        this.repository.getReviewCount(userId),
-        this.repository.getFavoriteCount(userId),
-        this.repository.getHoursAndEpisodesByType(userId),
-        this.repository.getGenreData(userId),
-      ]);
+    const [
+      completedByType,
+      totalsByType,
+      totalItems,
+      avgRating,
+      journalCount,
+      memoryCount,
+      reviewCount,
+      _favoriteCount,
+      hoursData,
+      genreData,
+    ] = await Promise.all([
+      this.repository.countCompletedByType(userId),
+      this.repository.countTotalByType(userId),
+      this.repository.getTotalLibraryItems(userId),
+      this.repository.getAverageRating(userId),
+      this.repository.getJournalEntryDates(userId, 10000),
+      this.repository.getRecentMemories(userId, 10000),
+      this.repository.getReviewCount(userId),
+      this.repository.getFavoriteCount(userId),
+      this.repository.getHoursAndEpisodesByType(userId),
+      this.repository.getGenreData(userId),
+    ]);
 
     return {
       moviesCompleted: completedByType['movie'] ?? 0,
@@ -43,12 +50,16 @@ export class AnalyticsAggregationService {
       booksRead: completedByType['book'] ?? 0,
       gamesFinished: completedByType['game'] ?? 0,
       coursesCompleted: completedByType['course'] ?? 0,
-      hoursWatched: (hoursData.hours['movie'] ?? 0) + (hoursData.hours['tvShow'] ?? 0) + (hoursData.hours['anime'] ?? 0),
+      hoursWatched:
+        (hoursData.hours['movie'] ?? 0) + (hoursData.hours['tvShow'] ?? 0) + (hoursData.hours['anime'] ?? 0),
       hoursRead: hoursData.hours['book'] ?? 0,
       hoursPlayed: hoursData.hours['game'] ?? 0,
       hoursLearned: hoursData.hours['course'] ?? 0,
       averageRating: avgRating,
-      favoriteGenre: Object.keys(genreData.genreCounts).length > 0 ? Object.entries(genreData.genreCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null : null,
+      favoriteGenre:
+        Object.keys(genreData.genreCounts).length > 0
+          ? (Object.entries(genreData.genreCounts).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null)
+          : null,
       favoriteMediaType: this.getFavoriteType(totalsByType),
       totalLibraryItems: totalItems,
       totalJournalEntries: journalCount.length,
@@ -145,7 +156,7 @@ export class AnalyticsAggregationService {
     };
   }
 
-    async getCalendarYear(userId: string, year: number): Promise<any> {
+  async getCalendarYear(userId: string, year: number): Promise<any> {
     const raw = await this.repository.getCalendarData(userId, year);
 
     let totalStories = 0;
@@ -164,9 +175,17 @@ export class AnalyticsAggregationService {
 
       for (let day = 1; day <= 31; day++) {
         const key = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-        if (raw.journalCounts[key]) { journalCount += raw.journalCounts[key]; dayHits++; }
-        if (raw.completedCounts[key]) { storyCount += raw.completedCounts[key]; dayHits++; }
-        if (raw.hoursTracked[key]) { hoursTracked += raw.hoursTracked[key]; }
+        if (raw.journalCounts[key]) {
+          journalCount += raw.journalCounts[key];
+          dayHits++;
+        }
+        if (raw.completedCounts[key]) {
+          storyCount += raw.completedCounts[key];
+          dayHits++;
+        }
+        if (raw.hoursTracked[key]) {
+          hoursTracked += raw.hoursTracked[key];
+        }
       }
       return {
         month,
@@ -195,19 +214,23 @@ export class AnalyticsAggregationService {
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
         const val = (raw.completedCounts[key] ?? 0) + (raw.journalCounts[key] ?? 0);
         return { week, day, value: val };
-      })
+      }),
     ).flat();
 
     const highlights: any[] = [];
 
-    const streaks = [{ label: "Daily Media Streak", value: totalStories > 0 ? longestStreak : 0, total: 30, accent: "var(--primary)" },{ label: "Journaling Consistency", value: totalJournals > 0 ? 5 : 0, total: 30, accent: "oklch(0.72 0.16 160)" },{ label: "Reading Streak", value: 4, total: 14, accent: "oklch(0.7 0.18 25)" }];
+    const streaks = [
+      { label: 'Daily Media Streak', value: totalStories > 0 ? longestStreak : 0, total: 30, accent: 'var(--primary)' },
+      { label: 'Journaling Consistency', value: totalJournals > 0 ? 5 : 0, total: 30, accent: 'oklch(0.72 0.16 160)' },
+      { label: 'Reading Streak', value: 4, total: 14, accent: 'oklch(0.7 0.18 25)' },
+    ];
 
     const upcoming: any[] = [];
 
     const insights = [
       `You recorded ${totalStories} stories and ${totalJournals} journal reflections in ${year}.`,
       `Your peak activity occurred in July, spending ${Math.round(totalHours)} hours enjoying media.`,
-      `Sci-Fi was your most revisited genre throughout the year.`
+      `Sci-Fi was your most revisited genre throughout the year.`,
     ];
 
     return {
@@ -306,9 +329,3 @@ export class AnalyticsAggregationService {
     return Object.entries(totals).sort(([, a], [, b]) => b - a)[0]?.[0] ?? null;
   }
 }
-
-
-
-
-
-
