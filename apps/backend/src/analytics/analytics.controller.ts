@@ -2,6 +2,7 @@ import { Controller, Get, Post, Body, Query, UseGuards } from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
 import { AnalyticsService } from './analytics.service';
+import { DiscoveryService } from './discovery.service';
 import { CurrentUser, JwtAuthGuard } from '../auth';
 import type { AccessTokenPayload } from '../auth/services/jwt-token.service';
 import type { ActivityDto, OverviewDto, InsightsDto, GenreAnalyticsDto, CalendarDto } from './dto/analytics.dto';
@@ -11,7 +12,10 @@ import type { ActivityDto, OverviewDto, InsightsDto, GenreAnalyticsDto, Calendar
 @Controller('analytics')
 @UseGuards(ThrottlerGuard)
 export class AnalyticsController {
-  constructor(private readonly analyticsService: AnalyticsService) {}
+  constructor(
+    private readonly analyticsService: AnalyticsService,
+    private readonly discoveryService: DiscoveryService,
+  ) {}
 
   @Get('dashboard')
   @UseGuards(JwtAuthGuard)
@@ -59,6 +63,41 @@ export class AnalyticsController {
   @ApiOperation({ summary: 'Get AI-generated insights' })
   async getInsights(@CurrentUser() user: AccessTokenPayload): Promise<InsightsDto> {
     return this.analyticsService.getInsights(user.sub);
+  }
+
+  // These four were called by the frontend since launch but never existed, so
+  // every request 404'd and the dashboard, discovery and calendar sections
+  // that depend on them rendered empty.
+  @Get('discovery')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
+  @ApiOperation({ summary: 'Discovery recommendations drawn from the library' })
+  async getDiscovery(@CurrentUser() user: AccessTokenPayload) {
+    return this.discoveryService.getDiscovery(user.sub);
+  }
+
+  @Get('intelligence')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
+  @ApiOperation({ summary: 'Taste profile and media evolution' })
+  async getIntelligence(@CurrentUser() user: AccessTokenPayload) {
+    return this.discoveryService.getIntelligence(user.sub);
+  }
+
+  @Get('challenges')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
+  @ApiOperation({ summary: 'Challenges derived from real library counts' })
+  async getChallenges(@CurrentUser() user: AccessTokenPayload) {
+    return this.discoveryService.getChallenges(user.sub);
+  }
+
+  @Get('constellation')
+  @UseGuards(JwtAuthGuard)
+  @Throttle({ default: { limit: 15, ttl: 60000 } })
+  @ApiOperation({ summary: 'Genre distribution for the constellation chart' })
+  async getConstellation(@CurrentUser() user: AccessTokenPayload) {
+    return this.discoveryService.getConstellation(user.sub);
   }
 
   @Get('activity')

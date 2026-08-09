@@ -1,5 +1,6 @@
 import { PureComponent, type ReactNode, type ErrorInfo } from "react";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
+import { reportLovableError } from "@/lib/lovable-error-reporting";
 
 interface Props {
   children: ReactNode;
@@ -19,14 +20,10 @@ export class ErrorBoundary extends PureComponent<Props, State> {
 
   componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     console.error("[ErrorBoundary] Caught error:", error, errorInfo);
-    if (typeof window !== "undefined") {
-      try {
-        const { reportLovableError } = require("@/lib/lovable-error-reporting") as { reportLovableError: (err: Error, info: Record<string, unknown>) => void };
-        reportLovableError(error, { boundary: "ErrorBoundary", componentStack: errorInfo.componentStack ?? undefined });
-      } catch {
-        // Error reporting unavailable — error already logged to console
-      }
-    }
+    reportLovableError(error, {
+      boundary: "ErrorBoundary",
+      componentStack: errorInfo.componentStack ?? undefined,
+    });
   }
 
   render() {

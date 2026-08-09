@@ -31,10 +31,6 @@ export function AppShell({ children }: { children?: ReactNode }) {
     trackPageView(pathname);
   }, [pathname]);
 
-  if (isMobile === undefined) {
-    return null;
-  }
-
   return (
     <MediaActionsProvider>
       <div className="relative min-h-dvh">
@@ -50,15 +46,15 @@ export function AppShell({ children }: { children?: ReactNode }) {
           Skip to main content
         </a>
         <AtmosphereBackground />
-        <Sidebar 
-          onOpenSearch={() => setSearch(true)} 
-          collapsed={sidebarCollapsed} 
-          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} 
+        <Sidebar
+          onOpenSearch={() => setSearch(true)}
+          collapsed={sidebarCollapsed}
+          onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}
         />
-        <div 
+        <div
           className={cn(
             "transition-[padding-left] duration-[350ms] ease-[cubic-bezier(0.22,1,0.36,1)] max-lg:!pl-0",
-            sidebarCollapsed ? "pl-[108px]" : "pl-[296px]"
+            sidebarCollapsed ? "pl-[108px]" : "pl-[296px]",
           )}
         >
           <TopBar onOpenSearch={() => setSearch(true)} />

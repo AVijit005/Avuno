@@ -372,31 +372,4 @@ export class AuthService {
       .expire(key, LOCKOUT_MINUTES * 60, 'NX')
       .exec();
   }
-
-  /**
-   * Record that a password reset was requested.
-   *
-   * NOTE: password reset is not implemented — no email is sent and no reset
-   * token is issued. This only records demand. The PasswordResetToken model
-   * exists in the schema and is unused; wiring it up is tracked separately.
-   *
-   * Previously this did `sadd('auth:forgot_password_requests', email)` with
-   * the raw address and no TTL, so an unauthenticated caller could grow an
-   * unbounded Redis set (a memory-exhaustion vector) and, incidentally, build
-   * a plaintext list of every address ever typed into the form. Now it keeps
-   * only a bounded per-address counter, keyed by hash, that expires.
-   */
-  async logForgotPasswordRequest(email: string): Promise<void> {
-    const key = `auth:forgot_password:${createHash('sha256').update(email.toLowerCase().trim()).digest('hex')}`;
-    try {
-      await this.redis
-        .getClient()
-        .multi()
-        .incr(key)
-        .expire(key, 24 * 60 * 60, 'NX')
-        .exec();
-    } catch (error) {
-      this.logger.warn('Failed to record a password reset request', error as Error);
-    }
-  }
 }

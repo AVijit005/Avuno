@@ -29,6 +29,7 @@ import {
   OAuthStateService,
   TokenRevocationService,
   UserStateService,
+  PasswordResetService,
   EMAIL_TRANSPORT,
 } from './services';
 
@@ -61,6 +62,7 @@ import {
     GoogleOAuthGuard,
     TokenRevocationService,
     UserStateService,
+    PasswordResetService,
     AuthAuditService,
     ConsoleEmailTransportService,
     JwtAuthGuard,

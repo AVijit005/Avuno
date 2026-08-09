@@ -11,6 +11,8 @@ import type {
   GenreStatDto,
 } from './dto';
 
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'] as const;
+
 @Injectable()
 export class AnalyticsAggregationService {
   private convertInternalRatingToApiScale(total: number, count: number): number {
@@ -189,7 +191,7 @@ export class AnalyticsAggregationService {
       }
       return {
         month,
-        name: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'][month],
+        name: MONTH_NAMES[month],
         journalCount,
         storyCount,
         hoursTracked: Math.round(hoursTracked * 10) / 10,
@@ -219,19 +221,47 @@ export class AnalyticsAggregationService {
 
     const highlights: any[] = [];
 
+    // Streak values are real counts. 'Journaling Consistency' previously
+    // reported a hardcoded 5 whenever any journal existed, and 'Reading
+    // Streak' a hardcoded 4 unconditionally — neither was computed from
+    // anything, and both were shown to every user.
+    const journalingDays = Object.values(raw.journalCounts).filter((n) => n > 0).length;
     const streaks = [
-      { label: 'Daily Media Streak', value: totalStories > 0 ? longestStreak : 0, total: 30, accent: 'var(--primary)' },
-      { label: 'Journaling Consistency', value: totalJournals > 0 ? 5 : 0, total: 30, accent: 'oklch(0.72 0.16 160)' },
-      { label: 'Reading Streak', value: 4, total: 14, accent: 'oklch(0.7 0.18 25)' },
+      {
+        label: 'Daily Media Streak',
+        value: totalStories > 0 ? longestStreak : 0,
+        total: 30,
+        accent: 'var(--primary)',
+      },
+      {
+        label: 'Days Journalled',
+        value: journalingDays,
+        total: 30,
+        accent: 'oklch(0.72 0.16 160)',
+      },
     ];
 
     const upcoming: any[] = [];
 
-    const insights = [
+    // Only state what the data supports. The peak month is computed rather
+    // than hardcoded to July, and the "Sci-Fi was your most revisited genre"
+    // line is gone: this aggregation has no genre data, so it was pure
+    // invention sent identically to every user.
+    const insights: string[] = [
       `You recorded ${totalStories} stories and ${totalJournals} journal reflections in ${year}.`,
-      `Your peak activity occurred in July, spending ${Math.round(totalHours)} hours enjoying media.`,
-      `Sci-Fi was your most revisited genre throughout the year.`,
     ];
+
+    const peak = months.reduce<{ name: string; count: number } | null>((best, m) => {
+      const count = m.storyCount + m.journalCount;
+      if (count === 0) return best;
+      return !best || count > best.count ? { name: MONTH_NAMES[m.month], count } : best;
+    }, null);
+
+    if (peak) {
+      insights.push(
+        `${peak.name} was your most active month, with ${peak.count} ${peak.count === 1 ? 'entry' : 'entries'}.`,
+      );
+    }
 
     return {
       year,

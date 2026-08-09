@@ -1,7 +1,11 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { Resend } from 'resend';
-import { EmailTransport, VerificationEmailOptions } from './email-transport.abstraction';
+import {
+  type EmailTransport,
+  type PasswordResetEmailOptions,
+  type VerificationEmailOptions,
+} from './email-transport.abstraction';
 
 @Injectable()
 export class ResendEmailTransportService implements EmailTransport {
@@ -32,6 +36,29 @@ export class ResendEmailTransportService implements EmailTransport {
       this.logger.log(`Verification email sent to ${to} via Resend`);
     } catch (error) {
       this.logger.error(`Failed to send email to ${to}: ${error.message}`, error.stack);
+      throw error;
+    }
+  }
+
+  async sendPasswordResetEmail(to: string, options: PasswordResetEmailOptions): Promise<void> {
+    const { link, userDisplayName, expiresInMinutes } = options;
+    const fromEmail = this.configService.get<string>('EMAIL_FROM') || 'noreply@chronicle.com';
+    const safeName = String(userDisplayName || 'there').replace(/[<>&"']/g, '');
+
+    try {
+      await this.resend.emails.send({
+        from: fromEmail,
+        to,
+        subject: 'Reset your Avuno password',
+        html:
+          `<p>Hi ${safeName},</p>` +
+          `<p>Use the link below to choose a new password. It expires in ${expiresInMinutes} minutes.</p>` +
+          `<p><a href="${link}">${link}</a></p>` +
+          `<p>If you did not request this, you can ignore this email — your password will not change.</p>`,
+      });
+      this.logger.log(`Password reset email sent to ${to} via Resend`);
+    } catch (error) {
+      this.logger.error(`Failed to send reset email to ${to}: ${(error as Error).message}`);
       throw error;
     }
   }

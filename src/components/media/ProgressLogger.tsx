@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/compone
 import { toast } from "sonner";
 import { useLibraryStore, snapshotAllItems } from "@/lib/store/libraryStore";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
+import { useLibrarySync } from "@/lib/store/useLibrarySync";
 
 function suggestedLabel(kind: string | undefined): string {
   switch (kind) {
@@ -32,6 +33,7 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
   const meta = useLibraryStore((s) => (id ? s.meta[id] : undefined));
   const logProgress = useLibraryStore((s) => s.logProgress);
   const { openReflection } = useMediaActions();
+  const { syncProgress } = useLibrarySync();
 
   const [pct, setPct] = useState(0);
   const [label, setLabel] = useState("");
@@ -51,7 +53,11 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
 
   function save() {
     if (!id) return;
+    // Local first so the UI updates instantly, then persist. Previously this
+    // only ever wrote to localStorage, so progress was lost on logout or on
+    // any other device.
     logProgress(id, pct, note.trim() || undefined, label.trim() || undefined);
+    void syncProgress(id, pct);
     toast.success(pct >= 100 ? "Marked complete" : `Logged ${pct}%`, { description: item?.title });
     onClose();
     if (pct >= 100) setTimeout(() => openReflection(id), 80);

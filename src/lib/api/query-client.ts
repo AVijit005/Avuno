@@ -1,8 +1,29 @@
-import { QueryClient } from '@tanstack/react-query';
-import { ApiError } from './errors';
+import { QueryClient, QueryCache, MutationCache } from "@tanstack/react-query";
+import { ApiError } from "./errors";
+import { toast } from "sonner";
 
 export function createQueryClient(): QueryClient {
+  const queryCache = new QueryCache({
+    onError: (error, query) => {
+      if (query.state.data !== undefined) {
+        toast.error("Failed to refresh data", {
+          description: error instanceof Error ? error.message : "Please try again",
+        });
+      }
+    },
+  });
+
+  const mutationCache = new MutationCache({
+    onError: (error) => {
+      toast.error("Action failed", {
+        description: error instanceof Error ? error.message : "Please try again",
+      });
+    },
+  });
+
   return new QueryClient({
+    queryCache,
+    mutationCache,
     defaultOptions: {
       queries: {
         staleTime: 30_000,

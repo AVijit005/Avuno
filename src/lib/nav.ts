@@ -115,22 +115,23 @@ export const NAV: NavItem[] = [
 
   // Memories — the time-axis of your life
   { to: "/app/timeline", label: "Timeline", icon: Clock, group: "memories" },
-  { to: "/app/museum", label: "Museum", icon: ImageIcon, group: "memories" },
 
   // Saved — fragments you wanted to keep
   { to: "/app/bookmarks", label: "Bookmarks", icon: Bookmark, group: "saved" },
   { to: "/app/quotes", label: "Quotes", icon: Quote, group: "saved" },
   { to: "/app/save-for-later", label: "Save for later", icon: Clock4, group: "saved" },
 
-  // People & Worlds
-  { to: "/app/characters", label: "Characters", icon: Users, group: "people" },
-  { to: "/app/creators", label: "Creators", icon: User, group: "people" },
-  { to: "/app/franchises", label: "Franchises", icon: Building2, group: "people" },
-
   // Journey — where you're heading
-  { to: "/app/goals", label: SURFACE.goals.nav, icon: Target, group: "journey" },
-  { to: "/app/achievements", label: SURFACE.achievements.nav, icon: Trophy, group: "journey" },
   { to: "/app/wrapped", label: "Wrapped", icon: Sparkle, group: "journey" },
+
+  // NOT LISTED — Museum, Characters, Creators, Franchises, Goals, Achievements.
+  //
+  // Each has a route, but no backend and no data source: the lib modules
+  // behind them return empty arrays, so the index pages render a permanent
+  // "Coming soon" and the $id pages always throw notFound(). Six nav entries
+  // that lead nowhere read as a broken product; the routes remain reachable by
+  // URL so the work is not lost, but they are not advertised until they do
+  // something.
 
   // Discover
   { to: "/app/search", label: "Discover", icon: Search, group: "discover" },

@@ -5,6 +5,7 @@ import { Star } from "lucide-react";
 import { toast } from "sonner";
 import { useLibraryStore, snapshotAllItems } from "@/lib/store/libraryStore";
 import { cn } from "@/lib/utils";
+import { useLibrarySync } from "@/lib/store/useLibrarySync";
 
 const MOODS = [
   "🤍 Quiet",
@@ -24,6 +25,7 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
   const meta = useLibraryStore((s) => (id ? s.meta[id] : undefined));
   const setReflection = useLibraryStore((s) => s.setReflection);
   const toggleFavorite = useLibraryStore((s) => s.toggleFavorite);
+  const { syncReflection } = useLibrarySync();
 
   const [mood, setMood] = useState<string | undefined>(undefined);
   const [text, setText] = useState("");
@@ -41,8 +43,16 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
 
   function save() {
     if (!id) return;
-    setReflection(id, mood, text.trim() || undefined, rating || undefined);
+    const notes = text.trim() || undefined;
+    const nextRating = rating || undefined;
+
+    setReflection(id, mood, notes, nextRating);
     if (fav !== !!meta?.favorite) toggleFavorite(id);
+
+    // Persist rating, notes and favourite. Mood has no column on the library
+    // item — it belongs to a journal entry — so it stays local for now.
+    void syncReflection(id, nextRating, notes, fav);
+
     toast.success("Reflection saved", { description: item?.title });
     onClose();
   }

@@ -4,15 +4,25 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
-import { AuthResponseDto, ExchangeCodeDto, ForgotPasswordDto, LoginDto, RegisterDto, UserResponseDto } from './dto';
+import {
+  AuthResponseDto,
+  ExchangeCodeDto,
+  ForgotPasswordDto,
+  LoginDto,
+  RegisterDto,
+  ResetPasswordDto,
+  UserResponseDto,
+} from './dto';
 import type { AccessTokenPayload } from './services/jwt-token.service';
 import { REFRESH_TOKEN_COOKIE, CookieService } from './services/cookie.service';
+import { PasswordResetService } from './services/password-reset.service';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly cookieService: CookieService,
+    private readonly passwordResetService: PasswordResetService,
   ) {}
 
   @Post('register')
@@ -93,9 +103,22 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(200)
   @Throttle({ default: { limit: 3, ttl: 60000 } })
-  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<{ message: string }> {
-    await this.authService.logForgotPasswordRequest(dto.email);
+  async forgotPassword(@Body() dto: ForgotPasswordDto, @Req() request: Request): Promise<{ message: string }> {
+    // Actually sends a reset link now. This previously wrote the address to a
+    // Redis set and returned the message below without sending anything, so
+    // anyone who forgot their password was permanently locked out.
+    await this.passwordResetService.requestReset(dto.email, { ipAddress: request.ip });
     // Deliberately identical whether or not the address is registered.
     return { message: 'If an account exists, a reset link has been sent.' };
+  }
+
+  @Post('reset-password')
+  @HttpCode(200)
+  @Throttle({ default: { limit: 5, ttl: 60000 } })
+  async resetPassword(@Body() dto: ResetPasswordDto, @Req() request: Request): Promise<{ message: string }> {
+    await this.passwordResetService.completeReset(dto.token, dto.password, {
+      ipAddress: request.ip,
+    });
+    return { message: 'Your password has been reset. Please sign in.' };
   }
 }

@@ -39,6 +39,7 @@ import { Route as AppTimelineRouteImport } from './routes/app.timeline'
 import { Route as AppWrappedRouteImport } from './routes/app.wrapped'
 import { Route as AuthCallbackRouteImport } from './routes/auth.callback'
 import { Route as AuthForgotPasswordRouteImport } from './routes/auth.forgot-password'
+import { Route as AuthResetPasswordRouteImport } from './routes/auth.reset-password'
 import { Route as AppCharactersIndexRouteImport } from './routes/app.characters.index'
 import { Route as AppCharactersIdRouteImport } from './routes/app.characters.$id'
 import { Route as AppCollectionsIndexRouteImport } from './routes/app.collections.index'
@@ -214,6 +215,11 @@ const AuthForgotPasswordRoute = AuthForgotPasswordRouteImport.update({
   path: '/forgot-password',
   getParentRoute: () => AuthRoute,
 } as any)
+const AuthResetPasswordRoute = AuthResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => AuthRoute,
+} as any)
 const AppCharactersIndexRoute = AppCharactersIndexRouteImport.update({
   id: '/characters/',
   path: '/characters/',
@@ -366,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/app/wrapped': typeof AppWrappedRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app/': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
   '/app/collections/$id': typeof AppCollectionsIdRoute
@@ -419,6 +426,7 @@ export interface FileRoutesByTo {
   '/app/wrapped': typeof AppWrappedRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
   '/app/collections/$id': typeof AppCollectionsIdRoute
@@ -476,6 +484,7 @@ export interface FileRoutesById {
   '/app/wrapped': typeof AppWrappedRoute
   '/auth/callback': typeof AuthCallbackRoute
   '/auth/forgot-password': typeof AuthForgotPasswordRoute
+  '/auth/reset-password': typeof AuthResetPasswordRoute
   '/app/': typeof AppIndexRoute
   '/app/characters/$id': typeof AppCharactersIdRoute
   '/app/collections/$id': typeof AppCollectionsIdRoute
@@ -534,6 +543,7 @@ export interface FileRouteTypes {
     | '/app/wrapped'
     | '/auth/callback'
     | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/app/'
     | '/app/characters/$id'
     | '/app/collections/$id'
@@ -587,6 +597,7 @@ export interface FileRouteTypes {
     | '/app/wrapped'
     | '/auth/callback'
     | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/app'
     | '/app/characters/$id'
     | '/app/collections/$id'
@@ -643,6 +654,7 @@ export interface FileRouteTypes {
     | '/app/wrapped'
     | '/auth/callback'
     | '/auth/forgot-password'
+    | '/auth/reset-password'
     | '/app/'
     | '/app/characters/$id'
     | '/app/collections/$id'
@@ -890,6 +902,13 @@ declare module '@tanstack/react-router' {
       path: '/forgot-password'
       fullPath: '/auth/forgot-password'
       preLoaderRoute: typeof AuthForgotPasswordRouteImport
+      parentRoute: typeof AuthRoute
+    }
+    '/auth/reset-password': {
+      id: '/auth/reset-password'
+      path: '/reset-password'
+      fullPath: '/auth/reset-password'
+      preLoaderRoute: typeof AuthResetPasswordRouteImport
       parentRoute: typeof AuthRoute
     }
     '/app/characters/': {
@@ -1194,11 +1213,13 @@ const AppRouteWithChildren = AppRoute._addFileChildren(AppRouteChildren)
 interface AuthRouteChildren {
   AuthCallbackRoute: typeof AuthCallbackRoute
   AuthForgotPasswordRoute: typeof AuthForgotPasswordRoute
+  AuthResetPasswordRoute: typeof AuthResetPasswordRoute
 }
 
 const AuthRouteChildren: AuthRouteChildren = {
   AuthCallbackRoute: AuthCallbackRoute,
   AuthForgotPasswordRoute: AuthForgotPasswordRoute,
+  AuthResetPasswordRoute: AuthResetPasswordRoute,
 }
 
 const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)

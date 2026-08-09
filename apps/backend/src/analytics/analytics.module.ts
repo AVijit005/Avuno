@@ -8,11 +8,13 @@ import { AnalyticsAggregationService } from './analytics-aggregation.service';
 import { DashboardService } from './dashboard.service';
 import { StreakService } from './streak.service';
 import { InsightsService } from './insights.service';
+import { DiscoveryService } from './discovery.service';
 
 @Module({
   imports: [SharedModule, AuthModule],
   controllers: [AnalyticsController],
   providers: [
+    DiscoveryService,
     AnalyticsService,
     AnalyticsRepository,
     AnalyticsAggregationService,

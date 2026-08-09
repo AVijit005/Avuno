@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { t as motionT } from "@/lib/motion";
 import { useShortcuts } from "@/lib/shortcuts";
 import { QuickPromptDialog } from "@/components/media/QuickPromptDialog";
+import { useLibrarySync } from "@/lib/store/useLibrarySync";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -81,19 +82,27 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
   const status = meta?.status;
   const fav = !!meta?.favorite;
 
+  const { syncStatus, syncFavorite, syncRewatch } = useLibrarySync();
+
+  // Each handler writes locally for instant feedback, then persists. These
+  // were previously localStorage-only, so every status change and favourite
+  // was lost on logout or on another device.
   const s = useCallback(
     (next: typeof status, msg: string) => {
       if (!next) return;
       useLibraryStore.getState().setStatus(id, next);
+      void syncStatus(id, next);
       toast.success(msg, { description: title });
     },
-    [id, title],
+    [id, title, syncStatus],
   );
 
   const handleToggleFavorite = useCallback(() => {
+    const nextFav = !fav;
     useLibraryStore.getState().toggleFavorite(id);
-    toast(fav ? "Removed from favorites" : "Favorited", { description: title });
-  }, [id, title, fav]);
+    void syncFavorite(id, nextFav);
+    toast(nextFav ? "Favorited" : "Removed from favorites", { description: title });
+  }, [id, title, fav, syncFavorite]);
 
   const handleToggleBookmark = useCallback(() => {
     const v = toggleBookmark({ kind: "media", refId: id, title, to: `/app/media/${id}` });
@@ -181,6 +190,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
         icon: RotateCcw,
         run: () => {
           useLibraryStore.getState().incrementRewatch(id);
+          void syncRewatch(id);
           toast.success("Rewatch started", { description: title });
         },
         primary: true,
@@ -223,7 +233,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
       });
     }
     return v;
-  }, [status, id, title, s, openProgress, openReflection]);
+  }, [status, id, title, s, openProgress, openReflection, syncRewatch]);
 
   const primary = verbs.filter((v) => v.primary);
   const secondary = verbs.filter((v) => !v.primary);

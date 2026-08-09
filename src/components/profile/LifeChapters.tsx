@@ -5,11 +5,20 @@ import { getLifeChapters } from "@/lib/lifeChapters";
 import { useLibrary } from "@/hooks/use-library";
 import { adaptLibraryItem } from "@/lib/adapters/media";
 
+function stableHash(str: string): number {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = (hash << 5) - hash + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+}
+
 export function LifeChapters() {
   const chapters = getLifeChapters();
   const { data: libraryData } = useLibrary();
-  
-  const libraryItems = libraryData?.pages.flatMap(p => p.data).map(adaptLibraryItem) || [];
+
+  const libraryItems = libraryData?.pages.flatMap((p) => p.data).map(adaptLibraryItem) || [];
 
   return (
     <PremiumGlass variant="subtle">
@@ -23,7 +32,7 @@ export function LifeChapters() {
             <li
               key={c.id}
               className="relative grid grid-cols-[100px_minmax(0,1fr)] gap-4 border-l-2 pl-4"
-              style={{ borderColor: c.accent.replace(')', ' / 0.5)') }}
+              style={{ borderColor: c.accent.replace(")", " / 0.5)") }}
             >
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 {c.era}
@@ -33,9 +42,12 @@ export function LifeChapters() {
                 <p className="mt-1 text-sm text-muted-foreground">{c.description}</p>
                 <div className="mt-2 flex flex-wrap gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                   {c.mediaIds.map((id) => {
-                    const m = libraryItems.find((x) => x.id === id || x.mediaId === id) || 
-                              libraryItems[Math.floor(Math.random() * Math.max(1, libraryItems.length))];
-                    
+                    const m =
+                      libraryItems.find((x) => x.id === id || x.mediaId === id) ||
+                      (libraryItems.length > 0
+                        ? libraryItems[stableHash(c.id + id) % libraryItems.length]
+                        : undefined);
+
                     if (!m) return null;
                     return (
                       <Link
@@ -57,6 +69,3 @@ export function LifeChapters() {
     </PremiumGlass>
   );
 }
-
-
-

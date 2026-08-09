@@ -83,6 +83,13 @@ export async function logoutAll(): Promise<void> {
   }
 }
 
+export async function resetPassword(input: {
+  token: string;
+  password: string;
+}): Promise<{ message: string }> {
+  return apiPost<{ message: string }>("/auth/reset-password", input, { skipAuth: true });
+}
+
 export async function forgotPassword(input: { email: string }): Promise<{ message: string }> {
   return apiPost<{ message: string }>("/auth/forgot-password", input, { skipAuth: true });
 }

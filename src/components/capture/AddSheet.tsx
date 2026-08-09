@@ -132,7 +132,17 @@ export function AddSheet({
       addedAt: "Just now",
       ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
     });
-    toast.success("Added to Avuno", { description: title.trim() });
+    // NOTE: this stays local-only, and deliberately says so.
+    //
+    // POST /library requires a mediaId that already exists in the catalog
+    // (LibraryService.add verifies it), but this sheet creates free-text
+    // entries for things the catalog does not know about. Silently pretending
+    // they were saved is what the rest of this phase is fixing, so the copy is
+    // explicit instead. Wiring this properly needs a catalog search step, or a
+    // backend endpoint that accepts user-authored media.
+    toast.success("Added to your library", {
+      description: `${title.trim()} — saved on this device`,
+    });
     onOpenChange(false);
     setTimeout(() => navigate({ to: "/app/media/$id", params: { id } }), 60);
   }
