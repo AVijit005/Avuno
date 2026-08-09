@@ -67,6 +67,21 @@ class EnvironmentVariables {
   @IsOptional()
   OAUTH_ENCRYPTION_KEY?: string;
 
+  /**
+   * Global throttle window and request budget. Read by ThrottlerModule in
+   * app.module.ts but previously declared nowhere, so they were always
+   * undefined and silently fell back to the inline defaults.
+   */
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  RATE_LIMIT_TTL: number = 60;
+
+  @IsNumber()
+  @Min(1)
+  @IsOptional()
+  RATE_LIMIT_GLOBAL: number = 100;
+
   @IsNumber()
   @Min(1)
   @IsOptional()

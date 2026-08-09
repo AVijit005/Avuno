@@ -4,7 +4,15 @@ import type { Request, Response } from 'express';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards';
 import { CurrentUser } from './decorators';
-import { AuthResponseDto, ExchangeCodeDto, LoginDto, RefreshAccessTokenDto, RegisterDto, UserResponseDto } from './dto';
+import {
+  AuthResponseDto,
+  ExchangeCodeDto,
+  ForgotPasswordDto,
+  LoginDto,
+  RefreshAccessTokenDto,
+  RegisterDto,
+  UserResponseDto,
+} from './dto';
 import type { AccessTokenPayload } from './services/jwt-token.service';
 import { REFRESH_TOKEN_COOKIE, CookieService } from './services/cookie.service';
 
@@ -65,9 +73,7 @@ export class AuthController {
     // access token can still end their session. The bearer token is therefore
     // read opportunistically: when present and valid it is denylisted, so the
     // credential stops working immediately rather than at natural expiry.
-    const accessTokenPayload = this.authService.tryDecodeAccessToken(
-      request.headers.authorization,
-    );
+    const accessTokenPayload = this.authService.tryDecodeAccessToken(request.headers.authorization);
 
     // Always call through: clearing the cookie and denylisting the access
     // token must happen even when no refresh cookie was sent.
@@ -95,8 +101,9 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(200)
   @Throttle({ default: { limit: 3, ttl: 60000 } })
-  async forgotPassword(@Body('email') email: string): Promise<{ message: string }> {
-    this.authService.logForgotPasswordRequest(email);
+  async forgotPassword(@Body() dto: ForgotPasswordDto): Promise<{ message: string }> {
+    await this.authService.logForgotPasswordRequest(dto.email);
+    // Deliberately identical whether or not the address is registered.
     return { message: 'If an account exists, a reset link has been sent.' };
   }
 }

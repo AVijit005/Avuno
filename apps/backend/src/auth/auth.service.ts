@@ -1,6 +1,7 @@
 import { ForbiddenException, Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import type { Response } from 'express';
+import { createHash } from 'crypto';
 import { ConflictException, NotFoundException } from '../common';
 import { AuthRepository } from './auth.repository';
 import { AuthResponseDto, InternalAuthResult, LoginDto, RegisterDto, UserResponseDto } from './dto';
@@ -58,17 +59,21 @@ export class AuthService {
   }
 
   async login(dto: LoginDto, ipAddress?: string, userAgent?: string, response?: Response): Promise<AuthResponseDto> {
-    const emailKey = `auth:attempts:${dto.email.toLowerCase().trim()}`;
-    const ipKey = `auth:attempts:ip:${ipAddress || 'unknown'}`;
+    // The email is hashed into the key so Redis does not accumulate a
+    // plaintext list of every address anyone has tried to sign in with.
+    const emailKey = `auth:attempts:${createHash('sha256').update(dto.email.toLowerCase().trim()).digest('hex')}`;
+    const ipKey = ipAddress ? `auth:attempts:ip:${ipAddress}` : null;
     const redisClient = this.redis.getClient();
 
     const attempts = parseInt((await redisClient.get(emailKey)) || '0', 10);
-    const ipAttempts = parseInt((await redisClient.get(ipKey)) || '0', 10);
+    const ipAttempts = ipKey ? parseInt((await redisClient.get(ipKey)) || '0', 10) : 0;
+
     if (attempts >= MAX_LOGIN_ATTEMPTS || ipAttempts >= MAX_LOGIN_ATTEMPTS) {
-      const lockedKey = attempts >= MAX_LOGIN_ATTEMPTS ? emailKey : ipKey;
+      const lockedKey = attempts >= MAX_LOGIN_ATTEMPTS ? emailKey : (ipKey as string);
       const ttl = await redisClient.ttl(lockedKey);
-      const minutes = Math.ceil(ttl / 60);
-      throw new ForbiddenException(`Account temporarily locked. Try again in ${minutes} minutes.`);
+      const minutes = Math.max(1, Math.ceil(ttl / 60));
+      // Deliberately does not confirm whether the address is registered.
+      throw new ForbiddenException(`Too many failed sign-in attempts. Try again in ${minutes} minutes.`);
     }
 
     const user = await this.authRepository.findByEmail(dto.email);
@@ -102,11 +107,18 @@ export class AuthService {
       }
     }
 
+    // Credentials were correct, so clear the failure counters.
     await redisClient.del(emailKey);
-    await redisClient.del(ipKey);
+    if (ipKey) await redisClient.del(ipKey);
 
     const verificationRequired = String(this.config.get('emailVerification.required')) !== 'false';
     if (verificationRequired && !user.emailVerified) {
+      // Distinct from the invalid-credentials response above, and reached only
+      // AFTER the password verified — so it confirms both that the account
+      // exists and that the supplied password is correct. That is a
+      // credential-validity oracle, but the user genuinely needs to be told
+      // why they cannot proceed. Keep the message, and make sure it is never
+      // reachable without a correct password (it is not).
       throw new ForbiddenException('Email not verified');
     }
 
@@ -342,16 +354,49 @@ export class AuthService {
     };
   }
 
-  private async recordFailedAttempt(key: string): Promise<void> {
+  /**
+   * Count a failed attempt within a FIXED window.
+   *
+   * The previous version called expire() on every attempt, which slid the
+   * window forward each time. A low-rate attacker could therefore keep any
+   * known email locked out indefinitely — a targeted denial of service
+   * against an arbitrary account. Setting the TTL only when the counter is
+   * created bounds the lockout to LOCKOUT_MINUTES from the first failure.
+   */
+  private async recordFailedAttempt(key: string | null): Promise<void> {
+    if (!key) return;
     const redisClient = this.redis.getClient();
-    const attempts = await redisClient.incr(key);
-    await redisClient.expire(key, LOCKOUT_MINUTES * 60);
+    await redisClient
+      .multi()
+      .incr(key)
+      .expire(key, LOCKOUT_MINUTES * 60, 'NX')
+      .exec();
   }
 
-  logForgotPasswordRequest(email: string): void {
-    this.redis
-      .getClient()
-      .sadd('auth:forgot_password_requests', email)
-      .catch(() => {});
+  /**
+   * Record that a password reset was requested.
+   *
+   * NOTE: password reset is not implemented — no email is sent and no reset
+   * token is issued. This only records demand. The PasswordResetToken model
+   * exists in the schema and is unused; wiring it up is tracked separately.
+   *
+   * Previously this did `sadd('auth:forgot_password_requests', email)` with
+   * the raw address and no TTL, so an unauthenticated caller could grow an
+   * unbounded Redis set (a memory-exhaustion vector) and, incidentally, build
+   * a plaintext list of every address ever typed into the form. Now it keeps
+   * only a bounded per-address counter, keyed by hash, that expires.
+   */
+  async logForgotPasswordRequest(email: string): Promise<void> {
+    const key = `auth:forgot_password:${createHash('sha256').update(email.toLowerCase().trim()).digest('hex')}`;
+    try {
+      await this.redis
+        .getClient()
+        .multi()
+        .incr(key)
+        .expire(key, 24 * 60 * 60, 'NX')
+        .exec();
+    } catch (error) {
+      this.logger.warn('Failed to record a password reset request', error as Error);
+    }
   }
 }

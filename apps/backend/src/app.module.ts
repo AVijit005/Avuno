@@ -29,14 +29,16 @@ import { UsersModule } from './users/users.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { ResponseInterceptor } from './common/interceptors/response.interceptor';
 import { validationPipe } from './common/pipes/validation.pipe';
+import { RedisThrottlerStorage } from './common/throttler/redis-throttler.storage';
+import { RedisService } from './redis/redis.service';
 
 @Module({
   imports: [
     ConfigModule,
     ThrottlerModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (config: ConfigService) => ({
+      imports: [ConfigModule, RedisModule],
+      inject: [ConfigService, RedisService],
+      useFactory: (config: ConfigService, redis: RedisService) => ({
         throttlers: [
           {
             name: 'global',
@@ -44,6 +46,10 @@ import { validationPipe } from './common/pipes/validation.pipe';
             limit: config.get<number>('RATE_LIMIT_GLOBAL', 100),
           },
         ],
+        // Without an explicit storage the throttler keeps counters in a
+        // per-process Map, so limits multiplied by replica count and reset on
+        // every deploy.
+        storage: new RedisThrottlerStorage(redis),
       }),
     }),
     LoggerModule,
