@@ -7,9 +7,12 @@ import { HealthMetricsService } from './health-metrics.service';
 import { TracingService } from './tracing.service';
 import { LoggingService } from './logging.service';
 import { RequestMetricsMiddleware } from './request-metrics.middleware';
+import { AuthModule } from '../auth/auth.module';
 
 @Module({
-  imports: [RedisModule],
+  // AuthModule supplies JwtAuthGuard and its dependencies for the
+  // now admin-only MetricsController.
+  imports: [RedisModule, AuthModule],
   controllers: [MetricsController],
   providers: [MetricsService, PerformanceService, HealthMetricsService, TracingService, LoggingService],
   exports: [MetricsService, PerformanceService, HealthMetricsService, TracingService, LoggingService],

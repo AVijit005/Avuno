@@ -19,7 +19,8 @@ export class HealthMetricsService {
       await this.prisma.$queryRaw`SELECT 1`;
       return { status: 'up' };
     } catch (error) {
-      return { status: 'down', message: `Database unreachable: ${(error as Error).message}` };
+      this.logger.error('Database health check failed', error as Error);
+      return { status: 'down', message: 'Database unreachable' };
     }
   }
 
@@ -29,7 +30,8 @@ export class HealthMetricsService {
       await client.ping();
       return { status: 'up' };
     } catch (error) {
-      return { status: 'down', message: `Redis unreachable: ${(error as Error).message}` };
+      this.logger.error('Redis health check failed', error as Error);
+      return { status: 'down', message: 'Redis unreachable' };
     }
   }
 
@@ -39,7 +41,8 @@ export class HealthMetricsService {
       const redisHealth = await this.getRedisHealth();
       return redisHealth.status === 'up' ? { status: 'up' } : { status: 'down', message: 'BullMQ depends on Redis' };
     } catch (error) {
-      return { status: 'down', message: `BullMQ: ${(error as Error).message}` };
+      this.logger.error('BullMQ health check failed', error as Error);
+      return { status: 'down', message: 'Queue unavailable' };
     }
   }
 
@@ -51,7 +54,8 @@ export class HealthMetricsService {
       await fs.access(uploadRoot);
       return { status: 'up' };
     } catch (error) {
-      return { status: 'down', message: `Storage: ${(error as Error).message}` };
+      this.logger.error('Storage health check failed', error as Error);
+      return { status: 'down', message: 'Storage unavailable' };
     }
   }
 

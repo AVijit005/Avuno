@@ -2,6 +2,7 @@ import { ExceptionFilter, Catch, ArgumentsHost, HttpException, HttpStatus, Logge
 import { BaseExceptionFilter } from '@nestjs/core';
 import type { Request, Response } from 'express';
 import { Prisma } from '@prisma/client';
+import { redactUrl } from '../redact-url';
 @Catch()
 export class AllExceptionsFilter extends BaseExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -14,22 +15,37 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
     const requestId = request['id'] as string | undefined;
     const { status, message, code } = this.resolveError(exception);
 
-    this.logger.error({
+    // 4xx are client mistakes, not faults: logging a full stack trace for
+    // every validation error and failed login floods the logs (an
+    // unauthenticated 404 flood becomes a disk-space vector) and buries the
+    // 5xx that actually need attention. Stacks are kept for server errors only.
+    const isServerError = status >= 500;
+    const logPayload = {
       requestId,
       status,
       code,
       message,
-      path: request.url,
+      // Credentials travel in the query string on the verification, signed
+      // storage and OAuth callback routes; never log them.
+      path: redactUrl(request.url),
       method: request.method,
-      stack: exception instanceof Error ? exception.stack : undefined,
-    });
+      ...(isServerError && exception instanceof Error ? { stack: exception.stack } : {}),
+    };
+
+    if (isServerError) {
+      this.logger.error(logPayload);
+    } else {
+      this.logger.warn(logPayload);
+    }
 
     const body: Record<string, unknown> = {
       statusCode: status,
       message,
       requestId,
       timestamp: new Date().toISOString(),
-      path: request.url,
+      // Redacted here too: error responses are frequently captured by
+      // client-side error reporters and support tooling.
+      path: redactUrl(request.url),
     };
 
     // Only expose safe, user-facing error codes
@@ -42,14 +58,11 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
   }
 
   private resolveError(exception: unknown): { status: number; message: string | string[]; code?: string } {
-
     // HttpException — use as-is
     if (exception instanceof HttpException) {
       const resp = exception.getResponse();
       const message =
-        typeof resp === 'string'
-          ? resp
-          : (resp as { message?: string | string[] }).message || exception.message;
+        typeof resp === 'string' ? resp : (resp as { message?: string | string[] }).message || exception.message;
       return { status: exception.getStatus(), message };
     }
 
