@@ -1,9 +1,27 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
-import { WrappedRepository } from './wrapped.repository';
+import type { Prisma } from '@prisma/client';
+import { WrappedRepository, type WrappedYearRow, type WrappedStatRow } from './wrapped.repository';
 import { WrappedGeneratorService } from './wrapped-generator.service';
 import { WrappedShareService } from './wrapped-share.service';
-import type { WrappedDto, WrappedSummaryDto, WrappedShareDto } from './dto';
+import type { WrappedDto, WrappedSummaryDto, WrappedShareDto, WrappedCardDto, WrappedInsightDto } from './dto';
+
+interface Metadata {
+  cards?: WrappedCardDto[];
+  insights?: WrappedInsightDto[];
+  summary?: string;
+  sharePayload?: Record<string, unknown>;
+  totalCompleted?: number;
+  totalHours?: number;
+  totalJournalEntries?: number;
+  version?: number;
+}
+
+interface DbStat {
+  title: string;
+  value: string;
+  icon: string | null;
+  sortOrder: number;
+}
 
 @Injectable()
 export class WrappedService {
@@ -35,7 +53,7 @@ export class WrappedService {
     const wrappedYear = await this.repository.createWrappedYear({
       userId,
       year,
-      metadata,
+      metadata: metadata as unknown as Prisma.JsonValue,
     });
 
     await this.repository.upsertStats(
@@ -52,7 +70,7 @@ export class WrappedService {
       throw new NotFoundException(`No wrapped for ${year} found. Generate first.`);
     }
 
-    const oldMeta = (existing.metadata ?? {}) as Record<string, any>;
+    const oldMeta = (existing.metadata ?? {}) as Metadata;
     const nextVersion = (oldMeta.version ?? 1) + 1;
 
     const { cards, stats, insights, summary, sharePayload, totalCompleted, totalHours, journalCount } =
@@ -69,7 +87,7 @@ export class WrappedService {
       version: nextVersion,
     };
     const updated = await this.repository.updateWrappedYear(existing.id, {
-      metadata,
+      metadata: metadata as unknown as Record<string, unknown>,
       generatedAt: new Date(),
       coverImage: null,
     });
@@ -84,8 +102,8 @@ export class WrappedService {
 
   async findAll(userId: string): Promise<WrappedSummaryDto[]> {
     const items = await this.repository.findWrappedYearsByUserId(userId);
-    return items.map((item: any) => {
-      const meta = (item.metadata ?? {}) as Record<string, any>;
+    return items.map((item) => {
+      const meta = (item.metadata ?? {}) as Metadata;
       return {
         id: item.id,
         year: item.year,
@@ -102,7 +120,7 @@ export class WrappedService {
     const wrapped = await this.repository.findWrappedYear(userId, year);
     if (!wrapped) throw new NotFoundException(`No wrapped for ${year} found`);
 
-    const meta = (wrapped.metadata ?? {}) as Record<string, any>;
+    const meta = (wrapped.metadata ?? {}) as Metadata;
     return this.toWrappedDto(
       wrapped,
       meta.cards ?? [],
@@ -117,11 +135,11 @@ export class WrappedService {
     const wrapped = await this.repository.findWrappedYear(userId, year);
     if (!wrapped) throw new NotFoundException(`No wrapped for ${year} found`);
 
-    const meta = (wrapped.metadata ?? {}) as Record<string, any>;
+    const meta = (wrapped.metadata ?? {}) as Metadata;
     const stats = this.mapStatsFromDb(wrapped.stats ?? []);
-    const cards: any[] = meta.cards ?? [];
-    const insights: any[] = meta.insights ?? [];
-    const summary: string = meta.summary ?? '';
+    const cards = meta.cards ?? [];
+    const insights = meta.insights ?? [];
+    const summary = meta.summary ?? '';
 
     return this.shareService.buildSharePayload(wrapped.id, year, summary, insights, cards, stats);
   }
@@ -130,7 +148,7 @@ export class WrappedService {
     const wrapped = await this.repository.findWrappedYear(userId, year);
     if (!wrapped) throw new NotFoundException(`No wrapped for ${year} found`);
 
-    const meta = (wrapped.metadata ?? {}) as Record<string, any>;
+    const meta = (wrapped.metadata ?? {}) as Metadata;
     return {
       id: wrapped.id,
       year: wrapped.year,
@@ -152,14 +170,15 @@ export class WrappedService {
   // ─── Helpers ─────────────────────────────────────────────────────────────
 
   private toWrappedDto(
-    wrapped: any,
-    cards: any[],
-    stats: any[],
-    insights: any[],
+    wrapped: WrappedYearRow,
+    cards: WrappedCardDto[],
+    stats: DbStat[],
+    insights: WrappedInsightDto[],
     summary: string,
     version: number,
   ): WrappedDto {
-    const sharePayload = wrapped.metadata?.sharePayload ?? {
+    const meta = (wrapped.metadata ?? {}) as Metadata;
+    const sharePayload = meta.sharePayload ?? {
       year: wrapped.year,
       stats: stats.slice(0, 10),
       insights: insights.slice(0, 5),
@@ -179,8 +198,8 @@ export class WrappedService {
     };
   }
 
-  private mapStatsFromDb(dbStats: any[]): any[] {
-    return dbStats.map((s: any) => ({
+  private mapStatsFromDb(dbStats: WrappedStatRow[]): DbStat[] {
+    return dbStats.map((s) => ({
       title: s.title,
       value: s.value,
       icon: s.icon ?? null,

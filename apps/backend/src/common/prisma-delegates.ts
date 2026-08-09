@@ -34,7 +34,7 @@ export interface QueryableDelegate {
   findMany(args?: Record<string, unknown>): Promise<Record<string, unknown>[]>;
   count(args?: Record<string, unknown>): Promise<number>;
   create(args: Record<string, unknown>): Promise<Record<string, unknown>>;
-  createMany(args: Record<string, unknown>): Promise<{ count: number }>;
+  createMany?(args: Record<string, unknown>): Promise<{ count: number }>;
   update(args: Record<string, unknown>): Promise<Record<string, unknown>>;
   updateMany(args: Record<string, unknown>): Promise<{ count: number }>;
   delete(args: Record<string, unknown>): Promise<Record<string, unknown>>;
