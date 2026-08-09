@@ -41,6 +41,7 @@ export interface QueryableDelegate {
   deleteMany(args: Record<string, unknown>): Promise<{ count: number }>;
   groupBy(args: Record<string, unknown>): Promise<Record<string, unknown>[]>;
   aggregate(args: Record<string, unknown>): Promise<Record<string, unknown>>;
+  upsert(args: Record<string, unknown>): Promise<Record<string, unknown>>;
 }
 
 /** Anything that exposes Prisma delegates: the client, or a transaction. */

@@ -46,10 +46,9 @@ describe('InteractionRepository', () => {
       expect(result).toBeNull();
     });
 
-    it('returns null when delegate missing', async () => {
+    it('throws when delegate missing', async () => {
       prismaMock.userMovie = undefined;
-      const result = await repo.findLibraryItem('id', 'movie');
-      expect(result).toBeNull();
+      await expect(repo.findLibraryItem('id', 'movie')).rejects.toThrow();
     });
 
     it('returns item when found by movie type', async () => {
@@ -115,10 +114,9 @@ describe('InteractionRepository', () => {
       expect(prismaMock.activityFeed.create).toHaveBeenCalledTimes(1);
     });
 
-    it('does not throw when activityFeed delegate is missing', async () => {
+    it('throws when activityFeed delegate is missing', async () => {
       delete prismaMock.activityFeed;
-      await repo.recordHistory('user-1', 'RATED', 'lib-1', 'movie');
-      // no error
+      await expect(repo.recordHistory('user-1', 'RATED', 'lib-1', 'movie')).rejects.toThrow();
     });
   });
 
@@ -151,10 +149,9 @@ describe('InteractionRepository', () => {
       expect(result).toEqual([]);
     });
 
-    it('returns empty array when activityFeed delegate missing', async () => {
+    it('throws when activityFeed delegate missing', async () => {
       delete prismaMock.activityFeed;
-      const result = await repo.findHistory('user-1');
-      expect(result).toEqual([]);
+      await expect(repo.findHistory('user-1')).rejects.toThrow();
     });
   });
 

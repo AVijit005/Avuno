@@ -24,6 +24,23 @@ function withSecurityHeaders(response: Response): Response {
   headers.set("X-Frame-Options", "DENY");
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
+  headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
+  headers.set(
+    "Content-Security-Policy",
+    [
+      "default-src 'self'",
+      "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com",
+      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "font-src 'self' https://fonts.gstatic.com",
+      "img-src 'self' data: https:",
+      "connect-src 'self'",
+      "frame-ancestors 'none'",
+      "base-uri 'self'",
+      "form-action 'self'",
+      "object-src 'none'",
+      "upgrade-insecure-requests",
+    ].join("; "),
+  );
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
@@ -51,14 +68,15 @@ async function normalizeCatastrophicSsrResponse(response: Response): Promise<Res
 }
 
 const rawBackend = process.env.VITE_API_URL || process.env.API_HOST || "";
-const BACKEND_URL = rawBackend && !rawBackend.includes("trycloudflare.com")
-  ? rawBackend
-  : (() => {
-      if (process.env.NODE_ENV === 'production') {
-        throw new Error('VITE_API_URL or API_HOST must be set in production');
-      }
-      return "http://localhost:3000";
-    })();
+const BACKEND_URL =
+  rawBackend && !rawBackend.includes("trycloudflare.com")
+    ? rawBackend
+    : (() => {
+        if (process.env.NODE_ENV === "production") {
+          throw new Error("VITE_API_URL or API_HOST must be set in production");
+        }
+        return "http://localhost:3000";
+      })();
 
 async function handleApiProxy(request: Request): Promise<Response> {
   const url = new URL(request.url);
@@ -107,10 +125,12 @@ export default {
       return withSecurityHeaders(await normalizeCatastrophicSsrResponse(response));
     } catch (error) {
       console.error(error);
-      return withSecurityHeaders(new Response(renderErrorPage(), {
-        status: 500,
-        headers: { "content-type": "text/html; charset=utf-8" },
-      }));
+      return withSecurityHeaders(
+        new Response(renderErrorPage(), {
+          status: 500,
+          headers: { "content-type": "text/html; charset=utf-8" },
+        }),
+      );
     }
   },
 };

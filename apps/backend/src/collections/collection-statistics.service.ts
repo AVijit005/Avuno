@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { CollectionsRepository } from './collections.repository';
 import type { CollectionStatsDto } from './dto';
+import { asHost, delegate } from '../common/prisma-delegates';
 
 @Injectable()
 export class CollectionStatisticsService {
@@ -44,17 +44,17 @@ export class CollectionStatisticsService {
       const cfg = MEDIA_TYPE_MAP[type];
       if (!cfg) continue;
 
-      const prisma = (this.repository as any).prisma;
-      const delegate = prisma?.[cfg.userDelegate];
-      if (!delegate) continue;
+      const prisma = (this.repository as unknown as { prisma: Record<string, unknown> }).prisma;
+      const del = delegate(asHost(prisma), cfg.userDelegate);
 
-      const userItems = await delegate.findMany({
+      const userItems = await del.findMany({
         where: { userId, [cfg.mediaIdField]: { in: ids }, deletedAt: null },
       });
 
       for (const userItem of userItems) {
-        if (userItem.status === 'COMPLETED') completed++;
-        if (userItem.favorite) favoriteCount++;
+        const item = userItem as { status: string; favorite: boolean };
+        if (item.status === 'COMPLETED') completed++;
+        if (item.favorite) favoriteCount++;
       }
     }
 

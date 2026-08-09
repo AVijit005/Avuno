@@ -10,3 +10,4 @@ export * from './common.module';
 export * from './redact-url';
 export * from './media-types';
 export * from './prisma-delegates';
+export * from './user-library-types';

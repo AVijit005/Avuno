@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { NotificationsRepository } from './notifications.repository';
 import { NotificationQueueService } from './notification-queue.service';
@@ -8,6 +7,41 @@ import type {
   UpdateNotificationPreferencesDto,
   NotificationListDto,
 } from './dto';
+
+interface NotificationRow {
+  id: string;
+  title: string;
+  body: string;
+  type: string;
+  isRead: boolean;
+  actionUrl?: string | null;
+  image?: string | null;
+  createdAt: Date;
+  readAt?: Date | null;
+}
+
+interface PreferenceRow {
+  emailEnabled: boolean;
+  pushEnabled: boolean;
+  browserEnabled: boolean;
+  marketingEnabled: boolean;
+  weeklyWrapped: boolean;
+  monthlyReport: boolean;
+  friendActivity: boolean;
+  reminders: boolean;
+}
+
+interface PreferenceUpdateData {
+  emailEnabled?: boolean;
+  pushEnabled?: boolean;
+  browserEnabled?: boolean;
+  marketingEnabled?: boolean;
+  weeklyWrapped?: boolean;
+  monthlyReport?: boolean;
+  friendActivity?: boolean;
+  reminders?: boolean;
+  [key: string]: unknown;
+}
 
 @Injectable()
 export class NotificationsService {
@@ -26,7 +60,7 @@ export class NotificationsService {
     const sliced = hasMore ? items.slice(0, limit) : items;
 
     return {
-      items: sliced.map((n: any) => this.toResponse(n)),
+      items: sliced.map((n) => this.toResponse(n as NotificationRow)),
       total: sliced.length,
       unreadCount,
       hasMore,
@@ -69,7 +103,7 @@ export class NotificationsService {
   }
 
   async updatePreferences(userId: string, dto: UpdateNotificationPreferencesDto): Promise<NotificationPreferencesDto> {
-    const data: Record<string, any> = {};
+    const data: PreferenceUpdateData = {};
     if (dto.emailEnabled !== undefined) data.emailEnabled = dto.emailEnabled;
     if (dto.pushEnabled !== undefined) data.pushEnabled = dto.pushEnabled;
     if (dto.browserEnabled !== undefined) data.browserEnabled = dto.browserEnabled;
@@ -99,7 +133,7 @@ export class NotificationsService {
     return this.queueService.getQueueMetrics();
   }
 
-  private toResponse(n: any): NotificationResponseDto {
+  private toResponse(n: NotificationRow): NotificationResponseDto {
     return {
       id: n.id,
       title: n.title,
@@ -113,7 +147,7 @@ export class NotificationsService {
     };
   }
 
-  private toPreferencesResponse(p: any): NotificationPreferencesDto {
+  private toPreferencesResponse(p: PreferenceRow): NotificationPreferencesDto {
     return {
       emailEnabled: p.emailEnabled ?? true,
       pushEnabled: p.pushEnabled ?? true,

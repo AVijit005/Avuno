@@ -1,7 +1,10 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, Logger } from '@nestjs/common';
 import { NotificationsRepository } from './notifications.repository';
 import { AnalyticsRepository } from '../analytics/analytics.repository';
+
+interface MediaWithTitle {
+  title?: string;
+}
 
 @Injectable()
 export class ReminderService {
@@ -37,7 +40,7 @@ export class ReminderService {
     const items = await this.analyticsRepo.getInProgressByType(userId, 'movie', ['WATCHING'], 3);
     if (items.length === 0) return;
 
-    const titles = items.map((i: any) => i.movie?.title ?? 'Unknown').join(', ');
+    const titles = items.map((i) => (i as { movie?: MediaWithTitle }).movie?.title ?? 'Unknown').join(', ');
     await this.notificationsRepo.create({
       userId,
       title: 'Continue Watching',
@@ -50,7 +53,7 @@ export class ReminderService {
     const items = await this.analyticsRepo.getInProgressByType(userId, 'book', ['READING'], 3);
     if (items.length === 0) return;
 
-    const titles = items.map((i: any) => i.book?.title ?? 'Unknown').join(', ');
+    const titles = items.map((i) => (i as { book?: MediaWithTitle }).book?.title ?? 'Unknown').join(', ');
     await this.notificationsRepo.create({
       userId,
       title: 'Continue Reading',

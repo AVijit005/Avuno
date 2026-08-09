@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { SearchRepository } from './search.repository';
 import { SearchSuggestionService } from './search-suggestion.service';
@@ -130,8 +129,10 @@ export class SearchService {
         break;
       case 'rating':
         items.sort((a, b) => {
-          const bRating = (b.metadata as Record<string, any>)?.rating ?? 0;
-          const aRating = (a.metadata as Record<string, any>)?.rating ?? 0;
+          const bMeta = b.metadata as Record<string, unknown> | null;
+          const aMeta = a.metadata as Record<string, unknown> | null;
+          const bRating = (bMeta?.rating as number) ?? 0;
+          const aRating = (aMeta?.rating as number) ?? 0;
           return bRating - aRating;
         });
         break;
@@ -153,14 +154,15 @@ export class SearchService {
     for (const item of items) {
       types[item.type] = (types[item.type] ?? 0) + 1;
 
-      const meta = item.metadata as Record<string, any> | null;
+      const meta = item.metadata as Record<string, unknown> | null;
       if (meta?.status) {
-        statuses[meta.status] = (statuses[meta.status] ?? 0) + 1;
+        statuses[meta.status as string] = (statuses[meta.status as string] ?? 0) + 1;
       }
       if (meta?.genre) {
         const genreList = Array.isArray(meta.genre) ? meta.genre : [meta.genre];
         for (const g of genreList) {
-          genres[g] = (genres[g] ?? 0) + 1;
+          const genre = g as string;
+          genres[genre] = (genres[genre] ?? 0) + 1;
         }
       }
     }

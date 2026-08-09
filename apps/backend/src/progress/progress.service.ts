@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable, NotFoundException } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import { ProgressRepository } from './progress.repository';
 import {
   ProgressCalculationService,
@@ -11,6 +11,52 @@ import {
 import { ProgressEventService } from './progress-event.service';
 import type { UpdateProgressDto } from './dto/progress.dto';
 import type { ProgressResponseDto, ProgressTotalDto, RecentProgressItemDto } from './dto/progress.dto';
+
+interface ProgressUpdateData {
+  progress: number;
+  progressPercentage: number;
+  status?: string;
+  finishedAt?: Date | null;
+  startedAt?: Date | null;
+  currentEpisode?: number | null;
+  currentSeason?: number | null;
+  currentChapter?: number | null;
+  currentPage?: number | null;
+  currentTrack?: number | null;
+  currentLesson?: number | null;
+  hoursSpent?: number | null;
+  minutesSpent?: number | null;
+}
+
+interface LibraryItemWithMedia {
+  id: string;
+  _mediaType?: string;
+  movieId?: string;
+  tvShowId?: string;
+  animeId?: string;
+  bookId?: string;
+  gameId?: string;
+  musicAlbumId?: string;
+  podcastId?: string;
+  courseId?: string;
+  progress?: number | null;
+  progressPercentage?: number | null;
+  currentEpisode?: number | null;
+  currentSeason?: number | null;
+  currentChapter?: number | null;
+  currentPage?: number | null;
+  currentTrack?: number | null;
+  currentLesson?: number | null;
+  currentModule?: number | null;
+  hoursSpent?: number | null;
+  minutesSpent?: number | null;
+  status?: string;
+  startedAt?: Date | null;
+  finishedAt?: Date | null;
+  lastInteractionAt?: Date | null;
+  updatedAt?: Date;
+  [key: string]: Prisma.InputJsonValue | string | boolean | number | Date | null | undefined;
+}
 
 @Injectable()
 export class ProgressService {
@@ -59,7 +105,7 @@ export class ProgressService {
     const isComplete = clampedProgress >= 100 || clampedPercentage >= 100;
     const isStarting = !wasZero && clampedProgress > 0;
 
-    const updateData: Record<string, any> = {
+    const updateData: ProgressUpdateData = {
       progress: clampedProgress,
       progressPercentage: clampedPercentage,
     };
@@ -82,7 +128,12 @@ export class ProgressService {
       updateData.startedAt = new Date();
     }
 
-    const updated = await this.repository.updateProgress(id, type, userId, updateData);
+    const updated = await this.repository.updateProgress(
+      id,
+      type,
+      userId,
+      updateData as unknown as Record<string, unknown>,
+    );
     if (!updated) throw new NotFoundException('Library item not found');
 
     await this.emitEvents(userId, id, type, wasZero, wasCompleted, isComplete, clampedProgress);
@@ -144,7 +195,7 @@ export class ProgressService {
       item.courseId;
     const totals = mediaId ? await this.repository.fetchMediaTotals(type, mediaId) : emptyMediaTotals();
 
-    const updateData: Record<string, any> = {
+    const updateData: ProgressUpdateData = {
       progress: 0,
       progressPercentage: 0,
       status: 'PLANNING',
@@ -160,7 +211,12 @@ export class ProgressService {
       minutesSpent: null,
     };
 
-    const updated = await this.repository.updateProgress(id, type, userId, updateData);
+    const updated = await this.repository.updateProgress(
+      id,
+      type,
+      userId,
+      updateData as unknown as Record<string, unknown>,
+    );
     if (!updated) throw new NotFoundException('Library item not found');
 
     await this.events.emitReset(userId, id, type);
@@ -171,18 +227,22 @@ export class ProgressService {
 
   async getRecent(userId: string, limit = 20): Promise<RecentProgressItemDto[]> {
     const items = await this.repository.findRecentByUserId(userId, limit);
-    return items.map((item: any) => ({
-      libraryId: item.id,
-      mediaId: item[`${item._mediaType}Id`],
-      title: item[item._mediaType]?.title ?? 'Unknown',
-      slug: item[item._mediaType]?.slug ?? '',
-      posterUrl: item[item._mediaType]?.posterUrl ?? null,
-      mediaType: item._mediaType,
-      progress: item.progress ?? 0,
-      progressPercentage: item.progressPercentage ?? 0,
-      status: item.status,
-      updatedAt: (item.lastInteractionAt ?? item.updatedAt).toISOString(),
-    }));
+    return items.map((item) => {
+      const mediaType = item._mediaType ?? 'unknown';
+      const joined = (item as LibraryItemWithMedia)[mediaType] as Record<string, unknown> | undefined;
+      return {
+        libraryId: item.id,
+        mediaId: ((item as LibraryItemWithMedia)[`${mediaType}Id`] as string) ?? '',
+        title: (joined?.title as string) ?? 'Unknown',
+        slug: (joined?.slug as string) ?? '',
+        posterUrl: (joined?.posterUrl as string | null) ?? null,
+        mediaType,
+        progress: item.progress ?? 0,
+        progressPercentage: item.progressPercentage ?? 0,
+        status: item.status ?? 'PLANNING',
+        updatedAt: (item.lastInteractionAt ?? item.updatedAt)?.toISOString() ?? new Date().toISOString(),
+      };
+    });
   }
 
   private async emitEvents(
@@ -204,7 +264,7 @@ export class ProgressService {
   }
 
   private toResponse(
-    item: any,
+    item: LibraryItemWithMedia,
     type: string,
     totals: MediaTotals,
     calculated: { progress: number; progressPercentage: number },

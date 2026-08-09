@@ -1,6 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { asHost, delegate, type QueryableDelegate } from '../common/prisma-delegates';
 
 export interface AutoTimelineEvent {
   type: string;
@@ -9,22 +10,23 @@ export interface AutoTimelineEvent {
   eventDate: Date;
   icon: string | null;
   color: string | null;
-  metadata: Record<string, any> | null;
+  metadata: Prisma.InputJsonValue;
 }
 
 @Injectable()
 export class TimelineEventFactory {
   constructor(private readonly prisma: PrismaService) {}
 
-  private prismaAny(): Record<string, any> {
-    return this.prisma as unknown as Record<string, any>;
+  private host(): ReturnType<typeof asHost> {
+    return asHost(this.prisma);
+  }
+
+  private timelineEvent(): QueryableDelegate {
+    return delegate(this.host(), 'timelineEvent');
   }
 
   async createEvent(userId: string, data: AutoTimelineEvent): Promise<void> {
-    const delegate = this.prismaAny().timelineEvent;
-    if (!delegate) return;
-
-    await delegate.create({
+    await this.timelineEvent().create({
       data: {
         userId,
         type: data.type,

@@ -1,7 +1,9 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
+import type { Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
 import { getLibraryTypes } from '../library';
+import { asHost, asRow, asRows, delegate, type QueryableDelegate } from '../common/prisma-delegates';
+import { type UserLibraryWhereInput, type UserLibraryUpdateInput } from '../common';
 
 interface InteractionModelConfig {
   userDelegate: string;
@@ -16,7 +18,7 @@ export interface LibraryItemWithMetadata {
   favorite: boolean;
   bookmarked: boolean;
   bookmarkedAt: Date | null;
-  metadata: Record<string, any> | null;
+  metadata: Prisma.InputJsonValue;
   status: string;
   startedAt: Date | null;
   finishedAt: Date | null;
@@ -25,7 +27,7 @@ export interface LibraryItemWithMetadata {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  [key: string]: any;
+  _mediaType?: string;
 }
 
 @Injectable()
@@ -49,47 +51,49 @@ export class InteractionRepository {
     return this.config[type] ?? null;
   }
 
-  private prismaAny(): Record<string, any> {
-    return this.prisma as unknown as Record<string, any>;
+  private host(): ReturnType<typeof asHost> {
+    return asHost(this.prisma);
+  }
+
+  private lib(type: string): QueryableDelegate | null {
+    const cfg = this.getCfg(type);
+    if (!cfg) return null;
+    return delegate(this.host(), cfg.userDelegate);
   }
 
   async findLibraryItem(id: string, type: string): Promise<LibraryItemWithMetadata | null> {
+    const del = this.lib(type);
+    if (!del) return null;
     const cfg = this.getCfg(type);
     if (!cfg) return null;
-    const delegate = this.prismaAny()[cfg.userDelegate];
-    if (!delegate) return null;
-    const item = await delegate.findUnique({
+    const item = await del.findUnique({
       where: { id },
       include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
     });
-    return (item as LibraryItemWithMetadata) ?? null;
+    return asRow<LibraryItemWithMetadata>(item as Record<string, unknown> | null);
   }
 
   async updateLibraryItem(
     id: string,
     type: string,
     userId: string,
-    data: Record<string, any>,
+    data: UserLibraryUpdateInput,
   ): Promise<LibraryItemWithMetadata | null> {
+    const del = this.lib(type);
+    if (!del) return null;
     const cfg = this.getCfg(type);
     if (!cfg) return null;
-    const delegate = this.prismaAny()[cfg.userDelegate];
-    if (!delegate) return null;
 
-    // Ownership is folded into the write predicate rather than checked by a
-    // preceding read, closing the check-then-act window and removing a query.
-    // The row is re-read afterwards because updateMany cannot return it with
-    // the joined media.
     const updateData = { ...data, updatedAt: new Date(), lastInteractionAt: new Date() };
 
-    const result = await delegate.updateMany({ where: { id, userId }, data: updateData });
+    const result = await del.updateMany({ where: { id, userId }, data: updateData });
     if (result.count === 0) return null;
 
-    const updated = await delegate.findUnique({
+    const updated = await del.findUnique({
       where: { id },
       include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
     });
-    return updated as LibraryItemWithMetadata;
+    return asRow<LibraryItemWithMetadata>(updated as Record<string, unknown> | null);
   }
 
   async recordHistory(
@@ -97,10 +101,9 @@ export class InteractionRepository {
     eventType: string,
     libraryId: string,
     mediaType: string,
-    metadata?: Record<string, any>,
+    metadata?: Prisma.InputJsonValue,
   ): Promise<void> {
-    const activityDelegate = this.prismaAny()['activityFeed'];
-    if (!activityDelegate) return;
+    const activityDelegate = delegate(this.host(), 'activityFeed');
 
     const activityTypeMap: Record<string, string> = {
       movie: 'WATCH',
@@ -120,7 +123,7 @@ export class InteractionRepository {
         type,
         title: eventType,
         description: `${eventType} on ${mediaType} item ${libraryId}`,
-        metadata: { ...metadata, libraryId, mediaType, eventType },
+        metadata: { ...(metadata as object), libraryId, mediaType, eventType },
         visibility: 'PRIVATE',
       },
     });
@@ -134,15 +137,15 @@ export class InteractionRepository {
     for (const t of types) {
       const cfg = this.getCfg(t);
       if (!cfg) continue;
-      const delegate = this.prismaAny()[cfg.userDelegate];
-      if (!delegate) continue;
+      const del = this.lib(t);
+      if (!del) continue;
 
-      const where: Record<string, any> = { userId, favorite: true, deletedAt: null };
+      const where: UserLibraryWhereInput = { userId, favorite: true, deletedAt: null };
       if (cursor) {
-        where.updatedAt = { lt: cursor };
+        (where as Record<string, unknown>).updatedAt = { lt: cursor };
       }
 
-      const items = await delegate.findMany({
+      const items = await del.findMany({
         where,
         orderBy: { updatedAt: 'desc' },
         take: limit + 1,
@@ -150,7 +153,8 @@ export class InteractionRepository {
       });
 
       for (const item of items) {
-        results.push({ ...item, _mediaType: t });
+        const row = asRow<LibraryItemWithMetadata>(item as Record<string, unknown>);
+        if (row) results.push({ ...row, _mediaType: t });
       }
     }
 
@@ -166,19 +170,19 @@ export class InteractionRepository {
     for (const t of types) {
       const cfg = this.getCfg(t);
       if (!cfg) continue;
-      const delegate = this.prismaAny()[cfg.userDelegate];
-      if (!delegate) continue;
+      const del = this.lib(t);
+      if (!del) continue;
 
-      const where: Record<string, any> = {
+      const where: UserLibraryWhereInput = {
         userId,
         deletedAt: null,
         bookmarked: true,
       };
       if (cursor) {
-        where.updatedAt = { lt: cursor };
+        (where as Record<string, unknown>).updatedAt = { lt: cursor };
       }
 
-      const items = await delegate.findMany({
+      const items = await del.findMany({
         where,
         orderBy: { updatedAt: 'desc' },
         take: limit + 1,
@@ -186,7 +190,8 @@ export class InteractionRepository {
       });
 
       for (const item of items) {
-        results.push({ ...item, _mediaType: t });
+        const row = asRow<LibraryItemWithMetadata>(item as Record<string, unknown>);
+        if (row) results.push({ ...row, _mediaType: t });
       }
     }
 
@@ -207,10 +212,10 @@ export class InteractionRepository {
     for (const t of types) {
       const cfg = this.getCfg(t);
       if (!cfg) continue;
-      const delegate = this.prismaAny()[cfg.userDelegate];
-      if (!delegate) continue;
+      const del = this.lib(t);
+      if (!del) continue;
 
-      const where: Record<string, any> = {
+      const where: Record<string, unknown> = {
         userId,
         deletedAt: null,
         metadata: { path: ['review'], not: null },
@@ -219,7 +224,7 @@ export class InteractionRepository {
         where.updatedAt = { lt: cursor };
       }
 
-      const items = await delegate.findMany({
+      const items = await del.findMany({
         where,
         orderBy: { updatedAt: 'desc' },
         take: limit + 1,
@@ -227,7 +232,8 @@ export class InteractionRepository {
       });
 
       for (const item of items) {
-        results.push({ ...item, _mediaType: t });
+        const row = asRow<LibraryItemWithMetadata>(item as Record<string, unknown>);
+        if (row) results.push({ ...row, _mediaType: t });
       }
     }
 
@@ -235,11 +241,10 @@ export class InteractionRepository {
     return results.slice(0, limit + 1);
   }
 
-  async findHistory(userId: string, type?: string, cursor?: string, limit = 20): Promise<Record<string, any>[]> {
-    const activityDelegate = this.prismaAny()['activityFeed'];
-    if (!activityDelegate) return [];
+  async findHistory(userId: string, type?: string, cursor?: string, limit = 20): Promise<Record<string, unknown>[]> {
+    const activityDelegate = delegate(this.host(), 'activityFeed');
 
-    const where: Record<string, any> = { userId };
+    const where: Record<string, unknown> = { userId };
     if (type) {
       const typeMap: Record<string, string> = {
         movie: 'WATCH',
@@ -263,16 +268,15 @@ export class InteractionRepository {
       take: limit + 1,
     });
 
-    return items;
+    return asRows<Record<string, unknown>>(items);
   }
 
   async findHistoryByLibraryItem(
     userId: string,
     libraryId: string,
     _mediaType: string,
-  ): Promise<Record<string, any>[]> {
-    const activityDelegate = this.prismaAny()['activityFeed'];
-    if (!activityDelegate) return [];
+  ): Promise<Record<string, unknown>[]> {
+    const activityDelegate = delegate(this.host(), 'activityFeed');
 
     const items = await activityDelegate.findMany({
       where: {
@@ -282,6 +286,6 @@ export class InteractionRepository {
       orderBy: { createdAt: 'desc' },
     });
 
-    return items;
+    return asRows<Record<string, unknown>>(items);
   }
 }

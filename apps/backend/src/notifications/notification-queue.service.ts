@@ -1,7 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { InjectQueue } from '@nestjs/bullmq';
 import { Injectable, Logger } from '@nestjs/common';
 import { Queue } from 'bullmq';
+
+interface QueueMetrics {
+  waiting: number;
+  active: number;
+  completed: number;
+  failed: number;
+}
 
 export const QUEUE_NOTIFICATION = 'notification';
 export const QUEUE_EMAIL = 'email';
@@ -49,12 +55,10 @@ export class NotificationQueueService {
     );
   }
 
-  async getQueueMetrics(): Promise<
-    Record<string, { waiting: number; active: number; completed: number; failed: number }>
-  > {
+  async getQueueMetrics(): Promise<Record<string, QueueMetrics>> {
     const queues = [this.notificationQueue, this.wrappedQueue, this.analyticsQueue, this.cleanupQueue];
     const names = [QUEUE_NOTIFICATION, QUEUE_WRAPPED, QUEUE_ANALYTICS, QUEUE_CLEANUP];
-    const metrics: Record<string, any> = {};
+    const metrics: Record<string, QueueMetrics> = {};
 
     for (let i = 0; i < queues.length; i++) {
       const [waiting, active, completed, failed] = await Promise.all([

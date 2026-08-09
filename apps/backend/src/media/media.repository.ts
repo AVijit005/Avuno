@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import type { ContentStatus, Prisma } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
+import { asHost, delegate, type QueryableDelegate } from '../common/prisma-delegates';
 
 export interface FindManyParams {
   mediaType?: string;
@@ -75,26 +75,26 @@ function buildOrderBy(params: FindManyParams): Record<string, string>[] {
 
 @Injectable()
 export class MediaRepository {
-  private readonly modelMap: Record<string, keyof typeof this.prisma>;
+  private readonly modelMap: Record<string, string>;
 
   constructor(private readonly prisma: PrismaService) {
     this.modelMap = {
-      movie: 'movie' as keyof typeof this.prisma,
-      tvShow: 'tvShow' as keyof typeof this.prisma,
-      tvSeason: 'tvSeason' as keyof typeof this.prisma,
-      tvEpisode: 'tvEpisode' as keyof typeof this.prisma,
-      anime: 'anime' as keyof typeof this.prisma,
-      animeEpisode: 'animeEpisode' as keyof typeof this.prisma,
-      book: 'book' as keyof typeof this.prisma,
-      game: 'game' as keyof typeof this.prisma,
-      musicArtist: 'musicArtist' as keyof typeof this.prisma,
-      musicAlbum: 'musicAlbum' as keyof typeof this.prisma,
-      musicTrack: 'musicTrack' as keyof typeof this.prisma,
-      podcast: 'podcast' as keyof typeof this.prisma,
-      podcastEpisode: 'podcastEpisode' as keyof typeof this.prisma,
-      course: 'course' as keyof typeof this.prisma,
-      courseModule: 'courseModule' as keyof typeof this.prisma,
-      courseLesson: 'courseLesson' as keyof typeof this.prisma,
+      movie: 'movie',
+      tvShow: 'tvShow',
+      tvSeason: 'tvSeason',
+      tvEpisode: 'tvEpisode',
+      anime: 'anime',
+      animeEpisode: 'animeEpisode',
+      book: 'book',
+      game: 'game',
+      musicArtist: 'musicArtist',
+      musicAlbum: 'musicAlbum',
+      musicTrack: 'musicTrack',
+      podcast: 'podcast',
+      podcastEpisode: 'podcastEpisode',
+      course: 'course',
+      courseModule: 'courseModule',
+      courseLesson: 'courseLesson',
     };
   }
 
@@ -102,59 +102,67 @@ export class MediaRepository {
     return Object.keys(this.modelMap);
   }
 
-  private getDelegate(type: string): any {
+  private host(): ReturnType<typeof asHost> {
+    return asHost(this.prisma);
+  }
+
+  private getDelegate(type: string): QueryableDelegate | null {
     const key = this.modelMap[type];
     if (!key) return null;
-    return this.prisma[key];
+    return delegate(this.host(), key);
   }
 
   async findById(type: string, id: string): Promise<MediaRow | null> {
-    const delegate = this.getDelegate(type);
-    if (!delegate) return null;
-    return delegate.findFirst({ where: { id, deletedAt: null } });
+    const del = this.getDelegate(type);
+    if (!del) return null;
+    const item = await del.findFirst({ where: { id, deletedAt: null } });
+    return item as MediaRow | null;
   }
 
-  private async findUniqueOrNull(delegate: any, where: Record<string, unknown>): Promise<MediaRow | null> {
+  private async findUniqueOrNull(del: QueryableDelegate, where: Record<string, unknown>): Promise<MediaRow | null> {
     try {
-      return (await delegate.findUnique({ where })) ?? null;
+      const item = await del.findUnique({ where });
+      return item as MediaRow | null;
     } catch {
       return null;
     }
   }
 
   async findBySlug(type: string, slug: string): Promise<MediaRow | null> {
-    const delegate = this.getDelegate(type);
-    if (!delegate) return null;
-    return this.findUniqueOrNull(delegate, { slug });
+    const del = this.getDelegate(type);
+    if (!del) return null;
+    return this.findUniqueOrNull(del, { slug });
   }
 
   async findMany(type: string | undefined, params: FindManyParams): Promise<MediaRow[]> {
     if (type) {
-      const delegate = this.getDelegate(type);
-      if (!delegate) return [];
-      return this.executeFindMany(delegate, params);
+      const del = this.getDelegate(type);
+      if (!del) return [];
+      return this.executeFindMany(del, params);
     }
 
     const promises = this.getModelKeys().map((key) => {
-      const delegate = this.getDelegate(key);
-      if (!delegate) return Promise.resolve([]);
-      return this.executeFindMany(delegate, params);
+      const del = this.getDelegate(key);
+      if (!del) return Promise.resolve([] as MediaRow[]);
+      return this.executeFindMany(del, params);
     });
     const results = await Promise.all(promises);
     let allResults = results.flat();
     const sortField = params.sortBy ?? 'createdAt';
     const sortOrder = params.sortOrder ?? 'desc';
-    allResults.sort((a: any, b: any) => {
-      const valA = a[sortField];
-      const valB = b[sortField];
-      if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
-      if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
+    allResults.sort((a, b) => {
+      const valA = a[sortField as keyof MediaRow] as string | number | Date | null;
+      const valB = b[sortField as keyof MediaRow] as string | number | Date | null;
+      const aStr = valA instanceof Date ? valA.toISOString() : String(valA ?? '');
+      const bStr = valB instanceof Date ? valB.toISOString() : String(valB ?? '');
+      if (aStr < bStr) return sortOrder === 'asc' ? -1 : 1;
+      if (aStr > bStr) return sortOrder === 'asc' ? 1 : -1;
       return a.id.localeCompare(b.id);
     });
     return allResults.slice(0, params.limit + 1);
   }
 
-  private async executeFindMany(delegate: any, params: FindManyParams): Promise<MediaRow[]> {
+  private async executeFindMany(del: QueryableDelegate, params: FindManyParams): Promise<MediaRow[]> {
     const where = buildWhere(params);
     const orderBy = buildOrderBy(params);
 
@@ -169,20 +177,21 @@ export class MediaRepository {
       query.cursor = { id: params.cursor };
     }
 
-    return delegate.findMany(query as any);
+    const items = await del.findMany(query);
+    return items as unknown as MediaRow[];
   }
 
   async count(type: string | undefined, params: FindManyParams): Promise<number> {
     if (type) {
-      const delegate = this.getDelegate(type);
-      if (!delegate) return 0;
-      return delegate.count({ where: buildWhere(params) as any });
+      const del = this.getDelegate(type);
+      if (!del) return 0;
+      return del.count({ where: buildWhere(params) });
     }
 
     const promises = this.getModelKeys().map((key) => {
-      const delegate = this.getDelegate(key);
-      if (!delegate) return Promise.resolve(0);
-      return delegate.count({ where: buildWhere(params) as any });
+      const del = this.getDelegate(key);
+      if (!del) return Promise.resolve(0);
+      return del.count({ where: buildWhere(params) });
     });
     const counts = await Promise.all(promises);
     return counts.reduce((acc, count) => acc + (typeof count === 'number' ? count : 0), 0);
@@ -192,8 +201,8 @@ export class MediaRepository {
     const item = await this.findById(type, id);
     if (!item) return [];
 
-    const delegate = this.getDelegate(type);
-    if (!delegate) return [];
+    const del = this.getDelegate(type);
+    if (!del) return [];
 
     const where: Record<string, unknown> = {
       id: { not: id },
@@ -208,11 +217,12 @@ export class MediaRepository {
       where.language = item.language;
     }
 
-    return delegate.findMany({
+    const items = await del.findMany({
       where,
       orderBy: [{ releaseYear: 'desc' as const }, { id: 'asc' as const }],
       take: limit,
     });
+    return items as unknown as MediaRow[];
   }
 
   async getMetadata(type: string, id: string): Promise<Record<string, unknown> | null> {

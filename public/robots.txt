@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 Disallow: /app/
-Sitemap: https://chronicle.app/sitemap.xml
+Sitemap: https://avuno.xyz/sitemap.xml
