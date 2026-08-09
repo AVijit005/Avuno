@@ -26,12 +26,12 @@ export class RequestMetricsMiddleware implements NestMiddleware {
       }
 
       this.loggingService.info('request completed', {
-        requestId: (req as any).id,
+        requestId: (req as Request & { id?: string }).id,
         method: req.method,
         route: req.route?.path ?? req.path,
         statusCode: res.statusCode,
         executionTimeMs: duration,
-        userId: (req as any).user?.sub,
+        userId: (req as Request & { user?: { sub?: string } }).user?.sub,
       });
     });
 

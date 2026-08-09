@@ -10,7 +10,7 @@ export class UploadResponseDto {
 }
 
 export class MultipartUploadDto {
-  files: any[];
+  files: Express.Multer.File[];
 }
 
 export class SignedUrlDto {

@@ -49,11 +49,11 @@ export class AnalyticsService {
     return this.aggregation.getActivity(userId);
   }
 
-  async getCalendarYear(userId: string, year: number): Promise<any> {
+  async getCalendarYear(userId: string, year: number) {
     return this.aggregation.getCalendarYear(userId, year);
   }
 
-  async getCalendarDay(userId: string, date: string): Promise<any> {
+  async getCalendarDay(userId: string, date: string) {
     return this.aggregation.getCalendarDay(userId, date);
   }
 

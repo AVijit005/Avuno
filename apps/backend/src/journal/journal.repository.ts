@@ -48,16 +48,23 @@ export class JournalRepository {
   }
 
   async updateEntry(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().journalEntry.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-    return this.prismaAny().journalEntry.update({ where: { id }, data: { ...data, updatedAt: new Date() } });
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().journalEntry.updateMany({
+      where: { id, userId },
+      data: { ...data, updatedAt: new Date() },
+    });
+    if (result.count === 0) return null;
+    return this.prismaAny().journalEntry.findUnique({ where: { id } });
   }
 
   async deleteEntry(id: string, userId: string): Promise<boolean> {
-    const existing = await this.prismaAny().journalEntry.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await this.prismaAny().journalEntry.delete({ where: { id } });
-    return true;
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().journalEntry.deleteMany({ where: { id, userId } });
+    return result.count > 0;
   }
 
   async countEntries(userId: string): Promise<number> {
@@ -111,9 +118,15 @@ export class JournalRepository {
   }
 
   async updateMemory(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().memory.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-    return this.prismaAny().memory.update({ where: { id }, data: { ...data, updatedAt: new Date() } });
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().memory.updateMany({
+      where: { id, userId },
+      data: { ...data, updatedAt: new Date() },
+    });
+    if (result.count === 0) return null;
+    return this.prismaAny().memory.findUnique({ where: { id } });
   }
 
   async deleteMemory(id: string, userId: string): Promise<boolean> {
@@ -250,16 +263,23 @@ export class JournalRepository {
   }
 
   async updateQuote(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().favoriteQuote.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-    return this.prismaAny().favoriteQuote.update({ where: { id }, data: { ...data, updatedAt: new Date() } });
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().favoriteQuote.updateMany({
+      where: { id, userId },
+      data: { ...data, updatedAt: new Date() },
+    });
+    if (result.count === 0) return null;
+    return this.prismaAny().favoriteQuote.findUnique({ where: { id } });
   }
 
   async deleteQuote(id: string, userId: string): Promise<boolean> {
-    const existing = await this.prismaAny().favoriteQuote.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await this.prismaAny().favoriteQuote.delete({ where: { id } });
-    return true;
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().favoriteQuote.deleteMany({ where: { id, userId } });
+    return result.count > 0;
   }
 
   async countQuotes(userId: string): Promise<number> {
@@ -317,16 +337,23 @@ export class JournalRepository {
   }
 
   async updateHighlight(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().highlight.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-    return this.prismaAny().highlight.update({ where: { id }, data: { ...data, updatedAt: new Date() } });
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().highlight.updateMany({
+      where: { id, userId },
+      data: { ...data, updatedAt: new Date() },
+    });
+    if (result.count === 0) return null;
+    return this.prismaAny().highlight.findUnique({ where: { id } });
   }
 
   async deleteHighlight(id: string, userId: string): Promise<boolean> {
-    const existing = await this.prismaAny().highlight.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await this.prismaAny().highlight.delete({ where: { id } });
-    return true;
+    // Ownership is folded into the write predicate. The previous
+    // read-then-write form had a check-then-act window and cost an extra
+    // query on every call.
+    const result = await this.prismaAny().highlight.deleteMany({ where: { id, userId } });
+    return result.count > 0;
   }
 
   async countHighlights(userId: string): Promise<number> {

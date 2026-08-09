@@ -74,14 +74,17 @@ export class ProgressRepository {
     const delegate = this.prismaAny()[cfg.userDelegate];
     if (!delegate) return null;
 
-    const existing = await delegate.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-
+    // Ownership is folded into the write predicate rather than checked by a
+    // preceding read, closing the check-then-act window and removing a query.
+    // The row is re-read afterwards because updateMany cannot return it with
+    // the joined media.
     const updateData = { ...data, updatedAt: new Date(), lastInteractionAt: new Date() };
 
-    return delegate.update({
+    const result = await delegate.updateMany({ where: { id, userId }, data: updateData });
+    if (result.count === 0) return null;
+
+    return delegate.findUnique({
       where: { id },
-      data: updateData,
       include: { [cfg.mediaDelegate]: { select: { id: true, slug: true, title: true, posterUrl: true } } },
     });
   }

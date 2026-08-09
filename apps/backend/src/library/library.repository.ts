@@ -1,6 +1,14 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import {
+  asHost,
+  asRow,
+  asRows,
+  mediaDelegate,
+  userLibraryDelegateFor,
+  type QueryableDelegate,
+} from '../common/prisma-delegates';
+import { mediaTypeConfig } from '../common/media-types';
 
 export interface LibraryModelConfig {
   delegate: string;
@@ -29,7 +37,7 @@ export interface LibraryRow {
   // query, but was missing from the interface — so those reads were untyped
   // and test fixtures could not set it.
   deletedAt: Date | null;
-  media?: Record<string, any> | null;
+  media?: Record<string, unknown> | null;
 }
 
 export interface LibraryFindManyParams {
@@ -81,27 +89,29 @@ export class LibraryRepository {
     return Object.keys(this.modelConfig);
   }
 
-  private getDelegate(type: string): any {
-    const cfg = this.modelConfig[type];
-    if (!cfg) return null;
-    const prismaAny = this.prisma as unknown as Record<string, any>;
-    return prismaAny[cfg.delegate] ?? null;
+  private getDelegate(type: string): QueryableDelegate | null {
+    const resolved = userLibraryDelegateFor(asHost(this.prisma), type);
+    return resolved ? resolved.delegate : null;
   }
 
   async findByUserIdAndMediaId(userId: string, type: string, mediaId: string): Promise<LibraryRow | null> {
-    const delegate = this.getDelegate(type);
-    const cfg = this.modelConfig[type];
-    if (!delegate || !cfg) return null;
+    const resolved = userLibraryDelegateFor(asHost(this.prisma), type);
+    if (!resolved) return null;
+    const { delegate, config } = resolved;
 
+    // Prisma names this compound unique after the actual FK column, e.g.
+    // `userId_movieId`. This used to pass the literal `userId_mediaId`, which
+    // exists on no model, so every duplicate check threw a validation error
+    // instead of returning a result — masked by an `as any` cast.
     const item = await delegate.findUnique({
       where: {
-        userId_mediaId: { userId, [cfg.mediaIdField]: mediaId } as any,
+        [config.userMediaUnique]: { userId, [config.mediaIdField]: mediaId },
       },
     });
 
     if (!item || item.deletedAt) return null;
 
-    return (item as LibraryRow) ?? null;
+    return asRow<LibraryRow>(item) ?? null;
   }
 
   async findById(id: string, userId: string, type?: string): Promise<LibraryRow | null> {
@@ -128,7 +138,7 @@ export class LibraryRepository {
           : undefined,
       });
       if (!item || item.userId !== userId || item.deletedAt) return null;
-      return item as LibraryRow;
+      return asRow<LibraryRow>(item) as LibraryRow;
     }
 
     for (const t of this.getTypes()) {
@@ -153,7 +163,7 @@ export class LibraryRepository {
             }
           : undefined,
       });
-      if (item && item.userId === userId && !item.deletedAt) return item as LibraryRow;
+      if (item && item.userId === userId && !item.deletedAt) return asRow<LibraryRow>(item) as LibraryRow;
     }
     return null;
   }
@@ -174,9 +184,15 @@ export class LibraryRepository {
     const all = results.flat();
     const sortField = params.sortBy ?? 'createdAt';
     const sortOrder = params.sortOrder ?? 'desc';
-    all.sort((a: any, b: any) => {
-      const valA = a[sortField];
-      const valB = b[sortField];
+    // Sorting on a runtime-selected field, so the comparator reads through an
+    // index signature. `id` is the tiebreaker to keep the order deterministic
+    // across the eight per-type queries this merges.
+    const field = (row: LibraryRow): string | number =>
+      (row as unknown as Record<string, string | number>)[sortField] ?? '';
+
+    all.sort((a, b) => {
+      const valA = field(a);
+      const valB = field(b);
       if (valA < valB) return sortOrder === 'asc' ? -1 : 1;
       if (valA > valB) return sortOrder === 'asc' ? 1 : -1;
       return a.id.localeCompare(b.id);
@@ -200,7 +216,7 @@ export class LibraryRepository {
   }
 
   private async executeFindAll(
-    delegate: any,
+    delegate: QueryableDelegate,
     userId: string,
     type: string,
     params: LibraryFindManyParams,
@@ -236,7 +252,7 @@ export class LibraryRepository {
       query.cursor = { id: params.cursor };
     }
 
-    return delegate.findMany(query as any) as Promise<LibraryRow[]>;
+    return asRows<LibraryRow>(await delegate.findMany(query));
   }
 
   async create(
@@ -260,7 +276,7 @@ export class LibraryRepository {
     if (data.startedAt) createData.startedAt = data.startedAt;
 
     const item = await delegate.create({
-      data: createData as any,
+      data: createData,
       include: {
         [cfg.includeKey]: {
           select: {
@@ -273,10 +289,10 @@ export class LibraryRepository {
             genres: true,
           },
         },
-      } as any,
+      },
     });
 
-    return item as LibraryRow;
+    return asRow<LibraryRow>(item) as LibraryRow;
   }
 
   async update(id: string, userId: string, type: string, data: Record<string, unknown>): Promise<LibraryRow | null> {
@@ -306,17 +322,18 @@ export class LibraryRepository {
       'timesRead',
       'timesPlayed',
     ];
-    const safeData: Record<string, any> = { updatedAt: new Date() };
+    const safeData: Record<string, unknown> = { updatedAt: new Date() };
     for (const key of ALLOWED_UPDATE_FIELDS) {
-      if (key in updateData && (updateData as any)[key] !== undefined) {
-        safeData[key] = (updateData as any)[key];
+      const patch = updateData as Record<string, unknown>;
+      if (key in patch && patch[key] !== undefined) {
+        safeData[key] = patch[key];
       }
     }
     safeData.updatedAt = new Date();
 
     const item = await delegate.update({
       where: { id },
-      data: safeData as any,
+      data: safeData,
       include: {
         [cfg.includeKey]: {
           select: {
@@ -329,25 +346,24 @@ export class LibraryRepository {
             genres: true,
           },
         },
-      } as any,
+      },
     });
 
-    return item as LibraryRow;
+    return asRow<LibraryRow>(item) as LibraryRow;
   }
 
   async softDelete(id: string, userId: string, type: string): Promise<boolean> {
     const delegate = this.getDelegate(type);
     if (!delegate) return false;
 
-    const existing = await delegate.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId || existing.deletedAt) return false;
-
-    await delegate.update({
-      where: { id },
+    // Ownership and the not-already-deleted check are both part of the write
+    // predicate, so a concurrent delete cannot slip between check and write.
+    const result = await delegate.updateMany({
+      where: { id, userId, deletedAt: null },
       data: { deletedAt: new Date() },
     });
 
-    return true;
+    return result.count > 0;
   }
 
   async countByStatus(userId: string): Promise<Record<string, number>> {
@@ -358,14 +374,14 @@ export class LibraryRepository {
       if (!delegate) return [];
       return delegate.groupBy({
         by: ['status'],
-        where: { userId, deletedAt: null } as any,
+        where: { userId, deletedAt: null },
         _count: { status: true },
       });
     });
 
     const results = await Promise.all(promises);
     for (const groupResults of results) {
-      for (const group of groupResults) {
+      for (const group of groupResults as Array<{ status: string; _count: { status: number } }>) {
         counts[group.status] = (counts[group.status] ?? 0) + group._count.status;
       }
     }
@@ -378,7 +394,7 @@ export class LibraryRepository {
     for (const t of this.getTypes()) {
       const delegate = this.getDelegate(t);
       if (!delegate) continue;
-      counts[t] = await delegate.count({ where: { userId, deletedAt: null } as any });
+      counts[t] = await delegate.count({ where: { userId, deletedAt: null } });
     }
     return counts;
   }
@@ -388,16 +404,21 @@ export class LibraryRepository {
     for (const t of this.getTypes()) {
       const delegate = this.getDelegate(t);
       if (!delegate) continue;
-      total += await delegate.count({ where: { userId, favorite: true, deletedAt: null } as any });
+      total += await delegate.count({ where: { userId, favorite: true, deletedAt: null } });
     }
     return total;
   }
 
   async verifyMediaExists(type: string, mediaId: string): Promise<boolean> {
-    const prismaAny = this.prisma as unknown as Record<string, any>;
-    const mediaDelegate = prismaAny[type];
-    if (!mediaDelegate) return false;
-    const item = await mediaDelegate.findUnique({ where: { id: mediaId } });
+    // `type` originates from the request body. Resolving it through the
+    // allowlist means an unexpected value can never reach a Prisma delegate
+    // by name; the previous version indexed the client directly with it.
+    const config = mediaTypeConfig(type);
+    if (!config) return false;
+
+    const item = await mediaDelegate(asHost(this.prisma), config.mediaDelegate).findUnique({
+      where: { id: mediaId },
+    });
     return !!item && !item.deletedAt;
   }
 }

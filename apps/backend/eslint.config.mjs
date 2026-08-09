@@ -36,6 +36,8 @@ const nodeGlobals = {
   global: 'readonly',
   globalThis: 'readonly',
   NodeJS: 'readonly',
+  // Ambient namespace from @types/express (Express.Multer.File).
+  Express: 'readonly',
 };
 
 /**

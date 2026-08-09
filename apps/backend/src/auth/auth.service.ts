@@ -48,7 +48,7 @@ export class AuthService {
         passwordHash,
         name: dto.name,
       });
-    } catch (e: any) {
+    } catch (e) {
       if (e.code === 'P2002') throw new ConflictException('Email already registered');
       throw e;
     }

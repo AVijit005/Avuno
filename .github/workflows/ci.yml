@@ -61,11 +61,11 @@ jobs:
       # could never fail.
       - name: Format check
         run: bunx prettier --check "src/**/*.ts" "test/**/*.ts"
-      # Zero errors is enforced. The warning budget is the remaining
-      # `no-explicit-any` debt in the dynamic Prisma delegate pattern, which is
-      # scheduled for a typed refactor; the cap stops it growing.
+      # Zero warnings. The `no-explicit-any` debt that previously required a
+      # budget of 22 is gone; delegate names are now verified against
+      # PrismaClient at compile time (see common/media-types.ts).
       - name: Lint
-        run: bunx eslint "src/**/*.ts" "test/**/*.ts" --max-warnings=22
+        run: bunx eslint "src/**/*.ts" "test/**/*.ts" --max-warnings=0
 
   backend-build:
     name: Backend Build

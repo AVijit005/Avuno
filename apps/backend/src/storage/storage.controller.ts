@@ -39,7 +39,7 @@ export class StorageController {
   @UseInterceptors(FileInterceptor('file'))
   async upload(
     @CurrentUser() user: AccessTokenPayload,
-    @UploadedFile() file: any,
+    @UploadedFile() file: Express.Multer.File,
     @Query('category') category: string,
   ): Promise<UploadResponseDto> {
     if (!file) throw new BadRequestException('No file provided');
@@ -59,7 +59,7 @@ export class StorageController {
   @UseInterceptors(FilesInterceptor('files', 10))
   async uploadMultipart(
     @CurrentUser() user: AccessTokenPayload,
-    @UploadedFiles() files: any[],
+    @UploadedFiles() files: Express.Multer.File[],
     @Query('category') category: string,
   ): Promise<UploadResponseDto[]> {
     return Promise.all(
@@ -129,7 +129,10 @@ export class StorageController {
   @ApiOperation({ summary: 'Upload an avatar' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadAvatar(@CurrentUser() user: AccessTokenPayload, @UploadedFile() file: any): Promise<UploadResponseDto> {
+  async uploadAvatar(
+    @CurrentUser() user: AccessTokenPayload,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UploadResponseDto> {
     if (!file) throw new BadRequestException('No file provided');
     return this.storageService.uploadAvatar(
       { buffer: file.buffer, mimeType: file.mimetype, originalName: file.originalname },
@@ -144,7 +147,10 @@ export class StorageController {
   @ApiOperation({ summary: 'Upload a cover image' })
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file'))
-  async uploadCover(@CurrentUser() user: AccessTokenPayload, @UploadedFile() file: any): Promise<UploadResponseDto> {
+  async uploadCover(
+    @CurrentUser() user: AccessTokenPayload,
+    @UploadedFile() file: Express.Multer.File,
+  ): Promise<UploadResponseDto> {
     if (!file) throw new BadRequestException('No file provided');
     return this.storageService.uploadCover(
       { buffer: file.buffer, mimeType: file.mimetype, originalName: file.originalname },

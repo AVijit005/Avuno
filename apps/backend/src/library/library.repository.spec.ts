@@ -32,6 +32,8 @@ describe('LibraryRepository', () => {
     findMany: ReturnType<typeof mock>;
     create: ReturnType<typeof mock>;
     update: ReturnType<typeof mock>;
+    updateMany: ReturnType<typeof mock>;
+    deleteMany: ReturnType<typeof mock>;
     count: ReturnType<typeof mock>;
   };
   let movieMock: {
@@ -44,6 +46,8 @@ describe('LibraryRepository', () => {
       findMany: mock(() => Promise.resolve([])),
       create: mock(() => Promise.resolve(createMockRow())),
       update: mock(() => Promise.resolve(createMockRow())),
+      updateMany: mock(() => Promise.resolve({ count: 0 })),
+      deleteMany: mock(() => Promise.resolve({ count: 0 })),
       count: mock(() => Promise.resolve(0)),
     };
     movieMock = {
@@ -137,21 +141,25 @@ describe('LibraryRepository', () => {
   });
 
   describe('softDelete', () => {
-    it('returns false when not found', async () => {
-      userMovieMock.findUnique.mockResolvedValueOnce(null);
+    // Ownership is now part of the write predicate rather than a preceding
+    // read, so these assert on the outcome and on the scoping of the write,
+    // not on a findUnique that no longer happens.
+    it('returns false when nothing matched', async () => {
+      userMovieMock.updateMany.mockResolvedValueOnce({ count: 0 });
       const result = await repository.softDelete('lib-1', 'user-1', 'movie');
       expect(result).toBe(false);
     });
 
-    it('returns false when userId does not match', async () => {
-      userMovieMock.findUnique.mockResolvedValueOnce(createMockRow({ userId: 'other-user' }));
-      const result = await repository.softDelete('lib-1', 'user-1', 'movie');
-      expect(result).toBe(false);
+    it('scopes the write by id, userId and not-already-deleted', async () => {
+      userMovieMock.updateMany.mockResolvedValueOnce({ count: 1 });
+      await repository.softDelete('lib-1', 'user-1', 'movie');
+
+      const args = userMovieMock.updateMany.mock.calls[0][0];
+      expect(args.where).toEqual({ id: 'lib-1', userId: 'user-1', deletedAt: null });
     });
 
     it('soft deletes when found and owned', async () => {
-      userMovieMock.findUnique.mockResolvedValueOnce(createMockRow({ userId: 'user-1' }));
-      userMovieMock.update.mockResolvedValueOnce(createMockRow({ deletedAt: new Date() }));
+      userMovieMock.updateMany.mockResolvedValueOnce({ count: 1 });
       const result = await repository.softDelete('lib-1', 'user-1', 'movie');
       expect(result).toBe(true);
     });

@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import type { SearchResultItemDto } from './dto';
+import { asHost, userLibraryDelegateFor } from '../common/prisma-delegates';
 
 interface SearchableMediaConfig {
   delegate: string;
@@ -99,8 +100,14 @@ export class SearchRepository {
       const cfg = MEDIA_CONFIG[type];
       if (!cfg) continue;
 
-      const delegate = this.prismaAny()[`user${type.charAt(0).toUpperCase() + type.slice(1)}`];
-      if (!delegate) continue;
+      // Resolve through the verified allowlist rather than building the
+      // delegate name by string manipulation. The old
+      // `user${Type}` concatenation was undiscoverable by grep and produced a
+      // silent `continue` — i.e. that media type quietly missing from every
+      // search result — for any name it got wrong.
+      const resolved = userLibraryDelegateFor(asHost(this.prisma), type);
+      if (!resolved) continue;
+      const delegate = resolved.delegate;
 
       const items = await delegate.findMany({
         where: {
@@ -129,8 +136,18 @@ export class SearchRepository {
         },
       });
 
-      for (const item of items) {
-        const media = item[cfg.delegate];
+      for (const raw of items) {
+        // Fields read off the junction row itself. Declared once so the
+        // accesses below stay checked.
+        const item = raw as Record<string, unknown> & {
+          id: string;
+          status?: string | null;
+          createdAt?: Date | null;
+          updatedAt?: Date | null;
+        };
+        // The joined catalog row sits under a per-type key. Narrow it once
+        // here rather than reading through `any` at each access below.
+        const media = item[cfg.delegate] as Record<string, string | null> | undefined;
         if (!media) continue;
 
         const title = media.title?.toLowerCase() ?? '';

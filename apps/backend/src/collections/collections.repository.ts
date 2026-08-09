@@ -18,6 +18,12 @@ const MEDIA_CONFIG: Record<string, MediaDelegate> = {
   course: { mediaIdField: 'courseId', mediaDelegate: 'course' },
 };
 
+/**
+ * Internal signal used to roll back a delete transaction when the row does not
+ * belong to the caller. Never escapes the repository.
+ */
+class OwnershipMismatchError extends Error {}
+
 @Injectable()
 export class CollectionsRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -94,28 +100,44 @@ export class CollectionsRepository {
   }
 
   async updateCollection(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().collection.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-
+    // Ownership is part of the write predicate rather than a preceding read,
+    // closing the check-then-act window and removing a query.
     const updateData: Record<string, any> = { ...data, updatedAt: new Date() };
     if (data.name) updateData.slug = this.generateSlug(data.name);
 
-    return this.prismaAny().collection.update({
-      where: { id },
+    const result = await this.prismaAny().collection.updateMany({
+      where: { id, userId },
       data: updateData,
     });
+    if (result.count === 0) return null;
+    return this.prismaAny().collection.findUnique({ where: { id } });
   }
 
   async softDeleteCollection(id: string, userId: string): Promise<boolean> {
     // Collection model doesn't have deletedAt. Use hard delete.
-    const existing = await this.prismaAny().collection.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
+    // Ownership is verified inside the transaction, before the children are
+    // removed. The array form of $transaction cannot be used: a zero-row
+    // parent delete is not an error, so it would commit — destroying another
+    // user's collectionItem rows while their collection survived.
+    return this.prisma
+      .$transaction(async (tx) => {
+        const txAny = tx as unknown as Record<
+          string,
+          {
+            deleteMany(args: { where: Record<string, string> }): Promise<{ count: number }>;
+          }
+        >;
 
-    await this.prisma.$transaction([
-      this.prismaAny().collectionItem.deleteMany({ where: { collectionId: id } }),
-      this.prismaAny().collection.delete({ where: { id } }),
-    ]);
-    return true;
+        const deleted = await txAny.collection.deleteMany({ where: { id, userId } });
+        if (deleted.count === 0) throw new OwnershipMismatchError();
+
+        await txAny.collectionItem.deleteMany({ where: { collectionId: id } });
+        return true;
+      })
+      .catch((error) => {
+        if (error instanceof OwnershipMismatchError) return false;
+        throw error;
+      });
   }
 
   async collectionExists(userId: string, slug: string): Promise<boolean> {
@@ -284,24 +306,40 @@ export class CollectionsRepository {
   }
 
   async updateShelf(id: string, userId: string, data: Record<string, any>): Promise<Record<string, any> | null> {
-    const existing = await this.prismaAny().shelf.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return null;
-
+    // Ownership is part of the write predicate rather than a preceding read,
+    // closing the check-then-act window and removing a query.
     const updateData: Record<string, any> = { ...data, updatedAt: new Date() };
     if (data.title) updateData.slug = this.generateSlug(data.title);
 
-    return this.prismaAny().shelf.update({ where: { id }, data: updateData });
+    const result = await this.prismaAny().shelf.updateMany({ where: { id, userId }, data: updateData });
+    if (result.count === 0) return null;
+    return this.prismaAny().shelf.findUnique({ where: { id } });
   }
 
   async softDeleteShelf(id: string, userId: string): Promise<boolean> {
-    const existing = await this.prismaAny().shelf.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
+    // Ownership is verified inside the transaction, before the children are
+    // removed. The array form of $transaction cannot be used: a zero-row
+    // parent delete is not an error, so it would commit — destroying another
+    // user's shelfItem rows while their shelf survived.
+    return this.prisma
+      .$transaction(async (tx) => {
+        const txAny = tx as unknown as Record<
+          string,
+          {
+            deleteMany(args: { where: Record<string, string> }): Promise<{ count: number }>;
+          }
+        >;
 
-    await this.prisma.$transaction([
-      this.prismaAny().shelfItem.deleteMany({ where: { shelfId: id } }),
-      this.prismaAny().shelf.delete({ where: { id } }),
-    ]);
-    return true;
+        const deleted = await txAny.shelf.deleteMany({ where: { id, userId } });
+        if (deleted.count === 0) throw new OwnershipMismatchError();
+
+        await txAny.shelfItem.deleteMany({ where: { shelfId: id } });
+        return true;
+      })
+      .catch((error) => {
+        if (error instanceof OwnershipMismatchError) return false;
+        throw error;
+      });
   }
 
   async shelfExists(userId: string, slug: string): Promise<boolean> {

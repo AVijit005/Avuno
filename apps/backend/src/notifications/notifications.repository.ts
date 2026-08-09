@@ -53,10 +53,15 @@ export class NotificationsRepository {
   async markAsRead(id: string, userId: string): Promise<boolean> {
     const delegate = this.prismaAny().notification;
     if (!delegate) return false;
-    const existing = await delegate.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await delegate.update({ where: { id }, data: { isRead: true, readAt: new Date() } });
-    return true;
+
+    // Ownership is part of the write predicate rather than a preceding read.
+    // The read-then-write form left a window in which the row could change
+    // between check and update, and cost an extra query on every call.
+    const result = await delegate.updateMany({
+      where: { id, userId },
+      data: { isRead: true, readAt: new Date() },
+    });
+    return result.count > 0;
   }
 
   async markAllAsRead(userId: string): Promise<number> {
@@ -72,10 +77,9 @@ export class NotificationsRepository {
   async delete(id: string, userId: string): Promise<boolean> {
     const delegate = this.prismaAny().notification;
     if (!delegate) return false;
-    const existing = await delegate.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await delegate.delete({ where: { id } });
-    return true;
+
+    const result = await delegate.deleteMany({ where: { id, userId } });
+    return result.count > 0;
   }
 
   async getPreferences(userId: string): Promise<Record<string, any> | null> {

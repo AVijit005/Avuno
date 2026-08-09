@@ -5,6 +5,19 @@ import { Strategy } from 'passport-google-oauth20';
 import { GoogleOAuthService } from '../services/google-oauth.service';
 import { GoogleProfileDto } from '../dto/google-profile.dto';
 
+/**
+ * The parts of the passport-google profile this strategy uses. The library's
+ * own Profile type is loose; declaring the fields we read keeps the accesses
+ * below checked.
+ */
+interface GoogleProfileShape {
+  id: string;
+  displayName?: string;
+  emails?: { value?: string; verified?: boolean }[];
+  name?: { givenName?: string; familyName?: string };
+  photos?: { value?: string }[];
+}
+
 interface GoogleProfileName {
   givenName?: string;
   familyName?: string;
@@ -45,10 +58,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   async validate(
     accessToken: string,
     refreshToken: string | undefined,
-    profile: any,
+    profile: GoogleProfileShape,
   ): Promise<{ sub: string; email: string }> {
     const emails = profile.emails ?? [];
-    const primaryEmail = emails.find((e: any) => e.verified) ?? emails[0];
+    const primaryEmail = emails.find((e) => e.verified) ?? emails[0];
     const name = (profile.name ?? {}) as GoogleProfileName;
     const photos = (profile.photos ?? []) as GoogleProfilePhotos[];
 

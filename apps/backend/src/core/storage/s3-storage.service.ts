@@ -108,7 +108,7 @@ export class S3StorageService implements StorageService {
 
       await this.s3Client.send(command);
       return true;
-    } catch (error: any) {
+    } catch (error) {
       if (error.name === 'NotFound' || error.$metadata?.httpStatusCode === 404) {
         return false;
       }

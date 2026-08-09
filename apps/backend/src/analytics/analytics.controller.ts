@@ -21,7 +21,7 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({ summary: 'Get full dashboard analytics' })
-  async getDashboard(@CurrentUser() user: AccessTokenPayload): Promise<any> {
+  async getDashboard(@CurrentUser() user: AccessTokenPayload) {
     return this.analyticsService.getDashboard(user.sub);
   }
 
@@ -29,7 +29,7 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Get streak analytics' })
-  async getStreaks(@CurrentUser() user: AccessTokenPayload): Promise<any> {
+  async getStreaks(@CurrentUser() user: AccessTokenPayload) {
     return this.analyticsService.getStreaks(user.sub);
   }
 
@@ -37,7 +37,7 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Get media distribution analytics' })
-  async getMediaAnalytics(@CurrentUser() user: AccessTokenPayload): Promise<any> {
+  async getMediaAnalytics(@CurrentUser() user: AccessTokenPayload) {
     return this.analyticsService.getMediaAnalytics(user.sub);
   }
 
@@ -128,20 +128,20 @@ export class AnalyticsController {
   @UseGuards(JwtAuthGuard)
   @Throttle({ default: { limit: 10, ttl: 60000 } })
   @ApiOperation({ summary: 'Calendar year data' })
-  async getCalendarYear(@CurrentUser() user: AccessTokenPayload, @Query('year') year: string): Promise<any> {
+  async getCalendarYear(@CurrentUser() user: AccessTokenPayload, @Query('year') year: string) {
     return this.analyticsService.getCalendarYear(user.sub, parseInt(year, 10) || new Date().getFullYear());
   }
 
   @Get('calendar/day')
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Calendar day data' })
-  async getCalendarDay(@CurrentUser() user: AccessTokenPayload, @Query('date') date: string): Promise<any> {
+  async getCalendarDay(@CurrentUser() user: AccessTokenPayload, @Query('date') date: string) {
     return this.analyticsService.getCalendarDay(user.sub, date);
   }
 
   @Post('pageview')
   @ApiOperation({ summary: 'Record pageview analytics' })
-  async recordPageView(@Body() _body: Record<string, any>) {
+  async recordPageView(@Body() _body: Record<string, unknown>) {
     // NOTE: pageviews are not persisted. This accepts and discards the
     // payload so the client's beacon does not error; wiring it to a real
     // analytics sink is tracked separately.

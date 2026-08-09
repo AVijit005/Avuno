@@ -33,8 +33,8 @@ export class MediaController {
       country: searchDto.country,
       releaseYear: searchDto.releaseYear,
       status: searchDto.status,
-      sortBy: searchDto.sortBy as any,
-      sortOrder: searchDto.sortOrder as any,
+      sortBy: searchDto.sortBy,
+      sortOrder: searchDto.sortOrder,
       cursor: searchDto.cursor,
       limit: searchDto.limit,
     });

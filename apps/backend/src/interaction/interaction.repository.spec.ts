@@ -9,6 +9,8 @@ describe('InteractionRepository', () => {
     findUnique: mock(() => Promise.resolve(null)),
     findMany: mock(() => Promise.resolve([])),
     update: mock(() => Promise.resolve(null)),
+    updateMany: mock(() => Promise.resolve({ count: 0 })),
+    deleteMany: mock(() => Promise.resolve({ count: 0 })),
     create: mock(() => Promise.resolve(null)),
     count: mock(() => Promise.resolve(0)),
   };
@@ -70,23 +72,34 @@ describe('InteractionRepository', () => {
       expect(result).toBeNull();
     });
 
-    it('returns null when item not found', async () => {
-      prismaMock.userMovie.findUnique.mockResolvedValueOnce(null);
+    // Ownership is now part of the write predicate, so a non-matching row
+    // simply updates nothing. These assert the outcome and the scoping rather
+    // than a preceding findUnique that no longer happens.
+    it('returns null when nothing matched', async () => {
+      prismaMock.userMovie.updateMany.mockResolvedValueOnce({ count: 0 });
       const result = await repo.updateLibraryItem('id', 'movie', 'user-1', { rating: 5 });
       expect(result).toBeNull();
     });
 
-    it('returns null when userId does not match', async () => {
-      prismaMock.userMovie.findUnique.mockResolvedValueOnce({ id: 'lib-1', userId: 'other-user' });
-      const result = await repo.updateLibraryItem('lib-1', 'movie', 'user-1', { rating: 5 });
-      expect(result).toBeNull();
+    it('scopes the write by id and userId', async () => {
+      prismaMock.userMovie.updateMany.mockResolvedValueOnce({ count: 1 });
+      prismaMock.userMovie.findUnique.mockResolvedValueOnce({ id: 'lib-1', userId: 'user-1' });
+      await repo.updateLibraryItem('lib-1', 'movie', 'user-1', { rating: 5 });
+
+      // Read the LAST call: mockDelegate is shared via spread, so earlier
+      // tests in this file have already recorded calls on it.
+      const calls = prismaMock.userMovie.updateMany.mock.calls;
+      const args = calls[calls.length - 1][0];
+      expect(args.where).toEqual({ id: 'lib-1', userId: 'user-1' });
     });
 
     it('updates the item when found and owned', async () => {
-      const existing = { id: 'lib-1', userId: 'user-1' };
-      const updated = { id: 'lib-1', userId: 'user-1', rating: 5 };
-      prismaMock.userMovie.findUnique.mockResolvedValueOnce(existing);
-      prismaMock.userMovie.update.mockResolvedValueOnce(updated);
+      prismaMock.userMovie.updateMany.mockResolvedValueOnce({ count: 1 });
+      prismaMock.userMovie.findUnique.mockResolvedValueOnce({
+        id: 'lib-1',
+        userId: 'user-1',
+        rating: 5,
+      });
       const result = await repo.updateLibraryItem('lib-1', 'movie', 'user-1', { rating: 5 });
       expect(result).not.toBeNull();
       expect(result!.rating).toBe(5);
