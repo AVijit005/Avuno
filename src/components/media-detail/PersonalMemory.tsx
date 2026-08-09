@@ -7,7 +7,10 @@ import { adaptMemory } from "@/lib/adapters/journal";
 export function PersonalMemory({ item }: { item: UIMediaItem }) {
   const accent = item.accent ?? "var(--primary)";
   const { data: memoriesData, isLoading } = useMemories({ limit: 1 });
-  const memories = memoriesData?.pages.flatMap((p) => p.data).map(adaptMemory) ?? [];
+  // The endpoint returns `{ items, ... }`. Reading `.data` produced
+  // [undefined], which adaptMemory then dereferenced — crashing this component
+  // on every media detail page.
+  const memories = memoriesData?.pages.flatMap((p) => p.items).map(adaptMemory) ?? [];
   const latestMemory = memories[0];
 
   if (isLoading) {

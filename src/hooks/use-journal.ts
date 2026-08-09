@@ -1,4 +1,5 @@
 import { useCurrentUser } from "@/hooks/use-auth";
+import { nextPageParam } from "@/lib/api/pagination";
 import { useQuery, useMutation, useQueryClient, useInfiniteQuery } from "@tanstack/react-query";
 import { journalApi } from "@/lib/api";
 import { queryKeys } from "@/lib/api/query-keys";
@@ -17,7 +18,7 @@ export function useJournalEntries(params?: { cursor?: string; limit?: number }) 
     enabled: !!user,
     queryFn: ({ pageParam }) =>
       journalApi.listJournalEntries({ ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
+    getNextPageParam: nextPageParam,
     initialPageParam: undefined as string | undefined,
   });
 }
@@ -91,7 +92,7 @@ export function useMemories(params?: { cursor?: string; limit?: number }) {
     enabled: !!user,
     queryFn: ({ pageParam }) =>
       journalApi.listMemories({ ...params, cursor: pageParam as string | undefined }),
-    getNextPageParam: (lastPage) => (lastPage.hasMore ? lastPage.nextCursor : undefined),
+    getNextPageParam: nextPageParam,
     initialPageParam: undefined as string | undefined,
   });
 }

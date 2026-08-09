@@ -2,6 +2,12 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 
+/**
+ * Internal signal used to abort the deleteMemory transaction when the row does
+ * not belong to the caller. Never escapes the repository.
+ */
+class MemoryNotDeletableError extends Error {}
+
 @Injectable()
 export class JournalRepository {
   constructor(private readonly prisma: PrismaService) {}
@@ -111,11 +117,34 @@ export class JournalRepository {
   }
 
   async deleteMemory(id: string, userId: string): Promise<boolean> {
-    const existing = await this.prismaAny().memory.findUnique({ where: { id } });
-    if (!existing || existing.userId !== userId) return false;
-    await this.prismaAny().memoryMedia.deleteMany({ where: { memoryId: id } });
-    await this.prismaAny().memory.delete({ where: { id } });
-    return true;
+    // Both writes in one transaction: a failure between them previously left
+    // orphaned MemoryMedia rows pointing at a memory that no longer exists.
+    // Ownership is folded into the delete itself rather than a separate read,
+    // which also closes the check-then-act window.
+    return this.prisma
+      .$transaction(async (tx) => {
+        const txAny = tx as unknown as {
+          memory: {
+            deleteMany(args: { where: { id: string; userId: string } }): Promise<{ count: number }>;
+          };
+          memoryMedia: {
+            deleteMany(args: { where: { memoryId: string } }): Promise<{ count: number }>;
+          };
+        };
+
+        // Ownership first, so a foreign id never reaches the child delete. The
+        // throw would roll it back either way, but ordering it this way keeps
+        // the guarantee obvious rather than dependent on the rollback.
+        const result = await txAny.memory.deleteMany({ where: { id, userId } });
+        if (result.count === 0) throw new MemoryNotDeletableError();
+
+        await txAny.memoryMedia.deleteMany({ where: { memoryId: id } });
+        return true;
+      })
+      .catch((error) => {
+        if (error instanceof MemoryNotDeletableError) return false;
+        throw error;
+      });
   }
 
   async countMemories(userId: string): Promise<number> {

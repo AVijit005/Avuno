@@ -1,4 +1,5 @@
 import { apiGet, apiPost, apiPatch, apiDelete } from "./fetch";
+import type { ItemsPage } from "./pagination";
 
 export interface JournalEntryResponse {
   id: string;
@@ -188,7 +189,7 @@ export async function createJournalEntry(
 export async function listJournalEntries(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ items: JournalEntryResponse[]; hasMore: boolean; nextCursor?: string }> {
+}): Promise<ItemsPage<JournalEntryResponse>> {
   return apiGet(`/journal${buildQueryString(params ?? {})}`);
 }
 
@@ -215,7 +216,7 @@ export async function createMemory(input: CreateMemoryInput): Promise<MemoryResp
 export async function listMemories(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ data: MemoryResponse[]; hasMore: boolean; nextCursor?: string }> {
+}): Promise<ItemsPage<MemoryResponse>> {
   return apiGet(`/memories${buildQueryString(params ?? {})}`);
 }
 
@@ -241,20 +242,14 @@ export async function createTimelineEvent(
 export async function listTimelineEvents(params?: {
   year?: number;
   month?: number;
-}): Promise<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }> {
+}): Promise<ItemsPage<TimelineEventResponse>> {
   if (params?.year && params?.month) {
-    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
-      `/timeline/${params.year}/${params.month}`,
-    );
+    return apiGet<ItemsPage<TimelineEventResponse>>(`/timeline/${params.year}/${params.month}`);
   }
   if (params?.year) {
-    return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
-      `/timeline/${params.year}`,
-    );
+    return apiGet<ItemsPage<TimelineEventResponse>>(`/timeline/${params.year}`);
   }
-  return apiGet<{ items: TimelineEventResponse[]; hasMore: boolean; nextCursor?: string }>(
-    "/timeline",
-  );
+  return apiGet<ItemsPage<TimelineEventResponse>>("/timeline");
 }
 
 // Quotes

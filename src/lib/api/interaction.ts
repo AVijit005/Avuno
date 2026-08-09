@@ -1,4 +1,5 @@
 import { apiGet, apiPatch, apiPost, apiDelete } from "./fetch";
+import type { CountedItemsPage } from "./pagination";
 
 export interface RatingResponse {
   rating: number | null;
@@ -85,7 +86,7 @@ export async function deleteReview(libraryId: string): Promise<void> {
 export async function listReviews(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ data: ReviewResponse[]; hasMore: boolean; cursor: string | null }> {
+}): Promise<CountedItemsPage<ReviewResponse>> {
   const qs = new URLSearchParams();
   if (params?.cursor) qs.set("cursor", params.cursor);
   if (params?.limit) qs.set("limit", String(params.limit));
@@ -95,7 +96,7 @@ export async function listReviews(params?: {
 export async function listFavorites(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
+}): Promise<CountedItemsPage<unknown>> {
   const qs = new URLSearchParams();
   if (params?.cursor) qs.set("cursor", params.cursor);
   if (params?.limit) qs.set("limit", String(params.limit));
@@ -105,7 +106,7 @@ export async function listFavorites(params?: {
 export async function listBookmarks(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ data: unknown[]; hasMore: boolean; cursor: string | null }> {
+}): Promise<CountedItemsPage<unknown>> {
   const qs = new URLSearchParams();
   if (params?.cursor) qs.set("cursor", params.cursor);
   if (params?.limit) qs.set("limit", String(params.limit));
@@ -115,7 +116,7 @@ export async function listBookmarks(params?: {
 export async function listHistory(params?: {
   cursor?: string;
   limit?: number;
-}): Promise<{ data: HistoryEvent[]; hasMore: boolean; cursor: string | null }> {
+}): Promise<CountedItemsPage<HistoryEvent>> {
   const qs = new URLSearchParams();
   if (params?.cursor) qs.set("cursor", params.cursor);
   if (params?.limit) qs.set("limit", String(params.limit));

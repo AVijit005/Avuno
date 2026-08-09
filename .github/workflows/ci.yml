@@ -87,6 +87,23 @@ jobs:
       # .ts file outside src/ widens the inferred rootDir and silently moves
       # the entrypoint to dist/src/main.js, which would make the production
       # container fail to start with no build error.
+      # A zero-byte or missing baseline means there is no reproducible path
+      # from an empty database to the current schema — and therefore no
+      # disaster recovery. 0_init was empty for the entire history of this
+      # repo before it was regenerated.
+      - name: Verify migration baseline is not empty
+        run: |
+          BASELINE=prisma/migrations/0_init/migration.sql
+          if [ ! -s "$BASELINE" ]; then
+            echo "FAILED: $BASELINE is missing or empty"
+            exit 1
+          fi
+          if ! grep -q 'CREATE TABLE' "$BASELINE"; then
+            echo "FAILED: $BASELINE creates no tables"
+            exit 1
+          fi
+          echo "OK: baseline defines $(grep -c 'CREATE TABLE' "$BASELINE") tables"
+
       - name: Verify entrypoint location
         run: |
           if [ ! -f dist/main.js ]; then
@@ -253,4 +270,19 @@ jobs:
             echo "FAILED: compose files still default secrets to a known value"
             exit 1
           fi
+      # docs/BACKUP.md previously documented a schedule and an HTTP endpoint
+      # that did not exist, while BackupService had zero call sites. Assert the
+      # scripts are present and parseable so the documentation cannot drift
+      # back into fiction.
+      - name: Verify backup and restore scripts
+        run: |
+          for f in apps/backend/scripts/backup.sh apps/backend/scripts/restore.sh; do
+            [ -f "$f" ] || { echo "FAILED: $f is missing"; exit 1; }
+            bash -n "$f" || { echo "FAILED: $f has a syntax error"; exit 1; }
+          done
+          if ! grep -q 'backup:' apps/backend/docker-compose.prod.yml; then
+            echo "FAILED: no backup service in the production compose stack"
+            exit 1
+          fi
+          echo "OK: backup and restore scripts present and scheduled"
       - run: echo "Production invariants verified (cascade FKs, CORS, CSP, image secrets, compose secrets)."

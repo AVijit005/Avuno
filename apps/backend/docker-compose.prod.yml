@@ -88,11 +88,48 @@ services:
     volumes:
       - uploads_data:/app/uploads
 
+  # ── Backups ──
+  # A sidecar rather than an in-app scheduler: backups must survive the API
+  # being down, must not block its event loop, and must run once for the whole
+  # stack rather than once per replica.
+  backup:
+    image: postgres:16-alpine
+    <<: *common
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgresql://chronicle:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/chronicle
+      BACKUP_DIR: /backups
+      BACKUP_RETENTION_DAYS: ${BACKUP_RETENTION_DAYS:-7}
+      # Public key only. The private key must live OFFLINE — a key stored
+      # beside the backups protects against nothing.
+      BACKUP_AGE_RECIPIENT: ${BACKUP_AGE_RECIPIENT:-}
+      BACKUP_S3_URI: ${BACKUP_S3_URI:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    volumes:
+      - ./scripts:/scripts:ro
+      - backups_data:/backups
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        apk add --no-cache age aws-cli >/dev/null 2>&1 || true
+        /scripts/backup.sh --verify-only || exit 1
+        echo "[backup] sidecar ready; taking a daily backup at 03:00 UTC"
+        while true; do
+          NOW=$$(date -u +%s)
+          NEXT=$$(date -u -d "tomorrow 03:00" +%s 2>/dev/null || echo $$((NOW + 86400)))
+          sleep $$((NEXT - NOW))
+          /scripts/backup.sh || echo "[backup] FAILED - investigate immediately"
+        done
+
 volumes:
   postgres_data:
   redis_data:
   minio_data:
   uploads_data:
+  backups_data:
 
 networks:
   chronicle:

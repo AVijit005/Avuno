@@ -59,8 +59,9 @@ export async function generateWrapped(year: number): Promise<WrappedResponse> {
 }
 
 export async function listWrapped(): Promise<WrappedSummary[]> {
-  const response = await apiGet<{ items: WrappedSummary[] }>("/wrapped");
-  return response.items;
+  // GET /wrapped returns a bare array (WrappedController.findAll). Reading
+  // `.items` off it yielded undefined, and the declared return type hid that.
+  return apiGet<WrappedSummary[]>("/wrapped");
 }
 
 export async function getWrapped(year: number): Promise<WrappedResponse> {
