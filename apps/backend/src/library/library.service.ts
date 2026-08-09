@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { buildCursorMeta } from '../common';
 import { LibraryRepository, type LibraryFindManyParams, type LibraryRow } from './library.repository';
@@ -106,7 +105,7 @@ export class LibraryService {
         dto.status,
       ) &&
       !dto.startedAt &&
-      !(currentItem as any).startedAt
+      !currentItem.startedAt
     ) {
       updateData.startedAt = new Date();
     }
@@ -143,19 +142,22 @@ export class LibraryService {
   }
 
   private detectMediaType(item: LibraryRow): string {
-    if ((item as any).movie) return 'movie';
-    if ((item as any).tvShow) return 'tvShow';
-    if ((item as any).anime) return 'anime';
-    if ((item as any).book) return 'book';
-    if ((item as any).game) return 'game';
-    if ((item as any).musicAlbum) return 'musicAlbum';
-    if ((item as any).podcast) return 'podcast';
-    if ((item as any).course) return 'course';
+    if (item.movie) return 'movie';
+    if (item.tvShow) return 'tvShow';
+    if (item.anime) return 'anime';
+    if (item.book) return 'book';
+    if (item.game) return 'game';
+    if (item.musicAlbum) return 'musicAlbum';
+    if (item.podcast) return 'podcast';
+    if (item.course) return 'course';
     return 'unknown';
   }
 
   private toResponse(row: LibraryRow, mediaType: string): LibraryItemResponseDto {
-    const media = (row as any).media ?? (row as any)[mediaType] ?? null;
+    const media =
+      row.media ??
+      ((row as unknown as Record<string, unknown>)[mediaType] as Record<string, unknown> | null) ??
+      null;
 
     return {
       id: row.id,
@@ -176,13 +178,13 @@ export class LibraryService {
       mediaType,
       media: media
         ? {
-            id: media.id,
-            slug: media.slug,
-            title: media.title,
-            posterUrl: media.posterUrl ?? null,
-            backdropUrl: media.backdropUrl ?? null,
-            releaseYear: media.releaseYear ?? null,
-            genres: media.genres ?? [],
+            id: media.id as string,
+            slug: media.slug as string,
+            title: media.title as string,
+            posterUrl: (media.posterUrl as string | null) ?? null,
+            backdropUrl: (media.backdropUrl as string | null) ?? null,
+            releaseYear: (media.releaseYear as number | null) ?? null,
+            genres: (media.genres as string[]) ?? [],
           }
         : null,
     };

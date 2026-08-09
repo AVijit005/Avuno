@@ -33,11 +33,16 @@ export interface LibraryRow {
   progressPercentage: number | null;
   createdAt: Date;
   updatedAt: Date;
-  // Soft-delete marker. Read in findById/findAll/update and filtered in every
-  // query, but was missing from the interface — so those reads were untyped
-  // and test fixtures could not set it.
   deletedAt: Date | null;
   media?: Record<string, unknown> | null;
+  movie?: Record<string, unknown> | null;
+  tvShow?: Record<string, unknown> | null;
+  anime?: Record<string, unknown> | null;
+  book?: Record<string, unknown> | null;
+  game?: Record<string, unknown> | null;
+  musicAlbum?: Record<string, unknown> | null;
+  podcast?: Record<string, unknown> | null;
+  course?: Record<string, unknown> | null;
 }
 
 export interface LibraryFindManyParams {
