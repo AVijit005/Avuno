@@ -193,7 +193,17 @@ export class CollectionsRepository {
     // transaction, so a batch containing a foreign ID is rejected outright
     // rather than partially applied.
     return this.prisma.$transaction(async (tx) => {
-      const txAny = tx as unknown as Record<string, any>;
+      // Narrow structural type instead of `any`: only these two operations
+      // are used, and typing them keeps the query shapes checked.
+      const txAny = tx as unknown as {
+        collectionItem: {
+          findMany(args: {
+            where: { id: { in: string[] }; collectionId: string };
+            select: { id: true };
+          }): Promise<{ id: string }[]>;
+          update(args: { where: { id: string }; data: { position: number } }): Promise<unknown>;
+        };
+      };
 
       const owned = await txAny.collectionItem.findMany({
         where: { id: { in: itemIds }, collectionId },

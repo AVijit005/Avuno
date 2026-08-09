@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Processor, WorkerHost } from '@nestjs/bullmq';
 import { Job } from 'bullmq';
 import { Logger } from '@nestjs/common';
@@ -25,9 +24,18 @@ export class CleanupProcessor extends WorkerHost {
         break;
       }
       case 'old-sessions': {
+        // Prune sessions that are already finished, plus anything past its
+        // expiry. The previous filter was inverted: it deleted rows whose
+        // status was still ACTIVE — reaping live sessions for anyone who had
+        // not touched the app in 90 days — while REVOKED and EXPIRED rows
+        // accumulated forever.
         const cutoff = new Date();
         cutoff.setDate(cutoff.getDate() - 90);
-        await this.prisma.session.deleteMany({ where: { updatedAt: { lt: cutoff }, status: 'ACTIVE' } as any });
+        await this.prisma.session.deleteMany({
+          where: {
+            OR: [{ status: { not: 'ACTIVE' }, updatedAt: { lt: cutoff } }, { expiresAt: { lt: cutoff } }],
+          },
+        });
         break;
       }
       case 'expired-refresh': {

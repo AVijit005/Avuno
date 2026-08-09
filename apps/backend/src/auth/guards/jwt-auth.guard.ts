@@ -28,6 +28,14 @@ export class JwtAuthGuard implements CanActivate {
       throw new UnauthorizedException('Invalid access token');
     }
 
+    // `sub` must be a non-empty string. Prisma omits `undefined` fields from a
+    // WHERE clause, so a token without a subject would turn every
+    // `where: { id, userId }` ownership check into an unscoped `where: { id }`
+    // and silently defeat the authorization model.
+    if (typeof payload.sub !== 'string' || payload.sub.length === 0) {
+      throw new UnauthorizedException('Invalid access token');
+    }
+
     // A valid signature is not sufficient. The token may have been revoked by
     // a logout, a "log out everywhere", or a role change since it was issued.
     if (await this.tokenRevocation.isRevoked(payload)) {

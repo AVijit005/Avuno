@@ -59,4 +59,35 @@ describe('redactUrl', () => {
     // `tokenCount` is not a credential; over-redacting hurts debuggability.
     expect(redactUrl('/x?tokenCount=5')).toBe('/x?tokenCount=5');
   });
+
+  // Bypasses found during review. None occur on our own routes, but a
+  // redaction helper is only worth having if it cannot be sidestepped.
+  describe('evasion', () => {
+    it('redacts a percent-encoded parameter name', () => {
+      expect(redactUrl('/x?%74oken=secret')).toBe('/x?%74oken=[REDACTED]');
+      expect(redactUrl('/x?%54OKEN=secret')).toBe('/x?%54OKEN=[REDACTED]');
+    });
+
+    it('redacts an array-suffixed parameter', () => {
+      expect(redactUrl('/x?token[]=secret')).toBe('/x?token[]=[REDACTED]');
+    });
+
+    it('redacts around a leading + or whitespace', () => {
+      expect(redactUrl('/x?+token=secret')).toBe('/x?+token=[REDACTED]');
+      expect(redactUrl('/x? token=secret')).toBe('/x? token=[REDACTED]');
+    });
+
+    it('redacts inside a fragment', () => {
+      // Implicit-flow style callbacks put credentials after the '#'.
+      expect(redactUrl('/x?a=1#token=secret')).toBe('/x?a=1#token=[REDACTED]');
+    });
+
+    it('keeps a fragment that carries no credential', () => {
+      expect(redactUrl('/x?token=secret#frag')).toBe('/x?token=[REDACTED]#frag');
+    });
+
+    it('redacts every occurrence of a repeated parameter', () => {
+      expect(redactUrl('/x?token=a&token=b')).toBe('/x?token=[REDACTED]&token=[REDACTED]');
+    });
+  });
 });

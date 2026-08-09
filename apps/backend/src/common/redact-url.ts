@@ -24,31 +24,54 @@ const SENSITIVE_PARAMS = new Set([
   'apikey',
 ]);
 
-export function redactUrl(url: string | undefined): string | undefined {
-  if (!url) return url;
+/**
+ * Normalise a raw parameter name to the form we match against.
+ *
+ * Handles the variants that would otherwise slip past a naive comparison:
+ * percent-encoding (`%74oken`), `+` as an encoded space, surrounding
+ * whitespace, PHP-style array suffixes (`token[]`), and case.
+ */
+function normaliseKey(rawKey: string): string {
+  let key = rawKey;
+  try {
+    key = decodeURIComponent(key.replace(/\+/g, ' '));
+  } catch {
+    // Malformed percent-encoding: fall back to the raw form.
+  }
+  return key.trim().toLowerCase().replace(/\[\]$/, '');
+}
 
-  const queryStart = url.indexOf('?');
-  if (queryStart === -1) return url;
-
-  const path = url.slice(0, queryStart);
-  const query = url.slice(queryStart + 1);
-
-  const redacted = query
+function redactQuery(query: string): string {
+  return query
     .split('&')
     .map((pair) => {
       if (!pair) return pair;
       const eq = pair.indexOf('=');
       const rawKey = eq === -1 ? pair : pair.slice(0, eq);
-      let key: string;
-      try {
-        key = decodeURIComponent(rawKey).toLowerCase();
-      } catch {
-        key = rawKey.toLowerCase();
-      }
-      if (!SENSITIVE_PARAMS.has(key)) return pair;
+      if (!SENSITIVE_PARAMS.has(normaliseKey(rawKey))) return pair;
       return `${rawKey}=[REDACTED]`;
     })
     .join('&');
+}
 
-  return `${path}?${redacted}`;
+export function redactUrl(url: string | undefined): string | undefined {
+  if (!url) return url;
+
+  // Split off any fragment first. Fragments are not sent to servers by
+  // browsers, but this helper is also used on values that arrive from logs and
+  // redirects, where a credential can sit after the '#'.
+  const hashStart = url.indexOf('#');
+  const hash = hashStart === -1 ? '' : url.slice(hashStart + 1);
+  const withoutHash = hashStart === -1 ? url : url.slice(0, hashStart);
+
+  const queryStart = withoutHash.indexOf('?');
+  const path = queryStart === -1 ? withoutHash : withoutHash.slice(0, queryStart);
+  const query = queryStart === -1 ? null : withoutHash.slice(queryStart + 1);
+
+  let out = path;
+  if (query !== null) out += `?${redactQuery(query)}`;
+  // A fragment can carry `token=...` in implicit-flow style callbacks.
+  if (hash) out += `#${redactQuery(hash)}`;
+
+  return out;
 }
