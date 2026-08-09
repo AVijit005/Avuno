@@ -339,7 +339,7 @@ describe('Users (e2e)', () => {
       {
         id: 'sess-current',
         userId: SEED_USER_ID,
-        token: 'refresh-current-token',
+        token: '5a36070bf233d84c5466bb2aac99452af8c9ec3ac14d5252158675d39a7f1994',
         expiresAt: new Date(Date.now() + 1000 * 60 * 60),
         ipAddress: '127.0.0.1',
         userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0 Safari/537.36',
@@ -351,7 +351,7 @@ describe('Users (e2e)', () => {
       {
         id: 'sess-other',
         userId: SEED_USER_ID,
-        token: 'refresh-other-token',
+        token: '1817ecc957879e9f90049c81af8ee8acb6db0d0cb2f010224d03ca8bde6a7a55',
         expiresAt: new Date(Date.now() + 1000 * 60 * 60),
         ipAddress: '127.0.0.2',
         userAgent: 'Mozilla/5.0 (X11; Linux x86_64) Firefox/120.0',

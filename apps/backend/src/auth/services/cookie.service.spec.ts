@@ -37,8 +37,8 @@ describe('CookieService', () => {
     service.writeRefreshToken(res as unknown as import('express').Response, 'token123', 604800);
     expect(res.cookies[REFRESH_TOKEN_COOKIE]).toBeDefined();
     expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { httpOnly: boolean } }).options.httpOnly).toBe(true);
-    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { secure: boolean } }).options.secure).toBe(false);
-    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { sameSite: string } }).options.sameSite).toBe('lax');
+    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { secure: boolean } }).options.secure).toBe(true);
+    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { sameSite: string } }).options.sameSite).toBe('strict');
     expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { path: string } }).options.path).toBe('/api/auth');
   });
 

@@ -99,9 +99,10 @@ export function StatCardPremium({
 }) {
   return (
     <motion.div
-      whileHover={{ y: -4 }}
-      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="glass group relative overflow-hidden rounded-3xl p-5"
+      whileHover={{ y: -6, scale: 1.01 }}
+      whileTap={{ scale: 0.98, y: -2 }}
+      transition={{ type: "spring", stiffness: 350, damping: 25 }}
+      className="glass group relative overflow-hidden rounded-3xl p-5 transition-shadow duration-[var(--dur-large)] hover:shadow-[var(--shadow-elevated)]"
     >
       <div
         className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full blur-3xl opacity-50 transition group-hover:opacity-80"

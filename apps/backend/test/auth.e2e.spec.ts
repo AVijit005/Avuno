@@ -82,6 +82,11 @@ function createMockPrismaService() {
         return Promise.resolve(users.filter((u) => !u.deletedAt && (!where.email || u.email === where.email)).length);
       },
       create: ({ data }: { data: Partial<MockUser> }) => {
+        if (users.find((u) => u.email === data.email && !u.deletedAt)) {
+          const err = new Error('Unique constraint failed');
+          (err as any).code = 'P2002';
+          return Promise.reject(err);
+        }
         const user: MockUser = {
           id: data.id ?? `user-${users.length + 1}`,
           email: data.email!,

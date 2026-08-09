@@ -11,6 +11,7 @@ import { useRef } from "react";
 import { Share2, Download, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { useOverview, useInsights } from "@/hooks/use-analytics";
 import { adaptOverview, adaptInsights } from "@/lib/adapters/analytics";
@@ -307,11 +308,11 @@ function Slide({
                   index % 4 === 0 ? "h-80 w-56" : index % 4 === 1 ? "h-72 w-72" : "h-96 w-64"
                 } ${index % 3 === 1 ? "md:order-2" : ""}`}
               >
-                <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10" />
-                <img src={poster} alt="" className="h-full w-full object-cover" />
+                <div className="absolute inset-0 rounded-3xl ring-1 ring-white/10 z-10" />
+                <PremiumImage src={poster} alt="" className="h-full w-full object-cover" />
                 <div
-                  className="pointer-events-none absolute inset-0 rounded-3xl"
-                  style={{ boxShadow: `0 0 60px ${accent}` }}
+                  className="pointer-events-none absolute inset-0 rounded-3xl z-10"
+                  style={{ boxShadow: `inset 0 0 60px ${accent}` }}
                 />
               </motion.div>
             )}

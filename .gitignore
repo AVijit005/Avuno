@@ -38,3 +38,5 @@ STRATEGY.md
 
 # TypeScript incremental build cache
 *.tsbuildinfo
+test-results/
+playwright-report/

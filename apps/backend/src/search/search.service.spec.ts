@@ -60,7 +60,14 @@ describe('SearchService', () => {
       getFilterOptions: mock(() => Promise.resolve({ types: [], statuses: [], genres: [], years: [], moods: [] })),
     };
 
-    service = new SearchService(repoMock as any, suggestionMock as any, statsMock as any);
+    const redisMock = {
+      getClient: mock(() => ({
+        get: mock(() => Promise.resolve(null)),
+        set: mock(() => Promise.resolve()),
+      })),
+    };
+
+    service = new SearchService(repoMock as any, suggestionMock as any, statsMock as any, redisMock as any);
   });
 
   it('returns empty results for empty query', async () => {

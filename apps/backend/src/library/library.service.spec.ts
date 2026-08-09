@@ -78,7 +78,9 @@ describe('LibraryService', () => {
     });
 
     it('throws ConflictException for duplicate', async () => {
-      repoMock.findByUserIdAndMediaId.mockResolvedValueOnce(createMockRow({ id: 'existing' }));
+      const error = new Error('Unique constraint failed');
+      (error as any).code = 'P2002';
+      repoMock.create.mockRejectedValueOnce(error);
       try {
         await service.add('user-1', { mediaType: 'movie', mediaId: 'movie-1' });
         expect.unreachable('should have thrown');

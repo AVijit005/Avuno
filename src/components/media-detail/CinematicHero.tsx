@@ -5,6 +5,7 @@ import type { UIMediaItem } from "@/lib/adapters/types";
 import { useArtworkAccent } from "@/lib/useArtworkAccent";
 import { PremiumProgress } from "@/components/ui/PremiumProgress";
 import { ItemActionBar } from "@/components/media/ItemActionBar";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 import { t as motionT } from "@/lib/motion";
 
 const ease = [0.22, 1, 0.36, 1] as const;
@@ -109,15 +110,12 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
                 <ImageOff className="h-8 w-8 text-white/30" />
               </div>
             ) : (
-              <motion.img
+              <PremiumImage
                 src={item.poster}
                 alt={item.title}
-                onLoad={() => setPosterLoaded(true)}
+                aspectRatio="poster"
+                style={{ viewTransitionName: `poster-${item.id}` }}
                 onError={() => setPosterErrored(true)}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: posterLoaded ? 1 : 0 }}
-                transition={{ duration: 0.5, ease }}
-                className="h-full w-full object-cover"
               />
             )}
             <span

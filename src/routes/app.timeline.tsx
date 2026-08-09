@@ -3,6 +3,7 @@ import { useRef, useState, useMemo, useEffect } from "react";
 import { useScroll, useTransform, useReducedMotion, motion } from "motion/react";
 import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 import { CountUp, SegmentedFilter, ZoneHeading } from "@/components/analytics/AnalyticsKit";
 import { LIFE_CHAPTERS } from "@/lib/memoryInsights";
 import { LifeChapterCard } from "@/components/memory/LifeChapterCard";
@@ -177,16 +178,12 @@ function TimelinePage() {
                     <span className="h-2 w-2 rounded-full" style={{ background: media.accent }} />
                   </motion.span>
 
-                  <PremiumGlass className="flex gap-5 p-5">
-                    <img
+                  <PremiumGlass interactive glow={media.accent} className="flex gap-5 p-5">
+                    <PremiumImage
                       src={media.poster}
                       alt=""
-                      loading="lazy"
-                      decoding="async"
-                      onError={(e) => {
-                        e.currentTarget.style.display = "none";
-                      }}
-                      className="h-28 w-20 shrink-0 rounded-xl object-cover"
+                      className="h-28 w-20 shrink-0 rounded-xl object-cover ring-1 ring-white/10"
+                      style={{ viewTransitionName: `timeline-poster-${e.id}` }}
                     />
                     <div className="min-w-0 flex-1">
                       <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">

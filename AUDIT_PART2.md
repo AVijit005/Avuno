@@ -1,7 +1,11 @@
 # COMPLETE PROBLEM INVENTORY - CHRONICLE YOUR MEDIA STORY
+
 # Part 2: Testing, Architecture, Premiumness, UX/UI Issues
-# Version: 1.0.0  
-# Date: August 10, 2026  
+
+# Version: 1.0.0
+
+# Date: August 10, 2026
+
 # Continued from PART1.md
 
 ---
@@ -31,24 +35,28 @@
 ---
 
 ### TEST-001: library.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Location**: `apps/backend/src/library/library.service.ts`
 
 **Description**: Core business logic service with NO unit tests. This is a critical gap as the library service handles:
+
 - CRUD operations for all 8 media types
 - Status transitions
 - Rating updates
 - Progress tracking
 - Ownership verification
 
-**Impact**: 
+**Impact**:
+
 - Core functionality untested
 - Regression bugs likely to go undetected
 - Refactoring risky
 - No confidence in production reliability
 
 **Methods Without Tests**:
+
 - create() - Library item creation
 - findAll() - Paginated listing
 - findById() - Single item retrieval
@@ -60,9 +68,10 @@
 - And many more...
 
 **Remediation**: Create comprehensive unit test file:
+
 ```typescript
 // apps/backend/src/library/library.service.spec.ts
-describe('LibraryService', () => {
+describe("LibraryService", () => {
   let service: LibraryService;
   let repository: MockType<LibraryRepository>;
   let prisma: MockType<PrismaService>;
@@ -80,24 +89,24 @@ describe('LibraryService', () => {
     repository = module.get(LibraryRepository);
   });
 
-  describe('create', () => {
-    it('should create library item successfully', async () => {
+  describe("create", () => {
+    it("should create library item successfully", async () => {
       // Test happy path
     });
-    it('should validate media type', async () => {
+    it("should validate media type", async () => {
       // Test validation
     });
-    it('should check ownership on update', async () => {
+    it("should check ownership on update", async () => {
       // Test ownership
     });
     // ... more tests
   });
 
-  describe('updateStatus', () => {
-    it('should allow valid status transitions', async () => {
+  describe("updateStatus", () => {
+    it("should allow valid status transitions", async () => {
       // Test all valid transitions
     });
-    it('should reject invalid status transitions', async () => {
+    it("should reject invalid status transitions", async () => {
       // Test invalid transitions
     });
     // ... more tests
@@ -107,7 +116,8 @@ describe('LibraryService', () => {
 });
 ```
 
-**Verification**: 
+**Verification**:
+
 - [ ] library.service.spec.ts created
 - [ ] All public methods have unit tests
 - [ ] Edge cases covered
@@ -118,11 +128,13 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-002: media.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Location**: `apps/backend/src/media/media.service.ts`
 
 **Description**: Media catalog service with NO unit tests. Handles:
+
 - Media metadata fetching
 - Related media queries
 - Search functionality
@@ -137,11 +149,13 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-003: progress.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Location**: `apps/backend/src/progress/progress.service.ts`
 
 **Description**: Progress tracking service with NO unit tests. Handles:
+
 - Progress updates
 - Episode/season tracking
 - Percentage calculations
@@ -155,11 +169,13 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-004: interaction.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Location**: `apps/backend/src/interaction/interaction.service.ts`
 
 **Description**: User interaction tracking service with NO unit tests. Handles:
+
 - Like/dislike tracking
 - Bookmarking
 - Favorites
@@ -174,24 +190,28 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-005: analytics/discovery.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: CRITICAL
 
 **Location**: `apps/backend/src/analytics/discovery.service.ts`
 
 **Description**: **MOST CRITICAL** - Complex analytics service with NO unit tests. Handles:
+
 - Year in review generation
 - Insights calculation
 - Statistics aggregation
 - Trend analysis
 - Multiple data sources
 
-**Impact**: 
+**Impact**:
+
 - Analytics features completely untested
 - Complex logic with no verification
 - Silent failures (see EH-001)
 - Data inconsistency risks
 
 **Methods Without Tests**:
+
 - getYearInReview() - Complex year-end summary
 - getTopMedia() - Top items calculation
 - getActivityInsights() - Activity analysis
@@ -200,6 +220,7 @@ describe('LibraryService', () => {
 - And many more...
 
 **Remediation**: Create comprehensive test file with:
+
 - Happy path tests
 - Edge case tests (empty data, boundary conditions)
 - Error handling tests
@@ -210,11 +231,13 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-006: analytics/analytics-aggregation.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: CRITICAL
 
 **Location**: `apps/backend/src/analytics/analytics-aggregation.service.ts`
 
 **Description**: **CRITICAL** - Analytics aggregation service with NO unit tests. Handles:
+
 - Overview statistics
 - Media analytics
 - Genre analytics
@@ -234,6 +257,7 @@ describe('LibraryService', () => {
 ---
 
 ### TEST-007: Concurrent Logins
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH
 
 **Location**: `apps/backend/src/auth/auth.service.ts`
@@ -241,6 +265,7 @@ describe('LibraryService', () => {
 **Description**: No tests for concurrent login attempts from the same user/session.
 
 **Edge Cases to Test**:
+
 - Multiple login requests simultaneously
 - Session race conditions
 - Token generation conflicts
@@ -249,19 +274,20 @@ describe('LibraryService', () => {
 **Impact**: Race conditions, session corruption, token conflicts.
 
 **Remediation**: Add concurrent login tests:
+
 ```typescript
-describe('concurrent logins', () => {
-  it('should handle concurrent login requests', async () => {
-    const loginPromises = Array(5).fill().map(() =>
-      service.login('user@example.com', 'password123')
-    );
+describe("concurrent logins", () => {
+  it("should handle concurrent login requests", async () => {
+    const loginPromises = Array(5)
+      .fill()
+      .map(() => service.login("user@example.com", "password123"));
     const results = await Promise.all(loginPromises);
-    
+
     // Verify all succeeded or failed appropriately
     // Verify no duplicate sessions created
   });
 
-  it('should prevent race condition in session creation', async () => {
+  it("should prevent race condition in session creation", async () => {
     // Test session creation under concurrent load
   });
 });
@@ -272,6 +298,7 @@ describe('concurrent logins', () => {
 ---
 
 ### TEST-008: Password Rehash Failure
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/auth/auth.service.ts:104-107`
@@ -283,14 +310,15 @@ describe('concurrent logins', () => {
 **Impact**: User logged in but password not upgraded, or login fails unexpectedly.
 
 **Remediation**: Add test for rehash failure:
+
 ```typescript
-it('should handle password rehash failure gracefully', async () => {
+it("should handle password rehash failure gracefully", async () => {
   // Mock compare to succeed but hash to fail
-  jest.spyOn(passwordService, 'compare').mockResolvedValue(true);
-  jest.spyOn(passwordService, 'hash').mockRejectedValue(new Error('Hash failure'));
-  
-  const result = await service.login('user@example.com', 'password123');
-  
+  jest.spyOn(passwordService, "compare").mockResolvedValue(true);
+  jest.spyOn(passwordService, "hash").mockRejectedValue(new Error("Hash failure"));
+
+  const result = await service.login("user@example.com", "password123");
+
   // Should still succeed (old hash still works)
   // Should log warning
   expect(result).toBeDefined();
@@ -303,6 +331,7 @@ it('should handle password rehash failure gracefully', async () => {
 ---
 
 ### TEST-009: Concurrent Updates in Library
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH
 
 **Location**: `apps/backend/src/library/library.repository.ts`
@@ -310,6 +339,7 @@ it('should handle password rehash failure gracefully', async () => {
 **Description**: No tests for concurrent updates to the same library item.
 
 **Edge Cases to Test**:
+
 - Two users updating the same item
 - Same user updating from multiple tabs
 - Status transition race conditions
@@ -318,17 +348,18 @@ it('should handle password rehash failure gracefully', async () => {
 **Impact**: Data loss, inconsistent state, last-write-wins issues.
 
 **Remediation**: Add concurrent update tests:
+
 ```typescript
-describe('concurrent updates', () => {
-  it('should handle concurrent updates to same item', async () => {
-    const itemId = 'test-item-id';
-    
+describe("concurrent updates", () => {
+  it("should handle concurrent updates to same item", async () => {
+    const itemId = "test-item-id";
+
     // Simulate two concurrent updates
-    const update1 = repository.update(itemId, userId, { status: 'WATCHING' });
+    const update1 = repository.update(itemId, userId, { status: "WATCHING" });
     const update2 = repository.update(itemId, userId, { rating: 5 });
-    
+
     const [result1, result2] = await Promise.all([update1, update2]);
-    
+
     // Verify both updates applied or proper conflict resolution
   });
 });
@@ -339,6 +370,7 @@ describe('concurrent updates', () => {
 ---
 
 ### TEST-010: Duplicate Items in Collections
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/collections/collections.service.ts`
@@ -346,6 +378,7 @@ describe('concurrent updates', () => {
 **Description**: No tests for adding duplicate items to collections.
 
 **Edge Cases to Test**:
+
 - Adding same item twice
 - Adding item already in another user's collection
 - Concurrent duplicate additions
@@ -353,20 +386,21 @@ describe('concurrent updates', () => {
 **Impact**: Duplicate entries, data inconsistency.
 
 **Remediation**: Add duplicate item tests:
+
 ```typescript
-describe('duplicate items', () => {
-  it('should reject duplicate items in collection', async () => {
-    const collectionId = 'test-collection';
-    const mediaId = 'test-media';
-    
-    await service.addItem(collectionId, userId, 'movie', mediaId);
-    
-    await expect(
-      service.addItem(collectionId, userId, 'movie', mediaId)
-    ).rejects.toThrow(ConflictException);
+describe("duplicate items", () => {
+  it("should reject duplicate items in collection", async () => {
+    const collectionId = "test-collection";
+    const mediaId = "test-media";
+
+    await service.addItem(collectionId, userId, "movie", mediaId);
+
+    await expect(service.addItem(collectionId, userId, "movie", mediaId)).rejects.toThrow(
+      ConflictException,
+    );
   });
 
-  it('should handle concurrent duplicate additions', async () => {
+  it("should handle concurrent duplicate additions", async () => {
     // Test race condition
   });
 });
@@ -377,6 +411,7 @@ describe('duplicate items', () => {
 ---
 
 ### TEST-011: Concurrent Wrapped Generation
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH
 
 **Location**: `apps/backend/src/wrapped/wrapped.service.ts`
@@ -384,6 +419,7 @@ describe('duplicate items', () => {
 **Description**: No tests for concurrent wrapped report generation.
 
 **Edge Cases to Test**:
+
 - Multiple users generating reports simultaneously
 - Same user generating multiple reports
 - Memory usage under concurrent load
@@ -391,22 +427,23 @@ describe('duplicate items', () => {
 **Impact**: Memory exhaustion, race conditions, performance degradation.
 
 **Remediation**: Add concurrent generation tests:
+
 ```typescript
-describe('concurrent wrapped generation', () => {
-  it('should handle concurrent report generation', async () => {
-    const userIds = Array(10).fill().map((_, i) => `user-${i}`);
-    
-    const promises = userIds.map(userId =>
-      service.generate(userId, 2024)
-    );
-    
+describe("concurrent wrapped generation", () => {
+  it("should handle concurrent report generation", async () => {
+    const userIds = Array(10)
+      .fill()
+      .map((_, i) => `user-${i}`);
+
+    const promises = userIds.map((userId) => service.generate(userId, 2024));
+
     const results = await Promise.all(promises);
-    
+
     // Verify all succeeded
     // Verify no memory issues
   });
 
-  it('should limit concurrent generations per user', async () => {
+  it("should limit concurrent generations per user", async () => {
     // Test rate limiting or queueing
   });
 });
@@ -421,6 +458,7 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-012: Auth Login Flow
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/auth/auth.service.ts`
@@ -428,11 +466,13 @@ describe('concurrent wrapped generation', () => {
 **Description**: Complex login flow with rate limiting, password verification, session creation, and token generation has insufficient test coverage.
 
 **Methods Needing More Tests**:
+
 - login() - Main login flow
 - tryDecodeAccessToken() - Token decoding
 - refresh() - Token refresh flow
 
 **Remediation**: Add comprehensive tests for:
+
 - All code paths in login
 - Error cases
 - Token generation
@@ -443,6 +483,7 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-013: Auth Token Decoding
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/auth/auth.service.ts:207-208`
@@ -450,6 +491,7 @@ describe('concurrent wrapped generation', () => {
 **Description**: tryDecodeAccessToken() has no tests for error handling.
 
 **Remediation**: Add tests for:
+
 - Valid token decoding
 - Expired token handling
 - Invalid token handling
@@ -460,6 +502,7 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-014: Collections Service
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL
 
 **Location**: `apps/backend/src/collections/collections.service.ts`
@@ -475,6 +518,7 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-015: Library Repository Complex Queries
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/library/library.repository.ts`
@@ -482,6 +526,7 @@ describe('concurrent wrapped generation', () => {
 **Description**: Complex queries in findAll and executeFindAll have insufficient coverage.
 
 **Methods Needing Tests**:
+
 - findAll() - With various filters
 - executeFindAll() - With different media types
 - cursorPagination() - Pagination logic
@@ -497,6 +542,7 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-016: wrapped.repository.ts Transaction Errors
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 101-110
 
 **Description**: Transaction errors not properly tested.
@@ -508,21 +554,24 @@ describe('concurrent wrapped generation', () => {
 ---
 
 ### TEST-017: Missing Integration Tests
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No integration tests for complex flows across multiple services.
 
 **Missing Integration Tests**:
+
 - Full auth flow (register -> login -> token refresh -> logout)
 - Library item creation -> analytics update
 - Collection creation -> item addition -> analytics update
 - File upload -> metadata extraction -> storage
 
 **Remediation**: Create integration test files:
+
 ```typescript
 // apps/backend/tests/integration/auth.flow.spec.ts
-describe('Auth Flow Integration', () => {
-  it('should handle complete auth flow', async () => {
+describe("Auth Flow Integration", () => {
+  it("should handle complete auth flow", async () => {
     // Register -> Login -> Refresh -> Logout
     // Verify all steps work together
   });
@@ -534,28 +583,31 @@ describe('Auth Flow Integration', () => {
 ---
 
 ### TEST-018: No Performance Tests
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No performance tests for slow operations.
 
 **Operations Needing Performance Tests**:
+
 - Wrapped report generation (currently has memory issue PERF-004)
 - Analytics queries with large datasets
 - File uploads with large files
 - Concurrent request handling
 
 **Remediation**: Add performance tests:
+
 ```typescript
-describe('Performance Tests', () => {
-  it('should generate wrapped report within 5 seconds', async () => {
+describe("Performance Tests", () => {
+  it("should generate wrapped report within 5 seconds", async () => {
     const start = Date.now();
     await service.generate(userId, 2024);
     const duration = Date.now() - start;
-    
+
     expect(duration).toBeLessThan(5000);
   }, 10000); // 10 second timeout
 
-  it('should handle 100 concurrent requests', async () => {
+  it("should handle 100 concurrent requests", async () => {
     // Test load handling
   });
 });
@@ -566,11 +618,13 @@ describe('Performance Tests', () => {
 ---
 
 ### TEST-019: No Security Regression Tests
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH
 
 **Description**: No automated tests to prevent regression of security fixes.
 
 **Missing Security Tests**:
+
 - IDOR prevention (SEC-017, SEC-018, SEC-019)
 - Open redirect prevention (SEC-003, SEC-004)
 - CSRF protection (SEC-005)
@@ -579,27 +633,28 @@ describe('Performance Tests', () => {
 - Authorization checks
 
 **Remediation**: Create security regression test suite (TASK 4 from original request):
+
 ```typescript
 // apps/backend/tests/security-regression.spec.ts
-describe('Security Regression Tests', () => {
-  describe('IDOR Prevention', () => {
-    it('should prevent accessing other users collections', async () => {
+describe("Security Regression Tests", () => {
+  describe("IDOR Prevention", () => {
+    it("should prevent accessing other users collections", async () => {
       // Test collections IDOR fix (commit c53d3e4)
     });
 
-    it('should prevent accessing other users journal entries', async () => {
+    it("should prevent accessing other users journal entries", async () => {
       // Test journal IDOR fix (commit c53d3e4)
     });
   });
 
-  describe('Open Redirect Prevention', () => {
-    it('should reject invalid redirect URLs in OAuth', async () => {
+  describe("Open Redirect Prevention", () => {
+    it("should reject invalid redirect URLs in OAuth", async () => {
       // Test open redirect fixes (SEC-003, SEC-004)
     });
   });
 
-  describe('CSRF Protection', () => {
-    it('should require CSRF token for form submissions', async () => {
+  describe("CSRF Protection", () => {
+    it("should require CSRF token for form submissions", async () => {
       // Test CSRF protection (SEC-005)
     });
   });
@@ -611,11 +666,13 @@ describe('Security Regression Tests', () => {
 ---
 
 ### TEST-020: No End-to-End Tests
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No end-to-end tests for full application flows.
 
 **Missing E2E Tests**:
+
 - User registration flow
 - Email verification flow
 - Password reset flow
@@ -639,6 +696,7 @@ describe('Security Regression Tests', () => {
 ---
 
 ### ARCH-001: AppShell.tsx Hardcoded Components
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH
 
 **Location**: `src/components/layout/AppShell.tsx:83`
@@ -647,13 +705,15 @@ describe('Security Regression Tests', () => {
 
 **Description**: RightSidebar is hardcoded with ActivityFeed component. Cannot customize sidebar for different routes or user preferences.
 
-**Impact**: 
+**Impact**:
+
 - Inflexible layout
 - Cannot customize sidebar per route
 - Cannot A/B test different sidebars
 - Hard to add/remove sidebar components
 
 **Remediation**: Make sidebar configurable:
+
 ```tsx
 // Option 1: Route-based sidebar
 <RightSidebar>
@@ -676,23 +736,27 @@ describe('Security Regression Tests', () => {
 ---
 
 ### ARCH-002: libraryStore.ts Mixed Concerns
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 110-200+
 
 **Location**: `src/lib/store/libraryStore.ts`
 
 **Description**: Zustand store handles:
+
 - State management (OK)
 - Business logic (status derivation, progress tracking - SHOULD BE ELSEWHERE)
 - Serialization (OK)
 - I/O operations (SHOULD BE ELSEWHERE)
 
-**Impact**: 
+**Impact**:
+
 - Violates Single Responsibility Principle
 - Hard to test business logic
 - Hard to reuse business logic
 - Store becomes bloated
 
 **Evidence**:
+
 ```typescript
 // libraryStore.ts:110-200+
 // Business logic mixed with state:
@@ -704,21 +768,23 @@ const updateProgress = (state: LibraryState, action: UpdateProgressAction) => {
 
 // Status derivation (business logic):
 const deriveStatus = (item: LibraryItem): Status => {
-  if (item.progress === 100) return 'COMPLETED';
-  if (item.progress > 0) return 'IN_PROGRESS';
-  return 'PLANNING';
+  if (item.progress === 100) return "COMPLETED";
+  if (item.progress > 0) return "IN_PROGRESS";
+  return "PLANNING";
 };
 ```
 
-**Remediation**: 
+**Remediation**:
+
 1. Extract business logic to domain service:
+
 ```typescript
 // library-domain.service.ts
 class LibraryDomainService {
   calculateProgress(item: LibraryItem, action: UpdateProgressAction): number {
     // Complex calculation
   }
-  
+
   deriveStatus(item: LibraryItem): Status {
     // Status derivation
   }
@@ -726,21 +792,24 @@ class LibraryDomainService {
 ```
 
 2. Keep store focused on state management:
+
 ```typescript
 // libraryStore.ts
 const useLibraryStore = create<LibraryState>()((set) => ({
   // State only
   items: [],
-  
+
   // Actions that update state
   setItems: (items) => set({ items }),
-  updateItem: (id, updates) => set(state => ({
-    items: state.items.map(item => item.id === id ? { ...item, ...updates } : item)
-  })),
+  updateItem: (id, updates) =>
+    set((state) => ({
+      items: state.items.map((item) => (item.id === id ? { ...item, ...updates } : item)),
+    })),
 }));
 ```
 
 3. Use domain service in components:
+
 ```typescript
 // Component.tsx
 const domainService = new LibraryDomainService();
@@ -756,26 +825,30 @@ const newStatus = domainService.deriveStatus(item);
 ---
 
 ### ARCH-003: API Module Potential Circular Dependency
+
 **Status**: ⚠️ POTENTIAL | **Severity**: MEDIUM
 
-**Location**: 
+**Location**:
+
 - `src/lib/api/fetch.ts`
 - `src/lib/api/constants.ts`
 
 **Description**: Potential circular dependency chain between API modules.
 
 **Evidence**:
+
 ```typescript
 // fetch.ts:1-8
-import { API_BASE_URL, API_TIMEOUT_MS } from './constants';
+import { API_BASE_URL, API_TIMEOUT_MS } from "./constants";
 
 // constants.ts:2
-import { API_BASE_URL } from './fetch'; // Indirect via usage
+import { API_BASE_URL } from "./fetch"; // Indirect via usage
 ```
 
 **Impact**: Build errors, runtime issues, hard to debug.
 
-**Remediation**: 
+**Remediation**:
+
 1. Remove circular imports
 2. Use dependency injection or move shared code to separate file
 3. Use forwardRef if necessary
@@ -789,6 +862,7 @@ import { API_BASE_URL } from './fetch'; // Indirect via usage
 ---
 
 ### ARCH-004: Single Responsibility Violation - libraryStore.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 110-400+
 
 **Location**: `src/lib/store/libraryStore.ts`
@@ -804,6 +878,7 @@ import { API_BASE_URL } from './fetch'; // Indirect via usage
 ---
 
 ### ARCH-005: Open/Closed Violation - fetch.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 204-371
 
 **Location**: `src/lib/api/fetch.ts`
@@ -813,6 +888,7 @@ import { API_BASE_URL } from './fetch'; // Indirect via usage
 **Impact**: Hard to add new features, risk of breaking existing functionality.
 
 **Remediation**: Use middleware/chain of responsibility pattern:
+
 ```typescript
 // Instead of modifying apiFetch for each case:
 // apiFetch.ts
@@ -820,7 +896,10 @@ const apiFetchWithAuthRefresh = async (input: RequestInfo, init?: RequestInit) =
   let response = await apiFetch(input, init);
   if (response.status === 401) {
     // Refresh token
-    response = await apiFetch(input, { ...init, headers: { ...init?.headers, Authorization: newToken } });
+    response = await apiFetch(input, {
+      ...init,
+      headers: { ...init?.headers, Authorization: newToken },
+    });
   }
   return response;
 };
@@ -833,6 +912,7 @@ const apiFetchWithAuthRefresh = async (input: RequestInfo, init?: RequestInit) =
 ---
 
 ### ARCH-006: Liskov Substitution Violation - errors.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 1-57
 
 **Location**: `src/lib/api/errors.ts`
@@ -848,6 +928,7 @@ const apiFetchWithAuthRefresh = async (input: RequestInfo, init?: RequestInit) =
 ---
 
 ### ARCH-007: Interface Segregation Violation - libraryStore.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 52-95
 
 **Location**: `src/lib/store/libraryStore.ts`
@@ -857,6 +938,7 @@ const apiFetchWithAuthRefresh = async (input: RequestInfo, init?: RequestInit) =
 **Impact**: Tight coupling, hard to use partial functionality.
 
 **Remediation**: Split interfaces by domain:
+
 ```typescript
 interface LibraryActions {
   addItem: (item: LibraryItem) => void;
@@ -876,6 +958,7 @@ interface SyncActions {
 ---
 
 ### ARCH-008: Dependency Inversion Violation - AppShell.tsx
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 5-18
 
 **Location**: `src/components/layout/AppShell.tsx`
@@ -885,10 +968,11 @@ interface SyncActions {
 **Impact**: Hard to swap implementations, tight coupling.
 
 **Remediation**: Use dependency injection or props:
+
 ```tsx
 // Instead of:
-import { AtmosphereBackground } from '@/components/common/AtmosphereBackground';
-import { Sidebar } from '@/components/layout/Sidebar';
+import { AtmosphereBackground } from "@/components/common/AtmosphereBackground";
+import { Sidebar } from "@/components/layout/Sidebar";
 
 // Use:
 interface LayoutProps {
@@ -906,19 +990,23 @@ interface LayoutProps {
 ---
 
 ### ARCH-009: useLibrarySync.ts Direct API Calls
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 42-125
 
 **Location**: `src/lib/store/useLibrarySync.ts`
 
 **Description**: Hook directly calls API (`useUpdateLibraryItem`) and manages sync logic. Should be separated - API calls in service layer, sync logic in hook.
 
-**Impact**: 
+**Impact**:
+
 - Hook is hard to test
 - Hook has side effects
 - Concerns mixed
 
-**Remediation**: 
+**Remediation**:
+
 1. Move API calls to service:
+
 ```typescript
 // library-sync.service.ts
 class LibrarySyncService {
@@ -929,15 +1017,12 @@ class LibrarySyncService {
 ```
 
 2. Keep hook focused on React lifecycle:
+
 ```typescript
 // useLibrarySync.ts
 export function useLibrarySync() {
-  const { data, error } = useQuery(
-    ['library-sync'],
-    () => librarySyncService.sync(),
-    { retry: 3 }
-  );
-  
+  const { data, error } = useQuery(["library-sync"], () => librarySyncService.sync(), { retry: 3 });
+
   return { data, error, isLoading: !data && !error };
 }
 ```
@@ -947,25 +1032,28 @@ export function useLibrarySync() {
 ---
 
 ### ARCH-010: __root.tsx Session Logic
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 185-209
 
 **Location**: `src/routes/__root.tsx`
 
 **Description**: Session restoration logic in root component. Should be in dedicated auth service or hook.
 
-**Impact**: 
+**Impact**:
+
 - Root component is bloated
 - Hard to test session logic
 - Hard to reuse session logic
 
 **Remediation**: Extract to auth service/hook:
+
 ```tsx
 // auth.service.ts
 class AuthService {
   async restoreSession(): Promise<User | null> {
-    const token = localStorage.getItem('accessToken');
+    const token = localStorage.getItem("accessToken");
     if (!token) return null;
-    
+
     try {
       const user = await this.validateToken(token);
       return user;
@@ -979,20 +1067,23 @@ class AuthService {
 export function useAuth() {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
-    authService.restoreSession().then(setUser).finally(() => setLoading(false));
+    authService
+      .restoreSession()
+      .then(setUser)
+      .finally(() => setLoading(false));
   }, []);
-  
+
   return { user, loading };
 }
 
 // __root.tsx
 function Root() {
   const { user, loading } = useAuth();
-  
+
   if (loading) return <LoadingScreen />;
-  
+
   return user ? <AuthenticatedApp /> : <PublicApp />;
 }
 ```
@@ -1006,9 +1097,11 @@ function Root() {
 ---
 
 ### ARCH-011: useMutation with vs without onSuccess
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
-**Location**: 
+**Location**:
+
 - `src/hooks/use-auth.ts:16-26` (with onSuccess)
 - `src/hooks/use-library.ts:73-86` (without onSuccess)
 
@@ -1023,9 +1116,11 @@ function Root() {
 ---
 
 ### ARCH-012: Return Types Inconsistency
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
-**Location**: 
+**Location**:
+
 - `src/lib/api/auth.ts:14-19` (returns full response)
 - `src/lib/api/library.ts:34-38` (returns data only)
 
@@ -1034,6 +1129,7 @@ function Root() {
 **Impact**: Hard to consume, inconsistent error handling.
 
 **Remediation**: Standardize on one response format:
+
 ```typescript
 // Option 1: Always wrap in ApiResponse
 interface ApiResponse<T> {
@@ -1050,9 +1146,11 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-013: Validation Patterns Inconsistency
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
-**Location**: 
+**Location**:
+
 - `src/routes/app.library.$kind.tsx:24-30` (beforeLoad)
 - `src/routes/app.media.$id.tsx:50` (loader)
 
@@ -1071,6 +1169,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-014: No Dependency Injection
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Services directly instantiate dependencies instead of using DI.
@@ -1084,6 +1183,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-015: Service Locator Pattern
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Some code uses service locator pattern instead of DI.
@@ -1097,6 +1197,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-016-017: Missing Abstractions
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 - **ARCH-016**: No interfaces for services (concrete types used)
@@ -1109,6 +1210,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-018: Inconsistent Repository Pattern
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Repository pattern inconsistently applied across the codebase.
@@ -1120,6 +1222,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-019: Business Logic in Controllers
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Business logic in controller layer instead of service layer.
@@ -1133,6 +1236,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-020: Data Access in Services
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Direct data access in service layer instead of repository layer.
@@ -1146,6 +1250,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-021: No Clear Layer Boundaries
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Layer boundaries are unclear and inconsistently enforced.
@@ -1153,6 +1258,7 @@ interface ApiResponse<T> {
 **Impact**: Spaghetti architecture, hard to maintain.
 
 **Remediation**: Define and enforce clear layer boundaries:
+
 - Controllers: Handle HTTP requests/responses
 - Services: Business logic
 - Repositories: Data access
@@ -1163,6 +1269,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-022: Circular Import Risks
+
 **Status**: ⚠️ POTENTIAL | **Severity**: MEDIUM
 
 **Description**: Multiple files with potential circular import chains.
@@ -1176,6 +1283,7 @@ interface ApiResponse<T> {
 ---
 
 ### ARCH-023-026: Code Quality Issues
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 - **ARCH-023**: God services (too many responsibilities)
@@ -1200,11 +1308,13 @@ interface ApiResponse<T> {
 ---
 
 ### PREM-001: No Monitoring/Metrics
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Description**: No production monitoring or metrics system in place.
 
 **Missing Features**:
+
 - Request rate tracking
 - Error rate tracking
 - Response time tracking
@@ -1213,7 +1323,8 @@ interface ApiResponse<T> {
 - CPU usage monitoring
 - Custom business metrics (users, library items, etc.)
 
-**Impact**: 
+**Impact**:
+
 - **BLIND IN PRODUCTION** - No visibility into issues
 - Cannot detect performance degradation
 - Cannot detect outages
@@ -1223,6 +1334,7 @@ interface ApiResponse<T> {
 **Remediation**: Implement comprehensive monitoring:
 
 **Backend (NestJS)**:
+
 ```typescript
 // Install packages:
 npm install @nestjs/terminus prom-client
@@ -1257,34 +1369,35 @@ export class AppModule {}
 ```
 
 **Custom Metrics**:
+
 ```typescript
 // monitoring.service.ts
-import { Injectable } from '@nestjs/common';
-import { Counter, Gauge, Histogram } from 'prom-client';
+import { Injectable } from "@nestjs/common";
+import { Counter, Gauge, Histogram } from "prom-client";
 
 @Injectable()
 export class MonitoringService {
   private requestsTotal = new Counter({
-    name: 'http_requests_total',
-    help: 'Total number of HTTP requests',
-    labelNames: ['method', 'route', 'status'],
+    name: "http_requests_total",
+    help: "Total number of HTTP requests",
+    labelNames: ["method", "route", "status"],
   });
 
   private requestDuration = new Histogram({
-    name: 'http_request_duration_seconds',
-    help: 'Duration of HTTP requests in seconds',
+    name: "http_request_duration_seconds",
+    help: "Duration of HTTP requests in seconds",
     buckets: [0.1, 0.5, 1, 2, 5, 10],
   });
 
   private activeUsers = new Gauge({
-    name: 'active_users',
-    help: 'Number of active users',
+    name: "active_users",
+    help: "Number of active users",
   });
 
   private libraryItems = new Gauge({
-    name: 'library_items_total',
-    help: 'Total number of library items',
-    labelNames: ['media_type'],
+    name: "library_items_total",
+    help: "Total number of library items",
+    labelNames: ["media_type"],
   });
 
   incrementRequests(method: string, route: string, status: number) {
@@ -1306,6 +1419,7 @@ export class MonitoringService {
 ```
 
 **Grafana Setup**:
+
 - Create dashboards for:
   - Request rates
   - Error rates
@@ -1315,6 +1429,7 @@ export class MonitoringService {
   - Business metrics
 
 **Alerting**:
+
 - Set up alerts for:
   - Error rate > 1%
   - Response time > 2s
@@ -1327,11 +1442,13 @@ export class MonitoringService {
 ---
 
 ### PREM-002: No Health Checks
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Impact**: HIGH
 
 **Description**: No health check endpoint to verify service status.
 
-**Impact**: 
+**Impact**:
+
 - Cannot verify service is running
 - Cannot detect partial outages
 - Cannot check dependencies (database, Redis, etc.)
@@ -1340,10 +1457,15 @@ export class MonitoringService {
 
 ```typescript
 // health.controller.ts
-import { Controller, Get } from '@nestjs/common';
-import { HealthCheck, HealthCheckService, DiskHealthIndicator, MemoryHealthIndicator } from '@nestjs/terminus';
+import { Controller, Get } from "@nestjs/common";
+import {
+  HealthCheck,
+  HealthCheckService,
+  DiskHealthIndicator,
+  MemoryHealthIndicator,
+} from "@nestjs/terminus";
 
-@Controller('health')
+@Controller("health")
 export class HealthController {
   constructor(
     private health: HealthCheckService,
@@ -1357,21 +1479,22 @@ export class HealthController {
   @HealthCheck()
   async check() {
     return this.health.check([
-      () => this.disk.checkStorage('storage', { thresholdPercent: 0.9, path: '/' }),
-      () => this.memory.checkHeap('memory_heap', 200 * 1024 * 1024),
-      () => this.prismaHealth.isHealthy('prisma'),
-      () => this.redisHealth.isHealthy('redis'),
+      () => this.disk.checkStorage("storage", { thresholdPercent: 0.9, path: "/" }),
+      () => this.memory.checkHeap("memory_heap", 200 * 1024 * 1024),
+      () => this.prismaHealth.isHealthy("prisma"),
+      () => this.redisHealth.isHealthy("redis"),
     ]);
   }
 
-  @Get('ping')
+  @Get("ping")
   ping() {
-    return { status: 'ok', timestamp: new Date().toISOString() };
+    return { status: "ok", timestamp: new Date().toISOString() };
   }
 }
 ```
 
 **Health Check Types**:
+
 - Liveness: Is the app running? (ping)
 - Readiness: Can the app serve requests? (dependencies check)
 - Startup: Has the app started successfully?
@@ -1381,11 +1504,13 @@ export class HealthController {
 ---
 
 ### PREM-003: No Feature Flags
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Description**: No feature flag system for safely toggling features.
 
-**Impact**: 
+**Impact**:
+
 - Cannot toggle features without deployment
 - Cannot do gradual rollouts
 - Cannot kill switch broken features
@@ -1394,11 +1519,13 @@ export class HealthController {
 **Remediation**: Implement feature flag system:
 
 **Option 1: Use LaunchDarkly or similar service**:
+
 ```typescript
 npm install launchdarkly-node-server-sdk
 ```
 
 **Option 2: Simple in-house solution**:
+
 ```typescript
 // feature-flags.service.ts
 @Injectable()
@@ -1407,9 +1534,9 @@ export class FeatureFlagsService {
 
   constructor(private config: ConfigService) {
     this.flags = {
-      newDashboard: this.config.get<boolean>('FEATURE_NEW_DASHBOARD') ?? false,
-      wrappedV2: this.config.get<boolean>('FEATURE_WRAPPED_V2') ?? false,
-      advancedSearch: this.config.get<boolean>('FEATURE_ADVANCED_SEARCH') ?? false,
+      newDashboard: this.config.get<boolean>("FEATURE_NEW_DASHBOARD") ?? false,
+      wrappedV2: this.config.get<boolean>("FEATURE_WRAPPED_V2") ?? false,
+      advancedSearch: this.config.get<boolean>("FEATURE_ADVANCED_SEARCH") ?? false,
     };
   }
 
@@ -1430,8 +1557,8 @@ export class FeatureFlagGuard implements CanActivate {
 }
 
 // Usage:
-@UseGuards(FeatureFlagGuard('newDashboard'))
-@Controller('new-dashboard')
+@UseGuards(FeatureFlagGuard("newDashboard"))
+@Controller("new-dashboard")
 export class NewDashboardController {}
 ```
 
@@ -1440,11 +1567,13 @@ export class NewDashboardController {}
 ---
 
 ### PREM-004: No Circuit Breakers
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Description**: No circuit breakers to prevent cascading failures.
 
-**Impact**: 
+**Impact**:
+
 - One failing dependency can take down entire service
 - No graceful degradation
 - No automatic recovery
@@ -1452,6 +1581,7 @@ export class NewDashboardController {}
 **Remediation**: Implement circuit breakers:
 
 **Option 1: Use Opossum library**:
+
 ```typescript
 npm install opossum
 
@@ -1500,6 +1630,7 @@ async getUserData(userId: string): Promise<UserData> {
 ```
 
 **Option 2: Use NestJS Circuit Breaker** (if available):
+
 ```typescript
 // Similar pattern with NestJS-specific implementation
 ```
@@ -1509,11 +1640,13 @@ async getUserData(userId: string): Promise<UserData> {
 ---
 
 ### PREM-005: No Distributed Tracing
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Description**: No distributed tracing for debugging distributed requests.
 
-**Impact**: 
+**Impact**:
+
 - Hard to debug slow requests
 - Hard to trace requests across services
 - Cannot identify performance bottlenecks
@@ -1521,6 +1654,7 @@ async getUserData(userId: string): Promise<UserData> {
 **Remediation**: Implement distributed tracing:
 
 **Option 1: OpenTelemetry**:
+
 ```typescript
 npm install @opentelemetry/sdk-node @opentelemetry/auto-instrumentations-node @opentelemetry/exporter-jaeger
 
@@ -1546,11 +1680,13 @@ process.on('SIGTERM', () => {
 ```
 
 **Option 2: Datadog APM**:
+
 ```typescript
 // Similar setup for Datadog
 ```
 
 **Frontend Tracing**:
+
 - Use OpenTelemetry for React
 - Propagate trace context via headers
 - Connect frontend and backend traces
@@ -1560,13 +1696,15 @@ process.on('SIGTERM', () => {
 ---
 
 ### PREM-006: No Request IDs for Support
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Location**: `src/lib/api/fetch.ts:14,335`
 
 **Description**: Request IDs are received from backend but not surfaced to users for support requests.
 
-**Impact**: 
+**Impact**:
+
 - Users cannot reference specific requests in support tickets
 - Hard to correlate frontend and backend logs
 - Poor support experience
@@ -1609,11 +1747,13 @@ function showError(error: ApiError) {
 ---
 
 ### PREM-007: No API Versioning
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Description**: No API versioning strategy. All endpoints at `/api/*` without version prefix.
 
-**Impact**: 
+**Impact**:
+
 - Cannot make breaking changes without affecting all clients
 - Cannot deprecate old endpoints gradually
 - Hard to maintain multiple API versions
@@ -1621,6 +1761,7 @@ function showError(error: ApiError) {
 **Remediation**: Implement API versioning:
 
 **Option 1: Path-based versioning**:
+
 ```typescript
 // Old endpoints:
 @Post('/auth/login')
@@ -1631,18 +1772,20 @@ function showError(error: ApiError) {
 ```
 
 **Option 2: Header-based versioning**:
+
 ```typescript
 // Accept-Version header
-const version = request.headers['accept-version'] ?? 'v1';
+const version = request.headers["accept-version"] ?? "v1";
 
 // Or custom header
-const version = request.headers['x-api-version'] ?? 'v1';
+const version = request.headers["x-api-version"] ?? "v1";
 ```
 
 **Option 3: Query parameter versioning**:
+
 ```typescript
 // /api/auth/login?apiVersion=v1
-const version = request.query.apiVersion ?? 'v1';
+const version = request.query.apiVersion ?? "v1";
 ```
 
 **Recommendation**: Use path-based versioning for clarity.
@@ -1656,13 +1799,15 @@ const version = request.query.apiVersion ?? 'v1';
 ---
 
 ### PREM-008: Console Logging in Production
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Location**: `src/lib/analytics.ts:16,23,36,49`
 
 **Description**: Uses `console.log`/`console.error` directly instead of structured logging.
 
-**Impact**: 
+**Impact**:
+
 - Logs not structured (hard to query)
 - Logs not persistent (lost on container restart)
 - No log levels (can't filter)
@@ -1684,7 +1829,7 @@ export class StructuredLogger extends PinoLogger implements LoggerService {
   trackEvent(event: string, properties?: Record<string, unknown>) {
     this.logger.info({ event, ...properties });
   }
-  
+
   trackError(error: Error, context?: Record<string, unknown>) {
     this.logger.error({
       error: error.message,
@@ -1703,6 +1848,7 @@ this.logger.trackEvent('analytics', { userId, eventType });
 ```
 
 **Logging Best Practices**:
+
 - Use structured format (JSON)
 - Include request ID in all logs
 - Include user ID (when available)
@@ -1714,6 +1860,7 @@ this.logger.trackEvent('analytics', { userId, eventType });
 ---
 
 ### PREM-009: No Request ID in Logs
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Location**: `src/server.ts:63,127`
@@ -1726,27 +1873,29 @@ this.logger.trackEvent('analytics', { userId, eventType });
 
 ```typescript
 // middleware/logger.middleware.ts
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
-import { v4 as uuidv4 } from 'uuid';
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { Request, Response, NextFunction } from "express";
+import { v4 as uuidv4 } from "uuid";
 
 @Injectable()
 export class RequestIdMiddleware implements NestMiddleware {
   use(req: Request, res: Response, next: NextFunction) {
-    const requestId = req.headers['x-request-id'] as string ?? uuidv4();
+    const requestId = (req.headers["x-request-id"] as string) ?? uuidv4();
     (req as any).requestId = requestId;
-    res.setHeader('x-request-id', requestId);
-    
+    res.setHeader("x-request-id", requestId);
+
     // Add to logger context
     (req as any).log = (message: string, data?: any) => {
-      console.log(JSON.stringify({
-        timestamp: new Date().toISOString(),
-        requestId,
-        message,
-        ...data,
-      }));
+      console.log(
+        JSON.stringify({
+          timestamp: new Date().toISOString(),
+          requestId,
+          message,
+          ...data,
+        }),
+      );
     };
-    
+
     next();
   }
 }
@@ -1764,6 +1913,7 @@ logger.info(message, {
 ---
 
 ### PREM-010: No Log Levels
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: LOW
 
 **Location**: Multiple files
@@ -1773,6 +1923,7 @@ logger.info(message, {
 **Impact**: Cannot filter logs by severity.
 
 **Remediation**: Use proper log levels:
+
 - ERROR: Critical failures
 - WARN: Non-critical issues
 - INFO: Normal operations
@@ -1788,6 +1939,7 @@ logger.info(message, {
 ---
 
 ### PREM-011: API_BASE_URL Hardcoded Fallback
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Impact**: MEDIUM
 
 **Location**: `src/lib/api/constants.ts:2`
@@ -1796,21 +1948,23 @@ logger.info(message, {
 
 **Description**: Falls back to `/api` if VITE_API_URL not set. This may not work in all environments.
 
-**Impact**: 
+**Impact**:
+
 - May point to wrong API in production
 - Hardcoded fallback may not be appropriate
 
 **Remediation**: Fail fast or use environment-specific defaults:
+
 ```typescript
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 if (!API_BASE_URL) {
-  const env = import.meta.env.MODE || 'development';
-  if (env === 'production') {
-    throw new Error('VITE_API_URL is required in production');
+  const env = import.meta.env.MODE || "development";
+  if (env === "production") {
+    throw new Error("VITE_API_URL is required in production");
   }
   // In development, use default
-  API_BASE_URL = '/api';
+  API_BASE_URL = "/api";
 }
 ```
 
@@ -1819,11 +1973,13 @@ if (!API_BASE_URL) {
 ---
 
 ### PREM-012: API Timeouts Hardcoded
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: LOW
 
 **Location**: `src/lib/api/constants.ts:4-7`
 
 **Code**:
+
 ```typescript
 const API_TIMEOUT_MS = 10000;
 const API_RETRY_COUNT = 3;
@@ -1835,6 +1991,7 @@ const API_RETRY_DELAY_MS = 1000;
 **Impact**: Cannot tune for different environments or use cases.
 
 **Remediation**: Make configurable via environment:
+
 ```typescript
 const API_TIMEOUT_MS = Number(import.meta.env.VITE_API_TIMEOUT_MS) || 10000;
 const API_RETRY_COUNT = Number(import.meta.env.VITE_API_RETRY_COUNT) || 3;
@@ -1846,6 +2003,7 @@ const API_RETRY_DELAY_MS = Number(import.meta.env.VITE_API_RETRY_DELAY_MS) || 10
 ---
 
 ### PREM-013: BACKEND_URL Logic Hardcoded
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: LOW
 
 **Location**: `src/server.ts:70-79`
@@ -1865,6 +2023,7 @@ const API_RETRY_DELAY_MS = Number(import.meta.env.VITE_API_RETRY_DELAY_MS) || 10
 ---
 
 ### PREM-014: Rate Limit Retries Without Jitter
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: MEDIUM
 
 **Location**: `src/lib/api/fetch.ts:344-346`
@@ -1874,6 +2033,7 @@ const API_RETRY_DELAY_MS = Number(import.meta.env.VITE_API_RETRY_DELAY_MS) || 10
 **Impact**: Thundering herd problem - all retries hit at the same time.
 
 **Remediation**: Add jitter to retry delays:
+
 ```typescript
 const baseDelay = 1000;
 const jitter = Math.random() * 500; // 0-500ms jitter
@@ -1885,6 +2045,7 @@ const delay = baseDelay + jitter;
 ---
 
 ### PREM-015: Transport Retries Without Exponential Backoff
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: MEDIUM
 
 **Location**: `src/lib/api/fetch.ts:222`
@@ -1894,6 +2055,7 @@ const delay = baseDelay + jitter;
 **Impact**: Inefficient retry strategy, may overwhelm server.
 
 **Remediation**: Use exponential backoff:
+
 ```typescript
 const delays = [1000, 2000, 4000, 8000]; // Exponential backoff
 const delay = delays[retryCount - 1] || 8000;
@@ -1904,6 +2066,7 @@ const delay = delays[retryCount - 1] || 8000;
 ---
 
 ### PREM-016: No Backoff for Auth Refresh
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Impact**: MEDIUM
 
 **Location**: `src/lib/api/fetch.ts:292-296`
@@ -1923,6 +2086,7 @@ const delay = delays[retryCount - 1] || 8000;
 ---
 
 ### PREM-017: No Rate Limiting Per Endpoint
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Global rate limiting but no per-endpoint configuration.
@@ -1930,6 +2094,7 @@ const delay = delays[retryCount - 1] || 8000;
 **Impact**: Cannot fine-tune rate limits for sensitive endpoints.
 
 **Remediation**: Add per-endpoint rate limiting:
+
 ```typescript
 // In NestJS:
 @Throttle({ default: { limit: 10, ttl: 60000 } })
@@ -1947,11 +2112,13 @@ async login() {}
 ---
 
 ### PREM-018: No Caching Strategy
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No caching strategy for repeated requests.
 
-**Impact**: 
+**Impact**:
+
 - Repeated requests hit database
 - Poor performance for common queries
 - Higher database load
@@ -1959,6 +2126,7 @@ async login() {}
 **Remediation**: Implement caching:
 
 **Backend (NestJS)**:
+
 ```typescript
 import { CacheModule, CacheInterceptor } from '@nestjs/cache-manager';
 
@@ -1986,6 +2154,7 @@ async getUser(@Param('id') userId: string) {}
 ```
 
 **Frontend (React Query)**:
+
 ```typescript
 // Already using React Query which has built-in caching
 // Just need to configure properly:
@@ -2005,6 +2174,7 @@ const queryClient = new QueryClient({
 ---
 
 ### PREM-019: No Cache Invalidation
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No cache invalidation strategy for mutations.
@@ -2014,6 +2184,7 @@ const queryClient = new QueryClient({
 **Remediation**: Implement cache invalidation:
 
 **Backend**:
+
 ```typescript
 // Use CacheInterceptor with proper keys
 @CacheKey('get-library-${userId}')
@@ -2027,14 +2198,15 @@ async updateLibrary() {}
 ```
 
 **Frontend**:
+
 ```typescript
 // React Query cache invalidation
 const mutation = useMutation(updateLibraryItem, {
   onSuccess: () => {
     // Invalidate library queries
-    queryClient.invalidateQueries(['library']);
-    queryClient.invalidateQueries(['library-stats']);
-    queryClient.invalidateQueries(['library-recent']);
+    queryClient.invalidateQueries(["library"]);
+    queryClient.invalidateQueries(["library-stats"]);
+    queryClient.invalidateQueries(["library-recent"]);
   },
 });
 ```
@@ -2044,6 +2216,7 @@ const mutation = useMutation(updateLibraryItem, {
 ---
 
 ### PREM-020: No Connection Pooling Awareness
+
 **Status**: ❌ UNFIXED | **Severity**: LOW
 
 **Description**: API client not aware of database connection pooling limits.
@@ -2051,6 +2224,7 @@ const mutation = useMutation(updateLibraryItem, {
 **Impact**: May exhaust database connections.
 
 **Remediation**: Add connection pooling awareness:
+
 ```typescript
 // Limit concurrent requests
 const maxConcurrentRequests = 50;
@@ -2066,6 +2240,7 @@ async function apiFetch(input: RequestInfo, init?: RequestInit) {
 ---
 
 ### PREM-021: No Graceful Degradation
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No graceful degradation when dependencies fail.
@@ -2073,6 +2248,7 @@ async function apiFetch(input: RequestInfo, init?: RequestInit) {
 **Impact**: Service unavailable when non-critical dependencies fail.
 
 **Remediation**: Implement graceful degradation:
+
 ```typescript
 // Circuit breaker with fallback (see PREM-004)
 
@@ -2105,6 +2281,7 @@ export class ReadOnlyService {
 ---
 
 ### PREM-022: No Bulk Operations
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No bulk operations for creating/updating multiple items.
@@ -2112,6 +2289,7 @@ export class ReadOnlyService {
 **Impact**: N+1 problem for bulk operations, slow for bulk actions.
 
 **Remediation**: Add bulk operations:
+
 ```typescript
 // Instead of:
 for (const item of items) {
@@ -2127,6 +2305,7 @@ await service.bulkCreate(items);
 ---
 
 ### PREM-023: No Idempotency Keys
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: No idempotency keys for preventing duplicate operations.
@@ -2134,6 +2313,7 @@ await service.bulkCreate(items);
 **Impact**: Duplicate operations possible (double charges, double entries).
 
 **Remediation**: Add idempotency keys:
+
 ```typescript
 // Backend:
 @Post('/process-payment')
@@ -2161,6 +2341,7 @@ const response = await fetch('/api/process-payment', {
 ---
 
 ### PREM-024: No Request Deduplication
+
 **Status**: ❌ UNFIXED | **Severity**: LOW
 
 **Description**: No request deduplication for preventing duplicate requests.
@@ -2168,6 +2349,7 @@ const response = await fetch('/api/process-payment', {
 **Impact**: Duplicate requests processed, wasted resources.
 
 **Remediation**: Add request deduplication:
+
 ```typescript
 // Backend:
 const seenRequests = new Set<string>();
@@ -2175,14 +2357,14 @@ const seenRequests = new Set<string>();
 @Post('/expensive-operation')
 async expensiveOperation(@Req() req: Request) {
   const requestKey = req.ip + req.path + JSON.stringify(req.body);
-  
+
   if (seenRequests.has(requestKey)) {
     throw new ConflictException('Request already processing');
   }
-  
+
   seenRequests.add(requestKey);
   setTimeout(() => seenRequests.delete(requestKey), 10000);
-  
+
   return this.processRequest();
 }
 ```
@@ -2192,6 +2374,7 @@ async expensiveOperation(@Req() req: Request) {
 ---
 
 ### PREM-025: No Response Compression
+
 **Status**: ❌ UNFIXED | **Severity**: LOW
 
 **Description**: No response compression for large responses.
@@ -2199,9 +2382,10 @@ async expensiveOperation(@Req() req: Request) {
 **Impact**: Slower responses, higher bandwidth usage.
 
 **Remediation**: Enable response compression:
+
 ```typescript
 // Backend (NestJS):
-import { CompressionModule } from '@nestjs/common';
+import { CompressionModule } from "@nestjs/common";
 
 @Module({
   imports: [
@@ -2219,7 +2403,7 @@ export class AppModule {}
 export default defineConfig({
   server: {
     headers: {
-      'Content-Encoding': 'gzip',
+      "Content-Encoding": "gzip",
     },
   },
 });
@@ -2230,6 +2414,7 @@ export default defineConfig({
 ---
 
 ### PREM-026: No Security Headers
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Description**: Missing security headers for production.
@@ -2239,30 +2424,31 @@ export default defineConfig({
 **Remediation**: Add security headers (see SEC-022 for Helmet configuration).
 
 **Additional Headers**:
+
 ```typescript
 // Content Security Policy
 app.use(
   helmet.contentSecurityPolicy({
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", 'cdn.example.com'],
+      scriptSrc: ["'self'", "'unsafe-inline'", "cdn.example.com"],
       styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", 'data:', 'blob:', 'cdn.example.com'],
-      connectSrc: ["'self'", 'api.example.com'],
+      imgSrc: ["'self'", "data:", "blob:", "cdn.example.com"],
+      connectSrc: ["'self'", "api.example.com"],
       fontSrc: ["'self'"],
       objectSrc: ["'none'"],
       frameSrc: ["'none'"],
     },
-  })
+  }),
 );
 
 // Additional headers
 app.use((req, res, next) => {
-  res.setHeader('X-Content-Type-Options', 'nosniff');
-  res.setHeader('X-Frame-Options', 'DENY');
-  res.setHeader('X-XSS-Protection', '1; mode=block');
-  res.setHeader('Referrer-Policy', 'same-origin');
-  res.setHeader('Permissions-Policy', 'geolocation=(), microphone=(), camera=()');
+  res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "DENY");
+  res.setHeader("X-XSS-Protection", "1; mode=block");
+  res.setHeader("Referrer-Policy", "same-origin");
+  res.setHeader("Permissions-Policy", "geolocation=(), microphone=(), camera=()");
   next();
 });
 ```
@@ -2282,9 +2468,11 @@ app.use((req, res, next) => {
 ---
 
 ### UX-001: Session Expired Messages
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Location**: `src/lib/api/fetch.ts:100,289`
 
 **Messages**:
+
 - `fetch.ts:100`: "Session expired. Please log in again."
 - `fetch.ts:289`: "Session expired"
 
@@ -2293,8 +2481,9 @@ app.use((req, res, next) => {
 **Impact**: Confusing user experience.
 
 **Remediation**: Use single consistent message:
+
 ```typescript
-const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
+const SESSION_EXPIRED_MESSAGE = "Session expired. Please log in again.";
 ```
 
 **Tags**: `#ux #medium #error-messages #inconsistency`
@@ -2302,6 +2491,7 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 ---
 
 ### UX-002: Unauthorized Message
+
 **Status**: ❌ UNFIXED | **Severity**: LOW | **Location**: `src/lib/api/fetch.ts:284`
 
 **Message**: "Unauthorized"
@@ -2311,8 +2501,9 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 **Impact**: Poor user experience.
 
 **Remediation**: Use more helpful message:
+
 ```typescript
-"You don't have permission to access this resource. Please log in with an authorized account."
+"You don't have permission to access this resource. Please log in with an authorized account.";
 ```
 
 **Tags**: `#ux #low #error-messages`
@@ -2320,6 +2511,7 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 ---
 
 ### UX-003: Network Error Message
+
 **Status**: ❌ UNFIXED | **Severity**: LOW | **Location**: `src/lib/api/errors.ts:44`
 
 **Message**: "Network error. Please check your connection."
@@ -2333,6 +2525,7 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 ---
 
 ### UX-004: Timeout Message
+
 **Status**: ❌ UNFIXED | **Severity**: LOW | **Location**: `src/lib/api/errors.ts:53`
 
 **Message**: "Request timed out. Please try again."
@@ -2350,6 +2543,7 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 ---
 
 ### UX-005: AppShell No Initial Loading
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Location**: `src/components/layout/AppShell.tsx:34-44`
 
 **Description**: No loading indicator shown while app is loading initially.
@@ -2357,10 +2551,11 @@ const SESSION_EXPIRED_MESSAGE = 'Session expired. Please log in again.';
 **Impact**: User sees blank screen, thinks app is broken.
 
 **Remediation**: Add loading skeleton:
+
 ```tsx
 function AppShell() {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="fixed inset-0 flex items-center justify-center">
@@ -2368,7 +2563,7 @@ function AppShell() {
       </div>
     );
   }
-  
+
   return <AppLayout user={user} />;
 }
 ```
@@ -2378,6 +2573,7 @@ function AppShell() {
 ---
 
 ### UX-006: Library Grid Loading State
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Location**: `src/routes/app.library.$kind.tsx:35-36`
 
 **Description**: `isLoading` state exists but no loading UI is shown.
@@ -2385,6 +2581,7 @@ function AppShell() {
 **Impact**: User doesn't know data is loading.
 
 **Remediation**: Add loading state:
+
 ```tsx
 if (isLoading) {
   return <LibrarySkeleton />;
@@ -2400,6 +2597,7 @@ if (isLoading) {
 ---
 
 ### UX-007: Generic Error Component
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Location**: `src/routes/__root.tsx:43-78`
 
 **Description**: ErrorComponent is too generic, doesn't provide useful information or actions.
@@ -2407,36 +2605,37 @@ if (isLoading) {
 **Impact**: Poor user experience when errors occur.
 
 **Remediation**: Enhance error component:
+
 ```tsx
 function ErrorComponent({ error }: { error: ApiError }) {
   const { message, status, requestId } = error;
-  
+
   const getDescription = () => {
     switch (status) {
       case 401:
-        return 'Please log in to continue.';
+        return "Please log in to continue.";
       case 403:
-        return 'You do not have permission to access this resource.';
+        return "You do not have permission to access this resource.";
       case 404:
-        return 'The requested resource was not found.';
+        return "The requested resource was not found.";
       case 429:
-        return 'Too many requests. Please try again later.';
+        return "Too many requests. Please try again later.";
       default:
-        return 'An unexpected error occurred.';
+        return "An unexpected error occurred.";
     }
   };
-  
+
   const getAction = () => {
     switch (status) {
       case 401:
-        return <Button onClick={() => navigate('/login')}>Log In</Button>;
+        return <Button onClick={() => navigate("/login")}>Log In</Button>;
       case 404:
-        return <Button onClick={() => navigate('/')}>Go Home</Button>;
+        return <Button onClick={() => navigate("/")}>Go Home</Button>;
       default:
         return <Button onClick={() => window.location.reload()}>Try Again</Button>;
     }
   };
-  
+
   return (
     <div className="text-center py-12">
       <ErrorIcon className="mx-auto mb-4 h-12 w-12 text-red-500" />
@@ -2454,4 +2653,3 @@ function ErrorComponent({ error }: { error: ApiError }) {
 ```
 
 **Tags**: `#ux #high #error-component #user-experience`
-

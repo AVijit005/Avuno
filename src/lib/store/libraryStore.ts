@@ -107,250 +107,247 @@ const initialMeta = (): Record<string, StoredMeta> => {
 };
 
 export const useLibraryStore = create<State & Actions>()((set, get) => ({
-      meta: initialMeta(),
-      customItems: [],
-      shelves: [],
-      collections: [],
-      userQuotes: [],
-      hydrated: true,
+  meta: initialMeta(),
+  customItems: [],
+  shelves: [],
+  collections: [],
+  userQuotes: [],
+  hydrated: true,
 
-      setStatus: (id, status) =>
-        set((s) => ({
-          meta: {
-            ...s.meta,
-            [id]: {
-              ...s.meta[id],
-              status,
-              lastActivityAt: "Just now",
-              ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
-              ...(status === "rewatching"
-                ? { progress: 0, timesWatched: (s.meta[id]?.timesWatched ?? 0) + 1 }
-                : {}),
-            },
+  setStatus: (id, status) =>
+    set((s) => ({
+      meta: {
+        ...s.meta,
+        [id]: {
+          ...s.meta[id],
+          status,
+          lastActivityAt: "Just now",
+          ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
+          ...(status === "rewatching"
+            ? { progress: 0, timesWatched: (s.meta[id]?.timesWatched ?? 0) + 1 }
+            : {}),
+        },
+      },
+    })),
+  toggleFavorite: (id) =>
+    set((s) => ({
+      meta: {
+        ...s.meta,
+        [id]: { ...(s.meta[id] ?? { status: "in_progress" }), favorite: !s.meta[id]?.favorite },
+      },
+    })),
+  logProgress: (id, pct, note, label) =>
+    set((s) => {
+      const prev = s.meta[id] ?? { status: "in_progress" as MediaStatus };
+      const entry: ProgressEntry = { at: new Date().toISOString(), pct, note, label };
+      const log = [...(prev.progressLog ?? []), entry].slice(-50);
+      const status: MediaStatus =
+        pct >= 100 ? "completed" : prev.status === "planning" ? "in_progress" : prev.status;
+      return {
+        meta: {
+          ...s.meta,
+          [id]: {
+            ...prev,
+            status,
+            progress: pct,
+            progressLabel: label ?? prev.progressLabel,
+            lastActivityAt: "Just now",
+            progressLog: log,
+            ...(pct >= 100 ? { completedAt: "Today" } : {}),
           },
-        })),
-      toggleFavorite: (id) =>
-        set((s) => ({
-          meta: {
-            ...s.meta,
-            [id]: { ...(s.meta[id] ?? { status: "in_progress" }), favorite: !s.meta[id]?.favorite },
+        },
+      };
+    }),
+  incrementRewatch: (id) =>
+    set((s) => {
+      const prev = s.meta[id] ?? { status: "rewatching" as MediaStatus };
+      return {
+        meta: {
+          ...s.meta,
+          [id]: {
+            ...prev,
+            status: "rewatching",
+            progress: 0,
+            timesWatched: (prev.timesWatched ?? 0) + 1,
+            lastActivityAt: "Just now",
           },
+        },
+      };
+    }),
+  setPriority: (id, p) =>
+    set((s) => ({
+      meta: { ...s.meta, [id]: { ...(s.meta[id] ?? { status: "planning" }), priority: p } },
+    })),
+  addTag: (id, tag) =>
+    set((s) => {
+      const prev = s.meta[id] ?? { status: "in_progress" as MediaStatus };
+      const tags = Array.from(new Set([...(prev.tags ?? []), tag]));
+      return { meta: { ...s.meta, [id]: { ...prev, tags } } };
+    }),
+  setReflection: (id, mood, reflection, rating) =>
+    set((s) => {
+      const prev = s.meta[id] ?? { status: "completed" as MediaStatus };
+      return {
+        meta: { ...s.meta, [id]: { ...prev, mood, reflection, rating: rating ?? prev.rating } },
+      };
+    }),
+  addCustomItem: (item, initial) =>
+    set((s) => ({
+      customItems: [item, ...s.customItems.filter((x) => x.id !== item.id)],
+      meta: {
+        ...s.meta,
+        [item.id]: { status: "planning", addedAt: "Just now", ...initial } as StoredMeta,
+      },
+    })),
+  removeItem: (id) =>
+    set((s) => {
+      const m = { ...s.meta };
+      delete m[id];
+      return {
+        meta: m,
+        customItems: s.customItems.filter((x) => x.id !== id),
+        shelves: s.shelves.map((sh) => ({
+          ...sh,
+          itemIds: sh.itemIds.filter((x) => x !== id),
         })),
-      logProgress: (id, pct, note, label) =>
-        set((s) => {
-          const prev = s.meta[id] ?? { status: "in_progress" as MediaStatus };
-          const entry: ProgressEntry = { at: new Date().toISOString(), pct, note, label };
-          const log = [...(prev.progressLog ?? []), entry].slice(-50);
-          const status: MediaStatus =
-            pct >= 100 ? "completed" : prev.status === "planning" ? "in_progress" : prev.status;
-          return {
-            meta: {
-              ...s.meta,
-              [id]: {
-                ...prev,
-                status,
-                progress: pct,
-                progressLabel: label ?? prev.progressLabel,
-                lastActivityAt: "Just now",
-                progressLog: log,
-                ...(pct >= 100 ? { completedAt: "Today" } : {}),
-              },
-            },
-          };
-        }),
-      incrementRewatch: (id) =>
-        set((s) => {
-          const prev = s.meta[id] ?? { status: "rewatching" as MediaStatus };
-          return {
-            meta: {
-              ...s.meta,
-              [id]: {
-                ...prev,
-                status: "rewatching",
-                progress: 0,
-                timesWatched: (prev.timesWatched ?? 0) + 1,
-                lastActivityAt: "Just now",
-              },
-            },
-          };
-        }),
-      setPriority: (id, p) =>
-        set((s) => ({
-          meta: { ...s.meta, [id]: { ...(s.meta[id] ?? { status: "planning" }), priority: p } },
+        collections: s.collections.map((c) => ({
+          ...c,
+          itemIds: c.itemIds.filter((x) => x !== id),
         })),
-      addTag: (id, tag) =>
-        set((s) => {
-          const prev = s.meta[id] ?? { status: "in_progress" as MediaStatus };
-          const tags = Array.from(new Set([...(prev.tags ?? []), tag]));
-          return { meta: { ...s.meta, [id]: { ...prev, tags } } };
-        }),
-      setReflection: (id, mood, reflection, rating) =>
-        set((s) => {
-          const prev = s.meta[id] ?? { status: "completed" as MediaStatus };
-          return {
-            meta: { ...s.meta, [id]: { ...prev, mood, reflection, rating: rating ?? prev.rating } },
-          };
-        }),
-      addCustomItem: (item, initial) =>
-        set((s) => ({
-          customItems: [item, ...s.customItems.filter((x) => x.id !== item.id)],
-          meta: {
-            ...s.meta,
-            [item.id]: { status: "planning", addedAt: "Just now", ...initial } as StoredMeta,
-          },
-        })),
-      removeItem: (id) =>
-        set((s) => {
-          const m = { ...s.meta };
-          delete m[id];
-          return {
-            meta: m,
-            customItems: s.customItems.filter((x) => x.id !== id),
-            shelves: s.shelves.map((sh) => ({
+      };
+    }),
+  bulkSetStatus: (ids, status) =>
+    set((s) => {
+      const meta = { ...s.meta };
+      for (const id of ids) {
+        const prev = meta[id] ?? { status };
+        meta[id] = {
+          ...prev,
+          status,
+          lastActivityAt: "Just now",
+          ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
+        };
+      }
+      return { meta };
+    }),
+
+  createShelf: (name, accent) => {
+    const id = `shelf_${crypto.randomUUID().slice(0, 8)}`;
+    set((s) => ({ shelves: [...s.shelves, { id, name, accent, itemIds: [] }] }));
+    return id;
+  },
+  renameShelf: (id, name) =>
+    set((s) => ({ shelves: s.shelves.map((x) => (x.id === id ? { ...x, name } : x)) })),
+  deleteShelf: (id) => set((s) => ({ shelves: s.shelves.filter((x) => x.id !== id) })),
+  toggleShelfItem: (shelfId, itemId) =>
+    set((s) => ({
+      shelves: s.shelves.map((sh) =>
+        sh.id !== shelfId
+          ? sh
+          : {
               ...sh,
-              itemIds: sh.itemIds.filter((x) => x !== id),
-            })),
-            collections: s.collections.map((c) => ({
-              ...c,
-              itemIds: c.itemIds.filter((x) => x !== id),
-            })),
-          };
-        }),
-      bulkSetStatus: (ids, status) =>
-        set((s) => {
-          const meta = { ...s.meta };
-          for (const id of ids) {
-            const prev = meta[id] ?? { status };
-            meta[id] = {
-              ...prev,
-              status,
-              lastActivityAt: "Just now",
-              ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
-            };
-          }
-          return { meta };
-        }),
-
-      createShelf: (name, accent) => {
-        const id = `shelf_${crypto.randomUUID().slice(0, 8)}`;
-        set((s) => ({ shelves: [...s.shelves, { id, name, accent, itemIds: [] }] }));
-        return id;
-      },
-      renameShelf: (id, name) =>
-        set((s) => ({ shelves: s.shelves.map((x) => (x.id === id ? { ...x, name } : x)) })),
-      deleteShelf: (id) => set((s) => ({ shelves: s.shelves.filter((x) => x.id !== id) })),
-      toggleShelfItem: (shelfId, itemId) =>
-        set((s) => ({
-          shelves: s.shelves.map((sh) =>
-            sh.id !== shelfId
-              ? sh
-              : {
-                  ...sh,
-                  itemIds: sh.itemIds.includes(itemId)
-                    ? sh.itemIds.filter((x) => x !== itemId)
-                    : [itemId, ...sh.itemIds],
-                },
-          ),
-        })),
-
-      createCollection: (name, note) => {
-        const id = `col_${crypto.randomUUID().slice(0, 8)}`;
-        set((s) => ({ collections: [{ id, name, note, itemIds: [] }, ...s.collections] }));
-        return id;
-      },
-      renameCollection: (id, name) =>
-        set((s) => ({ collections: s.collections.map((c) => (c.id === id ? { ...c, name } : c)) })),
-      deleteCollection: (id) =>
-        set((s) => ({ collections: s.collections.filter((c) => c.id !== id) })),
-      toggleCollectionItem: (collectionId, itemId) =>
-        set((s) => ({
-          collections: s.collections.map((c) =>
-            c.id !== collectionId
-              ? c
-              : {
-                  ...c,
-                  itemIds: c.itemIds.includes(itemId)
-                    ? c.itemIds.filter((x) => x !== itemId)
-                    : [itemId, ...c.itemIds],
-                },
-          ),
-        })),
-      setCollectionMeta: (id, patch) =>
-        set((s) => ({
-          collections: s.collections.map((c) => (c.id === id ? { ...c, ...patch } : c)),
-        })),
-
-      addUserQuote: (text, ref) => {
-        const id = `uq_${crypto.randomUUID().slice(0, 8)}`;
-        set((s) => ({
-          userQuotes: [
-            {
-              id,
-              text,
-              refId: ref?.id,
-              refTitle: ref?.title,
-              accent: ref?.accent,
-              at: new Date().toISOString(),
+              itemIds: sh.itemIds.includes(itemId)
+                ? sh.itemIds.filter((x) => x !== itemId)
+                : [itemId, ...sh.itemIds],
             },
-            ...s.userQuotes,
-          ].slice(0, 500),
-        }));
-        return id;
-      },
-      removeUserQuote: (id) =>
-        set((s) => ({ userQuotes: s.userQuotes.filter((q) => q.id !== id) })),
+      ),
+    })),
 
-      importJSON: (data) => {
-        let added = 0,
-          updated = 0;
-        if (!data || typeof data !== "object") return { added: 0, updated: 0 };
-        const d = data as Partial<State>;
-        set((s) => {
-          const meta = { ...s.meta };
-          if (d.meta)
-            for (const [id, m] of Object.entries(d.meta)) {
-              if (meta[id]) updated++;
-              else added++;
-              meta[id] = { ...meta[id], ...m } as StoredMeta;
-            }
-          const customItems = [...s.customItems];
-          if (Array.isArray(d.customItems))
-            for (const it of d.customItems) {
-              if (!customItems.find((x) => x.id === it.id)) {
-                customItems.unshift(it);
-                added++;
-              }
-            }
-          return {
-            meta,
-            customItems,
-            shelves: Array.isArray(d.shelves) ? d.shelves : s.shelves,
-            collections: Array.isArray(d.collections) ? d.collections : s.collections,
-            userQuotes: Array.isArray(d.userQuotes) ? d.userQuotes : s.userQuotes,
-          };
-        });
-        return { added, updated };
+  createCollection: (name, note) => {
+    const id = `col_${crypto.randomUUID().slice(0, 8)}`;
+    set((s) => ({ collections: [{ id, name, note, itemIds: [] }, ...s.collections] }));
+    return id;
+  },
+  renameCollection: (id, name) =>
+    set((s) => ({ collections: s.collections.map((c) => (c.id === id ? { ...c, name } : c)) })),
+  deleteCollection: (id) => set((s) => ({ collections: s.collections.filter((c) => c.id !== id) })),
+  toggleCollectionItem: (collectionId, itemId) =>
+    set((s) => ({
+      collections: s.collections.map((c) =>
+        c.id !== collectionId
+          ? c
+          : {
+              ...c,
+              itemIds: c.itemIds.includes(itemId)
+                ? c.itemIds.filter((x) => x !== itemId)
+                : [itemId, ...c.itemIds],
+            },
+      ),
+    })),
+  setCollectionMeta: (id, patch) =>
+    set((s) => ({
+      collections: s.collections.map((c) => (c.id === id ? { ...c, ...patch } : c)),
+    })),
+
+  addUserQuote: (text, ref) => {
+    const id = `uq_${crypto.randomUUID().slice(0, 8)}`;
+    set((s) => ({
+      userQuotes: [
+        {
+          id,
+          text,
+          refId: ref?.id,
+          refTitle: ref?.title,
+          accent: ref?.accent,
+          at: new Date().toISOString(),
+        },
+        ...s.userQuotes,
+      ].slice(0, 500),
+    }));
+    return id;
+  },
+  removeUserQuote: (id) => set((s) => ({ userQuotes: s.userQuotes.filter((q) => q.id !== id) })),
+
+  importJSON: (data) => {
+    let added = 0,
+      updated = 0;
+    if (!data || typeof data !== "object") return { added: 0, updated: 0 };
+    const d = data as Partial<State>;
+    set((s) => {
+      const meta = { ...s.meta };
+      if (d.meta)
+        for (const [id, m] of Object.entries(d.meta)) {
+          if (meta[id]) updated++;
+          else added++;
+          meta[id] = { ...meta[id], ...m } as StoredMeta;
+        }
+      const customItems = [...s.customItems];
+      if (Array.isArray(d.customItems))
+        for (const it of d.customItems) {
+          if (!customItems.find((x) => x.id === it.id)) {
+            customItems.unshift(it);
+            added++;
+          }
+        }
+      return {
+        meta,
+        customItems,
+        shelves: Array.isArray(d.shelves) ? d.shelves : s.shelves,
+        collections: Array.isArray(d.collections) ? d.collections : s.collections,
+        userQuotes: Array.isArray(d.userQuotes) ? d.userQuotes : s.userQuotes,
+      };
+    });
+    return { added, updated };
+  },
+  exportJSON: () => {
+    const { meta, customItems, shelves, collections, userQuotes } = get();
+    return JSON.stringify(
+      {
+        version: 1,
+        exportedAt: new Date().toISOString(),
+        meta,
+        customItems,
+        shelves,
+        collections,
+        userQuotes,
       },
-      exportJSON: () => {
-        const { meta, customItems, shelves, collections, userQuotes } = get();
-        return JSON.stringify(
-          {
-            version: 1,
-            exportedAt: new Date().toISOString(),
-            meta,
-            customItems,
-            shelves,
-            collections,
-            userQuotes,
-          },
-          null,
-          2,
-        );
-      },
-      reset: () =>
-        set({ meta: initialMeta(), customItems: [], shelves: [], collections: [], userQuotes: [] }),
-    })
-);
+      null,
+      2,
+    );
+  },
+  reset: () =>
+    set({ meta: initialMeta(), customItems: [], shelves: [], collections: [], userQuotes: [] }),
+}));
 
 // Convenience selectors (non-reactive snapshot for legacy callers).
 export function snapshotMeta(id: string): StoredMeta {

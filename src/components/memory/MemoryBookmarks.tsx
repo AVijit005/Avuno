@@ -28,8 +28,8 @@ export function MemoryBookmarks({ className }: Props) {
           if (!m) return null;
           return (
             <li key={b.id}>
-              <PremiumGlass variant="subtle">
-                <Link to="/app/media/$id" params={{ id: m.id }} className="flex gap-3 p-4">
+              <PremiumGlass variant="subtle" interactive>
+                <Link to="/app/media/$id" params={{ id: m.id }} className="flex gap-3 p-4 relative z-10">
                   <span className="grid h-9 w-9 flex-none place-items-center rounded-xl bg-white/[0.04] text-primary/85 ring-1 ring-white/10">
                     <Bookmark className="h-4 w-4" />
                   </span>

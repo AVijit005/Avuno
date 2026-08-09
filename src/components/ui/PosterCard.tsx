@@ -4,6 +4,7 @@ import { Heart, Star, ImageOff } from "lucide-react";
 import type { MediaItem } from "@/lib/types";
 import { useState, type MouseEvent } from "react";
 import { useLibraryStore } from "@/lib/store/libraryStore";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 import { imageReveal } from "@/lib/motion";
 
 interface Props {
@@ -51,6 +52,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
         to="/app/media/$id"
         params={{ id: item.id }}
         className="focus-ring relative block aspect-[2/3] overflow-hidden rounded-2xl ring-1 ring-foreground/10 transition-shadow duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:shadow-[var(--shadow-poster-hover)]"
+        style={{ viewTransitionName: `poster-${item.id}` }}
         aria-label={`${item.title} — ${item.kind} (${item.year})`}
       >
         {errored ? (
@@ -58,19 +60,13 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
             <ImageOff className="h-6 w-6 text-foreground/30" />
           </div>
         ) : (
-          <div
-            className={`transition-opacity duration-[var(--dur-large)] ${loaded ? "opacity-100" : "opacity-0"}`}
-          >
-            <img
-              src={item.poster || undefined}
-              alt=""
-              loading="lazy"
-              decoding="async"
-              onLoad={() => setLoaded(true)}
-              onError={() => setErrored(true)}
-              className="h-full w-full object-cover transition-[transform,filter] duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:scale-[1.03] group-hover:brightness-[1.02] motion-reduce:group-hover:scale-100"
-            />
-          </div>
+          <PremiumImage
+            src={item.poster || ""}
+            alt={item.title}
+            aspectRatio="poster"
+            className="transition-[transform,filter] duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:scale-[1.03] group-hover:brightness-[1.02] motion-reduce:group-hover:scale-100"
+            style={{ viewTransitionName: `poster-${item.id}` }}
+          />
         )}
         {/* gradient base */}
         <div

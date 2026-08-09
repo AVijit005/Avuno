@@ -50,7 +50,9 @@ if (typeof window !== "undefined" && window.BroadcastChannel) {
       modAccessToken = null;
       try {
         sessionStorage.removeItem("accessToken");
-      } catch {}
+      } catch {
+        // Ignore storage errors during logout
+      }
       notifySessionExpired();
     }
   };

@@ -15,6 +15,7 @@ const TEST_CONFIG: Record<string, string> = {
   'redis.host': '127.0.0.1',
   'redis.port': '6379',
   'redis.db': '0',
+  EMAIL_API_KEY: 'test-email-api-key',
 };
 import { AuthModule } from './auth.module';
 import { EMAIL_TRANSPORT, ResendEmailTransportService, ConsoleEmailTransportService } from './services';

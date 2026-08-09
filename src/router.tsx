@@ -13,6 +13,7 @@ export const getRouter = () => {
     context: { queryClient },
     scrollRestoration: true,
     defaultPreloadStaleTime: 0,
+    defaultViewTransition: true,
     defaultErrorComponent: ({ error }) => (
       <div className="p-8">
         <PremiumErrorState

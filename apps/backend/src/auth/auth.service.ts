@@ -305,12 +305,14 @@ export class AuthService {
       throw new UnauthorizedException('Invalid or expired code');
     }
 
-    const AuthResultSchema = z.object({
-      user: z.record(z.unknown()).optional(),
-      accessToken: z.string().optional(),
-      expiresIn: z.number().optional(),
-      refreshToken: z.string().optional(),
-    }).passthrough();
+    const AuthResultSchema = z
+      .object({
+        user: z.record(z.unknown()).optional(),
+        accessToken: z.string().optional(),
+        expiresIn: z.number().optional(),
+        refreshToken: z.string().optional(),
+      })
+      .passthrough();
 
     let parsed: unknown;
     try {
@@ -323,7 +325,7 @@ export class AuthService {
     if (!validationResult.success) {
       throw new UnauthorizedException('Malformed payload data');
     }
-    
+
     const data = validationResult.data as Partial<InternalAuthResult>;
 
     if (!data.accessToken || !data.user) {

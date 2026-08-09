@@ -3,6 +3,7 @@ import { motion } from "motion/react";
 import { ChevronsLeft, ChevronsRight, Command } from "lucide-react";
 import { NAV, GROUP_LABELS, NAV_GROUP_ORDER } from "@/lib/nav";
 import { cn } from "@/lib/utils";
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { useState } from "react";
 
 export function Sidebar({
@@ -19,10 +20,10 @@ export function Sidebar({
   const groups = NAV_GROUP_ORDER;
 
   return (
-    <motion.aside
+    <PremiumGlass
       animate={{ width: collapsed ? 76 : 264 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="glass fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl lg:flex"
+      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl lg:flex"
       style={{ boxShadow: "var(--shadow-glass)" }}
     >
       {/* Brand */}
@@ -126,6 +127,6 @@ export function Sidebar({
           </>
         )}
       </button>
-    </motion.aside>
+    </PremiumGlass>
   );
 }

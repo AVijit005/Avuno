@@ -3,6 +3,7 @@ import { Heart, Clock } from "lucide-react";
 import { DropCap } from "@/components/editorial/DropCap";
 import { cascade } from "@/lib/motion";
 import { countWords } from "@/lib/utils/words";
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import type { UIJournalEntry } from "@/lib/adapters/types";
 
 interface Props {
@@ -12,25 +13,18 @@ interface Props {
 
 export function JournalEntryCard({ entry, index }: Props) {
   return (
-    <motion.article
+    <PremiumGlass
+      interactive
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={cascade(index, 0.05)}
-      whileHover={{ scale: 1.008 }}
-      className="glass group relative overflow-hidden rounded-3xl p-6"
+      className="group relative overflow-hidden rounded-3xl p-6"
+      style={{ viewTransitionName: `journal-card-${entry.id}` } as React.CSSProperties}
     >
       <div
         className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full blur-3xl opacity-50 transition group-hover:opacity-80"
         style={{ background: "oklch(0.7 0.18 35)" }}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 opacity-[0.05]"
-        style={{
-          backgroundImage:
-            "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='120' height='120'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>\")",
-        }}
       />
       <div className="relative">
         <div className="flex items-center justify-between">
@@ -64,6 +58,6 @@ export function JournalEntryCard({ entry, index }: Props) {
           </span>
         </div>
       </div>
-    </motion.article>
+    </PremiumGlass>
   );
 }

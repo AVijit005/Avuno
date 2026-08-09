@@ -242,26 +242,80 @@ select {
  * ============================================================ */
 
 @utility glass {
-  background: color-mix(in oklab, var(--card) calc(var(--glass-base-alpha) * 100%), transparent);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  backdrop-filter: blur(24px) saturate(180%);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-glass);
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.06) 0%, oklch(1 0 0 / 0.01) 100%);
+  -webkit-backdrop-filter: blur(80px) saturate(200%);
+  backdrop-filter: blur(80px) saturate(200%);
+  border: none;
+  box-shadow:
+    0 40px 100px -20px oklch(0 0 0 / 0.6),
+    0 0 0 1px oklch(1 0 0 / 0.05),
+    inset 0 1px 1px oklch(1 0 0 / 0.2),
+    inset 0 0 20px oklch(1 0 0 / 0.02);
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0.15;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 }
 
 @utility glass-strong {
-  background: color-mix(in oklab, var(--card) calc(var(--glass-strong-alpha) * 100%), transparent);
-  -webkit-backdrop-filter: blur(40px) saturate(200%);
-  backdrop-filter: blur(40px) saturate(200%);
-  border: 1px solid var(--border);
-  box-shadow: var(--shadow-glass);
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.1) 0%, oklch(1 0 0 / 0.04) 100%);
+  -webkit-backdrop-filter: blur(100px) saturate(220%);
+  backdrop-filter: blur(100px) saturate(220%);
+  border: none;
+  box-shadow:
+    0 50px 120px -20px oklch(0 0 0 / 0.8),
+    0 0 0 1px oklch(1 0 0 / 0.08),
+    inset 0 1px 2px oklch(1 0 0 / 0.3),
+    inset 0 0 30px oklch(1 0 0 / 0.04);
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0.2;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 }
 
 @utility glass-subtle {
-  background: color-mix(in oklab, var(--card) calc(var(--glass-subtle-alpha) * 100%), transparent);
-  -webkit-backdrop-filter: blur(16px) saturate(160%);
-  backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid var(--border);
+  background: linear-gradient(135deg, oklch(1 0 0 / 0.03) 0%, oklch(1 0 0 / 0.005) 100%);
+  -webkit-backdrop-filter: blur(40px) saturate(150%);
+  backdrop-filter: blur(40px) saturate(150%);
+  border: none;
+  box-shadow:
+    0 20px 40px -10px oklch(0 0 0 / 0.4),
+    0 0 0 1px oklch(1 0 0 / 0.03),
+    inset 0 1px 1px oklch(1 0 0 / 0.1);
+  position: relative;
+  isolation: isolate;
+
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    opacity: 0.1;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+  }
 }
 
 @utility hover-lift {
@@ -585,5 +639,44 @@ select {
       animation-duration: 0.01ms !important;
       transition-duration: 0.01ms !important;
     }
+  }
+
+  /* ============================================================
+   * View Transitions
+   * ============================================================ */
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation-duration: 0.4s;
+    animation-timing-function: var(--ease-page, cubic-bezier(0.65, 0, 0.35, 1));
+  }
+
+  ::view-transition-old(root) {
+    animation-name: fade-scale-out;
+  }
+
+  ::view-transition-new(root) {
+    animation-name: fade-scale-in;
+  }
+}
+
+@keyframes fade-scale-out {
+  0% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.98) translateY(-4px);
+  }
+}
+
+@keyframes fade-scale-in {
+  0% {
+    opacity: 0;
+    transform: scale(1.02) translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
   }
 }

@@ -2,6 +2,8 @@ import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import type { MouseEvent } from "react";
 import type { UICollection } from "@/lib/adapters/types";
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 
 export function CollectionCard({
   collection: c,
@@ -41,72 +43,68 @@ export function CollectionCard({
       onMouseMove={onMove}
       onMouseLeave={onLeave}
       style={{ rotateX: rx, rotateY: ry, transformPerspective: 1400 }}
-      className="group relative"
+      className="group relative h-full"
     >
-      <Link
-        to="/app/collections/$id"
-        params={{ id: c.id }}
-        aria-label={`View collection: ${c.name}`}
-        className={`relative block ${aspect} overflow-hidden rounded-3xl ring-1 ring-white/10 transition-shadow duration-500 group-hover:shadow-[0_30px_80px_-30px_oklch(0_0_0/0.7)]`}
+      <PremiumGlass
+        interactive
+        glow={accent}
+        className={`relative block ${aspect} overflow-hidden rounded-3xl transition-shadow duration-500 group-hover:shadow-[0_30px_80px_-30px_oklch(0_0_0/0.7)]`}
       >
-        {/* collage of covers */}
-        {coverImages.length >= 4 ? (
-          <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
-            {coverImages.slice(0, 4).map((src, i) => (
-              <img
-                key={i}
-                src={src}
-                alt=""
-                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
-              />
-            ))}
-          </div>
-        ) : (
-          <img
-            src={coverSrc}
-            alt=""
-            className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
-          />
-        )}
-        {/* tinted gradient */}
-        <div
-          aria-hidden
+        <Link
+          to="/app/collections/$id"
+          params={{ id: c.id }}
+          aria-label={`View collection: ${c.name}`}
           className="absolute inset-0"
-          style={{
-            background: `linear-gradient(180deg, transparent 35%, ${accent.startsWith("var(") ? `color-mix(in oklch, ${accent}, transparent 58%)` : `${accent}66`}, oklch(0 0 0 / 0.9))`,
-          }}
-        />
-        {/* reflection */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 -translate-x-full opacity-0 transition duration-700 group-hover:translate-x-0 group-hover:opacity-100"
-          style={{
-            background:
-              "linear-gradient(120deg, transparent 35%, oklch(1 0 0 / 0.16) 50%, transparent 65%)",
-            mixBlendMode: "overlay",
-          }}
-        />
-        {/* accent edge */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100"
-          style={{ boxShadow: `inset 0 0 0 1px ${accent}` }}
-        />
+        >
+          {/* collage of covers */}
+          {coverImages.length >= 4 ? (
+            <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+              {coverImages.slice(0, 4).map((src, i) => (
+                <PremiumImage
+                  key={i}
+                  src={src}
+                  alt=""
+                  className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
+                />
+              ))}
+            </div>
+          ) : (
+            <PremiumImage
+              src={coverSrc}
+              alt=""
+              className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
+            />
+          )}
+          {/* tinted gradient */}
+          <div
+            aria-hidden
+            className="absolute inset-0"
+            style={{
+              background: `linear-gradient(180deg, transparent 35%, ${accent.startsWith("var(") ? `color-mix(in oklch, ${accent}, transparent 58%)` : `${accent}66`}, oklch(0 0 0 / 0.9))`,
+            }}
+          />
+          {/* accent edge */}
+          <span
+            aria-hidden
+            className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100"
+            style={{ boxShadow: `inset 0 0 0 1px ${accent}` }}
+          />
 
-        {/* meta */}
-        <div className="absolute inset-x-0 bottom-0 p-5">
-          <div className="glass-subtle inline-block rounded-full px-2 py-0.5 text-[9px] uppercase tracking-[0.22em] text-white/85">
-            {c.itemCount} items
+          {/* meta */}
+          <div className="absolute inset-x-0 bottom-0 p-5">
+            <div className="glass-subtle inline-block rounded-full px-2 py-0.5 text-[9px] uppercase tracking-[0.22em] text-white/85 backdrop-blur-md">
+              {c.itemCount} items
+            </div>
+            <div className="mt-2 font-display text-2xl leading-tight text-white">{c.name}</div>
+            <div className="mt-1 max-w-md translate-y-2 text-[12px] text-white/75 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+              {c.description}
+            </div>
+            <div className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/55">
+              Updated {new Date(c.updatedAt).toLocaleDateString()}
+            </div>
           </div>
-          <div className="mt-2 font-display text-2xl leading-tight text-white">{c.name}</div>
-          <div className="mt-1 max-w-md translate-y-2 text-[12px] text-white/75 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-            {c.description}
-          </div>
-          <div className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/55">
-            Updated {new Date(c.updatedAt).toLocaleDateString()}
-          </div>
-        </div>
-      </Link>
+        </Link>
+      </PremiumGlass>
     </motion.div>
   );
 }

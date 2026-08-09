@@ -1,7 +1,11 @@
 # COMPLETE PROBLEM INVENTORY - CHRONICLE YOUR MEDIA STORY
+
 # Part 1: Security, Type Safety, Code Quality Issues
-# Version: 1.0.0  
-# Date: August 10, 2026  
+
+# Version: 1.0.0
+
+# Date: August 10, 2026
+
 # Total Issues: 400+ Identified
 
 ---
@@ -20,9 +24,11 @@
 ## 🎯 EXECUTIVE SUMMARY
 
 ### Overview
+
 Complete inventory of ALL 400+ problems identified in the Chronicle Your Media Story codebase through exhaustive line-by-line analysis of 790+ files across backend (NestJS) and frontend (React).
 
 ### 🚨 CRITICAL FINDINGS
+
 - **4 CRITICAL security vulnerabilities** (CVSS 9.0-10.0) - Must fix immediately
 - **9 files with complete type disabling** - No type safety
 - **50+ unchecked `any` types** across codebase
@@ -31,18 +37,21 @@ Complete inventory of ALL 400+ problems identified in the Chronicle Your Media S
 - **N+1 query problems** causing performance issues
 
 ### 📊 STATISTICS
-| Category | Count | Critical | High | Medium | Low |
-|----------|-------|----------|------|--------|-----|
-| Security | 35 | 4 | 11 | 13 | 7 |
-| Type Safety | 50+ | 8 | 25 | 17 | 0 |
-| Code Quality | 35+ | 4 | 12 | 15 | 4 |
-| Error Handling | 25+ | 3 | 8 | 10 | 4 |
-| Performance | 15+ | 0 | 5 | 7 | 3 |
-| Testing | 20+ | 0 | 6 | 14 | 0 |
-| **TOTAL** | **400+** | **19** | **93** | **156** | **52** |
+
+| Category       | Count    | Critical | High   | Medium  | Low    |
+| -------------- | -------- | -------- | ------ | ------- | ------ |
+| Security       | 35       | 4        | 11     | 13      | 7      |
+| Type Safety    | 50+      | 8        | 25     | 17      | 0      |
+| Code Quality   | 35+      | 4        | 12     | 15      | 4      |
+| Error Handling | 25+      | 3        | 8      | 10      | 4      |
+| Performance    | 15+      | 0        | 5      | 7       | 3      |
+| Testing        | 20+      | 0        | 6      | 14      | 0      |
+| **TOTAL**      | **400+** | **19**   | **93** | **156** | **52** |
 
 ### 🎯 DEPLOYMENT BLOCKERS
+
 **DO NOT DEPLOY** until these are fixed:
+
 1. SEC-001: Hardcoded secrets in docker-compose.e2e.yml
 2. SEC-002: Hardcoded EMAIL_API_KEY fallback
 3. SEC-003: Open redirect in OAuth guard
@@ -60,11 +69,13 @@ Complete inventory of ALL 400+ problems identified in the Chronicle Your Media S
 ---
 
 ### SEC-001: Hardcoded Secrets in Docker Compose
+
 **Status**: ❌ UNFIXED | **CVSS**: 10.0 | **CWE**: CWE-798 | **OWASP**: A2, A7
 
 **Location**: `docker-compose.e2e.yml:9,41-45`
 
 **Description**: Multiple sensitive credentials hardcoded in Docker Compose e2e file:
+
 - POSTGRES_PASSWORD=chronicle
 - OAUTH_ENCRYPTION_KEY=default_secret_key_32_bytes_long!
 - JWT_ACCESS_SECRET=super_secret_jwt_key
@@ -74,6 +85,7 @@ Complete inventory of ALL 400+ problems identified in the Chronicle Your Media S
 **Impact**: Complete system compromise if file is committed or leaked. Database access, OAuth token decryption, JWT forgery all possible.
 
 **Remediation**:
+
 ```yaml
 # Replace hardcoded values with environment variables:
 services:
@@ -87,6 +99,7 @@ services:
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
 ```
+
 **Action Required**: Rotate ALL exposed credentials immediately.
 
 **Tags**: `#security #critical #credentials #docker #hardcoded #rotateneeded`
@@ -94,6 +107,7 @@ services:
 ---
 
 ### SEC-002: Hardcoded EMAIL_API_KEY Fallback
+
 **Status**: ❌ UNFIXED | **CVSS**: 9.8 | **CWE**: CWE-798
 
 **Location**: `apps/backend/src/auth/services/resend-email-transport.service.ts:16`
@@ -105,10 +119,11 @@ services:
 **Impact**: Production emails silently fail, no notification of misconfiguration.
 
 **Remediation**:
+
 ```typescript
 const apiKey = process.env.EMAIL_API_KEY;
 if (!apiKey) {
-  throw new Error('EMAIL_API_KEY environment variable is required');
+  throw new Error("EMAIL_API_KEY environment variable is required");
 }
 ```
 
@@ -117,15 +132,18 @@ if (!apiKey) {
 ---
 
 ### SEC-003: Open Redirect in Google OAuth Guard
+
 **Status**: ❌ UNFIXED | **CVSS**: 9.1 | **CWE**: CWE-601 | **OWASP**: A1
 
 **Location**: `apps/backend/src/auth/guards/google-oauth.guard.ts:36-44`
 
-**Code**: 
+**Code**:
+
 ```typescript
-const returnTo = ctx.getRequest<Request>().headers.referer
-  || ctx.getRequest<Request>().headers.origin
-  || defaultReturnTo;
+const returnTo =
+  ctx.getRequest<Request>().headers.referer ||
+  ctx.getRequest<Request>().headers.origin ||
+  defaultReturnTo;
 ```
 
 **Description**: Accepts attacker-controlled `referer`/`origin` headers for redirect target. ALLOW_LOCAL_DEV_REDIRECT=true allows arbitrary localhost redirects.
@@ -139,6 +157,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-004: Open Redirect in OAuth State
+
 **Status**: ❌ UNFIXED | **CVSS**: 9.1 | **CWE**: CWE-601 | **OWASP**: A1
 
 **Location**: `apps/backend/src/auth/controllers/google-oauth.controller.ts:72-73`
@@ -160,6 +179,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-005: Missing CSRF Protection
+
 **Status**: ❌ UNFIXED | **CVSS**: 8.1 | **CWE**: CWE-352
 
 **Location**: `apps/backend/src/app.module.ts`
@@ -177,6 +197,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-006: Timing Attack on Forgot Password
+
 **Status**: ⚠️ PARTIAL | **CVSS**: 8.1 | **CWE**: CWE-204
 
 **Location**: `apps/backend/src/auth/auth.controller.ts:103-106`
@@ -192,6 +213,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-007: Insecure Deserialization (Auth Service)
+
 **Status**: ❌ UNFIXED | **CVSS**: 7.5 | **CWE**: CWE-502
 
 **Location**: `apps/backend/src/auth/auth.service.ts:307`
@@ -209,6 +231,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-008: Insecure Deserialization (OAuth State)
+
 **Status**: ❌ UNFIXED | **CVSS**: 7.5 | **CWE**: CWE-502
 
 **Location**: `apps/backend/src/auth/services/oauth-state.service.ts:81`
@@ -226,6 +249,7 @@ const returnTo = ctx.getRequest<Request>().headers.referer
 ---
 
 ### SEC-009: Weak Password Policy
+
 **Status**: ❌ UNFIXED | **CVSS**: 7.5 | **CWE**: CWE-521
 
 **Location**: `apps/backend/src/auth/dto/register.dto.ts:8-9`
@@ -254,6 +278,7 @@ password: string;
 ---
 
 ### SEC-010: Missing Request Body Size Limit
+
 **Status**: ❌ UNFIXED | **CVSS**: 7.5 | **CWE**: CWE-400
 
 **Location**: `apps/backend/src/app.bootstrap.ts`
@@ -263,8 +288,9 @@ password: string;
 **Impact**: Memory exhaustion DoS attack.
 
 **Remediation**: Add express.json limit:
+
 ```typescript
-app.use(express.json({ limit: '1mb', strict: true }));
+app.use(express.json({ limit: "1mb", strict: true }));
 ```
 
 **Tags**: `#security #high #dos #body-limit`
@@ -272,6 +298,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-011: File Upload MIME Bypass
+
 **Status**: ❌ UNFIXED | **CVSS**: 7.5 | **CWE**: CWE-434
 
 **Location**: `apps/backend/src/storage/storage.controller.ts:40-50`
@@ -291,6 +318,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-012: Information Leakage via Prisma Errors
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.5 | **CWE**: CWE-209
 
 **Location**: `apps/backend/src/common/filters/all-exceptions.filter.ts:130-131`
@@ -308,6 +336,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-013: User Enumeration via Distinct Errors
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.5 | **CWE**: CWE-204
 
 **Location**: `apps/backend/src/auth/auth.service.ts:115-123`
@@ -325,6 +354,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-014: Session Fixation
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.5 | **CWE**: CWE-384
 
 **Location**: `apps/backend/src/auth/services/cookie.service.ts:15`
@@ -342,6 +372,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-015: XSS in Email Templates
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.5 | **CWE**: CWE-79
 
 **Location**: `apps/backend/src/auth/services/resend-email-transport.service.ts:34,56`
@@ -359,6 +390,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-016: Missing Input Validation for Avatar/Cover
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.5 | **CWE**: CWE-20
 
 **Location**: `apps/backend/src/storage/storage.controller.ts:131-159`
@@ -374,6 +406,7 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-017: Missing UUID Validation
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.0 | **CWE**: CWE-20
 
 **Location**: `apps/backend/src/library/library.controller.ts:92-99`
@@ -391,9 +424,11 @@ app.use(express.json({ limit: '1mb', strict: true }));
 ---
 
 ### SEC-018-019: Path Traversal in Storage Service
+
 **Status**: ❌ UNFIXED | **CVSS**: 6.0 | **CWE**: CWE-22
 
-**Location**: 
+**Location**:
+
 - `apps/backend/src/storage/storage.service.ts:48-52` (downloadWithMeta)
 - `apps/backend/src/storage/storage.service.ts:68-74` (deleteWithOwnershipCheck)
 
@@ -407,8 +442,8 @@ app.use(express.json({ limit: '1mb', strict: true }));
 
 ```typescript
 const normalized = path.normalize(filePath);
-if (normalized.includes('..')) {
-  throw new ForbiddenException('Invalid file path');
+if (normalized.includes("..")) {
+  throw new ForbiddenException("Invalid file path");
 }
 ```
 
@@ -417,9 +452,11 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-020-021: Raw SQL Queries Without Parameters
+
 **Status**: ⚠️ SAFE BUT RISKY | **CVSS**: 5.3 | **CWE**: CWE-89
 
-**Location**: 
+**Location**:
+
 - `apps/backend/src/health/prisma-health.indicator.ts:13`
 - `apps/backend/src/observability/health-metrics.service.ts:19`
 
@@ -436,6 +473,7 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-022: Incomplete Helmet Configuration
+
 **Status**: ❌ UNFIXED | **CVSS**: 5.3 | **CWE**: CWE-693
 
 **Location**: `apps/backend/src/app.bootstrap.ts:28-40`
@@ -455,6 +493,7 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-023: Cookie Not Always Secure
+
 **Status**: ❌ UNFIXED | **CVSS**: 3.7 | **CWE**: CWE-614
 
 **Location**: `apps/backend/src/auth/services/cookie.service.ts:15`
@@ -470,6 +509,7 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-024: Logging Sensitive Error Data
+
 **Status**: ❌ UNFIXED | **CVSS**: 3.1 | **CWE**: CWE-532
 
 **Location**: `apps/backend/src/auth/services/resend-email-transport.service.ts:38,61`
@@ -485,6 +525,7 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-025: Missing CORS Preflight Handling
+
 **Status**: ❌ UNFIXED | **CVSS**: 2.0 | **CWE**: CWE-942
 
 **Location**: `apps/backend/src/app.bootstrap.ts:81-93`
@@ -498,6 +539,7 @@ if (normalized.includes('..')) {
 ---
 
 ### SEC-026-027: Legacy Code
+
 **Status**: ⚠️ DOCUMENTED | **CVSS**: 2.0
 
 - **SEC-026**: Hardcoded DUMMY_HASH (documented as non-secret)
@@ -518,6 +560,7 @@ if (normalized.includes('..')) {
 ---
 
 ### TS-001: analytics-aggregation.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -525,6 +568,7 @@ if (normalized.includes('..')) {
 **Impact**: No type checking, 15+ any usages undetected.
 
 **`any` Usages**:
+
 - Line 152: `timeline.map((t: any) => ...)`
 - Line 161: `async getCalendarYear(...): Promise<any>`
 - Line 297: `async getCalendarDay(...): Promise<any>`
@@ -532,12 +576,14 @@ if (normalized.includes('..')) {
 - Line 222: `const highlights: any[] = []`
 - Line 244: `const upcoming: any[] = []`
 
-**Remediation**: 
+**Remediation**:
+
 1. Remove eslint-disable comment
 2. Import proper types from Prisma and DTOs
 3. Create interfaces for return types
 
 **Required Types**:
+
 ```typescript
 interface TimelineEventDto {
   id: string; title: string; type: string; date: string;
@@ -551,6 +597,7 @@ interface CalendarDayDto { date: string; mediaItems: [...]; journalEntry: ...; m
 ---
 
 ### TS-002: analytics.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -558,20 +605,33 @@ interface CalendarDayDto { date: string; mediaItems: [...]; journalEntry: ...; m
 **Impact**: No type checking, 29+ any usages via prismaAny().
 
 **`any` Usages**:
+
 - Lines 29-31: `prismaAny(): Record<string, any>` helper
 - Lines 39, 60, 78, 97, 122, 133, 163, 189, 212, 223, 242, 267, 277, 297, 318, 327, 378, 409, 428, 443, 478, 518, 530, 544: `prismaAny()[cfg.delegate]`
 - Lines 253, 274, 293, 326, 336: Return type `Promise<any[]>`
 
 **Remediation**:
+
 1. Remove eslint-disable comment
 2. Import `delegate`, `asRow`, `asRows`, `asHost` from prisma-delegates.ts
 3. Replace all `prismaAny()[delegateName]` with `delegate(asHost(this.prisma), delegateName)`
 4. Use `asRows<T>()` and `asRow<T>()` for type narrowing
 
 **Required Types**:
+
 ```typescript
-interface CalendarRawData { journalCounts: Record<string, number>; memoryCounts: Record<string, number>; completedCounts: Record<string, number>; hoursTracked: Record<string, number>; }
-interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Record<string, number>; genreRatings: Record<string, {total: number; count: number}>; genreTime: Record<string, number>; }
+interface CalendarRawData {
+  journalCounts: Record<string, number>;
+  memoryCounts: Record<string, number>;
+  completedCounts: Record<string, number>;
+  hoursTracked: Record<string, number>;
+}
+interface GenreRawData {
+  genreCounts: Record<string, number>;
+  genreCompleted: Record<string, number>;
+  genreRatings: Record<string, { total: number; count: number }>;
+  genreTime: Record<string, number>;
+}
 ```
 
 **Tags**: `#type-safety #critical #eslint-disable #prisma #any`
@@ -579,6 +639,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-003: dashboard.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -586,11 +647,13 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 7+ any usages in map callbacks.
 
 **`any` Usages**:
+
 - Lines 36-42: 7 `.map((i: any) => ...)` calls
 - Line 64: `private toContinueItem(item: any, ...)`
 - Line 78: `private toRecentItem(item: any, ...)`
 
 **Remediation**:
+
 1. Remove eslint-disable comment
 2. Import proper Prisma types
 3. Type all parameters
@@ -600,6 +663,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-004: collections.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -607,6 +671,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 25+ any usages.
 
 **`any` Usages**:
+
 - Line 32: `prismaAny(): Record<string, any>`
 - Lines 46, 64-88, 91-100: Return type `Promise<Record<string, any>>`
 - Lines 102-114: `updateData: Record<string, any>`
@@ -620,6 +685,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-005: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -627,6 +693,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 10+ any usages.
 
 **`any` Usages**:
+
 - Lines 63, 76, 84: `(c: any)`, `(item: any)`, `(s: any)` in map callbacks
 - Lines 90-120: updateData manipulation with any
 - Lines 131-145: `(this.repository as any).prisma`
@@ -634,6 +701,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 - Lines 240-281: Helper methods with any parameters
 
 **Remediation**:
+
 1. Remove eslint-disable comment
 2. Import proper DTO types
 3. Remove type assertions to any
@@ -643,6 +711,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-006: journal.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: CRITICAL | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -650,6 +719,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 20+ any usages via prismaAny().
 
 **`any` Usages**:
+
 - Line 15-17: `prismaAny(): Record<string, any>`
 - Lines 30, 35, 40-48, 74-82, 101-106, 109-118, 120-130, 132-161: All methods return `Record<string, any>`
 - Lines 139-156: Transaction with any types
@@ -661,6 +731,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-007: journal.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -668,12 +739,14 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 15+ any usages.
 
 **`any` Usages**:
+
 - Lines 71, 174, 237, 355: `(e: any)`, `(m: any)`, `(q: any)`, `(h: any)` in map callbacks
 - Lines 131-145: `(this.repository as any).prismaAny()`
 - Lines 407-420: `Record<string, any>` in findLibraryMediaId
 - Lines 422-496: toResponse helper methods with any
 
 **Remediation**:
+
 1. Remove eslint-disable comment
 2. Import proper DTO types
 3. Replace prismaAny() with delegate helpers
@@ -683,6 +756,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-008: search.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 1
 
 **Issue**: `/* eslint-disable @typescript-eslint/no-explicit-any */` on entire file.
@@ -690,6 +764,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 **Impact**: No type checking, 14+ any usages.
 
 **`any` Usages**:
+
 - Line 28-30: `prismaAny(): Record<string, any>`
 - Lines 200, 235, 271, 307, 342, 377, 412, 463: `.map((item: any) => ...)`
 - Lines 638, 659: Function parameters with any
@@ -701,6 +776,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-009: prisma-delegates.ts
+
 **Status**: ⚠️ MINOR | **Severity**: LOW | **Lines**: 16
 
 **Issue**: Comment references eslint-disable but file is well-typed.
@@ -718,20 +794,25 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-010: library.repository.ts
+
 **Status**: ⚠️ PARTIALLY FIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/library/library.repository.ts`
 
 **Type Assertions** (Lines 119, 146, 171, 200, 260, 300, 357):
+
 - `as LibraryRow` type assertions
 
 **Duplicate Code** (Lines 129-143, 240-252, 285-297, 342-354):
+
 - Repeated include/select blocks for all 8 media types
 
 **Magic Strings** (Lines 314-329):
+
 - `ALLOWED_UPDATE_FIELDS` array
 
 **Remediation**:
+
 1. Replace type assertions with proper type inference
 2. Extract duplicate code into helper methods
 3. Use constants for magic strings
@@ -741,11 +822,13 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-011: media.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
 **Location**: `apps/backend/src/media/media.repository.ts`
 
 **Type Assertions** (Lines 119, 154-155, 181, 225):
+
 - `as MediaRow` type assertions
 
 **Remediation**: Replace with proper type inference or typed delegates.
@@ -755,6 +838,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-012: wrapped.repository.ts
+
 **Status**: ✅ FIXED | **Severity**: N/A
 
 **Note**: Type disabling removed in commit 92f8ed9.
@@ -762,6 +846,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-013: wrapped.service.ts
+
 **Status**: ✅ FIXED | **Severity**: N/A
 
 **Note**: Type disabling removed in commit 92f8ed9.
@@ -769,6 +854,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### TS-014-018: Various Files
+
 **Status**: ✅ FIXED in commits e2e70fe, 665f32a, 92f8ed9
 
 - collection-statistics.service.ts
@@ -789,19 +875,22 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-001: analytics.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 565
 
 **Description**: Entire file uses Record<string, any>, 25+ methods, all using any.
 
 **Impact**: Unmaintainable, error-prone, poor IDE support.
 
-**Metrics**: 
+**Metrics**:
+
 - Lines of Code: 565
 - Methods: 25+
 - Cognitive Complexity: >100
 - Cyclomatic Complexity: >50
 
-**Remediation**: 
+**Remediation**:
+
 1. Split into smaller repositories
 2. Use proper types
 3. Group related methods
@@ -811,6 +900,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-002: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 332
 
 **Description**: Type-disabled, multiple responsibilities, 332 lines.
@@ -824,6 +914,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-003: wrapped-generator.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Function**: generate() | **Lines**: 166
 
 **Description**: Single function with 166 lines, multiple responsibilities.
@@ -837,9 +928,11 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-004: auth.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM
 
-**Description**: 
+**Description**:
+
 - login() function: 85 lines
 - refresh() function: 47 lines
 
@@ -853,13 +946,13 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 
 ## 3.2 Large Functions (>50 lines) (5 Issues)
 
-| ID | File | Function | Lines | Severity |
-|----|------|----------|-------|----------|
-| CQ-005 | wrapped-generator.service.ts | generate | 166 | HIGH |
-| CQ-006 | library.repository.ts | findAll | 31 | MEDIUM |
-| CQ-007 | library.repository.ts | executeFindAll | 39 | MEDIUM |
-| CQ-008 | auth.service.ts | login | 85 | MEDIUM |
-| CQ-009 | auth.service.ts | refresh | 47 | LOW |
+| ID     | File                         | Function       | Lines | Severity |
+| ------ | ---------------------------- | -------------- | ----- | -------- |
+| CQ-005 | wrapped-generator.service.ts | generate       | 166   | HIGH     |
+| CQ-006 | library.repository.ts        | findAll        | 31    | MEDIUM   |
+| CQ-007 | library.repository.ts        | executeFindAll | 39    | MEDIUM   |
+| CQ-008 | auth.service.ts              | login          | 85    | MEDIUM   |
+| CQ-009 | auth.service.ts              | refresh        | 47    | LOW      |
 
 **Remediation**: Split all functions >50 lines into smaller sub-functions.
 
@@ -870,6 +963,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-010: library.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 176-206
 
 **Description**: 5+ levels of nesting with fan-out queries.
@@ -883,6 +977,7 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 ---
 
 ### CQ-011: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 60-68
 
 **Description**: Nested Promise.all with map and async callbacks.
@@ -897,20 +992,21 @@ interface GenreRawData { genreCounts: Record<string, number>; genreCompleted: Re
 
 ## 3.4 Magic Numbers/Strings (15+ Issues)
 
-| ID | File:Line | Value | Description | Severity |
-|----|-----------|-------|-------------|----------|
-| CQ-012 | auth.service.ts:19 | MAX_LOGIN_ATTEMPTS = 5 | Should be configurable | MEDIUM |
-| CQ-013 | auth.service.ts:20 | LOCKOUT_MINUTES = 15 | Should be configurable | MEDIUM |
-| CQ-014 | auth.service.ts:136,184 | 604800 | 7 days in seconds, unclear | MEDIUM |
-| **CQ-015** | **wrapped-generator.service.ts:31** | **10000** | **CRITICAL: Unbounded limit** | **CRITICAL** |
-| CQ-016 | analytics/discovery.service.ts:128-130 | 20 | Hardcoded limit | MEDIUM |
-| CQ-017 | analytics/discovery.service.ts:190 | 365 | Hardcoded days | MEDIUM |
-| CQ-018 | media/repository.ts:200 | 10 | Hardcoded limit | MEDIUM |
-| CQ-019 | libraryStore.ts:238,287 | 8 | ID truncation length | LOW |
-| CQ-020 | libraryStore.ts:299 | 500 | Max quotes limit | LOW |
-| CQ-021 | libraryStore.ts:146 | -50 | Progress log retention | LOW |
+| ID         | File:Line                              | Value                  | Description                   | Severity     |
+| ---------- | -------------------------------------- | ---------------------- | ----------------------------- | ------------ |
+| CQ-012     | auth.service.ts:19                     | MAX_LOGIN_ATTEMPTS = 5 | Should be configurable        | MEDIUM       |
+| CQ-013     | auth.service.ts:20                     | LOCKOUT_MINUTES = 15   | Should be configurable        | MEDIUM       |
+| CQ-014     | auth.service.ts:136,184                | 604800                 | 7 days in seconds, unclear    | MEDIUM       |
+| **CQ-015** | **wrapped-generator.service.ts:31**    | **10000**              | **CRITICAL: Unbounded limit** | **CRITICAL** |
+| CQ-016     | analytics/discovery.service.ts:128-130 | 20                     | Hardcoded limit               | MEDIUM       |
+| CQ-017     | analytics/discovery.service.ts:190     | 365                    | Hardcoded days                | MEDIUM       |
+| CQ-018     | media/repository.ts:200                | 10                     | Hardcoded limit               | MEDIUM       |
+| CQ-019     | libraryStore.ts:238,287                | 8                      | ID truncation length          | LOW          |
+| CQ-020     | libraryStore.ts:299                    | 500                    | Max quotes limit              | LOW          |
+| CQ-021     | libraryStore.ts:146                    | -50                    | Progress log retention        | LOW          |
 
 **Remediation for CQ-015 (CRITICAL)**:
+
 ```typescript
 // Change from:
 getJournalEntryDates(userId: string, 10000)  // Unbounded!
@@ -931,6 +1027,7 @@ getJournalEntryDates(userId: string, MAX_JOURNAL_ENTRIES)
 ---
 
 ### CQ-022: library.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 129-143, 240-252, 285-297, 342-354
 
 **Description**: 4x repeated include/select blocks for all 8 media types.
@@ -938,6 +1035,7 @@ getJournalEntryDates(userId: string, MAX_JOURNAL_ENTRIES)
 **Impact**: Maintenance burden, inconsistency risk.
 
 **Remediation**: Extract to helper method:
+
 ```typescript
 private getMediaInclude() {
   return {
@@ -953,6 +1051,7 @@ private getMediaInclude() {
 ---
 
 ### CQ-023: analytics/discovery.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 105-139
 
 **Description**: 5 similar insight generation blocks.
@@ -966,6 +1065,7 @@ private getMediaInclude() {
 ---
 
 ### CQ-024: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 248-264
 
 **Description**: resolveMediaType has duplicate checks (8 if-statements twice).
@@ -973,17 +1073,20 @@ private getMediaInclude() {
 **Impact**: Maintenance burden.
 
 **Remediation**: Create single lookup object:
+
 ```typescript
 const mediaTypeFromKey: Record<string, string> = {
-  movie: 'movie', movieId: 'movie',
-  tvShow: 'tvShow', tvShowId: 'tvShow',
+  movie: "movie",
+  movieId: "movie",
+  tvShow: "tvShow",
+  tvShowId: "tvShow",
   // ... etc
 };
 function resolveMediaType(item: any): string {
   for (const [key, type] of Object.entries(mediaTypeFromKey)) {
     if (item[key]) return type;
   }
-  return 'unknown';
+  return "unknown";
 }
 ```
 
@@ -996,6 +1099,7 @@ function resolveMediaType(item: any): string {
 ---
 
 ### CQ-025: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 101, 111, 212
 
 **Description**: Uses `Record<string, any>` for update data.
@@ -1003,6 +1107,7 @@ function resolveMediaType(item: any): string {
 **Impact**: No type safety for updates.
 
 **Remediation**: Create proper DTO interfaces:
+
 ```typescript
 interface UpdateCollectionData {
   name?: string;
@@ -1019,6 +1124,7 @@ interface UpdateCollectionData {
 ---
 
 ### CQ-026: library.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 314-329
 
 **Description**: ALLOWED_UPDATE_FIELDS magic strings array.
@@ -1026,9 +1132,10 @@ interface UpdateCollectionData {
 **Impact**: Error-prone, hard to maintain.
 
 **Remediation**: Use enum or constants:
+
 ```typescript
-const ALLOWED_UPDATE_FIELDS = ['status', 'rating', 'progress', /* ... */] as const;
-type AllowedUpdateField = typeof ALLOWED_UPDATE_FIELDS[number];
+const ALLOWED_UPDATE_FIELDS = ["status", "rating", "progress" /* ... */] as const;
+type AllowedUpdateField = (typeof ALLOWED_UPDATE_FIELDS)[number];
 ```
 
 **Tags**: `#code-quality #high #magic-strings`
@@ -1040,6 +1147,7 @@ type AllowedUpdateField = typeof ALLOWED_UPDATE_FIELDS[number];
 ---
 
 ### CQ-027: library.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 19-46
 
 **Description**: LibraryRow is just a data container with no behavior.
@@ -1053,6 +1161,7 @@ type AllowedUpdateField = typeof ALLOWED_UPDATE_FIELDS[number];
 ---
 
 ### CQ-028: collections.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 283-304
 
 **Description**: DTO mapping without domain logic.
@@ -1076,15 +1185,18 @@ type AllowedUpdateField = typeof ALLOWED_UPDATE_FIELDS[number];
 ---
 
 ### EH-001: analytics/discovery.service.ts
+
 **Status**: ❌ CRITICAL | **Severity**: CRITICAL | **Lines**: 128-131, 186-190, 278-279
 
 **Code**:
+
 ```typescript
 .catch(() => [])  // Swallows ALL errors, returns empty array
 .catch(() => ({}))  // Swallows ALL errors, returns empty object
 ```
 
 **Description**: Multiple catch blocks that silently swallow all errors and return default values. This means:
+
 - Production errors go unnoticed
 - No visibility into failures
 - Silent data loss
@@ -1093,25 +1205,24 @@ type AllowedUpdateField = typeof ALLOWED_UPDATE_FIELDS[number];
 **Impact**: **CRITICAL** - Silent failures in production, no monitoring, data loss.
 
 **Evidence**:
+
 ```typescript
 // Line 128-131:
 Promise.all([
   this.getTopMedia(userId),
   this.getActivityInsights(userId),
   this.getRecentAchievements(userId),
-]).catch(() => []);  // SWALLOWS ALL ERRORS
+]).catch(() => []); // SWALLOWS ALL ERRORS
 
 // Line 186-190:
-Promise.all([
-  this.getStreakData(userId),
-  this.getRecentHighlights(userId),
-]).catch(() => ({}));  // SWALLOWS ALL ERRORS
+Promise.all([this.getStreakData(userId), this.getRecentHighlights(userId)]).catch(() => ({})); // SWALLOWS ALL ERRORS
 
 // Line 278-279:
 this.getYearInReview(userId).catch(() => ({}));
 ```
 
 **Remediation**:
+
 ```typescript
 // Option 1: Remove catch blocks entirely (let errors propagate)
 Promise.all([
@@ -1142,9 +1253,11 @@ try {
 ---
 
 ### EH-002: collections.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 185, 137, 339
 
 **Code**:
+
 ```typescript
 catch {  // Line 185 - Empty catch body
   // Silently swallows duplicate item error
@@ -1163,6 +1276,7 @@ catch {  // Line 185 - Empty catch body
 **Impact**: Silent failures, hard to debug.
 
 **Remediation**:
+
 ```typescript
 // For Line 185:
 catch (error) {
@@ -1186,6 +1300,7 @@ catch (error) {
 ---
 
 ### EH-003: collections.repository.ts (Transaction Errors)
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 137, 339
 
 **Description**: Same as EH-002, errors not properly handled in transactions.
@@ -1201,9 +1316,11 @@ catch (error) {
 ---
 
 ### EH-004: media.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 122-128
 
 **Code**:
+
 ```typescript
 async findUniqueOrNull<T>(...): Promise<T | null> {
   try {
@@ -1219,6 +1336,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 **Impact**: Cannot distinguish between not found and database errors.
 
 **Remediation**:
+
 ```typescript
 async findUniqueOrNull<T>(...): Promise<T | null> {
   try {
@@ -1240,6 +1358,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 ---
 
 ### EH-005: wrapped.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 101-110
 
 **Description**: Transaction errors may not be properly handled.
@@ -1257,6 +1376,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 ---
 
 ### EH-006: library.service.ts & collections.service.ts
+
 **Status**: ⚠️ MINOR | **Severity**: LOW
 
 **Description**: Multiple "not found" / "invalid" messages that don't provide specific information.
@@ -1274,6 +1394,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 ---
 
 ### EH-007: analytics/discovery.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 128-131
 
 **Description**: Promise rejections from repository calls are swallowed.
@@ -1291,6 +1412,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 ---
 
 ### EH-008: library.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 232-233
 
 **Code**: `cfg` used without null check after `this.modelConfig[type]`.
@@ -1298,6 +1420,7 @@ async findUniqueOrNull<T>(...): Promise<T | null> {
 **Impact**: Runtime error if type not found.
 
 **Remediation**: Add null check:
+
 ```typescript
 const cfg = this.modelConfig[type];
 if (!cfg) throw new Error(`Unknown media type: ${type}`);
@@ -1308,6 +1431,7 @@ if (!cfg) throw new Error(`Unknown media type: ${type}`);
 ---
 
 ### EH-009: media.repository.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 117-119
 
 **Description**: No null check for `item`.
@@ -1321,6 +1445,7 @@ if (!cfg) throw new Error(`Unknown media type: ${type}`);
 ---
 
 ### EH-010: wrapped-generator.service.ts
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 35-37
 
 **Description**: No null check for `hoursData.hours`.
@@ -1328,6 +1453,7 @@ if (!cfg) throw new Error(`Unknown media type: ${type}`);
 **Impact**: Runtime error if hoursData or hours is null/undefined.
 
 **Remediation**: Add null check:
+
 ```typescript
 const hours = hoursData?.hours ?? {};
 ```
@@ -1347,9 +1473,11 @@ const hours = hoursData?.hours ?? {};
 ---
 
 ### PERF-001: collections.service.ts - findAll
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 60-68
 
 **Code**:
+
 ```typescript
 async findAll(userId: string): Promise<CollectionResponseDto[]> {
   const collections = await this.repository.findCollectionsByUserId(userId);
@@ -1367,13 +1495,14 @@ async findAll(userId: string): Promise<CollectionResponseDto[]> {
 **Impact**: O(N) queries where N = number of collections. Poor performance for users with many collections.
 
 **Remediation**:
+
 ```typescript
 // Option 1: Include count in initial query
 async findAll(userId: string): Promise<CollectionResponseDto[]> {
   const collections = await this.repository.findCollectionsByUserId(userId, {
     include: { _count: { select: { items: true } } },
   });
-  return collections.map(c => 
+  return collections.map(c =>
     this.toCollectionResponse(c, c._count.items)
   );
 }
@@ -1382,10 +1511,10 @@ async findAll(userId: string): Promise<CollectionResponseDto[]> {
 async findAll(userId: string): Promise<CollectionResponseDto[]> {
   const collections = await this.repository.findCollectionsByUserId(userId);
   const collectionIds = collections.map(c => c.id);
-  
+
   const counts = await this.repository.getItemCountsByCollectionIds(collectionIds);
-  
-  return collections.map(c => 
+
+  return collections.map(c =>
     this.toCollectionResponse(c, counts[c.id] ?? 0)
   );
 }
@@ -1396,9 +1525,11 @@ async findAll(userId: string): Promise<CollectionResponseDto[]> {
 ---
 
 ### PERF-002: collections.service.ts - getItemCount
+
 **Status**: ❌ UNFIXED | **Severity**: HIGH | **Lines**: 235-238
 
 **Code**:
+
 ```typescript
 private async getItemCount(collectionId: string): Promise<number> {
   const prisma: any = (this.repository as any).prisma;
@@ -1417,6 +1548,7 @@ private async getItemCount(collectionId: string): Promise<number> {
 ---
 
 ### PERF-003: library.repository.ts - findAll
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 176-206
 
 **Description**: Without type parameter, does 8 separate queries (one for each media type).
@@ -1434,12 +1566,14 @@ private async getItemCount(collectionId: string): Promise<number> {
 ---
 
 ### PERF-004: wrapped-generator.service.ts - Memory Exhaustion
+
 **Status**: ❌ CRITICAL | **Severity**: CRITICAL | **Lines**: 31
 
 **Code**:
+
 ```typescript
 const [journalEntries, memories, libraryItems] = await Promise.all([
-  this.repository.getJournalEntryDates(userId, 10000),  // 10,000 items!
+  this.repository.getJournalEntryDates(userId, 10000), // 10,000 items!
   this.repository.getRecentMemories(userId, 100),
   this.repository.getRecentlyAdded(userId, 100),
 ]);
@@ -1447,13 +1581,15 @@ const [journalEntries, memories, libraryItems] = await Promise.all([
 
 **Description**: `getJournalEntryDates` can return up to 10,000 journal entries, which are all loaded into memory. For a user with 10,000+ entries, this can consume significant memory and potentially crash the Node.js process.
 
-**Impact**: 
+**Impact**:
+
 - Memory exhaustion DoS attack
 - Server crash for active users
 - High memory usage per request
 - Potential for OOM killer to terminate process
 
 **Remediation**:
+
 ```typescript
 // Cap the limit to a reasonable number
 const MAX_JOURNAL_ENTRIES = 1000;
@@ -1471,6 +1607,7 @@ const [journalEntries] = await Promise.all([
 ```
 
 **Additional Recommendations**:
+
 - Add request-level memory limits
 - Monitor memory usage per request
 - Implement streaming for large datasets
@@ -1481,9 +1618,11 @@ const [journalEntries] = await Promise.all([
 ---
 
 ### PERF-005: wrapped-generator.service.ts - Unnecessary Queries
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 24-33
 
 **Code**:
+
 ```typescript
 const [
   moviesInProgress,
@@ -1494,11 +1633,11 @@ const [
   totalByType,
   recent,
 ] = await Promise.all([
-  this.repository.getInProgressByType(userId, 'movie', ['WATCHING'], 5),
-  this.repository.getInProgressByType(userId, 'book', ['READING'], 5),
-  this.repository.getInProgressByType(userId, 'game', ['PLAYING'], 5),
-  this.repository.getInProgressByType(userId, 'anime', ['WATCHING'], 5),
-  this.repository.getInProgressByType(userId, 'tvShow', ['WATCHING'], 5),
+  this.repository.getInProgressByType(userId, "movie", ["WATCHING"], 5),
+  this.repository.getInProgressByType(userId, "book", ["READING"], 5),
+  this.repository.getInProgressByType(userId, "game", ["PLAYING"], 5),
+  this.repository.getInProgressByType(userId, "anime", ["WATCHING"], 5),
+  this.repository.getInProgressByType(userId, "tvShow", ["WATCHING"], 5),
   this.repository.countTotalByType(userId),
   this.repository.getRecentlyCompleted(userId, 10),
 ]);
@@ -1509,13 +1648,14 @@ const [
 **Impact**: Unnecessary database load, especially for new users with no data.
 
 **Remediation**:
+
 ```typescript
 // Only query for media types that exist for the user
 const activeTypes = await this.getUserActiveMediaTypes(userId);
 
 const queries = [
-  ...activeTypes.map(type => 
-    this.repository.getInProgressByType(userId, type, this.getStatusForType(type), 5)
+  ...activeTypes.map((type) =>
+    this.repository.getInProgressByType(userId, type, this.getStatusForType(type), 5),
   ),
   this.repository.countTotalByType(userId),
   this.repository.getRecentlyCompleted(userId, 10),
@@ -1533,6 +1673,7 @@ const results = await Promise.all(queries);
 ---
 
 ### PERF-006: library.repository.ts - In-Memory Processing
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 176-206
 
 **Description**: Fan-out queries then in-memory sort and slice. Fetches all data then filters/sorts in JavaScript.
@@ -1540,6 +1681,7 @@ const results = await Promise.all(queries);
 **Impact**: Wastes memory and CPU, could be done more efficiently in database.
 
 **Remediation**: Push sorting/slicing to database:
+
 ```typescript
 // Instead of:
 const items = await delegate.findMany({ where, take: 1000 });
@@ -1549,7 +1691,7 @@ const result = sorted.slice(0, 50);
 // Do:
 const items = await delegate.findMany({
   where,
-  orderBy: { updatedAt: 'desc' },
+  orderBy: { updatedAt: "desc" },
   take: 50,
 });
 ```
@@ -1559,6 +1701,7 @@ const items = await delegate.findMany({
 ---
 
 ### PERF-007: media.repository.ts - In-Memory Processing
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 144-163
 
 **Description**: Same issue as PERF-006 - fan-out queries then in-memory sort.
@@ -1574,6 +1717,7 @@ const items = await delegate.findMany({
 ---
 
 ### PERF-008: auth.service.ts - Synchronous CPU Burn
+
 **Status**: ⚠️ MINOR | **Severity**: LOW | **Lines**: 85
 
 **Code**: `dummyCompare` is synchronous CPU-intensive operation.
@@ -1593,19 +1737,21 @@ const items = await delegate.findMany({
 ---
 
 ### PERF-009: auth.service.ts - Redundant Password Check
+
 **Status**: ❌ UNFIXED | **Severity**: MEDIUM | **Lines**: 91-95
 
 **Code**:
+
 ```typescript
 const user = await this.authRepository.findByEmail(email);
 if (!user) {
-  await this.dummyCompare(password);  // Good for timing
-  throw new UnauthorizedException('Invalid credentials');
+  await this.dummyCompare(password); // Good for timing
+  throw new UnauthorizedException("Invalid credentials");
 }
 
 const validPassword = await this.passwordService.compare(password, user.passwordHash);
 if (!validPassword) {
-  throw new UnauthorizedException('Invalid credentials');
+  throw new UnauthorizedException("Invalid credentials");
 }
 ```
 
@@ -1614,14 +1760,15 @@ if (!validPassword) {
 **Impact**: Timing attack possible (but dummyCompare helps mitigate).
 
 **Remediation**: Always call dummyCompare to normalize timing:
+
 ```typescript
 const user = await this.authRepository.findByEmail(email);
-const validPassword = user 
+const validPassword = user
   ? await this.passwordService.compare(password, user.passwordHash)
   : await this.dummyCompare(password);
 
 if (!user || !validPassword) {
-  throw new UnauthorizedException('Invalid credentials');
+  throw new UnauthorizedException("Invalid credentials");
 }
 ```
 
@@ -1634,6 +1781,7 @@ if (!user || !validPassword) {
 ---
 
 ### PERF-010: library.repository.ts - Compound Unique References
+
 **Status**: ⚠️ VERIFY | **Severity**: LOW | **Lines**: 112-113
 
 **Code**: References `userId_movieId` etc. but not verified in schema.
@@ -1651,6 +1799,7 @@ if (!user || !validPassword) {
 ---
 
 **NOTE**: This file continues in PART2.md due to size limits. PART2.md contains:
+
 - Testing Issues (20+)
 - Architecture Issues (26+)
 - Premiumness Issues (26+)

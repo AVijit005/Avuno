@@ -6,6 +6,8 @@ import { useMediaActions } from "@/lib/store/MediaActionsContext";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useCurrentUser } from "@/hooks/use-auth";
 
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
+
 const TITLES: Record<string, { title: string; subtitle?: string }> = {
   "/app/library": { title: "Your Library", subtitle: "Everything you've experienced." },
   "/app/collections": { title: "Collections", subtitle: "Curated stories, grouped your way." },
@@ -53,7 +55,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="sticky top-0 z-30 px-6 pt-5 lg:px-10"
     >
-      <div className="glass-subtle flex items-center justify-between gap-4 rounded-2xl px-3 py-2 md:px-4">
+      <PremiumGlass variant="subtle" className="flex items-center justify-between gap-4 px-3 py-2 md:px-4">
         <div className="flex min-w-0 items-center gap-4">
           {isHome ? (
             <div className="hidden flex-col leading-tight md:flex" suppressHydrationWarning>
@@ -130,12 +132,13 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Link
             to="/app/profile"
             aria-label="Profile"
+            style={{ viewTransitionName: "user-avatar" }}
             className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-white/20 press-scale"
           >
             {initials}
           </Link>
         </div>
-      </div>
+      </PremiumGlass>
     </motion.header>
   );
 }

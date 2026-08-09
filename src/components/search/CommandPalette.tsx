@@ -19,6 +19,7 @@ import {
 import { SEARCHABLE_SETTINGS, type MediaItem, type MediaKind } from "@/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PremiumImage } from "@/components/ui/PremiumImage";
 import { useSearch, useRecentSearches, useTrending } from "@/hooks/use-search";
 import { analytics } from "@/lib/analytics";
 
@@ -530,12 +531,14 @@ function RowContent({ row }: { row: Row }) {
     const Icon = MEDIA_ICONS[row.item.kind as MediaKind] || Sparkles;
     return (
       <>
-        <img
-          src={row.item.poster || undefined}
+        <PremiumImage
+          src={row.item.poster || ''}
           alt={row.item.title}
+          aspectRatio="poster"
           className="h-10 w-7 rounded-md object-cover ring-1 ring-white/10"
+          style={{ viewTransitionName: `poster-${row.item.id}` }}
         />
-        <div className="min-w-0 flex-1">
+        <div className="min-w-0 flex-1 ml-3">
           <div className="truncate text-sm">{row.item.title}</div>
           <div className="truncate text-xs text-muted-foreground">
             {[row.item.creator, row.item.year, row.item.kind]

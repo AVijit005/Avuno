@@ -32,6 +32,8 @@ services:
     image: postgres:16-alpine
     container_name: chronicle-postgres
     restart: unless-stopped
+    ports:
+      - '5432:5432'
     environment:
       POSTGRES_USER: ${DB_USER:-chronicle}
       POSTGRES_PASSWORD: ${DB_PASSWORD:?DB_PASSWORD is required}
@@ -50,6 +52,8 @@ services:
     image: redis:7-alpine
     container_name: chronicle-redis
     restart: unless-stopped
+    ports:
+      - '6379:6379'
     command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:?REDIS_PASSWORD is required}
     volumes:
       - redis_data:/data

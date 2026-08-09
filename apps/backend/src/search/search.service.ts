@@ -1,15 +1,19 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { SearchRepository } from './search.repository';
 import { SearchSuggestionService } from './search-suggestion.service';
 import { SearchStatisticsService } from './search-statistics.service';
+import { RedisService } from '../redis/redis.service';
 import type { SearchQueryDto, SearchResponseDto, SearchResultItemDto, SearchFacetsDto } from './dto';
 
 @Injectable()
 export class SearchService {
+  private readonly logger = new Logger(SearchService.name);
+
   constructor(
     private readonly repository: SearchRepository,
     private readonly suggestionService: SearchSuggestionService,
     private readonly statsService: SearchStatisticsService,
+    private readonly redisService: RedisService,
   ) {}
 
   async search(userId: string, dto: SearchQueryDto): Promise<SearchResponseDto> {
@@ -22,6 +26,18 @@ export class SearchService {
       return { items: [], total: 0, hasMore: false, cursor: null };
     }
 
+    const cacheKey = `search:${userId}:${mode}:${typeFilter ?? 'all'}:${limit}:${q.toLowerCase()}`;
+    const cached = await this.redisService.getClient().get(cacheKey);
+    if (cached) {
+      this.logger.debug(`Cache hit for search: ${cacheKey}`);
+      try {
+        return JSON.parse(cached) as SearchResponseDto;
+      } catch {
+        this.logger.warn(`Failed to parse cached search result for ${cacheKey}`);
+      }
+    }
+
+    this.logger.debug(`Cache miss for search: ${cacheKey}`);
     let items: SearchResultItemDto[] = [];
 
     switch (mode) {
@@ -86,13 +102,18 @@ export class SearchService {
     // Build facets
     const facets = this.buildFacets(sliced);
 
-    return {
+    const result: SearchResponseDto = {
       items: sliced,
       total: sliced.length,
       hasMore,
       cursor: sliced.length > 0 ? `${sliced[sliced.length - 1].score}_${sliced[sliced.length - 1].id}` : null,
       facets,
     };
+
+    // Cache the result for 5 minutes (300 seconds)
+    await this.redisService.getClient().set(cacheKey, JSON.stringify(result), 'EX', 300);
+
+    return result;
   }
 
   // ─── Delegated services ──────────────────────────────────────────────────

@@ -48,8 +48,8 @@ export class LibraryService {
       });
 
       return this.toResponse(item, dto.mediaType);
-    } catch (error: any) {
-      if (error.code === 'P2002') {
+    } catch (error: unknown) {
+      if (error instanceof Error && (error as any).code === 'P2002') {
         throw new ConflictException('Item already exists in library');
       }
       throw error;

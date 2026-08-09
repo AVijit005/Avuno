@@ -9,7 +9,6 @@ export class CookieService {
   constructor(private readonly config: ConfigService) {}
 
   writeRefreshToken(response: Response, token: string, maxAgeSeconds: number): void {
-    const isProduction = this.config.get<string>('nodeEnv') === 'production';
     response.cookie(REFRESH_TOKEN_COOKIE, token, {
       httpOnly: true,
       secure: true,
@@ -25,7 +24,6 @@ export class CookieService {
   }
 
   clearRefreshToken(response: Response): void {
-    const isProduction = this.config.get<string>('nodeEnv') === 'production';
     response.clearCookie(REFRESH_TOKEN_COOKIE, {
       httpOnly: true,
       secure: true,
