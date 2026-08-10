@@ -33,7 +33,7 @@ function withSecurityHeaders(response: Response): Response {
       "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
       "font-src 'self' https://fonts.gstatic.com",
       "img-src 'self' data: https:",
-      "connect-src 'self'",
+      `connect-src 'self' ${process.env.VITE_API_URL ? new URL(process.env.VITE_API_URL).origin : "https://api.avuno.xyz"}`,
       "frame-ancestors 'none'",
       "base-uri 'self'",
       "form-action 'self'",
