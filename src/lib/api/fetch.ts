@@ -133,7 +133,7 @@ async function refreshAccessToken(): Promise<string> {
  * first await so concurrent callers share one in-flight request and we never
  * burn more than one refresh-token rotation at a time.
  */
-function forceRefreshValidToken(): Promise<string> {
+export function forceRefreshValidToken(): Promise<string> {
   if (typeof window === "undefined") {
     return Promise.reject(new ApiError("No session on server", 401, "NO_SESSION"));
   }

@@ -184,10 +184,15 @@ function RootComponent() {
   useEffect(() => {
     let mounted = true;
     const restoreSession = async () => {
-      const token = getAccessToken();
+      let token = getAccessToken();
       if (!token) {
-        if (mounted) setIsRestoring(false);
-        return;
+        try {
+          const { forceRefreshValidToken } = await import("@/lib/api/fetch");
+          token = await forceRefreshValidToken();
+        } catch {
+          if (mounted) setIsRestoring(false);
+          return;
+        }
       }
       try {
         const user = await authApi.getCurrentUser();
