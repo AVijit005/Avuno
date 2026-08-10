@@ -94,7 +94,7 @@ export async function createApp(_options?: NestApplicationOptions): Promise<INes
     },
     credentials: true,
     methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id', 'ngrok-skip-browser-warning', 'x-correlation-id'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-request-id', 'ngrok-skip-browser-warning', 'x-correlation-id', 'x-requested-with'],
   });
 
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
