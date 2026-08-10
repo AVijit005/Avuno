@@ -1,10 +1,9 @@
 // Dynamic Greeting Engine — deterministic, SSR-safe.
-import { TODAY } from "@/lib/memory";
 import { mulberry } from "@/lib/seed";
 
 export type TimeOfDay = "morning" | "afternoon" | "evening" | "night";
 
-export function getTimeOfDay(d: Date = TODAY()): TimeOfDay {
+export function getTimeOfDay(d: Date = new Date()): TimeOfDay {
   const h = d.getUTCHours();
   if (h < 5) return "night";
   if (h < 12) return "morning";
@@ -160,7 +159,7 @@ export interface GreetingInput {
 
 export function getGreeting(input: GreetingInput = {}): { title: string; subtitle?: string } {
   const tod = getTimeOfDay();
-  const now = TODAY();
+  const now = new Date();
   const seed = now.getUTCFullYear() * 372 + now.getUTCMonth() * 31 + now.getUTCDate();
   const rng = mulberry(seed);
   const pool = TEMPLATES[tod];

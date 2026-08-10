@@ -532,7 +532,7 @@ function RowContent({ row }: { row: Row }) {
     return (
       <>
         <PremiumImage
-          src={row.item.poster || ''}
+          src={row.item.poster || ""}
           alt={row.item.title}
           aspectRatio="poster"
           className="h-10 w-7 rounded-md object-cover ring-1 ring-white/10"

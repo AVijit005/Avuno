@@ -15,10 +15,7 @@ import { ContinueCard } from "@/components/library/ContinueCard";
 import { PlanningRow } from "@/components/library/PlanningRow";
 import { RecentlyFinishedTimeline } from "@/components/library/RecentlyFinishedTimeline";
 import { FavoritesGallery } from "@/components/library/FavoritesGallery";
-import { MemoryHighlights } from "@/components/memory/MemoryHighlights";
-import { RememberAgain } from "@/components/memory/RememberAgain";
-import { ComfortStories } from "@/components/discovery/ComfortStories";
-import { GoalCard } from "@/components/goals/GoalCard";
+import { StatCard } from "@/components/common/Section";
 
 import { LibraryMap } from "@/components/intelligence/LibraryMap";
 import { Collage } from "@/components/editorial/Collage";
@@ -31,7 +28,6 @@ import { useCollections } from "@/hooks/use-collections";
 import { useChallenges } from "@/hooks/use-analytics";
 import { adaptLibraryItem } from "@/lib/adapters/media";
 import { adaptCollectionResponse } from "@/lib/adapters/collection";
-import { adaptGoal } from "@/lib/goals";
 
 export const Route = createFileRoute("/app/library/")({
   component: LibraryIndex,
@@ -88,7 +84,6 @@ function LibraryIndex() {
   const recentlyAdded = (allData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
   const collectionList = collections?.map(adaptCollectionResponse) ?? [];
   const wall = favs.slice(0, 4);
-  const primaryGoal = challengesData?.goals?.[0] ? adaptGoal(challengesData.goals[0]) : null;
 
   return (
     <div className="space-y-16 pt-2 pb-24">
@@ -246,14 +241,6 @@ function LibraryIndex() {
       </RevealSection>
 
       <RevealSection>
-        <MemoryHighlights />
-      </RevealSection>
-
-      <RevealSection>
-        <RememberAgain />
-      </RevealSection>
-
-      <RevealSection>
         <SectionHeader
           eyebrow="Collections"
           title="Curated collections"
@@ -281,12 +268,6 @@ function LibraryIndex() {
           </div>
           <ArrowRight className="h-6 w-6 shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-foreground" />
         </Link>
-      </RevealSection>
-
-      <RevealSection>{primaryGoal && <GoalCard goal={primaryGoal} />}</RevealSection>
-
-      <RevealSection>
-        <ComfortStories />
       </RevealSection>
 
       <RevealSection>

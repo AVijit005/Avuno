@@ -4,7 +4,7 @@ import { getCharacter } from "@/lib/characters";
 import { CharacterProfile } from "@/components/character/CharacterProfile";
 import { CharacterQuotes } from "@/components/character/CharacterQuotes";
 import { Section } from "@/components/common/Section";
-import { RelationshipPanel } from "@/components/profile/RelationshipPanel";
+
 import { ShareCardPreview } from "@/components/share/ShareCardPreview";
 
 export const Route = createFileRoute("/app/characters/$id")({
@@ -38,9 +38,6 @@ function CharacterPage() {
       <CharacterProfile character={character} media={media} />
       <Section title="Quotes">
         <CharacterQuotes quotes={character.quotes ?? []} accent={character.accent} />
-      </Section>
-      <Section title="Connections">
-        <RelationshipPanel kind="character" id={character.id} />
       </Section>
       <Section title="Share">
         <ShareCardPreview

@@ -64,7 +64,7 @@ function AuthCallback() {
         setAccessToken(res.accessToken);
         router.navigate({ to: "/app", replace: true });
       })
-      .catch((err) => fail(`Authentication failed. ${err.message || 'Please try again.'}`));
+      .catch((err) => fail(`Authentication failed. ${err.message || "Please try again."}`));
   }, []);
 
   return (

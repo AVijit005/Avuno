@@ -17,7 +17,7 @@ import { adaptCalendarYear } from "@/lib/adapters/analytics";
 import { useQuery } from "@tanstack/react-query";
 import { analyticsApi } from "@/lib/api";
 import { MediaConstellation } from "@/components/analytics/MediaConstellation";
-import { ThisWeekHistory } from "@/components/memory/ThisWeekHistory";
+
 import {
   MemoryZone,
   CalendarHero,
@@ -25,10 +25,6 @@ import {
   MonthlyGrid,
   DailyMemoryPanel,
   MediaHeatmap,
-  MemoryHighlights,
-  MemoryStreaks,
-  UpcomingReleases,
-  CalendarInsights,
   AddMemoryModal,
   CalendarSkeleton,
 } from "@/components/calendar";
@@ -288,24 +284,6 @@ function CalendarPage() {
 
       <MemoryZone title="Media heatmap" sub="52 weeks of attention.">
         <MediaHeatmap heatmap={calendarUI?.heatmap} />
-      </MemoryZone>
-      <MemoryZone title="Memory highlights">
-        <MemoryHighlights highlights={calendarUI?.highlights} />
-      </MemoryZone>
-      <MemoryZone title="Memory streaks">
-        <MemoryStreaks streaks={calendarUI?.streaks} />
-      </MemoryZone>
-      <MemoryZone title="Upcoming releases">
-        <UpcomingReleases releases={calendarUI?.releases} />
-      </MemoryZone>
-      <MemoryZone title="Calendar insights">
-        <CalendarInsights insights={calendarUI?.insights} />
-      </MemoryZone>
-      <MemoryZone
-        title="This week, in your life"
-        sub="The same week of the year, across previous years."
-      >
-        <ThisWeekHistory />
       </MemoryZone>
 
       <AddMemoryModal

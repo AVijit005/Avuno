@@ -1,1 +1,0 @@
-export { GenreChallenge } from "./Challenges";

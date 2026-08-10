@@ -5,10 +5,6 @@ import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumImage } from "@/components/ui/PremiumImage";
 import { CountUp, SegmentedFilter, ZoneHeading } from "@/components/analytics/AnalyticsKit";
-import { LIFE_CHAPTERS } from "@/lib/memoryInsights";
-import { LifeChapterCard } from "@/components/memory/LifeChapterCard";
-import { SeasonalRecommendations } from "@/components/discovery/SeasonalRecommendations";
-import { JourneyTracker } from "@/components/challenges/JourneyTracker";
 import { MediaEvolution } from "@/components/intelligence/MediaEvolution";
 import { LiveStatsStrip } from "@/components/memory/LiveStatsStrip";
 import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
@@ -255,7 +251,6 @@ function TimelinePage() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
             { l: "Stories tracked", v: allEvents?.length || 0 },
-            { l: "Life chapters", v: LIFE_CHAPTERS?.length || 0 },
             { l: "Journal entries", v: 0 },
             { l: "Achievements", v: 0 },
           ].map((s) => (
@@ -271,44 +266,6 @@ function TimelinePage() {
         </div>
       </motion.section>
 
-      {/* Memory · Life Chapters */}
-      <motion.section
-        initial={{ opacity: 0, y: reduced ? 0 : 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: reduced ? 0 : 0.7 }}
-        className="mt-24"
-      >
-        <ZoneHeading
-          eyebrow="Memory"
-          title="Life chapters"
-          sub="Periods of your life, told through stories."
-        />
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-          {LIFE_CHAPTERS.map((c) => (
-            <LifeChapterCard key={c.id} chapter={c} />
-          ))}
-        </div>
-      </motion.section>
-
-      <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className="mt-24"
-      >
-        <SeasonalRecommendations />
-      </motion.section>
-      <motion.section
-        initial={{ opacity: 0, y: 24 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.7 }}
-        className="mt-24"
-      >
-        <JourneyTracker />
-      </motion.section>
       <motion.section
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}

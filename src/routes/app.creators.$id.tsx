@@ -4,7 +4,7 @@ import { buildCreatorProfile } from "@/lib/creatorEngine";
 import { CreatorHeader } from "@/components/creator/CreatorHeader";
 import { CreatorWorks } from "@/components/creator/CreatorWorks";
 import { Section } from "@/components/common/Section";
-import { RelationshipPanel } from "@/components/profile/RelationshipPanel";
+
 import { ShareCardPreview } from "@/components/share/ShareCardPreview";
 
 export const Route = createFileRoute("/app/creators/$id")({
@@ -48,9 +48,6 @@ function CreatorPage() {
           </div>
         </Section>
       )}
-      <Section title="Connections">
-        <RelationshipPanel kind="creator" id={profile.creator.id} />
-      </Section>
       <Section title="Share">
         <ShareCardPreview
           kind="creator"

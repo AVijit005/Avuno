@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { QuoteGallery } from "@/components/profile/QuoteGallery";
+
 import { PullQuote } from "@/components/editorial/PullQuote";
 import { YourQuotesRail } from "@/components/memory/YourQuotesRail";
 
@@ -48,13 +48,6 @@ function QuotesPage() {
 
       <section className="mt-12">
         <YourQuotesRail />
-      </section>
-
-      <section className="mt-16">
-        <div className="mb-4 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-          From across your library
-        </div>
-        <QuoteGallery limit={rest.length} />
       </section>
     </div>
   );

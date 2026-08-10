@@ -1,21 +1,16 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { StatCard } from "@/components/common/Section";
 import { IdentityHero } from "@/components/profile/IdentityHero";
-import { MediaDNA } from "@/components/profile/MediaDNA";
 import { MemoryMap } from "@/components/profile/MemoryMap";
-import { LifeChapters } from "@/components/profile/LifeChapters";
-import { MemoryCapsules } from "@/components/profile/MemoryCapsules";
 import { Museum } from "@/components/profile/Museum";
-import { QuoteGallery } from "@/components/profile/QuoteGallery";
 import { ActivityCalendar } from "@/components/profile/ActivityCalendar";
 import { LifetimeMilestones } from "@/components/profile/LifetimeMilestones";
+import { EditorialProfileFooter } from "@/components/profile/EditorialProfileFooter";
+import { Section } from "@/components/common/Section";
 import { BookmarkPanel } from "@/components/profile/BookmarkPanel";
 import { SaveForLaterPanel } from "@/components/profile/SaveForLaterPanel";
 import { UniversalNotes } from "@/components/profile/UniversalNotes";
-import { EditorialProfileFooter } from "@/components/profile/EditorialProfileFooter";
-import { Section } from "@/components/common/Section";
 import { PullQuote } from "@/components/editorial/PullQuote";
-import { SplitBlock } from "@/components/editorial/SplitBlock";
 import { Collage } from "@/components/editorial/Collage";
 import { useOverview, useStreaks } from "@/hooks/use-analytics";
 import { adaptOverview, adaptStreaks } from "@/lib/adapters/analytics";
@@ -70,58 +65,10 @@ function ProfilePage() {
         />
       </div>
 
-      {/* DNA — centered, full-bleed feel */}
-      <Section title="Media DNA" subtitle="A fingerprint of how you experience stories.">
-        <MediaDNA />
-      </Section>
-
-      {/* Life chapters as split editorial */}
-      <div className="mt-16">
-        <SplitBlock
-          ratio="60/40"
-          primary={<LifeChapters />}
-          secondary={
-            <div className="pt-2">
-              <div className="text-[10px] uppercase tracking-[0.28em] text-primary/85">Eras</div>
-              <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">
-                Life chapters
-              </h2>
-              <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-foreground/80">
-                The seasons your stories grew alongside you — each one a small archive of who you
-                were becoming.
-              </p>
-            </div>
-          }
-        />
-      </div>
-
       {/* Memory map — full width */}
       <Section title="Memory map" subtitle="Every corner of your Avuno, one tap away.">
         <MemoryMap />
       </Section>
-
-      {/* Capsules as right-heavy split */}
-      <div className="mt-16">
-        <SplitBlock
-          ratio="60/40"
-          reverse
-          primary={<MemoryCapsules />}
-          secondary={
-            <div className="pt-2">
-              <div className="text-[10px] uppercase tracking-[0.28em] text-primary/85">
-                Captured
-              </div>
-              <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">
-                Memory capsules
-              </h2>
-              <p className="mt-4 max-w-prose text-[15px] leading-relaxed text-foreground/80">
-                Weekends and weeks Avuno quietly folded into a single feeling — opened only when you
-                want them.
-              </p>
-            </div>
-          }
-        />
-      </div>
 
       {/* Museum as collage instead of grid */}
       <Section title="Personal museum" subtitle="The shelves you're proudest of.">
@@ -150,15 +97,6 @@ function ProfilePage() {
       </Section>
       <Section title="Lifetime milestones">
         <LifetimeMilestones />
-      </Section>
-
-      {/* Pull quote separating archive-of-self from kept fragments */}
-      <PullQuote attribution="Lines that stayed with you">
-        The quotes you save are the version of yourself you keep rereading.
-      </PullQuote>
-
-      <Section title="Quotes you've kept">
-        <QuoteGallery limit={6} />
       </Section>
 
       <div className="mt-12 grid gap-4 md:grid-cols-2">

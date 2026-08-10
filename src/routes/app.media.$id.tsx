@@ -14,35 +14,10 @@ import { MediaCollections } from "@/components/media-detail/MediaCollections";
 import { MediaStatistics } from "@/components/media-detail/MediaStatistics";
 import { Chapter } from "@/components/media-detail/Chapter";
 import { ChapterNav } from "@/components/media-detail/ChapterNav";
-import { MemorySummary } from "@/components/memory/MemorySummary";
-import { MemoryJourney } from "@/components/memory/MemoryJourney";
-import { MemoryConnections } from "@/components/memory/MemoryConnections";
-import { BecauseYouLoved } from "@/components/discovery/BecauseYouLoved";
-import { GoalCard } from "@/components/goals/GoalCard";
-import { getRelatedGoal } from "@/lib/goals";
-import { StoryUniverse } from "@/components/intelligence/StoryUniverse";
-import { StoryDNA } from "@/components/intelligence/StoryDNA";
-import { JourneyContinuity } from "@/components/intelligence/JourneyContinuity";
 import { LivingHeaderMeta } from "@/components/media/LivingHeaderMeta";
-import { StoryJourney } from "@/components/media/StoryJourney";
-import { MemoryLayer } from "@/components/media/MemoryLayer";
-import { EmotionJourney } from "@/components/media/EmotionJourney";
-import { FavoriteMoments as MediaFavoriteMoments } from "@/components/media/FavoriteMoments";
-import { CharactersYouLoved } from "@/components/media/CharactersYouLoved";
-import { WhyItWorked } from "@/components/media/WhyItWorked";
-import { SimilarMemories } from "@/components/media/SimilarMemories";
 import { JournalIntegration } from "@/components/media/JournalIntegration";
 import { CollectionsIntegration } from "@/components/media/CollectionsIntegration";
-import { EditorialStats } from "@/components/media/EditorialStats";
-import { CompanionStories } from "@/components/media/CompanionStories";
-import { LifeContext } from "@/components/media/LifeContext";
-import { DiscussionNotes } from "@/components/media/DiscussionNotes";
-import { RewatchIntelligence } from "@/components/media/RewatchIntelligence";
-import { CompletionReflection } from "@/components/media/CompletionReflection";
-import { SessionHistory } from "@/components/media/SessionHistory";
-import { MediaRelationships } from "@/components/media/MediaRelationships";
 import { EditorialFooter } from "@/components/media/EditorialFooter";
-import { RelationshipPanel } from "@/components/profile/RelationshipPanel";
 import { MediaReflectionPanel } from "@/components/memory/YourReflectionsRail";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
@@ -54,7 +29,6 @@ export const Route = createFileRoute("/app/media/$id")({
 const CHAPTERS = [
   { id: "ch-story", label: "Story" },
   { id: "ch-memory", label: "Memory" },
-  { id: "ch-reflection", label: "Reflection" },
   { id: "ch-connections", label: "Connections" },
   { id: "ch-journey", label: "Journey" },
   { id: "ch-archive", label: "Archive" },
@@ -125,7 +99,6 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
       >
         <ContinueExperience item={item} />
         <MediaInformation item={item} />
-        <StoryJourney item={item} />
       </Chapter>
 
       {/* ───── Chapter 02 — Memory (journal) ──────────────────────────── */}
@@ -139,32 +112,12 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
       >
         <PersonalMemory item={item} />
         <MediaReflectionPanel id={item.id} />
-        <MemorySummary mediaId={item.id} />
-        <MemoryLayer item={item} />
-        <EmotionJourney item={item} />
-        <MediaFavoriteMoments item={item} />
-        <CharactersYouLoved item={item} />
       </Chapter>
 
-      {/* ───── Chapter 03 — Reflection (essay) ────────────────────────── */}
-      <Chapter
-        id="ch-reflection"
-        number="03"
-        eyebrow="Chapter three"
-        title="Why it worked for you"
-        description="The quiet shape of what this story did."
-        tone="essay"
-      >
-        <WhyItWorked item={item} />
-        <CompletionReflection item={item} />
-        <LifeContext item={item} />
-      </Chapter>
-
-      {/* ───── Chapter 04 — Connections (diagram) ─────────────────────── */}
       <Chapter
         id="ch-connections"
         number="04"
-        eyebrow="Chapter four"
+        eyebrow="Chapter three"
         title="Where it lives in your world"
         description="The collections, journal entries, and stories it touches."
         tone="diagram"
@@ -175,17 +128,13 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
           <JournalIntegration item={item} />
         </div>
         <MediaCollections item={item} />
-        <SimilarMemories item={item} />
-        <CompanionStories item={item} />
-        <MediaRelationships item={item} />
-        <RelationshipPanel kind="media" id={item.id} title="Across your Avuno" />
       </Chapter>
 
       {/* ───── Chapter 05 — Journey (timeline) ────────────────────────── */}
       <Chapter
         id="ch-journey"
         number="05"
-        eyebrow="Chapter five"
+        eyebrow="Chapter four"
         title="Your journey through it"
         description="History, sessions, and what's still ahead."
         tone="timeline"
@@ -194,9 +143,6 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
           <MediaTimelinePreview item={item} />
           <MediaJournalPreview item={item} />
         </div>
-        <RewatchIntelligence item={item} />
-        <BecauseYouLoved anchorId={item.id} />
-        {getRelatedGoal(item.id) && <GoalCard goal={getRelatedGoal(item.id)!} />}
       </Chapter>
 
       {/* ───── Chapter 06 — Archive (technical) ───────────────────────── */}
@@ -210,13 +156,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
         collapsible
         defaultOpen={false}
       >
-        <StoryUniverse mediaId={item.id} />
-        <StoryDNA mediaId={item.id} />
-        <JourneyContinuity mediaId={item.id} />
-        <EditorialStats item={item} />
         <MediaStatistics item={item} />
-        <SessionHistory item={item} />
-        <DiscussionNotes item={item} />
       </Chapter>
 
       <EditorialFooter />

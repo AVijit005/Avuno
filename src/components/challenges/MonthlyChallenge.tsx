@@ -1,1 +1,0 @@
-export { MonthlyChallenge } from "./Challenges";

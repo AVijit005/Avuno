@@ -30,7 +30,7 @@ export const Route = createFileRoute("/app")({
         console.error("app.tsx beforeLoad caught 401!", error);
         throw redirect({
           to: "/auth",
-          search: { error: "app_beforeload_401" }
+          search: { error: "app_beforeload_401" },
         });
       }
       // Network error or other transient failure — allow rendering /app

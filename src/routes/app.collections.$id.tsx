@@ -32,7 +32,7 @@ import { CompanionCollections } from "@/components/collections/CompanionCollecti
 import { CuratorNotes } from "@/components/collections/CuratorNotes";
 import { CollectionFooter } from "@/components/collections/CollectionFooter";
 import { CollectionQuickActions } from "@/components/collections/CollectionQuickActions";
-import { RelationshipPanel } from "@/components/profile/RelationshipPanel";
+
 import { Chapter } from "@/components/media-detail/Chapter";
 import { DropCap } from "@/components/editorial/DropCap";
 import { PullQuote } from "@/components/editorial/PullQuote";

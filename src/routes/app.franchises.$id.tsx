@@ -5,7 +5,7 @@ import { FranchiseHero } from "@/components/franchise/FranchiseHero";
 import { FranchiseTimeline } from "@/components/franchise/FranchiseTimeline";
 import { FranchiseEntries } from "@/components/franchise/FranchiseEntries";
 import { Section } from "@/components/common/Section";
-import { RelationshipPanel } from "@/components/profile/RelationshipPanel";
+
 import { ShareCardPreview } from "@/components/share/ShareCardPreview";
 
 export const Route = createFileRoute("/app/franchises/$id")({
@@ -35,9 +35,6 @@ function FranchisePage() {
       </Section>
       <Section title="Timeline">
         <FranchiseTimeline events={profile.timeline} />
-      </Section>
-      <Section title="Connections">
-        <RelationshipPanel kind="franchise" id={profile.franchise.id} />
       </Section>
       <Section title="Share">
         <ShareCardPreview

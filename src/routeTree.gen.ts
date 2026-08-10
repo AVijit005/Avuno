@@ -63,7 +63,6 @@ import { Route as AppLibraryRecentlyFinishedRouteImport } from './routes/app.lib
 import { Route as AppLibraryRewatchingRouteImport } from './routes/app.library.rewatching'
 import { Route as AppMediaIdRouteImport } from './routes/app.media.$id'
 import { Route as AppSettingsEmailCaptureRouteImport } from './routes/app.settings.email-capture'
-import { Route as AppTagsTagRouteImport } from './routes/app.tags.$tag'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -336,11 +335,6 @@ const AppSettingsEmailCaptureRoute = AppSettingsEmailCaptureRouteImport.update({
   path: '/email-capture',
   getParentRoute: () => AppSettingsRoute,
 } as any)
-const AppTagsTagRoute = AppTagsTagRouteImport.update({
-  id: '/tags/$tag',
-  path: '/tags/$tag',
-  getParentRoute: () => AppRoute,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -392,7 +386,6 @@ export interface FileRoutesByFullPath {
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
-  '/app/tags/$tag': typeof AppTagsTagRoute
   '/app/characters/': typeof AppCharactersIndexRoute
   '/app/collections/': typeof AppCollectionsIndexRoute
   '/app/creators/': typeof AppCreatorsIndexRoute
@@ -446,7 +439,6 @@ export interface FileRoutesByTo {
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
-  '/app/tags/$tag': typeof AppTagsTagRoute
   '/app/characters': typeof AppCharactersIndexRoute
   '/app/collections': typeof AppCollectionsIndexRoute
   '/app/creators': typeof AppCreatorsIndexRoute
@@ -504,7 +496,6 @@ export interface FileRoutesById {
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
-  '/app/tags/$tag': typeof AppTagsTagRoute
   '/app/characters/': typeof AppCharactersIndexRoute
   '/app/collections/': typeof AppCollectionsIndexRoute
   '/app/creators/': typeof AppCreatorsIndexRoute
@@ -563,7 +554,6 @@ export interface FileRouteTypes {
     | '/app/library/rewatching'
     | '/app/media/$id'
     | '/app/settings/email-capture'
-    | '/app/tags/$tag'
     | '/app/characters/'
     | '/app/collections/'
     | '/app/creators/'
@@ -617,7 +607,6 @@ export interface FileRouteTypes {
     | '/app/library/rewatching'
     | '/app/media/$id'
     | '/app/settings/email-capture'
-    | '/app/tags/$tag'
     | '/app/characters'
     | '/app/collections'
     | '/app/creators'
@@ -674,7 +663,6 @@ export interface FileRouteTypes {
     | '/app/library/rewatching'
     | '/app/media/$id'
     | '/app/settings/email-capture'
-    | '/app/tags/$tag'
     | '/app/characters/'
     | '/app/collections/'
     | '/app/creators/'
@@ -1072,13 +1060,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppSettingsEmailCaptureRouteImport
       parentRoute: typeof AppSettingsRoute
     }
-    '/app/tags/$tag': {
-      id: '/app/tags/$tag'
-      path: '/tags/$tag'
-      fullPath: '/app/tags/$tag'
-      preLoaderRoute: typeof AppTagsTagRouteImport
-      parentRoute: typeof AppRoute
-    }
   }
 }
 
@@ -1170,7 +1151,6 @@ interface AppRouteChildren {
   AppCreatorsIdRoute: typeof AppCreatorsIdRoute
   AppFranchisesIdRoute: typeof AppFranchisesIdRoute
   AppMediaIdRoute: typeof AppMediaIdRoute
-  AppTagsTagRoute: typeof AppTagsTagRoute
   AppCharactersIndexRoute: typeof AppCharactersIndexRoute
   AppCreatorsIndexRoute: typeof AppCreatorsIndexRoute
   AppFranchisesIndexRoute: typeof AppFranchisesIndexRoute
@@ -1202,7 +1182,6 @@ const AppRouteChildren: AppRouteChildren = {
   AppCreatorsIdRoute: AppCreatorsIdRoute,
   AppFranchisesIdRoute: AppFranchisesIdRoute,
   AppMediaIdRoute: AppMediaIdRoute,
-  AppTagsTagRoute: AppTagsTagRoute,
   AppCharactersIndexRoute: AppCharactersIndexRoute,
   AppCreatorsIndexRoute: AppCreatorsIndexRoute,
   AppFranchisesIndexRoute: AppFranchisesIndexRoute,

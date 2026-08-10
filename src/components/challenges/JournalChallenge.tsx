@@ -1,1 +1,0 @@
-export { JournalChallenge } from "./Challenges";

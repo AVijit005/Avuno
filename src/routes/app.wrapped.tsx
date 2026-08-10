@@ -1,6 +1,5 @@
 import { CountUp } from "@/components/analytics/AnalyticsKit";
-import { MemoryMilestones } from "@/components/memory/MemoryMilestones";
-import { FirstMoments } from "@/components/memory/FirstMoments";
+
 import { LiveStatsStrip } from "@/components/memory/LiveStatsStrip";
 import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
 import { YourQuotesRail } from "@/components/memory/YourQuotesRail";

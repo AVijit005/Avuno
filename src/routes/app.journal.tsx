@@ -4,9 +4,6 @@ import { NotebookPen } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { StatCardPremium } from "@/components/analytics/AnalyticsKit";
-import { MemoryBookmarks } from "@/components/memory/MemoryBookmarks";
-import { getActiveChallenge } from "@/lib/challenges";
-import { ChallengeCard } from "@/components/challenges/ChallengeCard";
 import { MemoryDNA } from "@/components/intelligence/MemoryDNA";
 import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
 import { LiveStatsStrip } from "@/components/memory/LiveStatsStrip";
@@ -245,23 +242,10 @@ function JournalPage() {
       </MemoryZone>
 
       <MemoryZone
-        title="What you watched & played"
-        sub="The stories that shaped your thoughts this month."
-      >
-        <MemoryBookmarks />
-      </MemoryZone>
-
-      <MemoryZone
         title="Recurring themes"
         sub="The algorithm noticed these patterns in your writing."
       >
         <MemoryDNA />
-      </MemoryZone>
-
-      <MemoryZone title="Follow the thread">
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <ChallengeCard challenge={getActiveChallenge()} />
-        </div>
       </MemoryZone>
 
       <MemoryZone title="Past reflections" sub="Your own words, resurfaced when relevant.">

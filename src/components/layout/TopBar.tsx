@@ -55,7 +55,10 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="sticky top-0 z-30 px-6 pt-5 lg:px-10"
     >
-      <PremiumGlass variant="subtle" className="flex items-center justify-between gap-4 px-3 py-2 md:px-4">
+      <PremiumGlass
+        variant="subtle"
+        className="flex items-center justify-between gap-4 px-3 py-2 md:px-4"
+      >
         <div className="flex min-w-0 items-center gap-4">
           {isHome ? (
             <div className="hidden flex-col leading-tight md:flex" suppressHydrationWarning>
