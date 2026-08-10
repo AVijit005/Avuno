@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
 import { setAccessToken, apiPost } from "@/lib/api/fetch";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ function AuthCallback() {
   // development, and a second exchange would fail against an already-consumed
   // code and bounce the user to /auth.
   const exchanged = useRef(false);
+  const router = useRouter();
 
   useEffect(() => {
     if (typeof window === "undefined" || exchanged.current) return;
