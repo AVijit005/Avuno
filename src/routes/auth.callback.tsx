@@ -61,7 +61,7 @@ function AuthCallback() {
           return;
         }
         setAccessToken(res.accessToken);
-        window.location.replace("/app");
+        router.navigate({ to: "/app", replace: true });
       })
       .catch((err) => fail(`Authentication failed. ${err.message || 'Please try again.'}`));
   }, []);
