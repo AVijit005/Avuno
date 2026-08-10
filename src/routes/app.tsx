@@ -26,7 +26,12 @@ export const Route = createFileRoute("/app")({
         throw error;
       }
       if (error instanceof ApiError && error.status === 401) {
-        throw redirect({ to: "/auth" });
+        // Prevent silent redirect so we can debug
+        console.error("app.tsx beforeLoad caught 401!", error);
+        throw redirect({
+          to: "/auth",
+          search: { error: "app_beforeload_401" }
+        });
       }
       // Network error or other transient failure — allow rendering /app
       // The user still has a token; retry will happen naturally

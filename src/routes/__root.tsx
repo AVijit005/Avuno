@@ -222,8 +222,11 @@ function RootComponent() {
       queryClient.removeQueries({ queryKey: queryKeys.auth.me() });
       const { pathname } = window.location;
       if (pathname.startsWith("/auth")) return;
-      const next = encodeURIComponent(pathname + window.location.search);
-      window.location.replace(`/auth?next=${next}`);
+      toast.error("Session expired. Redirecting to login...", { duration: 10000 });
+      setTimeout(() => {
+        const next = encodeURIComponent(pathname + window.location.search);
+        window.location.replace(`/auth?next=${next}&error=root_onexpired`);
+      }, 5000);
     };
     window.addEventListener(AUTH_EXPIRED_EVENT, onExpired);
     return () => window.removeEventListener(AUTH_EXPIRED_EVENT, onExpired);
