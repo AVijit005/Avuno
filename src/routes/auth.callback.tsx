@@ -61,7 +61,7 @@ function AuthCallback() {
         setAccessToken(res.accessToken);
         window.location.replace("/app");
       })
-      .catch(() => fail("Authentication failed. Please try again."));
+      .catch((err) => fail(`Authentication failed. ${err.message || 'Please try again.'}`));
   }, []);
 
   return (
