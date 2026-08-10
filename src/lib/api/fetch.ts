@@ -49,7 +49,7 @@ if (typeof window !== "undefined" && window.BroadcastChannel) {
     if (event.data === "LOGOUT") {
       modAccessToken = null;
       try {
-        sessionStorage.removeItem("accessToken");
+        localStorage.removeItem("accessToken");
       } catch {
         // Ignore storage errors during logout
       }
@@ -68,13 +68,13 @@ export function setAccessToken(token: string | null): void {
   if (token) {
     sessionExpiredNotified = false;
     try {
-      sessionStorage.setItem("accessToken", token);
+      localStorage.setItem("accessToken", token);
     } catch {
       // Private mode / storage disabled — the in-memory copy still works.
     }
   } else {
     try {
-      sessionStorage.removeItem("accessToken");
+      localStorage.removeItem("accessToken");
     } catch {
       // Nothing to do; the in-memory copy is already cleared.
     }
@@ -86,7 +86,7 @@ export function getAccessToken(): string | null {
   if (typeof window === "undefined") return null;
   if (modAccessToken) return modAccessToken;
   try {
-    const stored = sessionStorage.getItem("accessToken");
+    const stored = localStorage.getItem("accessToken");
     if (stored) {
       modAccessToken = stored;
       return stored;
