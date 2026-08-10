@@ -32,8 +32,10 @@ function AuthCallback() {
     window.history.replaceState({}, "", "/auth/callback");
 
     const fail = (message: string) => {
-      toast.error(message);
-      window.location.replace("/auth");
+      toast.error(message, { duration: 10000 });
+      setTimeout(() => {
+        window.location.replace("/auth");
+      }, 5000);
     };
 
     if (error) {
