@@ -1,1 +1,0 @@
-Serves static public assets for the Chronicle app including PWA manifest, icons, landing-page images and videos, SEO files (robots.txt, sitemap.xml), and Vite redirect rules.

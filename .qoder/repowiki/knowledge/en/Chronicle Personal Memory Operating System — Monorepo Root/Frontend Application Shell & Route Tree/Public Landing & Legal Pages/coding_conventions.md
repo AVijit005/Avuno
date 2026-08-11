@@ -1,5 +1,0 @@
-- Each route file exports a named `Route` created via `createFileRoute('/path')({ component: ... })`, keeping route registration and page component co-located.
-- SEO metadata is declared inline through the router's `head` option returning meta title and description rather than a separate document head manager.
-- Navigation is performed through TanStack Router's `useNavigate` hook or `<Link>` components instead of `window.location` or react-router-dom APIs.
-- Analytics events are emitted via the shared `analytics.track(...)` call before navigation actions such as upgrading plans.
-- Legal pages (terms, privacy) follow an identical layout pattern: a dark oklch background, a back-home `<Link>`, a dynamic last-updated date, and prose-styled content sections.

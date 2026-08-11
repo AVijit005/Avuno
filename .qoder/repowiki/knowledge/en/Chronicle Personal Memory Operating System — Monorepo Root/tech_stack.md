@@ -1,1 +1,0 @@
-Vite 8 + TanStack Start (SSR server entry), React 19, Tailwind CSS 4, Radix UI primitives, Zustand state, Zod validation, Vitest for unit tests, Playwright for e2e/visual regression, Bun runtime with a 24-hour package release-age guard, and PWA support via vite-plugin-pwa.

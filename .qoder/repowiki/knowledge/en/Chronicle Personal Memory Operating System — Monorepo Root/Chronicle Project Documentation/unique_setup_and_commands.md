@@ -1,1 +1,0 @@
-Development bootstrap uses `docker compose -f docker-compose.dev.yml up -d`, `npx prisma generate`, `npx prisma db push`, and `npm run start:dev`; production uses `docker compose -f docker-compose.prod.yml up -d` followed by `docker compose exec api npx prisma db push` and health checks against `/api/health`.

@@ -1,1 +1,0 @@
-No build or setup commands are specific to these routes; they are consumed automatically by TanStack Router's file-based routing convention. The forgot-password flow currently uses a simulated network call (`setTimeout`) because the backend endpoint is not yet implemented.

@@ -1,1 +1,0 @@
-No special build or setup commands — routes are auto-discovered by TanStack Router's file-based convention. The `$id` dynamic segment is handled automatically by the filename suffix.

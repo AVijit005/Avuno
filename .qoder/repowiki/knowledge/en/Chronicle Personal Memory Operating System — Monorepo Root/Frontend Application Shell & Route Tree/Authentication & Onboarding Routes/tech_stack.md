@@ -1,1 +1,0 @@
-TanStack Router (file-based routing via `createFileRoute`), React hooks (`useState`, `useEffect`, `useNavigate`), Sonner for toast notifications, Lucide icons, and a custom `@/lib/api/fetch` layer for HTTP calls.

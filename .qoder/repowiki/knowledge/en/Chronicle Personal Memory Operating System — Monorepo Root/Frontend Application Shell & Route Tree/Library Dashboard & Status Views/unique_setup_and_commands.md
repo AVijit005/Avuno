@@ -1,1 +1,0 @@
-No build or setup commands are specific to this module; routes are auto-discovered by TanStack Router based on the `src/routes/app.library.*.tsx` filename convention.

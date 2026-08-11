@@ -1,3 +1,0 @@
-- Image filenames use a descriptive prefix followed by an underscore-separated identifier (e.g., bg_privacy.png, chapter_home.png, poster_01.png) to group assets by visual role.
-- PWA assets are declared in pairs of sizes (192x192 and 512x512) alongside a single icon.svg fallback, all referenced from the root manifest.webmanifest.
-- SEO-related public files (robots.txt, sitemap.xml) hardcode the production domain https://chronicle.app rather than using relative paths.

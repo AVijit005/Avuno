@@ -1,1 +1,0 @@
-Node.js CommonJS (`.cjs`) and ES modules (`.js`) using only built-in `fs`, `path`, `readline` plus `fetch`; PowerShell for Windows-native downloads (`Invoke-WebRequest`, `yt-dlp.exe`); Playwright (`chromium`) for browser automation; Docker Compose v3.8 orchestrating Postgres 16-alpine, Redis 7-alpine, oven/bun:1, and mcr.microsoft.com/playwright:v1.61.1-jammy.

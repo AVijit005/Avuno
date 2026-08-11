@@ -1,1 +1,0 @@
-Documents a TanStack Start + React 19 frontend with Tailwind v4 and a NestJS backend using Prisma, PostgreSQL 16+, Redis 7+, BullMQ workers, and MinIO/S3 storage, orchestrated via Docker Compose.

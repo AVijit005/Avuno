@@ -1,1 +1,0 @@
-TanStack Router with file-based routing (`createFileRoute`), React functional components, Tailwind CSS for styling, lucide-react icons, and a custom analytics module (`@/lib/analytics`).

@@ -1,1 +1,0 @@
-TanStack Router file-based routes handling OAuth callback exchange, password reset flow, and the post-login media-type onboarding wizard that persists user preferences to localStorage.

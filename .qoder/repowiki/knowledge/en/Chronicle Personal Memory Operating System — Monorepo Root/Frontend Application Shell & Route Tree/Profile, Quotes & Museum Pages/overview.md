@@ -1,1 +1,0 @@
-TanStack Router file-based routes that compose the user's profile dashboard, a dedicated quotes gallery, and a museum archive page from reusable editorial and profile components.

@@ -1,1 +1,0 @@
-End-to-end Playwright flows, Vitest component unit tests with React Testing Library, and a Python/Playwright visual regression harness that diffs screenshots of premium interaction primitives against stored baselines.

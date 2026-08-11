@@ -1,5 +1,0 @@
-- Each feature area lives as one or more files directly under `src/routes/` using TanStack Router's `createFileRoute`, with no central route index.
-- Authenticated routes under `/app/*` enforce login via a `beforeLoad` guard that reads the access token from localStorage and redirects to `/auth` when absent.
-- Global cross-cutting concerns (React Query client, analytics, error reporting, theme application) are initialized once in `__root.tsx` and accessed through route context or direct imports.
-- UI composition follows a two-layer pattern: feature-specific route files compose higher-level layout components from `components/layout/` and domain components from `components/<feature>/`, while shared primitives live in `components/ui/`.
-- Data fetching uses React Query hooks from `hooks/` and `lib/` with typed query keys defined in `lib/api/query-keys`, and errors are surfaced through the shared `ErrorBoundary` component.

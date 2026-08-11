@@ -1,6 +1,0 @@
-Three parallel test layers coexist under `tests/`:
-- `components/<feature>/*.test.tsx`: per-component Vitest suites using `@testing-library/react` (`render`, `screen`) with `vi.mock` to stub external dependencies (PremiumGlass, AnalyticsKit, DropCap, react-router, store contexts). Each file is self-contained and imports the source component via the `@/` path alias.
-- `e2e.test.ts`: a single Playwright end-to-end spec that drives the dev server at `http://127.0.0.1:5173`, asserting auth → dashboard → analytics navigation and taking artifact screenshots on failure.
-- `visual/`: a Python script (`run.py`) that launches headless Chromium via Playwright, renders a deterministic harness at `http://localhost:8080/visual?ready=1`, captures each fixture in three states (`default`, `hover`, `active`), and compares pixel-level diffs against PNGs in `baselines/`. Diffs are written to `diffs/` and actual captures to `actuals/`.
-- `setup.ts` is the Vitest global setup importing `@testing-library/jest-dom/vitest` matchers.
-Dependency direction is one-way: tests depend on the application source via `@/` aliases; the visual harness depends only on the running dev server and Pillow for image diffing.

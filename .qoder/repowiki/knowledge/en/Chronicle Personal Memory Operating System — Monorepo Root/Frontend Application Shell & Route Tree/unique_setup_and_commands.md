@@ -1,1 +1,0 @@
-Routes are declared as individual files under `src/routes/`; the router tree is auto-generated into `src/routeTree.gen.ts` by TanStack Router's codegen, so adding or renaming route files requires no manual registry updates.

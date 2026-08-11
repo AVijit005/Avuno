@@ -1,4 +1,0 @@
-- TypeScript uses the @/* path alias mapped to ./src/* for all internal imports.
-- Linting and formatting are enforced centrally via eslint.config.js and .prettierrc across every child module.
-- Package installation is guarded by a 24-hour minimum release age in bunfig.toml, with explicit exceptions listed per package.
-- Test suites follow a consistent naming pattern: Vitest files under src/**/*.test.* and Playwright specs under tests/e2e.

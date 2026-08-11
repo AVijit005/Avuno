@@ -1,1 +1,0 @@
-No build or setup steps required beyond the standard TanStack Router file-based convention — each `.tsx` file under `src/routes/` is automatically registered as a route by its filename-to-path mapping.

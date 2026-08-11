@@ -1,1 +1,0 @@
-TanStack Router file-based routes that compose the user's media library dashboard, status-filtered views (continue, planning, favorites, etc.), and a master all-library browser with search, filters, and sorting.

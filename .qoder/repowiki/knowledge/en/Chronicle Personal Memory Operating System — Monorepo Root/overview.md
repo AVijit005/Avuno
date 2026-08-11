@@ -1,1 +1,0 @@
-Top-level orchestration of the Chronicle app that wires a TanStack Start/Vite frontend, Playwright/Vitest test suite, PWA assets, documentation, and development/asset scripts into a single buildable project.

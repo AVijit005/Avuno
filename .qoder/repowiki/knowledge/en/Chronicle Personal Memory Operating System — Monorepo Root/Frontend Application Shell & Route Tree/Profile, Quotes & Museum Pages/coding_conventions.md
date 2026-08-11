@@ -1,5 +1,0 @@
-- Each route file exports a named `Route` created via `createFileRoute("/app/<slug>")({ component: <PageComponent> })` following TanStack's file-route pattern.
-- Data fetching is done through custom hooks (`useOverview`, `useStreaks`, `useCollections`, `useLibrary`) and raw results are transformed via corresponding `adapt*` adapters from `@/lib/adapters/*` before rendering.
-- Editorial breathing space between major sections is inserted using the shared `<PullQuote>` component with an `attribution` prop rather than plain text headings.
-- Sectioned content uses the `<Section>` wrapper component with `title` and optional `subtitle` props to maintain consistent typography and spacing across the profile page.
-- Split-layout sections use `<SplitBlock>` with a `ratio` prop (e.g., `60/40`) and an optional `reverse` flag to alternate primary/secondary visual emphasis.

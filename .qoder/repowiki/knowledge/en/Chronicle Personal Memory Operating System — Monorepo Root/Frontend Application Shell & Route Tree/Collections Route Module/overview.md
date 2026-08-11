@@ -1,1 +1,0 @@
-TanStack Router file-based routes for the collections feature, providing a landing index page that aggregates featured, pinned, recent, memory capsule, smart, and discovery collections alongside a detail page for individual collections.
