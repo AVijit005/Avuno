@@ -1,278 +1,255 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { useState, useRef, useCallback } from "react";
+import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
-import { motion } from "motion/react";
-import { ArrowRight } from "lucide-react";
-
-import { SectionHeader, RevealSection } from "@/components/dashboard/SectionHeader";
-import { FeaturedCollections } from "@/components/collections/FeaturedCollections";
-import { MediaCard } from "@/components/media/MediaCard";
-
-import { LibraryHero } from "@/components/library/LibraryHero";
-import { InsightStrip } from "@/components/library/InsightStrip";
-import { StatsGrid } from "@/components/library/StatsGrid";
-import { StatusOverviewRow } from "@/components/library/StatusOverviewRow";
-import { ContinueCard } from "@/components/library/ContinueCard";
-import { PlanningRow } from "@/components/library/PlanningRow";
-import { RecentlyFinishedTimeline } from "@/components/library/RecentlyFinishedTimeline";
-import { FavoritesGallery } from "@/components/library/FavoritesGallery";
-import { StatCard } from "@/components/common/Section";
-
-import { LibraryMap } from "@/components/intelligence/LibraryMap";
-import { Collage } from "@/components/editorial/Collage";
-import { PullQuote } from "@/components/editorial/PullQuote";
-import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
-import { PremiumErrorState } from "@/components/common/PremiumErrorState";
-
-import { useLibrary, useLibraryByStatus, useLibraryStats } from "@/hooks/use-library";
-import { useCollections } from "@/hooks/use-collections";
-import { useChallenges } from "@/hooks/use-analytics";
+import { motion, AnimatePresence } from "motion/react";
+import { Search, SlidersHorizontal, ChevronDown, Check, LayoutGrid, List } from "lucide-react";
+import { useLibrary, useLibraryStats } from "@/hooks/use-library";
 import { adaptLibraryItem } from "@/lib/adapters/media";
-import { adaptCollectionResponse } from "@/lib/adapters/collection";
+import { MediaCard } from "@/components/media/MediaCard";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
+
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuCheckboxItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/app/library/")({
   component: LibraryIndex,
   pendingComponent: PageSkeleton,
 });
 
+type SortOption = "createdAt" | "rating" | "releaseYear";
+
 function LibraryIndex() {
+  const [mediaType, setMediaType] = useState<string>("all");
+  const [status, setStatus] = useState<string>("all");
+  const [sortBy, setSortBy] = useState<SortOption>("createdAt");
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
+  const [favorite, setFavorite] = useState<boolean>(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+
   const { data: stats } = useLibraryStats();
-  const { data: inProgressData, isLoading: isLoadingContinue } = useLibraryByStatus("WATCHING", {
-    limit: 8,
-  });
-  const { data: planningData, isLoading: isLoadingPlanning } = useLibraryByStatus("PLANNING", {
-    limit: 5,
-  });
-  const { data: favoritesData, isLoading: isLoadingFavorites } = useLibrary({
-    favorite: true,
-    limit: 8,
-  });
-  const { data: allData, isLoading: isLoadingAll } = useLibrary({ limit: 8 });
-  const { data: collections } = useCollections();
-  const { data: challengesData } = useChallenges();
 
-  const isLoading = isLoadingContinue || isLoadingPlanning || isLoadingFavorites || isLoadingAll;
+  const { data, isLoading, isError, fetchNextPage, hasNextPage, isFetchingNextPage, refetch } =
+    useLibrary({
+      ...(mediaType !== "all" && { mediaType }),
+      ...(status !== "all" && { status }),
+      ...(favorite && { favorite: true }),
+      sortBy,
+      sortOrder,
+      limit: 50,
+    });
 
-  if (isLoading) {
-    return (
-      <div className="space-y-16 pt-2 pb-24">
-        <ShimmerSkeleton className="h-48 rounded-3xl" />
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <ShimmerSkeleton key={i} className="h-24 rounded-2xl" />
-          ))}
-        </div>
-        <ShimmerSkeleton className="h-64 rounded-3xl" />
-        <div className="flex gap-4 overflow-hidden">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <ShimmerSkeleton key={i} className="h-56 w-40 shrink-0 rounded-2xl" />
-          ))}
-        </div>
-        <ShimmerSkeleton className="h-40 rounded-3xl" />
-        <div className="grid grid-cols-2 gap-5 md:grid-cols-4">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <ShimmerSkeleton key={i} className="h-64 rounded-2xl" />
-          ))}
-        </div>
-        <ShimmerSkeleton className="h-72 rounded-3xl" />
-      </div>
-    );
-  }
+  const items = data?.pages.flatMap((p) => p.data).map(adaptLibraryItem) ?? [];
 
-  const cont = (inProgressData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
-  const plan = (planningData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
-  const favs = (favoritesData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
-  const recentlyAdded = (allData?.pages.flatMap((p) => p.data) ?? []).map(adaptLibraryItem);
-  const collectionList = collections?.map(adaptCollectionResponse) ?? [];
-  const wall = favs.slice(0, 4);
+  // Infinite Scroll Observer
+  const observer = useRef<IntersectionObserver | null>(null);
+  const lastItemRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage) return;
+      if (observer.current) observer.current.disconnect();
+      observer.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+      if (node) observer.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage],
+  );
+
+  const TAXONOMY = [
+    { id: "all", label: "All" },
+    { id: "movie", label: "Movies" },
+    { id: "tvShow", label: "Series" },
+    { id: "anime", label: "Anime" },
+    { id: "book", label: "Books" },
+    { id: "manga", label: "Manga" },
+    { id: "game", label: "Games" },
+    { id: "musicAlbum", label: "Music" },
+    { id: "podcast", label: "Podcasts" },
+  ];
 
   return (
-    <div className="space-y-16 pt-2 pb-24">
-      <LibraryHero />
+    <div className="flex flex-col min-h-screen pt-2 pb-24">
+      {/* HEADER */}
+      <header className="mb-8">
+        <h1 className="font-display text-4xl tracking-tight">Library</h1>
+        <p className="mt-1 text-sm text-muted-foreground">
+          {stats?.total
+            ? `${stats.total.toLocaleString()} items in archive`
+            : "Your master archive"}
+        </p>
+      </header>
 
-      <section>
-        <InsightStrip />
-      </section>
-
-      <section>
-        <SectionHeader
-          eyebrow="Life dashboard"
-          title="Where you are right now"
-          subtitle="A live read on every story passing through your days."
-        />
-        <StatsGrid stats={stats} />
-      </section>
-
-      {/* Editorial memory wall — replaces 'just another grid' rhythm */}
-      {wall.length >= 4 && (
-        <RevealSection>
-          <SectionHeader
-            eyebrow="Memory wall"
-            title="A glance through your archive"
-            subtitle="Pinned moments — the gallery you'd hang in your own room."
-          />
-          <Collage
-            items={wall.map((m) => ({
-              id: m.mediaId,
-              image: m.poster,
-              alt: m.title,
-              node: (
-                <div className="rounded-2xl bg-gradient-to-t from-black/85 via-black/40 to-transparent p-4 pt-12">
-                  <div className="text-[10px] uppercase tracking-[0.22em] text-white/70">
-                    {m.kind}
-                  </div>
-                  <div className="font-display text-xl tracking-tight text-white">{m.title}</div>
-                </div>
-              ),
-            }))}
-          />
-        </RevealSection>
-      )}
-
-      <RevealSection>
-        <SectionHeader
-          eyebrow="Status"
-          title="Status overview"
-          subtitle="The seven shapes of your library."
-        />
-        <StatusOverviewRow />
-      </RevealSection>
-
-      {cont.length > 0 && (
-        <RevealSection>
-          <SectionHeader
-            eyebrow="Continue"
-            title="Continue Journey"
-            subtitle="Pick up where you left off — across every medium."
-            action={
-              <Link
-                to="/app/library/continue"
-                className="glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-all duration-[300ms] ease-out hover:-translate-y-0.5 hover:border-white/20 hover:text-foreground hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),0_0_20px_oklch(0.72_0.18_255/0.1)] active:scale-95 cursor-pointer"
-              >
-                View all <ArrowRight className="h-3 w-3" />
-              </Link>
-            }
-          />
-          <div className="-mx-6 flex snap-x snap-mandatory gap-4 overflow-x-auto px-6 pb-2 lg:-mx-10 lg:px-10">
-            {cont.map((m) => (
-              <div key={m.id} className="snap-start">
-                <ContinueCard item={m} />
-              </div>
-            ))}
-          </div>
-        </RevealSection>
-      )}
-
-      {plan.length > 0 && (
-        <RevealSection>
-          <SectionHeader
-            eyebrow="Planning"
-            title="Planning Queue"
-            subtitle="Stories waiting for the right night."
-            action={
-              <Link
-                to="/app/library/planning"
-                className="glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-all duration-[300ms] ease-out hover:-translate-y-0.5 hover:border-white/20 hover:text-foreground hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),0_0_20px_oklch(0.72_0.18_255/0.1)] active:scale-95 cursor-pointer"
-              >
-                Open queue <ArrowRight className="h-3 w-3" />
-              </Link>
-            }
-          />
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-            {plan.map((m) => (
-              <PlanningRow key={m.id} item={m} />
-            ))}
-          </div>
-        </RevealSection>
-      )}
-
-      <PullQuote attribution="The shape of an archive">
-        A library isn't what you've finished. It's the company you keep across years.
-      </PullQuote>
-
-      <RevealSection>
-        <SectionHeader
-          eyebrow="Recently"
-          title="Recently Finished"
-          subtitle="The stories you closed this season."
-          action={
-            <Link
-              to="/app/library/recently-finished"
-              className="glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-all duration-[300ms] ease-out hover:-translate-y-0.5 hover:border-white/20 hover:text-foreground hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),0_0_20px_oklch(0.72_0.18_255/0.1)] active:scale-95 cursor-pointer"
+      {/* TAXONOMY SEGMENTED CONTROL */}
+      <div className="-mx-6 mb-8 overflow-x-auto px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
+        <div className="flex w-max space-x-1 rounded-full bg-white/5 p-1 ring-1 ring-white/10">
+          {TAXONOMY.map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setMediaType(tab.id)}
+              className={`relative rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                mediaType === tab.id
+                  ? "text-primary-foreground"
+                  : "text-muted-foreground hover:text-foreground"
+              }`}
             >
-              See timeline <ArrowRight className="h-3 w-3" />
-            </Link>
+              {mediaType === tab.id && (
+                <motion.div
+                  layoutId="active-taxonomy"
+                  className="absolute inset-0 z-0 rounded-full bg-primary"
+                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                />
+              )}
+              <span className="relative z-10">{tab.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* FILTER BAR */}
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Search - Disabled per Phase 3 specs until backend supports it natively */}
+        <div className="relative flex-1 max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50" />
+          <input
+            type="text"
+            disabled
+            placeholder="Search library (Coming soon)..."
+            className="h-10 w-full rounded-full border border-white/10 bg-white/5 pl-9 pr-4 text-sm placeholder:text-muted-foreground/50 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20 disabled:opacity-50"
+          />
+        </div>
+
+        <div className="flex items-center gap-2">
+          {/* Status Dropdown */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="glass-subtle flex h-10 items-center gap-2 rounded-full px-4 text-sm transition-hover hover:border-white/20">
+              {status === "all" ? "Any Status" : status.replace("_", " ")}
+              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-48">
+              <DropdownMenuLabel>Status</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuRadioGroup value={status} onValueChange={setStatus}>
+                <DropdownMenuRadioItem value="all">Any Status</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="completed">Completed</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="in_progress">In Progress</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="planning">Planning</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="dropped">Dropped</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          {/* Advanced Filters */}
+          <DropdownMenu>
+            <DropdownMenuTrigger className="glass-subtle flex h-10 w-10 items-center justify-center rounded-full transition-hover hover:border-white/20">
+              <SlidersHorizontal className="h-4 w-4" />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-56">
+              <DropdownMenuLabel>Sort By</DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={sortBy}
+                onValueChange={(v) => setSortBy(v as SortOption)}
+              >
+                <DropdownMenuRadioItem value="createdAt">Date Added</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="rating">Rating</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="releaseYear">Release Year</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuLabel>Order</DropdownMenuLabel>
+              <DropdownMenuRadioGroup
+                value={sortOrder}
+                onValueChange={(v) => setSortOrder(v as "asc" | "desc")}
+              >
+                <DropdownMenuRadioItem value="desc">Descending</DropdownMenuRadioItem>
+                <DropdownMenuRadioItem value="asc">Ascending</DropdownMenuRadioItem>
+              </DropdownMenuRadioGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuCheckboxItem checked={favorite} onCheckedChange={setFavorite}>
+                Favorites Only
+              </DropdownMenuCheckboxItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </div>
+
+      {/* MASTER GRID */}
+      {isError ? (
+        <EmptyState
+          icon={<LayoutGrid />}
+          title="Cannot load library"
+          description="There was an error connecting to your archive."
+          action={
+            <button
+              onClick={() => refetch()}
+              className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
+            >
+              Retry
+            </button>
           }
         />
-        <RecentlyFinishedTimeline limit={8} />
-      </RevealSection>
-
-      {favs.length > 0 && (
-        <RevealSection>
-          <SectionHeader
-            eyebrow="Favorites"
-            title="The ones you'd live again"
-            subtitle="Hand-picked from every medium."
-            action={
-              <Link
-                to="/app/library/favorites"
-                className="glass-subtle inline-flex items-center gap-1 rounded-full px-3 py-1.5 text-xs text-muted-foreground transition-all duration-[300ms] ease-out hover:-translate-y-0.5 hover:border-white/20 hover:text-foreground hover:shadow-[0_12px_24px_rgba(0,0,0,0.3),0_0_20px_oklch(0.72_0.18_255/0.1)] active:scale-95 cursor-pointer"
-              >
-                Open gallery <ArrowRight className="h-3 w-3" />
-              </Link>
-            }
-          />
-          <FavoritesGallery items={favs} />
-        </RevealSection>
-      )}
-
-      <RevealSection>
-        <SectionHeader
-          eyebrow="Recent"
-          title="Recently added"
-          subtitle="Newest additions to your library."
-        />
-        <motion.div className="-mx-6 flex snap-x snap-mandatory gap-5 overflow-x-auto px-6 pb-2 lg:-mx-10 lg:px-10">
-          {recentlyAdded.map((m) => (
-            <div key={m.id} className="snap-start w-44">
-              <MediaCard item={m} size="md" />
-            </div>
+      ) : isLoading ? (
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          {Array.from({ length: 12 }).map((_, i) => (
+            <ShimmerSkeleton key={i} className="aspect-[2/3] w-full rounded-2xl" />
           ))}
-        </motion.div>
-      </RevealSection>
-
-      <RevealSection>
-        <SectionHeader
-          eyebrow="Collections"
-          title="Curated collections"
-          subtitle="Editorial sets that map your taste."
+        </div>
+      ) : items.length === 0 ? (
+        <EmptyState
+          icon={<LayoutGrid />}
+          title={
+            status !== "all" || mediaType !== "all" || favorite
+              ? "No matches found"
+              : "Your library is empty"
+          }
+          description={
+            status !== "all" || mediaType !== "all" || favorite
+              ? "Try adjusting your filters to see more results."
+              : "Start building your personal archive by adding your first story."
+          }
+          action={
+            status !== "all" || mediaType !== "all" || favorite ? (
+              <button
+                onClick={() => {
+                  setMediaType("all");
+                  setStatus("all");
+                  setFavorite(false);
+                }}
+                className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
+              >
+                Clear Filters
+              </button>
+            ) : undefined
+          }
         />
-        <FeaturedCollections />
-      </RevealSection>
-
-      <RevealSection>
-        <Link
-          to="/app/library/all"
-          className="glass group flex items-center justify-between gap-4 rounded-3xl p-6 transition hover-lift md:p-8"
-        >
-          <div className="min-w-0">
-            <div className="text-[11px] uppercase tracking-[0.22em] text-primary/90">
-              Master database
-            </div>
-            <div className="mt-2 font-display text-2xl tracking-tight md:text-3xl">
-              All Library →
-            </div>
-            <p className="mt-1 max-w-lg text-sm text-muted-foreground">
-              Every item across every status, every type, every collection — with full search,
-              filters and sort.
-            </p>
+      ) : (
+        <>
+          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+            {items.map((item, index) => {
+              const isLast = index === items.length - 1;
+              return (
+                <div key={item.id} ref={isLast ? lastItemRef : null}>
+                  <MediaCard item={item} />
+                </div>
+              );
+            })}
           </div>
-          <ArrowRight className="h-6 w-6 shrink-0 text-muted-foreground transition group-hover:translate-x-1 group-hover:text-foreground" />
-        </Link>
-      </RevealSection>
-
-      <RevealSection>
-        <LibraryMap />
-      </RevealSection>
+          {isFetchingNextPage && (
+            <div className="mt-8 flex justify-center">
+              <ShimmerSkeleton className="h-10 w-10 rounded-full" />
+            </div>
+          )}
+        </>
+      )}
     </div>
   );
 }
