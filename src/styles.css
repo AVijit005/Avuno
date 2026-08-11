@@ -239,22 +239,18 @@ select {
   --sidebar-ring: oklch(0.72 0.18 255 / 0.5);
 
   /* Gradients & shadows */
-  --gradient-aurora:
-    radial-gradient(ellipse 80% 60% at 20% 10%, oklch(0.55 0.25 280 / 0.35), transparent 60%),
-    radial-gradient(ellipse 70% 50% at 80% 30%, oklch(0.65 0.2 230 / 0.3), transparent 60%),
-    radial-gradient(ellipse 60% 50% at 50% 90%, oklch(0.6 0.22 330 / 0.25), transparent 60%);
+  --gradient-aurora: none;
   --shadow-glass:
     0 1px 0 oklch(1 0 0 / 0.08) inset, 0 -1px 0 oklch(0 0 0 / 0.2) inset,
     0 20px 60px -20px oklch(0 0 0 / 0.7);
   --shadow-elevated: 0 30px 80px -30px oklch(0 0 0 / 0.6), 0 0 0 1px oklch(1 0 0 / 0.05);
-  --shadow-glow: 0 0 40px oklch(0.72 0.18 255 / 0.35);
+  --shadow-glow: none;
 
   /* Component-level shadow tokens — used by premium interaction primitives. */
   --shadow-poster-hover: 0 24px 60px -20px oklch(0 0 0 / 0.7);
-  --shadow-button: 0 8px 24px -12px oklch(0 0 0 / 0.6);
-  --shadow-button-hover:
-    0 18px 44px -18px oklch(0 0 0 / 0.7), 0 0 28px -6px oklch(0.72 0.18 255 / 0.5);
-  --shadow-ghost-hover: 0 18px 44px -22px oklch(0 0 0 / 0.6);
+  --shadow-button: 0 4px 12px -4px oklch(0 0 0 / 0.6);
+  --shadow-button-hover: 0 8px 24px -8px oklch(0 0 0 / 0.7);
+  --shadow-ghost-hover: 0 4px 12px -6px oklch(0 0 0 / 0.6);
 
   --shadow-card: 0 12px 24px oklch(0 0 0 / 0.3);
   --glass-highlight: oklch(1 0 0 / 0.08);

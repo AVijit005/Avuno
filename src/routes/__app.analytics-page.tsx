@@ -256,73 +256,47 @@ export default function AnalyticsPage() {
       <main className="pb-32 pt-2">
         {/* ============ Zone 1 — Hero ============ */}
         <motion.section
-          initial={{ opacity: 0, y: 24, filter: "blur(8px)" }}
-          animate={{ opacity: 1, y: 0, filter: "blur(0)" }}
-          transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-          className="relative"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          className="mb-12 border-b border-border/40 pb-8"
         >
-          <div className="relative overflow-hidden rounded-[40px] p-10 md:p-16 mb-16 border-b border-border/40 pb-12">
-            <div
-              className="pointer-events-none absolute inset-0 opacity-60"
-              style={{
-                background:
-                  "radial-gradient(ellipse 60% 60% at 20% 20%, oklch(0.65 0.22 295 / 0.25), transparent 60%),radial-gradient(ellipse 60% 60% at 80% 70%, oklch(0.72 0.18 255 / 0.25), transparent 60%)",
-              }}
-            />
-            <div className="relative">
-              <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground flex items-center gap-2">
-                <Sparkles className="h-3 w-3 text-primary" /> Hello{" "}
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground flex items-center gap-2 mb-2">
+                <Sparkles className="h-3 w-3 text-primary" /> Analytics{" "}
                 {todayStr ? `· ${todayStr}` : ""}
               </div>
-              <h1 className="mt-5 font-display text-5xl tracking-tight md:text-7xl">
-                <span className="text-gradient-aurora">A year of stories,</span>
-                <br />
-                told back to you.
-              </h1>
-              <p className="mt-5 max-w-xl text-muted-foreground md:text-lg">
+              <h1 className="font-display text-4xl tracking-tight md:text-5xl">Library Insights</h1>
+              <p className="mt-2 text-muted-foreground">
                 You've spent {o.hoursSpent} hours immersed in different worlds.
               </p>
+            </div>
 
-              <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-5">
-                {[
-                  {
-                    l: "Current streak",
-                    v: s.current,
-                    suffix: " days",
-                    a: "oklch(0.82 0.16 80 / 0.45)",
-                  },
-                  { l: "Total stories", v: o.totalItems, a: "oklch(0.72 0.18 255 / 0.45)" },
-                  {
-                    l: "Hours experienced",
-                    v: o.hoursSpent,
-                    suffix: "h",
-                    a: "oklch(0.65 0.22 295 / 0.45)",
-                  },
-                  {
-                    l: "Journal entries",
-                    v: o.journalEntries,
-                    a: "oklch(0.72 0.16 160 / 0.45)",
-                  },
-                  { l: "Memories", v: o.memories, a: "oklch(0.7 0.18 25 / 0.45)" },
-                ].map((st) => (
-                  <div
-                    key={st.l}
-                    className="bg-surface-1 border border-border/40 relative overflow-hidden rounded-2xl p-4"
-                  >
-                    <div
-                      className="absolute -right-8 -top-8 h-24 w-24 rounded-full blur-2xl"
-                      style={{ background: st.a }}
-                    />
-                    <div className="relative">
-                      <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                        {st.l}
-                      </div>
-                      <div className="mt-2 font-display text-3xl tracking-tight">
-                        <CountUp to={st.v} suffix={st.suffix ?? ""} />
-                      </div>
-                    </div>
-                  </div>
-                ))}
+            <div className="flex gap-6">
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                  Total Stories
+                </div>
+                <div className="font-display text-3xl tracking-tight">
+                  <CountUp to={o.totalItems} />
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                  Hours Experienced
+                </div>
+                <div className="font-display text-3xl tracking-tight">
+                  <CountUp to={o.hoursSpent} suffix="h" />
+                </div>
+              </div>
+              <div>
+                <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-1">
+                  Journal Entries
+                </div>
+                <div className="font-display text-3xl tracking-tight">
+                  <CountUp to={o.journalEntries} />
+                </div>
               </div>
             </div>
           </div>
@@ -598,17 +572,11 @@ export default function AnalyticsPage() {
               return (
                 <motion.div
                   key={genre.genre}
-                  whileHover={{ y: -4 }}
-                  transition={{ duration: 0.4 }}
-                  className="glass group relative overflow-hidden rounded-3xl p-5"
+                  className="bg-surface-1 relative overflow-hidden rounded-2xl p-5 border border-border/40"
                 >
-                  <div
-                    className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full blur-3xl opacity-60 transition group-hover:opacity-100"
-                    style={{ background: genreColors[idx % genreColors.length] }}
-                  />
                   <div className="relative">
                     <div className="flex items-center justify-between">
-                      <div className="font-display text-2xl tracking-tight">{genre.genre}</div>
+                      <div className="font-display text-xl tracking-tight">{genre.genre}</div>
                       <div className="flex items-center gap-1 text-xs text-muted-foreground">
                         <Star className="h-3 w-3 fill-current" /> {g.genreRatings[genre.genre] ?? 0}
                       </div>
@@ -616,7 +584,7 @@ export default function AnalyticsPage() {
                     <div className="mt-1 text-xs text-muted-foreground">
                       {g.genreCompletion[genre.genre] ?? 0} completed
                     </div>
-                    <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-white/[0.06]">
+                    <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-surface-2">
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{
@@ -624,11 +592,7 @@ export default function AnalyticsPage() {
                         }}
                         viewport={{ once: true }}
                         transition={{ duration: 1, ease: [0.22, 1, 0.36, 1] }}
-                        className="h-full rounded-full"
-                        style={{
-                          background: "var(--primary)",
-                          boxShadow: `0 0 10px var(--primary)`,
-                        }}
+                        className="h-full rounded-full bg-primary"
                       />
                     </div>
                     <div className="mt-2 text-xs text-muted-foreground">
@@ -702,18 +666,16 @@ export default function AnalyticsPage() {
             ].map((r) => (
               <div
                 key={r.label}
-                className="relative overflow-hidden p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm"
+                className="relative overflow-hidden p-5 rounded-2xl bg-surface-1 border border-border/40"
               >
-                <div
-                  className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl opacity-60"
-                  style={{ background: r.accent }}
-                />
                 <div className="relative">
-                  <Trophy className="h-5 w-5 text-amber-300" />
-                  <div className="mt-3 text-[11px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {r.label}
+                  <div className="flex items-center gap-2 mb-3">
+                    <Trophy className="h-4 w-4 text-muted-foreground" />
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                      {r.label}
+                    </div>
                   </div>
-                  <div className="mt-2 font-display text-3xl tracking-tight">{r.value}</div>
+                  <div className="font-display text-xl tracking-tight truncate">{r.value}</div>
                   <div className="mt-1 text-xs text-muted-foreground">{r.date}</div>
                 </div>
               </div>

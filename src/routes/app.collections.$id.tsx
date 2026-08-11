@@ -137,8 +137,7 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
             aria-hidden
             className="absolute inset-0"
             style={{
-              background: `linear-gradient(115deg, oklch(0.1 0.02 270 / 0.92) 0%, oklch(0.1 0.02 270 / 0.55) 42%, transparent 78%),
-                           radial-gradient(60% 60% at 100% 0%, ${accent.glow} / 0.3, transparent 60%)`,
+              background: `linear-gradient(115deg, oklch(0.1 0.02 270 / 0.92) 0%, transparent 78%)`,
             }}
           />
         </div>
@@ -270,11 +269,6 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
         <DropCap>{c.description ?? "A collection of stories."}</DropCap>
         <CuratorNotes collection={c as never} />
       </Chapter>
-
-      <PullQuote attribution="You">
-        Every collection here was kept on purpose — not to complete a list, but to revisit a
-        feeling.
-      </PullQuote>
 
       <CollectionFooter />
     </div>

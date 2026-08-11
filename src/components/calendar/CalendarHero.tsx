@@ -69,7 +69,7 @@ export function CalendarHero({ currentYear, yearOffset, onChangeYear, onToday, i
           </div>
         </div>
         <h1 className="mt-5 font-display text-5xl tracking-tight md:text-7xl">
-          <span className="text-gradient-aurora">A year, day by day.</span>
+          A year, day by day.
         </h1>
         <p className="mt-5 max-w-xl text-muted-foreground md:text-lg">
           Every story, every chapter, every quiet evening — gently mapped onto your life.

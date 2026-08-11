@@ -20,10 +20,6 @@ function SaveForLaterPage() {
         </p>
       </header>
 
-      <PullQuote attribution="A small philosophy of patience">
-        A book unread isn't a debt. It's an invitation that hasn't expired.
-      </PullQuote>
-
       <SaveForLaterPanel />
     </div>
   );

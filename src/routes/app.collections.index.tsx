@@ -39,30 +39,36 @@ function CollectionsIndex() {
   const recent = [...allCollections].sort((a, b) => b.updatedAt.localeCompare(a.updatedAt));
 
   return (
-    <div className="-mt-3 pb-24">
-      <CollectionsHero />
+    <div className="pb-24">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-border/40 pb-6 pt-6">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-2">
+            Curated Organization
+          </div>
+          <h1 className="font-display text-4xl tracking-tight">Collections</h1>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            Group your media into intentional spaces. Share them, track them, or keep them private.
+          </p>
+        </div>
+      </div>
 
-      <RevealSection>
-        <SectionHeader
-          eyebrow="Featured"
-          title="Editor's shelves"
-          subtitle="Larger-than-life collections worth opening tonight."
-        />
+      <div className="mb-12">
+        <SectionHeader eyebrow="Workspace" title="Featured Collections" />
         <FeaturedCollections />
-      </RevealSection>
+      </div>
 
       {pinned.length > 0 && (
-        <RevealSection>
+        <div className="mb-12">
           <SectionHeader eyebrow="Pinned" title="Always within reach" />
           <EditorialGrid collections={pinned} />
-        </RevealSection>
+        </div>
       )}
 
       {recent.length > 0 && (
-        <RevealSection>
+        <div className="mb-12">
           <SectionHeader eyebrow="Recent activity" title="Recently updated" />
           <EditorialGrid collections={recent} />
-        </RevealSection>
+        </div>
       )}
 
       <RevealSection>

@@ -172,10 +172,10 @@ export function AddSheet({
         {step === 1 && (
           <div className="px-6 pb-6 pt-4">
             <DialogTitle className="font-display text-2xl tracking-tight">
-              What story are you bringing into your life?
+              Select Media Type
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              Pick the kind of media. You can always add more later.
+              Choose the kind of media you want to add to your library.
             </DialogDescription>
             <div className="mt-5 grid grid-cols-3 gap-2 sm:grid-cols-4">
               {TYPES.map(({ kind: k, label, icon: Icon }) => (
@@ -197,11 +197,9 @@ export function AddSheet({
 
         {step === 2 && (
           <div className="px-6 pb-6 pt-4">
-            <DialogTitle className="font-display text-2xl tracking-tight">
-              Tell Avuno about it
-            </DialogTitle>
+            <DialogTitle className="font-display text-2xl tracking-tight">Add Details</DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              Just the basics — you can refine later.
+              Enter the title and optional metadata.
             </DialogDescription>
             <div className="mt-5 space-y-3">
               <Field

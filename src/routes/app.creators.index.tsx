@@ -45,17 +45,13 @@ function CreatorsIndex() {
               <div
                 className="aspect-[4/5] w-full rounded-2xl ring-1 ring-white/10"
                 style={{
-                  background: `radial-gradient(120% 80% at 30% 20%, ${hero.accent} / 0.35, transparent 60%), linear-gradient(160deg, oklch(0.18 0.02 270), oklch(0.12 0.02 270))`,
+                  background: `linear-gradient(160deg, ${hero.accent}33, transparent 60%), oklch(0.12 0.02 270)`,
                 }}
               />
             </div>
           </PremiumGlass>
         </Link>
       )}
-
-      <PullQuote attribution="Why creators matter here">
-        Taste isn't a list of titles. It's the small handful of minds you keep returning to.
-      </PullQuote>
 
       <section>
         <div className="mb-5 flex items-baseline justify-between">

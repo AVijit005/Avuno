@@ -18,10 +18,6 @@ function BookmarksPage() {
         </p>
       </header>
 
-      <PullQuote attribution="Why bookmarks, not stars">
-        A favorite is a verdict. A bookmark is a promise to return.
-      </PullQuote>
-
       <BookmarkPanel />
     </div>
   );

@@ -1,7 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useMemory, useJournalEntry } from "@/hooks/use-journal";
 import { useMedia } from "@/hooks/use-media";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import {
   Lock,
   Globe,
@@ -159,7 +158,7 @@ function JournalEvidence({ journalId }: { journalId: string }) {
         <BookOpen className="w-4 h-4" />
         From your journal
       </h3>
-      <PremiumGlass className="p-6 md:p-8">
+      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl">
         <div className="prose prose-invert max-w-none">
           <p className="text-secondary-foreground italic leading-relaxed">"{journal.content}"</p>
         </div>
@@ -169,7 +168,7 @@ function JournalEvidence({ journalId }: { journalId: string }) {
             View original
           </Link>
         </div>
-      </PremiumGlass>
+      </div>
     </section>
   );
 }
@@ -182,11 +181,11 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
         <Quote className="w-4 h-4" />
         Saved quote
       </h3>
-      <PremiumGlass className="p-6 md:p-8">
+      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl">
         <p className="text-muted-foreground italic text-sm">
           Quote content will be available in a future phase.
         </p>
-      </PremiumGlass>
+      </div>
     </section>
   );
 }
@@ -199,7 +198,7 @@ function MediaEvidence({ mediaId }: { mediaId: string }) {
 
   return (
     <Link to="/app/media/$id" params={{ id: media.id }} className="block">
-      <PremiumGlass className="p-4 flex items-center gap-4 hover:bg-surface-2 transition-colors cursor-pointer">
+      <div className="p-4 flex items-center gap-4 hover:bg-surface-2 transition-colors cursor-pointer bg-surface-1 border border-border/40 rounded-2xl shadow-sm">
         {media.posterUrl || media.backdropUrl ? (
           <img
             src={media.posterUrl || media.backdropUrl || ""}
@@ -217,7 +216,7 @@ function MediaEvidence({ mediaId }: { mediaId: string }) {
           </h4>
           <p className="text-muted-foreground text-xs truncate capitalize">{media.mediaType}</p>
         </div>
-      </PremiumGlass>
+      </div>
     </Link>
   );
 }

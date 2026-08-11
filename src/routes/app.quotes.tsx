@@ -6,31 +6,6 @@ import { YourQuotesRail } from "@/components/memory/YourQuotesRail";
 export const Route = createFileRoute("/app/quotes")({ component: QuotesPage });
 
 function QuotesPage() {
-  const quotes = [
-    {
-      text: "Some stories ask you to finish them. Others wait quietly until you're ready to be changed.",
-      author: "Avuno",
-      context: "Weekly Reflection",
-    },
-    {
-      text: "The stories we return to say more about us than the stories we finish.",
-      author: "Avuno",
-      context: "Taste Profile",
-    },
-    {
-      text: "Memory isn't about perfect recall. It's about what chooses to stay.",
-      author: "Avuno",
-      context: "Journal",
-    },
-    {
-      text: "Every library is a self-portrait painted in other people's stories.",
-      author: "Avuno",
-      context: "Quiet Thought",
-    },
-  ];
-  const hero = quotes[0];
-  const rest = quotes.slice(1, 37);
-
   return (
     <div className="pb-16">
       <header className="max-w-3xl">
@@ -43,8 +18,6 @@ function QuotesPage() {
           anthology, kept in the order you found them.
         </p>
       </header>
-
-      {hero && <PullQuote attribution={`${hero.author} · ${hero.context}`}>{hero.text}</PullQuote>}
 
       <section className="mt-12">
         <YourQuotesRail />

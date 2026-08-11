@@ -4,6 +4,8 @@ import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { motion, AnimatePresence } from "motion/react";
 import { Search, SlidersHorizontal, ChevronDown, Check, LayoutGrid, List } from "lucide-react";
 import { useLibrary, useLibraryStats } from "@/hooks/use-library";
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
+import { PremiumButton } from "@/components/ui/PremiumButton";
 import { adaptLibraryItem } from "@/lib/adapters/media";
 import { MediaCard } from "@/components/media/MediaCard";
 import { EmptyState } from "@/components/ui/EmptyState";
@@ -204,33 +206,59 @@ function LibraryIndex() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        <EmptyState
-          icon={<LayoutGrid />}
-          title={
-            status !== "all" || mediaType !== "all" || favorite
-              ? "No matches found"
-              : "Your library is empty"
-          }
-          description={
-            status !== "all" || mediaType !== "all" || favorite
-              ? "Try adjusting your filters to see more results."
-              : "Start building your personal archive by adding your first story."
-          }
-          action={
-            status !== "all" || mediaType !== "all" || favorite ? (
+        status !== "all" || mediaType !== "all" || favorite ? (
+          <EmptyState
+            icon={<LayoutGrid />}
+            title="No matches found"
+            description="Try adjusting your filters to see more results."
+            action={
               <button
                 onClick={() => {
                   setMediaType("all");
                   setStatus("all");
                   setFavorite(false);
                 }}
-                className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
+                className="rounded-full bg-surface-2 px-4 py-2 text-sm font-medium hover:bg-surface-3 transition-colors border border-border/40"
               >
                 Clear Filters
               </button>
-            ) : undefined
-          }
-        />
+            }
+          />
+        ) : (
+          <div className="flex justify-center mt-12 md:mt-24">
+            <div className="max-w-xl text-center md:text-left md:flex items-center gap-12 bg-surface-1 border border-border/40 rounded-[24px] p-8 md:p-12">
+              <div className="flex-1 space-y-6">
+                <h2 className="text-2xl font-medium tracking-tight">
+                  The foundation of your story
+                </h2>
+                <div className="text-muted-foreground text-sm space-y-4">
+                  <p>
+                    Your library is where everything begins. Once you add media, it becomes the
+                    engine for your:
+                  </p>
+                  <ul className="grid grid-cols-2 gap-y-2 gap-x-4 text-foreground/80 list-disc list-inside">
+                    <li>Timeline</li>
+                    <li>Journal</li>
+                    <li>Memories</li>
+                    <li>Analytics</li>
+                  </ul>
+                </div>
+                <div className="pt-4">
+                  <PremiumButton
+                    variant="primary"
+                    onClick={() => {
+                      document.dispatchEvent(
+                        new KeyboardEvent("keydown", { key: "k", metaKey: true }),
+                      );
+                    }}
+                  >
+                    Add your first story
+                  </PremiumButton>
+                </div>
+              </div>
+            </div>
+          </div>
+        )
       ) : (
         <>
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">

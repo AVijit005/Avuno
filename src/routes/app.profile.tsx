@@ -39,12 +39,18 @@ function ProfilePage() {
 
   return (
     <div className="pt-2 pb-20">
-      <IdentityHero />
-
-      {/* Editorial breath between identity and metrics */}
-      <PullQuote attribution="Avuno · a living record">
-        You aren't a list of titles. You're the pattern between them.
-      </PullQuote>
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-border/40 pb-6">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-2">
+            Your Profile
+          </div>
+          <h1 className="font-display text-4xl tracking-tight">The story of your stories</h1>
+          <p className="mt-2 max-w-md text-sm text-muted-foreground">
+            A living portrait of your media life — the patterns, the preferences, and the moments
+            that shaped you.
+          </p>
+        </div>
+      </div>
 
       <div className="mt-2 grid grid-cols-2 gap-3 md:grid-cols-4">
         <StatCard label="Total hours" value={`${(overview?.hoursSpent || 0).toLocaleString()}h`} />

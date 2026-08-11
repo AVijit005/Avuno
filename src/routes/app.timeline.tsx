@@ -2,7 +2,6 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { useScroll, useTransform, useReducedMotion, motion } from "motion/react";
 import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumImage } from "@/components/ui/PremiumImage";
 import { CountUp, SegmentedFilter, ZoneHeading } from "@/components/analytics/AnalyticsKit";
 import { MediaEvolution } from "@/components/intelligence/MediaEvolution";
@@ -172,7 +171,7 @@ function TimelinePage() {
                     <span className="h-2 w-2 rounded-full" style={{ background: media.accent }} />
                   </motion.span>
 
-                  <PremiumGlass interactive glow={media.accent} className="flex gap-5 p-5">
+                  <div className="flex gap-5 p-5 bg-surface-1 border border-border/30 rounded-2xl shadow-sm transition hover:border-primary/50">
                     <PremiumImage
                       src={media.poster || ""}
                       alt=""
@@ -238,7 +237,7 @@ function TimelinePage() {
                         )}
                       </div>
                     </div>
-                  </PremiumGlass>
+                  </div>
                 </motion.div>
               );
             })}
@@ -273,14 +272,14 @@ function TimelinePage() {
             { l: "Journal entries", v: 0 },
             { l: "Achievements", v: 0 },
           ].map((s) => (
-            <PremiumGlass key={s.l} className="p-6">
+            <div key={s.l} className="p-6 bg-surface-1 border border-border/30 rounded-2xl shadow-sm">
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 {s.l}
               </div>
               <div className="mt-2 font-display text-4xl tracking-tight">
                 <CountUp to={s.v} />
               </div>
-            </PremiumGlass>
+            </div>
           ))}
         </div>
       </motion.section>

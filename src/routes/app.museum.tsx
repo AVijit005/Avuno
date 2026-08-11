@@ -18,10 +18,6 @@ function MuseumPage() {
         </p>
       </header>
 
-      <PullQuote attribution="Why a museum, not a list">
-        Lists rank. Archives remember. This room is built to remember.
-      </PullQuote>
-
       <Museum />
     </div>
   );
