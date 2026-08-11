@@ -26,7 +26,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
         {!isAdding && (
           <button
             onClick={() => setIsAdding(true)}
-            className="flex items-center gap-1.5 rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-foreground hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 rounded-full min-h-[44px] bg-white/5 px-4 py-2 text-xs font-medium text-foreground hover:bg-white/10 transition-colors"
           >
             <Plus className="h-3.5 w-3.5" />
             Add a memory
@@ -68,7 +68,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
               </p>
               <button
                 onClick={() => setIsAdding(true)}
-                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-2.5 min-h-[44px] text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4" /> Add a memory
               </button>
@@ -150,14 +150,14 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
               onClick={handleDetach}
               disabled={detach.isPending}
               aria-label="Confirm remove link"
-              className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-red-400/10 text-red-400 text-xs font-medium px-3 hover:bg-red-400/20 transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-red-400/10 text-red-400 text-xs font-medium px-3 hover:bg-red-400/20 transition-colors"
             >
               {detach.isPending ? "…" : "Yes"}
             </button>
             <button
               onClick={() => setConfirming(false)}
               aria-label="Cancel remove"
-              className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/5 text-muted-foreground text-xs font-medium px-3 hover:bg-white/10 transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/5 text-muted-foreground text-xs font-medium px-3 hover:bg-white/10 transition-colors"
             >
               No
             </button>
@@ -166,7 +166,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
           <button
             onClick={() => setConfirming(true)}
             aria-label={`Remove link between memory "${memory.title}" and this media`}
-            className="min-h-[36px] flex items-center gap-1.5 rounded-full px-3 text-xs text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+            className="min-h-[44px] flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
           >
             <Unlink className="h-3.5 w-3.5" />
             Remove link
@@ -186,7 +186,9 @@ function AttachMemoryView({
   onCancel: () => void;
   existingMemoryIds: string[];
 }) {
-  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useMemories({ limit: 20 });
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useMemories({
+    limit: 20,
+  });
   const allMemories = data?.pages.flatMap((p) => p.items) || [];
 
   // Filter out memories that are already linked
@@ -217,7 +219,10 @@ function AttachMemoryView({
               ? "You don't have any memories in your vault yet."
               : "All your memories are already linked to this media."}
           </p>
-          <Link to="/app/journal" className="text-primary hover:underline text-sm mt-2 block min-h-[44px] py-3">
+          <Link
+            to="/app/journal"
+            className="text-primary hover:underline text-sm mt-2 block min-h-[44px] py-3"
+          >
             Go to Journal to write a new one
           </Link>
         </div>

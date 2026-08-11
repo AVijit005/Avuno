@@ -1,6 +1,7 @@
 # Roadmap
 
 ## Completed Phases
+
 - Phase 0: Truth-First cleanup
 - Phase 1: Design System 2.0
 - Phase 2: Navigation / structural corrections
@@ -11,9 +12,11 @@
 - Phase 4C-5: Timeline ↔ Memory integration (attach/detach via TimelineEvent.memoryId, audited)
 
 ## Current Next Direction
+
 - **Phase 4C-6**: Final UI/UX polish (or whatever next step is approved).
 
 ## Future Phases
+
 - **Quote Experience**: Improving Quote interaction and frontend integration.
 - **Memory Search**: Advanced search for Memories.
 - **Memory Graph**: Visual representation of relationships.

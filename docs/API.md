@@ -3,14 +3,16 @@
 Base Path: `/api`
 Authentication: Bearer Token (JWT) or HttpOnly Cookies (Verified via NestJS Guards)
 
-*Note: The following endpoints are a verified subset of the actual backend implementation.*
+_Note: The following endpoints are a verified subset of the actual backend implementation._
 
 ## Authentication
+
 - `GET /auth/google` - Initiate Google OAuth login
 - `GET /auth/google/callback` - OAuth callback
 - `POST /auth/logout` - Logout and clear sessions
 
 ## Memory (Verified)
+
 - `GET /memories`
   - PURPOSE: Retrieve the Memory Vault/list.
   - AUTH: Required
@@ -24,6 +26,7 @@ Authentication: Bearer Token (JWT) or HttpOnly Cookies (Verified via NestJS Guar
   - IMPORTANT VALIDATION: Optionally accepts `journalId` or `quoteId`, but not both. MemoryMedia can be linked.
 
 ## Memory ↔ Media Relationship (Phase 4C-4)
+
 - `POST /library/:id/memories/:memoryId?type=<mediaType>`
   - PURPOSE: Attach an existing Memory to a library item (creates MemoryMedia relationship).
   - AUTH: Required. Both Memory and library item must belong to the authenticated user.
@@ -35,13 +38,16 @@ Authentication: Bearer Token (JWT) or HttpOnly Cookies (Verified via NestJS Guar
   - IMPORTANT: Only the MemoryMedia join row is removed. Neither the Memory nor the Media is deleted.
 
 ## Journal
+
 - Endpoints exist to manage Journal entries (Creation, Retrieval, Update, Deletion).
 - Required AUTH on all paths.
 
 ## Media
+
 - Endpoints exist for retrieving media metadata (Movies, TV Shows, Anime, Books, Games, Podcasts, Courses, Music).
 
 ## Timeline
+
 - Endpoints exist for retrieving timeline milestones.
 - **Timeline ↔ Memory Relationship (Phase 4C-5)**
   - `POST /timeline/:id/memories/:memoryId`
@@ -53,4 +59,5 @@ Authentication: Bearer Token (JWT) or HttpOnly Cookies (Verified via NestJS Guar
     - IMPORTANT: Does not delete either entity, just nullifies the `memoryId` reference.
 
 ## Analytics & Insights
+
 - Endpoints exist for retrieving system-derived analytics data.
