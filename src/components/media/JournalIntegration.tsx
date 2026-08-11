@@ -20,7 +20,7 @@ interface Props {
 export function JournalIntegration({ item, entries = [] }: Props) {
   const shown = entries.slice(0, 3);
   return (
-    <PremiumGlass variant="subtle">
+    <div className="rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
       <div className="p-5">
         <div className="flex items-center justify-between">
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
@@ -49,6 +49,6 @@ export function JournalIntegration({ item, entries = [] }: Props) {
         </ul>
         <p className="mt-3 text-[11px] text-muted-foreground">About {item.title}.</p>
       </div>
-    </PremiumGlass>
+    </div>
   );
 }

@@ -73,7 +73,6 @@ import {
 } from "@/components/analytics/AnalyticsKit";
 import { ChartStory } from "@/components/analytics/ChartStory";
 
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { PosterCard } from "@/components/ui/PosterCard";
 import {
@@ -262,11 +261,7 @@ export default function AnalyticsPage() {
           transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
           className="relative"
         >
-          <PremiumGlass
-            variant="strong"
-            className="relative overflow-hidden rounded-[40px] p-10 md:p-16"
-            glow="oklch(0.72 0.18 255 / 0.4)"
-          >
+          <div className="relative overflow-hidden rounded-[40px] p-10 md:p-16 mb-16 border-b border-border/40 pb-12">
             <div
               className="pointer-events-none absolute inset-0 opacity-60"
               style={{
@@ -310,7 +305,10 @@ export default function AnalyticsPage() {
                   },
                   { l: "Memories", v: o.memories, a: "oklch(0.7 0.18 25 / 0.45)" },
                 ].map((st) => (
-                  <div key={st.l} className="glass-subtle relative overflow-hidden rounded-2xl p-4">
+                  <div
+                    key={st.l}
+                    className="bg-surface-1 border border-border/40 relative overflow-hidden rounded-2xl p-4"
+                  >
                     <div
                       className="absolute -right-8 -top-8 h-24 w-24 rounded-full blur-2xl"
                       style={{ background: st.a }}
@@ -327,7 +325,7 @@ export default function AnalyticsPage() {
                 ))}
               </div>
             </div>
-          </PremiumGlass>
+          </div>
 
           {/* Filter bar */}
           <div className="mt-6 flex flex-wrap items-center justify-between gap-3">
@@ -393,12 +391,10 @@ export default function AnalyticsPage() {
         {/* ============ Zone 3 — Monthly activity ============ */}
         <Zone eyebrow="Zone 03" title="Monthly activity" sub="Sixty days of attention.">
           <ChartStory
-            observation="Your activity trends captured daily."
-            why="A reflection of your continuous journey."
-            meaning="Tracking your time helps you understand your rhythm."
-            memory="Keep exploring new worlds."
+            title="Activity Timeline"
+            description="Daily engagement trends across all media types."
           >
-            <PremiumGlass className="p-6 md:p-8">
+            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[
                   { l: "Monthly total", v: o.hoursSpent, s: "h" },
@@ -467,14 +463,14 @@ export default function AnalyticsPage() {
                   </ResponsiveContainer>
                 </ErrorBoundary>
               </div>
-            </PremiumGlass>
+            </div>
           </ChartStory>
         </Zone>
 
         {/* ============ Zone 4 — Media distribution ============ */}
         <Zone eyebrow="Zone 4" title="Media distribution" sub="The shape of your library.">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <PremiumGlass className="p-6 md:p-8">
+            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
               <div className="h-72">
                 <ErrorBoundary
                   fallback={
@@ -504,8 +500,8 @@ export default function AnalyticsPage() {
                   </ResponsiveContainer>
                 </ErrorBoundary>
               </div>
-            </PremiumGlass>
-            <PremiumGlass className="p-6 md:p-8">
+            </div>
+            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
               <div className="space-y-3">
                 {mediaDistribution.map((d) => {
                   const total = mediaDistribution.reduce((a, b) => a + b.value, 0);
@@ -532,13 +528,13 @@ export default function AnalyticsPage() {
                   );
                 })}
               </div>
-            </PremiumGlass>
+            </div>
           </div>
         </Zone>
 
         {/* ============ Zone 5 — Completion insights ============ */}
         <Zone eyebrow="Zone 05" title="Completion insights">
-          <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { label: "Reviews", value: m.reviewCount, ring: 60, accent: "var(--primary)" },
               {
@@ -572,9 +568,9 @@ export default function AnalyticsPage() {
                 accent: "oklch(0.85 0.2 100)",
               },
             ].map((c) => (
-              <PremiumGlass
+              <div
                 key={c.label}
-                className="flex flex-col items-center gap-3 p-5 text-center"
+                className="flex items-center justify-between rounded-xl p-3 bg-surface-2/50 hover:bg-surface-2 transition-colors border border-border/30"
               >
                 <ProgressRing value={c.ring} accent={c.accent}>
                   <div className="font-display text-2xl tracking-tight">
@@ -584,7 +580,7 @@ export default function AnalyticsPage() {
                 <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">
                   {c.label}
                 </div>
-              </PremiumGlass>
+              </div>
             ))}
           </div>
         </Zone>
@@ -704,7 +700,10 @@ export default function AnalyticsPage() {
                 accent: "oklch(0.72 0.16 160 / 0.6)",
               },
             ].map((r) => (
-              <PremiumGlass key={r.label} className="relative overflow-hidden p-6">
+              <div
+                key={r.label}
+                className="relative overflow-hidden p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm"
+              >
                 <div
                   className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full blur-3xl opacity-60"
                   style={{ background: r.accent }}
@@ -717,7 +716,7 @@ export default function AnalyticsPage() {
                   <div className="mt-2 font-display text-3xl tracking-tight">{r.value}</div>
                   <div className="mt-1 text-xs text-muted-foreground">{r.date}</div>
                 </div>
-              </PremiumGlass>
+              </div>
             ))}
           </div>
         </Zone>

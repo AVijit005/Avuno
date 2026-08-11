@@ -65,7 +65,7 @@ function AuthCallback() {
         router.navigate({ to: "/app", replace: true });
       })
       .catch((err) => fail(`Authentication failed. ${err.message || "Please try again."}`));
-  }, []);
+  }, [router]);
 
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4">

@@ -3,7 +3,6 @@ import { Clock, Lock, Globe } from "lucide-react";
 import { DropCap } from "@/components/editorial/DropCap";
 import { cascade } from "@/lib/motion";
 import { countWords } from "@/lib/utils/words";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import type { UIJournalEntry } from "@/lib/adapters/types";
 
 interface Props {
@@ -16,14 +15,12 @@ export function JournalEntryCard({ entry, index }: Props) {
   const readingTime = Math.max(1, Math.round(wordCount / 200));
 
   return (
-    <PremiumGlass
-      interactive
-      variant="subtle"
+    <motion.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={cascade(index, 0.05)}
-      className="group relative overflow-hidden rounded-3xl p-6 md:p-8"
+      className="group relative overflow-hidden rounded-[32px] p-6 md:p-8 bg-surface-1 border border-border/40 shadow-sm transition-colors hover:bg-surface-2"
       style={{ viewTransitionName: `journal-card-${entry.id}` } as React.CSSProperties}
     >
       <div className="relative">
@@ -85,6 +82,6 @@ export function JournalEntryCard({ entry, index }: Props) {
           {/* Phase 4C-3: Preserve as Memory action will go here */}
         </div>
       </div>
-    </PremiumGlass>
+    </motion.div>
   );
 }

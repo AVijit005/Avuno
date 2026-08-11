@@ -4,7 +4,6 @@ import { motion, AnimatePresence } from "motion/react";
 import { format } from "date-fns";
 import { Plus, X, Lock, Globe, Bookmark, Calendar, Unlink } from "lucide-react";
 import { toast } from "sonner";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { useMemories, useAttachMemory, useDetachMemory } from "@/hooks/use-journal";
 import type { UIMediaItem } from "@/lib/adapters/types";
 import type { MemoryResponse } from "@/lib/api/journal";
@@ -57,21 +56,23 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
           {isLoading ? (
             <div className="h-32 rounded-3xl bg-white/5 animate-pulse" />
           ) : memories.length === 0 ? (
-            <PremiumGlass variant="subtle" className="p-8 text-center md:col-span-2">
+            <div className="p-8 text-center md:col-span-2 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Vault
               </div>
-              <div className="mt-2 font-display text-2xl tracking-tight">No memories linked</div>
+              <div className="mt-2 font-display text-2xl tracking-tight text-foreground">
+                No memories linked
+              </div>
               <p className="mt-2 mx-auto max-w-md text-sm text-muted-foreground">
                 Attach a memory from your vault to remember exactly how this made you feel.
               </p>
               <button
                 onClick={() => setIsAdding(true)}
-                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-2.5 text-sm font-medium text-primary-foreground"
+                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4" /> Add a memory
               </button>
-            </PremiumGlass>
+            </div>
           ) : (
             memories.map((memory) => (
               <LinkedMemoryCard key={memory.id} memory={memory} item={item} />
@@ -105,7 +106,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
   };
 
   return (
-    <PremiumGlass className="group relative p-5 flex flex-col justify-between overflow-hidden">
+    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-1 border border-border/40 shadow-sm transition-all hover:bg-surface-2 hover:border-border/60">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-3">
           <time className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-wider">
@@ -123,19 +124,21 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
           )}
         </div>
         <Link to="/app/memories/$id" params={{ id: memory.id }} className="block">
-          <h4 className="font-serif text-xl text-white mb-2 line-clamp-2 hover:text-primary transition-colors">
+          <h4 className="font-display text-xl text-foreground mb-2 line-clamp-2 hover:text-primary transition-colors">
             {memory.title}
           </h4>
         </Link>
         {memory.description && (
-          <p className="text-sm text-white/70 line-clamp-3 leading-relaxed">{memory.description}</p>
+          <p className="text-sm text-muted-foreground line-clamp-3 leading-relaxed">
+            {memory.description}
+          </p>
         )}
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+      <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-4">
         <div className="flex items-center gap-3">
           {memory.emotion && (
-            <span className="text-xs px-2 py-1 bg-white/5 rounded-full text-white/80">
+            <span className="text-xs px-2 py-1 bg-surface-3 rounded-full text-foreground/80">
               {memory.emotion}
             </span>
           )}
@@ -170,7 +173,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
           </button>
         )}
       </div>
-    </PremiumGlass>
+    </div>
   );
 }
 
@@ -192,7 +195,7 @@ function AttachMemoryView({
   const attach = useAttachMemory();
 
   return (
-    <PremiumGlass className="p-6">
+    <div className="p-6 rounded-3xl bg-surface-1 border border-border/40 shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h4 className="font-display text-xl tracking-tight">Select a Memory from your Vault</h4>
         <button
@@ -261,6 +264,6 @@ function AttachMemoryView({
           ))}
         </div>
       )}
-    </PremiumGlass>
+    </div>
   );
 }

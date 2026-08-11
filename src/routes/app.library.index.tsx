@@ -92,7 +92,7 @@ function LibraryIndex() {
 
       {/* TAXONOMY SEGMENTED CONTROL */}
       <div className="-mx-6 mb-8 overflow-x-auto px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
-        <div className="flex w-max space-x-1 rounded-full bg-white/5 p-1 ring-1 ring-white/10">
+        <div className="flex w-max space-x-1 rounded-full bg-surface-1 p-1 ring-1 ring-border/40 shadow-sm">
           {TAXONOMY.map((tab) => (
             <button
               key={tab.id}

@@ -19,7 +19,6 @@ import {
   Shield,
   LogOut,
 } from "lucide-react";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/app/settings")({ component: Page });
@@ -64,7 +63,7 @@ function Page() {
         to="/app/import"
         className="press-scale mb-8 flex items-center gap-4 rounded-3xl border border-primary/30 bg-gradient-to-r from-primary/15 to-secondary/10 p-5 transition hover:border-primary/50"
       >
-        <div className="grid h-12 w-12 place-items-center rounded-xl bg-white/[0.08]">
+        <div className="grid h-12 w-12 place-items-center rounded-xl bg-surface-2 border border-border/40">
           <Download className="h-5 w-5 text-primary" />
         </div>
         <div className="min-w-0 flex-1">
@@ -77,36 +76,36 @@ function Page() {
       </Link>
 
       <div className="space-y-6">
-        <PremiumGlass className="p-6">
+        <div className="p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
           <h2 className="font-display text-lg tracking-tight mb-4 flex items-center gap-2">
             <Monitor className="h-4 w-4 text-primary" /> Appearance
           </h2>
           <div className="grid grid-cols-3 gap-3">
             <button
               onClick={() => applyTheme("system")}
-              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "system" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "system" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <Monitor className="h-5 w-5" />
               <span className="text-sm">System</span>
             </button>
             <button
               onClick={() => applyTheme("light")}
-              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "light" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "light" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <Sun className="h-5 w-5" />
               <span className="text-sm">Light</span>
             </button>
             <button
               onClick={() => applyTheme("dark")}
-              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "dark" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex flex-col items-center gap-2 rounded-xl border p-4 transition ${theme === "dark" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <Moon className="h-5 w-5" />
               <span className="text-sm">Dark</span>
             </button>
           </div>
-        </PremiumGlass>
+        </div>
 
-        <PremiumGlass className="p-6">
+        <div className="p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
           <h2 className="font-display text-lg tracking-tight mb-4 flex items-center gap-2">
             <Globe className="h-4 w-4 text-primary" /> Region & Language
           </h2>
@@ -119,7 +118,7 @@ function Page() {
                 id="language"
                 value={profile?.language || "en"}
                 onChange={(e) => updateProfile.mutate({ language: e.target.value })}
-                className="flex h-10 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="flex h-10 w-full rounded-md border border-border bg-surface-1 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <option value="en">English (US)</option>
                 <option value="es">Español</option>
@@ -135,7 +134,7 @@ function Page() {
                 id="timezone"
                 value={profile?.timezone || "UTC"}
                 onChange={(e) => updateProfile.mutate({ timezone: e.target.value })}
-                className="flex h-10 w-full rounded-md border border-white/10 bg-white/5 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+                className="flex h-10 w-full rounded-md border border-border bg-surface-1 px-3 py-2 text-sm text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
               >
                 <option value="UTC">UTC</option>
                 <option value="America/New_York">Eastern Time (ET)</option>
@@ -145,16 +144,16 @@ function Page() {
               </select>
             </div>
           </div>
-        </PremiumGlass>
+        </div>
 
-        <PremiumGlass className="p-6">
+        <div className="p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
           <h2 className="font-display text-lg tracking-tight mb-4 flex items-center gap-2">
             <Shield className="h-4 w-4 text-primary" /> Privacy & Visibility
           </h2>
           <div className="grid gap-3">
             <button
               onClick={() => handlePrivacyChange("public")}
-              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "public" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "public" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <Globe className="mt-0.5 h-5 w-5" />
               <div className="text-left">
@@ -166,7 +165,7 @@ function Page() {
             </button>
             <button
               onClick={() => handlePrivacyChange("private")}
-              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "private" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "private" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <Lock className="mt-0.5 h-5 w-5" />
               <div className="text-left">
@@ -178,7 +177,7 @@ function Page() {
             </button>
             <button
               onClick={() => handlePrivacyChange("followers")}
-              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "followers" ? "border-primary bg-primary/10" : "border-white/10 hover:border-white/30"}`}
+              className={`flex items-start gap-3 rounded-xl border p-4 transition ${privacy === "followers" ? "border-primary bg-primary/10" : "border-border/40 hover:border-border/80"}`}
             >
               <EyeOff className="mt-0.5 h-5 w-5" />
               <div className="text-left">
@@ -189,28 +188,28 @@ function Page() {
               </div>
             </button>
           </div>
-        </PremiumGlass>
+        </div>
 
-        <PremiumGlass className="p-6">
+        <div className="p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
           <h2 className="font-display text-lg tracking-tight mb-4 flex items-center gap-2">
             <Lock className="h-4 w-4 text-primary" /> Notifications & Connected Accounts
           </h2>
-          <div className="text-sm text-muted-foreground rounded-lg bg-white/5 p-4">
+          <div className="text-sm text-muted-foreground rounded-lg bg-surface-2 p-4">
             <p>
               Notification preferences and connected account management are not currently supported
               by the backend API.
             </p>
           </div>
-        </PremiumGlass>
+        </div>
 
         {sessions && sessions.length > 0 && (
-          <PremiumGlass className="p-6">
+          <div className="p-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm">
             <h2 className="font-display text-lg tracking-tight mb-4">Active Sessions</h2>
             <div className="space-y-3">
               {sessions.map((s) => (
                 <div
                   key={s.id}
-                  className="flex items-center justify-between rounded-xl border border-white/5 bg-white/[0.02] p-4"
+                  className="flex items-center justify-between rounded-xl border border-border/40 bg-surface-2 p-4"
                 >
                   <div>
                     <div className="font-medium text-sm flex items-center gap-2">
@@ -228,7 +227,7 @@ function Page() {
                   {!s.isCurrent && (
                     <button
                       onClick={() => revokeSession.mutate(s.id)}
-                      className="rounded-lg p-2 text-muted-foreground hover:bg-white/10 hover:text-red-400 transition"
+                      className="rounded-lg p-2 text-muted-foreground hover:bg-surface-3 hover:text-red-400 transition"
                       title="Revoke session"
                     >
                       <LogOut className="h-4 w-4" />
@@ -237,7 +236,7 @@ function Page() {
                 </div>
               ))}
             </div>
-          </PremiumGlass>
+          </div>
         )}
 
         <div className="pt-4">

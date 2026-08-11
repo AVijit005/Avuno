@@ -54,47 +54,40 @@ function TimelinePage() {
     <div className="pb-32 pt-2">
       {/* Hero */}
       <motion.section
-        initial={{ opacity: 0, y: reduced ? 0 : 24, filter: reduced ? "none" : "blur(8px)" }}
-        animate={{ opacity: 1, y: 0, filter: reduced ? "none" : "blur(0)" }}
-        transition={{ duration: reduced ? 0 : 0.9, ease: [0.22, 1, 0.36, 1] }}
+        initial={{ opacity: 0, y: reduced ? 0 : 24 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: reduced ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="mb-16 border-b border-border/40 pb-12"
       >
-        <PremiumGlass
-          variant="strong"
-          className="relative overflow-hidden rounded-[40px] p-10 md:p-16"
-          glow="oklch(0.65 0.22 295 / 0.4)"
-        >
-          {/* Background decoration */}
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-primary/5 via-secondary/5 to-background" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-background/40 via-background/80 to-background" />
-          <div className="relative">
-            <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-              Life through media
+        <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
+          Life through media
+        </div>
+        <h1 className="mt-4 font-display text-4xl tracking-tight md:text-5xl text-foreground">
+          Your timeline.
+        </h1>
+        <p className="mt-4 max-w-xl text-muted-foreground">
+          A vertical river of every story you've finished — from years ago to last night.
+        </p>
+        <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
+          {[
+            { l: "Years tracked", v: years.length },
+            { l: "Stories", v: statsData?.timelineEventCount ?? 0 },
+            { l: "Journals", v: statsData?.journalCount ?? 0 },
+            { l: "Longest streak", v: statsData?.writingStreak ?? 0, s: "d" },
+          ].map((s) => (
+            <div
+              key={s.l}
+              className="rounded-xl bg-surface-1 border border-border/30 p-4 shadow-sm"
+            >
+              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+                {s.l}
+              </div>
+              <div className="mt-2 font-display text-3xl tracking-tight text-foreground">
+                {typeof s.v === "number" ? <CountUp to={s.v} suffix={s.s ?? ""} /> : s.v}
+              </div>
             </div>
-            <h1 className="mt-5 font-display text-5xl tracking-tight md:text-7xl">
-              <span className="text-gradient-aurora">Your timeline.</span>
-            </h1>
-            <p className="mt-5 max-w-xl text-muted-foreground md:text-lg">
-              A vertical river of every story you've finished — from years ago to last night.
-            </p>
-            <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-              {[
-                { l: "Years tracked", v: years.length },
-                { l: "Stories", v: statsData?.timelineEventCount ?? 0 },
-                { l: "Journals", v: statsData?.journalCount ?? 0 },
-                { l: "Longest streak", v: statsData?.writingStreak ?? 0, s: "d" },
-              ].map((s) => (
-                <div key={s.l} className="glass-subtle rounded-2xl p-4">
-                  <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                    {s.l}
-                  </div>
-                  <div className="mt-2 font-display text-3xl tracking-tight">
-                    {typeof s.v === "number" ? <CountUp to={s.v} suffix={s.s ?? ""} /> : s.v}
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </PremiumGlass>
+          ))}
+        </div>
       </motion.section>
 
       {/* Live numbers from libraryStore */}
