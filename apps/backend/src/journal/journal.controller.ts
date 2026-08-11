@@ -137,6 +137,28 @@ export class JournalController {
     return this.journalService.deleteMemory(id, user.sub);
   }
 
+  @Post('library/:id/memories/:memoryId')
+  @ApiOperation({ summary: 'Attach a memory to a library item' })
+  async attachMemory(
+    @CurrentUser() user: AccessTokenPayload,
+    @Param('id') id: string,
+    @Param('memoryId') memoryId: string,
+    @Query() query: MediaTypeQueryDto,
+  ): Promise<void> {
+    return this.journalService.attachMedia(memoryId, user.sub, id, query.type);
+  }
+
+  @Delete('library/:id/memories/:memoryId')
+  @ApiOperation({ summary: 'Detach a memory from a library item' })
+  async detachMemory(
+    @CurrentUser() user: AccessTokenPayload,
+    @Param('id') id: string,
+    @Param('memoryId') memoryId: string,
+    @Query() query: MediaTypeQueryDto,
+  ): Promise<void> {
+    return this.journalService.detachMedia(memoryId, user.sub, id, query.type);
+  }
+
   // ─── Timeline ─────────────────────────────────────────────────────────────
 
   @Post('timeline/events')

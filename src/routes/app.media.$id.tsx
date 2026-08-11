@@ -18,7 +18,7 @@ import { LivingHeaderMeta } from "@/components/media/LivingHeaderMeta";
 import { JournalIntegration } from "@/components/media/JournalIntegration";
 import { CollectionsIntegration } from "@/components/media/CollectionsIntegration";
 import { EditorialFooter } from "@/components/media/EditorialFooter";
-import { MediaReflectionPanel } from "@/components/memory/YourReflectionsRail";
+import { MediaMemoriesPanel } from "@/components/memory/MediaMemoriesPanel";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
 
@@ -111,7 +111,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
         tone="journal"
       >
         <PersonalMemory item={item} />
-        <MediaReflectionPanel id={item.id} />
+        <MediaMemoriesPanel item={item} />
       </Chapter>
 
       <Chapter

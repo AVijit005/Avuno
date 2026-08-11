@@ -223,6 +223,8 @@ export async function createMemory(input: CreateMemoryInput): Promise<MemoryResp
 export async function listMemories(params?: {
   cursor?: string;
   limit?: number;
+  mediaId?: string;
+  journalId?: string;
 }): Promise<ItemsPage<MemoryResponse>> {
   return apiGet(`/memories${buildQueryString(params ?? {})}`);
 }
@@ -237,6 +239,22 @@ export async function updateMemory(id: string, input: UpdateMemoryInput): Promis
 
 export async function deleteMemory(id: string): Promise<void> {
   return apiDelete(`/memories/${id}`);
+}
+
+export async function attachMemoryToLibraryItem(
+  libraryId: string,
+  memoryId: string,
+  mediaType: string,
+): Promise<void> {
+  return apiPost(`/library/${libraryId}/memories/${memoryId}?type=${mediaType}`, {});
+}
+
+export async function detachMemoryFromLibraryItem(
+  libraryId: string,
+  memoryId: string,
+  mediaType: string,
+): Promise<void> {
+  return apiDelete(`/library/${libraryId}/memories/${memoryId}?type=${mediaType}`);
 }
 
 // Timeline

@@ -201,4 +201,36 @@ describe('Memory Relations E2E', () => {
     });
     expect(results.length).toBe(0);
   });
+
+  it('TEST 21: Attach Media -> MemoryMedia relationship created (simulated service attach)', async () => {
+    const user = await prisma.user.create({ data: { email: 't21_' + Date.now() + '@a.com' } });
+    const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 21' } });
+    const movie = await prisma.movie.create({ data: { title: 'M1', slug: 'm1_t21_' + Date.now() } });
+    
+    // simulate addMemoryMedia
+    await prisma.memoryMedia.create({ data: { memoryId: memory.id, movieId: movie.id } });
+    
+    const relations = await prisma.memoryMedia.findMany({ where: { memoryId: memory.id, movieId: movie.id } });
+    expect(relations.length).toBe(1);
+  });
+
+  it('TEST 22: Detach Media -> MemoryMedia relationship removed', async () => {
+    const user = await prisma.user.create({ data: { email: 't22_' + Date.now() + '@a.com' } });
+    const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 22' } });
+    const movie = await prisma.movie.create({ data: { title: 'M1', slug: 'm1_t22_' + Date.now() } });
+    await prisma.memoryMedia.create({ data: { memoryId: memory.id, movieId: movie.id } });
+    
+    // simulate removeMemoryMedia
+    await prisma.memoryMedia.deleteMany({ where: { memoryId: memory.id, movieId: movie.id } });
+    
+    const relations = await prisma.memoryMedia.findMany({ where: { memoryId: memory.id, movieId: movie.id } });
+    expect(relations.length).toBe(0);
+    
+    // Memory and Media should still exist
+    const m1 = await prisma.memory.findUnique({ where: { id: memory.id } });
+    const m2 = await prisma.movie.findUnique({ where: { id: movie.id } });
+    expect(m1).not.toBeNull();
+    expect(m2).not.toBeNull();
+  });
 });
+

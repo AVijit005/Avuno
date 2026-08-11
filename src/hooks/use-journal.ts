@@ -84,7 +84,12 @@ export function useDeleteJournalEntry() {
   });
 }
 
-export function useMemories(params?: { cursor?: string; limit?: number }) {
+export function useMemories(params?: {
+  cursor?: string;
+  limit?: number;
+  mediaId?: string;
+  journalId?: string;
+}) {
   const { data: user } = useCurrentUser();
 
   return useInfiniteQuery({
@@ -94,6 +99,44 @@ export function useMemories(params?: { cursor?: string; limit?: number }) {
       journalApi.listMemories({ ...params, cursor: pageParam as string | undefined }),
     getNextPageParam: nextPageParam,
     initialPageParam: undefined as string | undefined,
+  });
+}
+
+export function useAttachMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      memoryId,
+      libraryId,
+      mediaType,
+    }: {
+      memoryId: string;
+      libraryId: string;
+      mediaType: string;
+    }) => journalApi.attachMemoryToLibraryItem(libraryId, memoryId, mediaType),
+    onSuccess: (_, { memoryId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.library.all });
+    },
+  });
+}
+
+export function useDetachMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      memoryId,
+      libraryId,
+      mediaType,
+    }: {
+      memoryId: string;
+      libraryId: string;
+      mediaType: string;
+    }) => journalApi.detachMemoryFromLibraryItem(libraryId, memoryId, mediaType),
+    onSuccess: (_, { memoryId }) => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.library.all });
+    },
   });
 }
 

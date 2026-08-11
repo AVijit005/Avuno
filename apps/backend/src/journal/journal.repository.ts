@@ -202,6 +202,15 @@ export class JournalRepository {
     }
   }
 
+  async removeMemoryMedia(memoryId: string, mediaType: string, mediaId: string): Promise<boolean> {
+    const mediaField = `${mediaType}Id`;
+    const result = await this.prismaAny().memoryMedia.deleteMany({
+      where: { memoryId, [mediaField]: mediaId },
+    });
+    return result.count > 0;
+  }
+
+
   // ─── Timeline Events ──────────────────────────────────────────────────────
 
   async findTimelineEvents(

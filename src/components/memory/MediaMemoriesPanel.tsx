@@ -1,0 +1,220 @@
+import { useState } from "react";
+import { Link } from "@tanstack/react-router";
+import { motion, AnimatePresence } from "motion/react";
+import { format } from "date-fns";
+import { Plus, X, Lock, Globe, Bookmark, Calendar, Trash2 } from "lucide-react";
+import { PremiumGlass } from "@/components/ui/PremiumGlass";
+import { useMemories, useAttachMemory, useDetachMemory } from "@/hooks/use-journal";
+import type { UIMediaItem } from "@/lib/adapters/types";
+import type { MemoryResponse } from "@/lib/api/journal";
+
+export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
+  const [isAdding, setIsAdding] = useState(false);
+  const { data, isLoading } = useMemories({ mediaId: item.mediaId });
+  const memories = data?.pages.flatMap((p) => p.items) || [];
+
+  return (
+    <div className="space-y-6">
+      {/* HEADER */}
+      <div className="flex items-center justify-between">
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+            Preserved Moments
+          </div>
+          <h3 className="font-display text-2xl tracking-tight">Your memories</h3>
+        </div>
+        {!isAdding && (
+          <button
+            onClick={() => setIsAdding(true)}
+            className="flex items-center gap-1.5 rounded-full bg-white/5 px-4 py-2 text-xs font-medium text-foreground hover:bg-white/10 transition-colors"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add a memory
+          </button>
+        )}
+      </div>
+
+      <AnimatePresence mode="popLayout">
+        {isAdding && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="overflow-hidden"
+          >
+            <AttachMemoryView
+              item={item}
+              onCancel={() => setIsAdding(false)}
+              existingMemoryIds={memories.map((m) => m.id)}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {!isAdding && (
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+          {isLoading ? (
+            <div className="h-32 rounded-3xl bg-white/5 animate-pulse" />
+          ) : memories.length === 0 ? (
+            <PremiumGlass variant="subtle" className="p-8 text-center md:col-span-2">
+              <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                Vault
+              </div>
+              <div className="mt-2 font-display text-2xl tracking-tight">No memories linked</div>
+              <p className="mt-2 mx-auto max-w-md text-sm text-muted-foreground">
+                Attach a memory from your vault to remember exactly how this made you feel.
+              </p>
+              <button
+                onClick={() => setIsAdding(true)}
+                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary px-6 py-2.5 text-sm font-medium text-primary-foreground"
+              >
+                <Plus className="h-4 w-4" /> Add a memory
+              </button>
+            </PremiumGlass>
+          ) : (
+            memories.map((memory) => (
+              <LinkedMemoryCard key={memory.id} memory={memory} item={item} />
+            ))
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMediaItem }) {
+  const detach = useDetachMemory();
+  const date = memory.memoryDate ? new Date(memory.memoryDate) : new Date(memory.createdAt);
+
+  return (
+    <PremiumGlass className="group relative p-5 flex flex-col justify-between overflow-hidden">
+      <div className="flex-1">
+        <div className="flex items-center justify-between mb-3">
+          <time className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-wider">
+            <Calendar className="h-3 w-3" />
+            {format(date, "MMM d, yyyy")}
+          </time>
+          {memory.isPrivate ? (
+            <div title="Private">
+              <Lock className="h-3.5 w-3.5 text-muted-foreground" />
+            </div>
+          ) : (
+            <div title="Public">
+              <Globe className="h-3.5 w-3.5 text-muted-foreground" />
+            </div>
+          )}
+        </div>
+        <Link to="/app/memories/$id" params={{ id: memory.id }} className="block">
+          <h4 className="font-serif text-xl text-white mb-2 line-clamp-2 hover:text-primary transition-colors">
+            {memory.title}
+          </h4>
+        </Link>
+        {memory.description && (
+          <p className="text-sm text-white/70 line-clamp-3 leading-relaxed">{memory.description}</p>
+        )}
+      </div>
+
+      <div className="mt-4 flex items-center justify-between border-t border-white/5 pt-4">
+        <div className="flex items-center gap-3">
+          {memory.emotion && (
+            <span className="text-xs px-2 py-1 bg-white/5 rounded-full text-white/80">
+              {memory.emotion}
+            </span>
+          )}
+        </div>
+        <button
+          onClick={() => {
+            if (confirm("Remove this memory from this media?")) {
+              detach.mutate({ memoryId: memory.id, libraryId: item.id, mediaType: item.mediaType });
+            }
+          }}
+          disabled={detach.isPending}
+          className="text-xs text-red-400/50 hover:text-red-400 transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100"
+          title="Detach from media"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+          Remove
+        </button>
+      </div>
+    </PremiumGlass>
+  );
+}
+
+function AttachMemoryView({
+  item,
+  onCancel,
+  existingMemoryIds,
+}: {
+  item: UIMediaItem;
+  onCancel: () => void;
+  existingMemoryIds: string[];
+}) {
+  const { data, isLoading } = useMemories({ limit: 100 });
+  const allMemories = data?.pages.flatMap((p) => p.items) || [];
+
+  // Filter out memories that are already linked
+  const availableMemories = allMemories.filter((m) => !existingMemoryIds.includes(m.id));
+
+  const attach = useAttachMemory();
+
+  return (
+    <PremiumGlass className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h4 className="font-display text-xl tracking-tight">Select a Memory from your Vault</h4>
+        <button onClick={onCancel} className="text-muted-foreground hover:text-foreground">
+          <X className="h-5 w-5" />
+        </button>
+      </div>
+
+      {isLoading ? (
+        <div className="h-40 rounded-2xl bg-white/5 animate-pulse" />
+      ) : availableMemories.length === 0 ? (
+        <div className="text-center py-8">
+          <Bookmark className="h-8 w-8 text-white/20 mx-auto mb-3" />
+          <p className="text-sm text-muted-foreground">
+            {allMemories.length === 0
+              ? "You don't have any memories in your vault yet."
+              : "All your memories are already linked to this media."}
+          </p>
+          <Link to="/app/journal" className="text-primary hover:underline text-sm mt-2 block">
+            Go to Journal to write a new one
+          </Link>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+          {availableMemories.map((m) => (
+            <button
+              key={m.id}
+              onClick={() => {
+                attach.mutate(
+                  { memoryId: m.id, libraryId: item.id, mediaType: item.mediaType },
+                  { onSuccess: () => onCancel() },
+                );
+              }}
+              disabled={attach.isPending}
+              className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative"
+            >
+              <h5 className="font-serif text-lg mb-1 truncate group-hover:text-primary transition-colors">
+                {m.title}
+              </h5>
+              <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <time>
+                  {format(
+                    m.memoryDate ? new Date(m.memoryDate) : new Date(m.createdAt),
+                    "MMM d, yyyy",
+                  )}
+                </time>
+                {m.emotion && <span>{m.emotion}</span>}
+              </div>
+              {attach.isPending && (
+                <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                </div>
+              )}
+            </button>
+          ))}
+        </div>
+      )}
+    </PremiumGlass>
+  );
+}

@@ -230,6 +230,36 @@ export class JournalService {
     return this.toMemoryResponse(updated);
   }
 
+  async attachMedia(memoryId: string, userId: string, libraryId: string, mediaType: string): Promise<void> {
+    const memory = await this.repository.findMemoryById(memoryId, userId);
+    if (!memory) throw new NotFoundException('Memory not found');
+
+    const libItem = await this.findLibraryMediaId(libraryId, mediaType, userId);
+    if (!libItem) throw new NotFoundException('Library item not found');
+
+    const mediaId = libItem[`${mediaType}Id`];
+    if (!mediaId) throw new NotFoundException('Library item not found');
+
+    await this.repository.addMemoryMedia(memoryId, mediaType, mediaId);
+    await this.events.emitMemoryUpdated(userId, memoryId);
+  }
+
+  async detachMedia(memoryId: string, userId: string, libraryId: string, mediaType: string): Promise<void> {
+    const memory = await this.repository.findMemoryById(memoryId, userId);
+    if (!memory) throw new NotFoundException('Memory not found');
+
+    const libItem = await this.findLibraryMediaId(libraryId, mediaType, userId);
+    if (!libItem) throw new NotFoundException('Library item not found');
+
+    const mediaId = libItem[`${mediaType}Id`];
+    if (!mediaId) throw new NotFoundException('Library item not found');
+
+    const removed = await this.repository.removeMemoryMedia(memoryId, mediaType, mediaId);
+    if (removed) {
+      await this.events.emitMemoryUpdated(userId, memoryId);
+    }
+  }
+
   async deleteMemory(id: string, userId: string): Promise<void> {
     const ok = await this.repository.deleteMemory(id, userId);
     if (!ok) throw new NotFoundException('Memory not found');

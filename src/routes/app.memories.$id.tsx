@@ -1,6 +1,6 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useMemory, useJournalEntry } from "@/hooks/use-journal";
-import { useLibraryItem } from "@/hooks/use-library";
+import { useMedia } from "@/hooks/use-media";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import {
   Lock,
@@ -190,30 +190,32 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
 }
 
 function MediaEvidence({ mediaId }: { mediaId: string }) {
-  const { data: item, isLoading, isError } = useLibraryItem(mediaId);
+  const { data: media, isLoading, isError } = useMedia(mediaId);
 
   if (isLoading) return <div className="h-24 bg-white/5 rounded-2xl animate-pulse" />;
-  if (isError || !item) return null;
+  if (isError || !media) return null;
 
   return (
-    <PremiumGlass className="p-4 flex items-center gap-4">
-      {item.media?.posterUrl || item.media?.backdropUrl ? (
-        <img
-          src={item.media?.posterUrl || item.media?.backdropUrl || ""}
-          alt={item.media?.title || "Media"}
-          className="w-12 h-16 object-cover rounded shadow-sm"
-        />
-      ) : (
-        <div className="w-12 h-16 bg-white/5 rounded flex items-center justify-center text-white/20">
-          <ImageIcon className="w-4 h-4" />
+    <Link to="/app/media/$id" params={{ id: media.id }} className="block">
+      <PremiumGlass className="p-4 flex items-center gap-4 hover:bg-white/10 transition-colors cursor-pointer">
+        {media.posterUrl || media.backdropUrl ? (
+          <img
+            src={media.posterUrl || media.backdropUrl || ""}
+            alt={media.title || "Media"}
+            className="w-12 h-16 object-cover rounded shadow-sm"
+          />
+        ) : (
+          <div className="w-12 h-16 bg-white/5 rounded flex items-center justify-center text-white/20">
+            <ImageIcon className="w-4 h-4" />
+          </div>
+        )}
+        <div className="flex-1 min-w-0">
+          <h4 className="text-white/90 font-medium truncate text-sm">
+            {media.title || "Unknown Media"}
+          </h4>
+          <p className="text-white/40 text-xs truncate capitalize">{media.mediaType}</p>
         </div>
-      )}
-      <div className="flex-1 min-w-0">
-        <h4 className="text-white/90 font-medium truncate text-sm">
-          {item.media?.title || "Unknown Media"}
-        </h4>
-        <p className="text-white/40 text-xs truncate capitalize">{item.mediaType}</p>
-      </div>
-    </PremiumGlass>
+      </PremiumGlass>
+    </Link>
   );
 }
