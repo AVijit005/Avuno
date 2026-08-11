@@ -3,6 +3,7 @@ import { authApi } from "@/lib/api";
 import { setAccessToken } from "@/lib/api/fetch";
 import { queryKeys } from "@/lib/api/query-keys";
 import type { LoginInput, RegisterInput, AuthResponse, UserResponse } from "@/lib/api/auth";
+import { useRouter } from "@tanstack/react-router";
 
 export function useCurrentUser() {
   return useQuery<UserResponse>({
@@ -34,22 +35,41 @@ export function useRegister() {
 
 export function useLogout() {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  
   return useMutation<void, Error, void>({
-    mutationFn: () => authApi.logoutUser(),
-    onSettled: () => {
+    mutationFn: async () => {
+      // Optimistically clear local state immediately
       setAccessToken(null);
       queryClient.clear();
+      router.navigate({ to: "/auth", replace: true });
+      
+      // Attempt backend logout (clears httpOnly cookie)
+      try {
+        await authApi.logoutUser();
+      } catch (e) {
+        // Ignore network errors on logout
+      }
     },
   });
 }
 
 export function useLogoutAll() {
   const queryClient = useQueryClient();
+  const router = useRouter();
+  
   return useMutation<void, Error, void>({
-    mutationFn: () => authApi.logoutAll(),
-    onSettled: () => {
+    mutationFn: async () => {
+      // Optimistically clear local state immediately
       setAccessToken(null);
       queryClient.clear();
+      router.navigate({ to: "/auth", replace: true });
+      
+      try {
+        await authApi.logoutAll();
+      } catch (e) {
+        // Ignore network errors on logout
+      }
     },
   });
 }

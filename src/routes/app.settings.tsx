@@ -6,6 +6,7 @@ import {
   useSessions,
   useRevokeSession,
 } from "@/hooks/use-users";
+import { useLogout } from "@/hooks/use-auth";
 import {
   Download,
   ArrowUpRight,
@@ -29,6 +30,7 @@ function Page() {
   const updatePrivacy = useUpdatePrivacy();
   const { data: sessions } = useSessions();
   const revokeSession = useRevokeSession();
+  const logout = useLogout();
 
   const [theme, setTheme] = useState(profile?.themePreference || "system");
   const [privacy, setPrivacy] = useState(profile?.privacy?.profileVisibility || "private");
@@ -237,6 +239,16 @@ function Page() {
             </div>
           </PremiumGlass>
         )}
+
+        <div className="pt-4">
+          <button
+            onClick={() => logout.mutate()}
+            className="flex w-full items-center justify-center gap-2 rounded-xl bg-red-500/10 py-4 text-sm font-medium text-red-500 transition hover:bg-red-500/20 press-scale ring-1 ring-red-500/20"
+          >
+            <LogOut className="h-4 w-4" />
+            Log out of Avuno
+          </button>
+        </div>
       </div>
     </div>
   );
