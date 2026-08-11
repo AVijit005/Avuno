@@ -1,3 +1,4 @@
+import { describe, beforeAll, beforeEach, it, expect, mock, spyOn } from 'bun:test';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JournalService } from './journal.service';
 import { JournalRepository } from './journal.repository';
@@ -10,23 +11,23 @@ import { PromptService } from './prompt.service';
 
 describe('Memory Creation (Phase 4C-2)', () => {
   let service: JournalService;
-  let repository: jest.Mocked<JournalRepository>;
+  let repository: any;
 
   const mockUserId = 'user-a';
 
   beforeEach(async () => {
     repository = {
-      findEntryById: jest.fn(),
-      findQuoteById: jest.fn(),
-      createMemory: jest.fn(),
+      findEntryById: mock(),
+      findQuoteById: mock(),
+      createMemory: mock(),
     } as any;
 
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         JournalService,
         { provide: JournalRepository, useValue: repository },
-        { provide: JournalEventService, useValue: { emitMemoryCreated: jest.fn() } },
-        { provide: TimelineEventFactory, useValue: { createEvent: jest.fn(), fromMemory: jest.fn() } },
+        { provide: JournalEventService, useValue: { emitMemoryCreated: mock() } },
+        { provide: TimelineEventFactory, useValue: { createEvent: mock(), fromMemory: mock() } },
         { provide: JournalStatisticsService, useValue: {} },
         { provide: PromptService, useValue: {} },
       ],
@@ -34,7 +35,7 @@ describe('Memory Creation (Phase 4C-2)', () => {
 
     service = module.get<JournalService>(JournalService);
     // Suppress console error for expected exceptions during tests
-    jest.spyOn(console, 'error').mockImplementation(() => {});
+    spyOn(console, 'error').mockImplementation(() => {});
   });
 
   const mockMemoryResponse = (overrides: any = {}) => ({
@@ -51,13 +52,22 @@ describe('Memory Creation (Phase 4C-2)', () => {
       repository.createMemory.mockResolvedValue(mockMemoryResponse({ title: 'No evidence' }));
       const res = await service.createMemory(mockUserId, { title: 'No evidence' } as CreateMemoryDto);
       expect(res.title).toBe('No evidence');
-      expect(repository.createMemory).toHaveBeenCalledWith(expect.objectContaining({ journalId: undefined, quoteId: undefined }));
+      expect(repository.createMemory).toHaveBeenCalledWith(
+        expect.objectContaining({ journalId: undefined, quoteId: undefined }),
+      );
     });
 
     it('TEST 2: Create Memory with Journal evidence -> PASS', async () => {
-      repository.findEntryById.mockResolvedValue({ id: 'j-1', userId: mockUserId, createdAt: new Date('2026-08-11T10:00:00Z') });
+      repository.findEntryById.mockResolvedValue({
+        id: 'j-1',
+        userId: mockUserId,
+        createdAt: new Date('2026-08-11T10:00:00Z'),
+      });
       repository.createMemory.mockResolvedValue(mockMemoryResponse({ journalId: 'j-1' }));
-      const res = await service.createMemory(mockUserId, { title: 'Journal Evidence', journalId: 'j-1' } as CreateMemoryDto);
+      const res = await service.createMemory(mockUserId, {
+        title: 'Journal Evidence',
+        journalId: 'j-1',
+      } as CreateMemoryDto);
       expect(repository.findEntryById).toHaveBeenCalledWith('j-1', mockUserId);
       expect(res.journalId).toBe('j-1');
     });
@@ -65,14 +75,17 @@ describe('Memory Creation (Phase 4C-2)', () => {
     it('TEST 3: Create Memory with Quote evidence -> PASS', async () => {
       repository.findQuoteById.mockResolvedValue({ id: 'q-1', userId: mockUserId });
       repository.createMemory.mockResolvedValue(mockMemoryResponse({ quoteId: 'q-1' }));
-      const res = await service.createMemory(mockUserId, { title: 'Quote Evidence', quoteId: 'q-1' } as CreateMemoryDto);
+      const res = await service.createMemory(mockUserId, {
+        title: 'Quote Evidence',
+        quoteId: 'q-1',
+      } as CreateMemoryDto);
       expect(repository.findQuoteById).toHaveBeenCalledWith('q-1', mockUserId);
       expect(res.quoteId).toBe('q-1');
     });
 
     it('TEST 4: Create Memory with Journal + Quote -> FAIL', async () => {
       await expect(
-        service.createMemory(mockUserId, { title: 'Both', journalId: 'j-1', quoteId: 'q-1' } as CreateMemoryDto)
+        service.createMemory(mockUserId, { title: 'Both', journalId: 'j-1', quoteId: 'q-1' } as CreateMemoryDto),
       ).rejects.toThrow(BadRequestException);
     });
   });
@@ -89,7 +102,7 @@ describe('Memory Creation (Phase 4C-2)', () => {
       // simulate returning null because findEntryById(id, userId) enforces ownership in SQL/Prisma
       repository.findEntryById.mockResolvedValue(null);
       await expect(
-        service.createMemory(mockUserId, { title: 'Title', journalId: 'j-user-b' } as CreateMemoryDto)
+        service.createMemory(mockUserId, { title: 'Title', journalId: 'j-user-b' } as CreateMemoryDto),
       ).rejects.toThrow(NotFoundException);
     });
 
@@ -103,7 +116,7 @@ describe('Memory Creation (Phase 4C-2)', () => {
     it('TEST 8: User A + User B Quote -> FAIL', async () => {
       repository.findQuoteById.mockResolvedValue(null);
       await expect(
-        service.createMemory(mockUserId, { title: 'Title', quoteId: 'q-user-b' } as CreateMemoryDto)
+        service.createMemory(mockUserId, { title: 'Title', quoteId: 'q-user-b' } as CreateMemoryDto),
       ).rejects.toThrow(NotFoundException);
     });
   });

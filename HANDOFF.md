@@ -8,19 +8,19 @@ CURRENT PRODUCT:
 Avuno 2.0
 
 CURRENT COMPLETED PHASE:
-4C-4
+4C-5
 
 CURRENT STATE:
-Media ↔ Memory integration complete (attach/detach via MemoryMedia, audited)
+Timeline ↔ Memory integration complete (attach/detach via TimelineEvent.memoryId, audited)
 
 AI:
 DEFERRED
 
 CURRENT GIT COMMIT:
-8fe9798
+fe1b3d1
 
 NEXT RECOMMENDED PHASE:
-4C-5 Timeline ↔ Memory integration
+Phase 4C-6 Final UI/UX polish (or Next feature phase as approved)
 
 ## 1. What Avuno is
 Avuno is a premium personal media, experience, and memory SaaS. It is designed to act as a chronological and intentional record of a user's life and media experiences.
@@ -61,13 +61,14 @@ Memory Detail and Memory Vault are implemented. Memory Graph, Universe, and AI a
 - Phase 4C-2: Memory Capsule creation
 - Phase 4C-3: Memory Detail + Memory Vault foundation
 - Phase 4C-4: Media ↔ Memory integration (attach/detach via MemoryMedia)
+- Phase 4C-5: Timeline ↔ Memory integration (attach/detach via TimelineEvent.memoryId)
 
 ## 7. Current phase
-Phase 4C-4 is complete and audited.
-Next phase is Phase 4C-5: Timeline ↔ Memory integration.
+Phase 4C-5 is complete and audited.
+Next phase is Phase 4C-6 (or future roadmap items).
 
 ## 8. Current git commit
-The baseline commit for Phase 4C-4 audit completion is `8fe9798`.
+The baseline commit for Phase 4C-5 audit completion is `fe1b3d1`.
 
 ## 9. Frontend
 Vite, React, Tailwind CSS, TanStack Query, TanStack Router.
@@ -126,7 +127,7 @@ Design System 2.0. Uses OKLCH tokens, Hyper-Glass, PremiumGlass, PremiumButton. 
 - Quote frontend integration incomplete
 
 ## 24. Future roadmap
-- 4C-5: Timeline ↔ Memory
+- 4C-6: UI/UX polish
 Future: Quote experience, Memory search, Memory Graph, Memory Universe.
 
 ## 25. AI status
@@ -142,4 +143,4 @@ AI: NOT IMPLEMENTED. AI is intentionally deferred. Future AI must never fabricat
 - Do not skip authorization.
 
 ## 27. Exact recommended next phase
-Phase 4C-5: Timeline ↔ Memory integration.
+Phase 4C-6: Final UI/UX polish (or next approved roadmap step).

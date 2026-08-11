@@ -38,7 +38,7 @@ describe('CookieService', () => {
     expect(res.cookies[REFRESH_TOKEN_COOKIE]).toBeDefined();
     expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { httpOnly: boolean } }).options.httpOnly).toBe(true);
     expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { secure: boolean } }).options.secure).toBe(true);
-    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { sameSite: string } }).options.sameSite).toBe('strict');
+    expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { sameSite: string } }).options.sameSite).toBe('none');
     expect((res.cookies[REFRESH_TOKEN_COOKIE] as { options: { path: string } }).options.path).toBe('/api/auth');
   });
 

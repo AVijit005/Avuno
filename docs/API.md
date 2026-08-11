@@ -43,6 +43,14 @@ Authentication: Bearer Token (JWT) or HttpOnly Cookies (Verified via NestJS Guar
 
 ## Timeline
 - Endpoints exist for retrieving timeline milestones.
+- **Timeline ↔ Memory Relationship (Phase 4C-5)**
+  - `POST /timeline/:id/memories/:memoryId`
+    - PURPOSE: Attach an existing Memory to a Timeline event (populates `TimelineEvent.memoryId`).
+    - AUTH: Required. Both Timeline event and Memory must belong to the authenticated user.
+  - `DELETE /timeline/:id/memories/:memoryId`
+    - PURPOSE: Detach a Memory from a Timeline event (nullifies `TimelineEvent.memoryId`).
+    - AUTH: Required. Both Timeline event and Memory must belong to the authenticated user.
+    - IMPORTANT: Does not delete either entity, just nullifies the `memoryId` reference.
 
 ## Analytics & Insights
 - Endpoints exist for retrieving system-derived analytics data.

@@ -21,9 +21,9 @@ Avuno 2.0 is a modern monorepo web application using a decoupled client-server a
 - **Schema**: Strongly typed, relational schema enforcing application constraints at the database level.
 
 ## Core Systems
-- **Memory System**: Handles explicit user memories, optionally linked to Media, Journal entries, or Quotes. Enforces mutual exclusivity between Journal and Quote links.
+- **Memory System**: Handles explicit user memories, optionally linked to Media, Journal entries, Quotes, or Timeline events. Enforces mutual exclusivity between Journal and Quote links.
 - **Journal**: Chronological text entries authored by the user.
-- **Timeline**: System-recorded milestones indicating what happened.
+- **Timeline**: System-recorded milestones indicating what happened (can be optionally linked to user Memories via `memoryId`).
 - **Media**: The canonical creative works (Movies, TV, Books, Games, Podcasts, etc.).
 - **Analytics & Insights**: System-derived factual aggregations.
 

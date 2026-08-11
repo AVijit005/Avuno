@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
+import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common';
 import { JournalRepository } from './journal.repository';
 import { JournalEventService } from './journal-event.service';
 import { TimelineEventFactory } from './timeline-event-factory';
@@ -187,16 +187,22 @@ export class JournalService {
 
   async findMemories(
     userId: string,
-    options: { cursor?: string; limit?: number; mediaId?: string; journalId?: string }
+    options: { cursor?: string; limit?: number; mediaId?: string; journalId?: string } = {},
   ): Promise<{ items: MemoryResponseDto[]; hasMore: boolean; cursor: string | null }> {
     const limit = options.limit ?? 20;
-    
+
     if (options.journalId) {
       const journal = await this.repository.findEntryById(options.journalId, userId);
       if (!journal) throw new NotFoundException('Journal not found or unauthorized');
     }
-    
-    const items = await this.repository.findMemoriesByUserId(userId, limit, options.cursor, options.mediaId, options.journalId);
+
+    const items = await this.repository.findMemoriesByUserId(
+      userId,
+      limit,
+      options.cursor,
+      options.mediaId,
+      options.journalId,
+    );
     const hasMore = items.length > limit;
     const sliced = hasMore ? items.slice(0, limit) : items;
     return {
@@ -279,7 +285,7 @@ export class JournalService {
 
     const timelineEvent = await this.repository.findTimelineEventById(timelineId, userId);
     if (!timelineEvent) throw new NotFoundException('Timeline event not found');
-    
+
     if (timelineEvent.memoryId !== memoryId) {
       return; // Not attached, nothing to do
     }
@@ -523,7 +529,10 @@ export class JournalService {
 
   private toMemoryResponse(entity: any): MemoryResponseDto {
     const mediaIds = (entity.media || [])
-      .map((m: any) => m.movieId || m.tvShowId || m.animeId || m.bookId || m.gameId || m.musicAlbumId || m.podcastId || m.courseId)
+      .map(
+        (m: any) =>
+          m.movieId || m.tvShowId || m.animeId || m.bookId || m.gameId || m.musicAlbumId || m.podcastId || m.courseId,
+      )
       .filter(Boolean);
 
     return {

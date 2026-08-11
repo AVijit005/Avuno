@@ -1,4 +1,4 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { describe, beforeAll, afterAll, it, expect } from 'bun:test';
 import { PrismaClient } from '@prisma/client';
 
 describe('Memory Relations E2E', () => {

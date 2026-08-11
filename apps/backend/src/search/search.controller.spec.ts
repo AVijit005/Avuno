@@ -21,9 +21,9 @@ describe('SearchController', () => {
 
   describe('search', () => {
     it('calls searchService.search with user id and query', async () => {
-      const query: SearchQueryDto = { q: 'matrix', limit: 10, offset: 0 };
-      const req = { sub: 'user-1', email: '', role: '' };
-      const result = await controller.search(req, query);
+      const query: any = { q: 'matrix', limit: 10, offset: 0 };
+      const req: any = { sub: 'user-1', email: '', role: '' };
+      const result: any = await controller.search(req, query);
       expect(result.results.length).toBe(1);
       expect(mockSearchService.search).toHaveBeenCalledWith('user-1', query);
     });
@@ -31,7 +31,7 @@ describe('SearchController', () => {
 
   describe('suggestions', () => {
     it('calls searchService.getSuggestions', async () => {
-      const result = await controller.suggestions({ sub: 'user-1', email: '', role: '' }, 'mat');
+      const result: any = await controller.suggestions({ sub: 'user-1', email: '', role: '' } as any, 'mat');
       expect(result.length).toBe(2);
       expect(mockSearchService.getSuggestions).toHaveBeenCalledWith('user-1', 'mat', 8);
     });
