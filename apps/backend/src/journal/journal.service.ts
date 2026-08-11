@@ -192,8 +192,8 @@ export class JournalService {
     const limit = options.limit ?? 20;
     
     if (options.journalId) {
-      const journal = await this.repository.findJournalEntryById(options.journalId, userId);
-      if (!journal) throw new UnauthorizedException('Journal not found or unauthorized');
+      const journal = await this.repository.findEntryById(options.journalId, userId);
+      if (!journal) throw new NotFoundException('Journal not found or unauthorized');
     }
     
     const items = await this.repository.findMemoriesByUserId(userId, limit, options.cursor, options.mediaId, options.journalId);
@@ -258,6 +258,34 @@ export class JournalService {
     if (removed) {
       await this.events.emitMemoryUpdated(userId, memoryId);
     }
+  }
+
+  // ─── Timeline ↔ Memory Integration ────────────────────────────────────────
+
+  async attachTimelineMemory(timelineId: string, memoryId: string, userId: string): Promise<void> {
+    const memory = await this.repository.findMemoryById(memoryId, userId);
+    if (!memory) throw new NotFoundException('Memory not found');
+
+    const timelineEvent = await this.repository.findTimelineEventById(timelineId, userId);
+    if (!timelineEvent) throw new NotFoundException('Timeline event not found');
+
+    await this.repository.updateTimelineEventMemory(timelineId, memoryId);
+    await this.events.emitMemoryUpdated(userId, memoryId);
+  }
+
+  async detachTimelineMemory(timelineId: string, memoryId: string, userId: string): Promise<void> {
+    const memory = await this.repository.findMemoryById(memoryId, userId);
+    if (!memory) throw new NotFoundException('Memory not found');
+
+    const timelineEvent = await this.repository.findTimelineEventById(timelineId, userId);
+    if (!timelineEvent) throw new NotFoundException('Timeline event not found');
+    
+    if (timelineEvent.memoryId !== memoryId) {
+      return; // Not attached, nothing to do
+    }
+
+    await this.repository.updateTimelineEventMemory(timelineId, null);
+    await this.events.emitMemoryUpdated(userId, memoryId);
   }
 
   async deleteMemory(id: string, userId: string): Promise<void> {
@@ -529,6 +557,7 @@ export class JournalService {
       color: e.color ?? null,
       metadata: e.metadata ?? null,
       createdAt: e.createdAt?.toISOString() ?? new Date().toISOString(),
+      memoryId: e.memoryId ?? null,
     };
   }
 

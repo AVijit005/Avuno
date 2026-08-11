@@ -256,6 +256,19 @@ export class JournalRepository {
     return this.prismaAny().timelineEvent.count({ where: { userId } });
   }
 
+  async findTimelineEventById(id: string, userId: string): Promise<Record<string, any> | null> {
+    return this.prismaAny().timelineEvent.findFirst({
+      where: { id, userId },
+    });
+  }
+
+  async updateTimelineEventMemory(id: string, memoryId: string | null): Promise<void> {
+    await this.prismaAny().timelineEvent.update({
+      where: { id },
+      data: { memoryId },
+    });
+  }
+
   // ─── Quotes ───────────────────────────────────────────────────────────────
 
   async createQuote(data: {

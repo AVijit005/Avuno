@@ -221,10 +221,12 @@ export class MemoryResponseDto {
   coverImage: string | null;
   location: string | null;
   mediaCount: number;
+  metadata: Record<string, unknown> | null;
   createdAt: string;
   updatedAt: string;
   journalId: string | null;
   quoteId: string | null;
+  mediaIds?: string[];
 }
 
 // ─── Timeline DTOs ─────────────────────────────────────────────────────────────
@@ -266,6 +268,7 @@ export class TimelineEventResponseDto {
   color: string | null;
   metadata: Record<string, unknown> | null;
   createdAt: string;
+  memoryId: string | null;
 }
 
 // ─── Quote DTOs ────────────────────────────────────────────────────────────────

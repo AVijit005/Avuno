@@ -4,8 +4,9 @@ import { X, Lock, Globe, Image as ImageIcon, Calendar } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { toast } from "sonner";
-import { useCreateMemory } from "@/hooks/use-journal";
+import { useCreateMemory, useAttachTimelineMemory } from "@/hooks/use-journal";
 import type { UIJournalEntry } from "@/lib/adapters/types";
+import type { TimelineEventResponse } from "@/lib/api/journal";
 import { useNavigate } from "@tanstack/react-router";
 
 interface Props {
@@ -15,17 +16,19 @@ interface Props {
    * Optional context to pre-fill the capsule with evidence.
    */
   sourceJournal?: UIJournalEntry;
+  sourceTimeline?: TimelineEventResponse;
   // sourceQuote?: UIQuote; // If quotes are added later
   // defaultMediaIds?: string[];
 }
 
-export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
+export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTimeline }: Props) {
   const [title, setTitle] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const { mutateAsync: createMemory } = useCreateMemory();
+  const { mutateAsync: attachTimelineMemory } = useAttachTimelineMemory();
 
   const handlePreserve = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,6 +41,11 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
         isPrivate,
         journalId: sourceJournal?.id,
       });
+
+      if (sourceTimeline) {
+        await attachTimelineMemory({ timelineId: sourceTimeline.id, memoryId: newMemory.id });
+      }
+
       toast.success("Memory preserved.");
       onClose();
       navigate({ to: "/app/memories/$id", params: { id: newMemory.id } });
@@ -128,6 +136,17 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
                     </div>
                     <p className="text-sm leading-relaxed text-foreground/80 line-clamp-3 italic">
                       "{sourceJournal.content}"
+                    </p>
+                  </div>
+                )}
+
+                {sourceTimeline && (
+                  <div className="mb-8 rounded-2xl bg-black/20 border border-white/5 p-5 flex items-center gap-4">
+                    <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground shrink-0">
+                      From timeline
+                    </div>
+                    <p className="text-sm leading-relaxed text-foreground/80 line-clamp-2 italic border-l border-white/10 pl-4">
+                      {sourceTimeline.title}
                     </p>
                   </div>
                 )}

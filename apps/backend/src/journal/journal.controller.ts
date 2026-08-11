@@ -197,6 +197,26 @@ export class JournalController {
     );
   }
 
+  @Post('timeline/:id/memories/:memoryId')
+  @ApiOperation({ summary: 'Attach a memory to a timeline event' })
+  async attachTimelineMemory(
+    @CurrentUser() user: AccessTokenPayload,
+    @Param('id') id: string,
+    @Param('memoryId') memoryId: string,
+  ): Promise<void> {
+    return this.journalService.attachTimelineMemory(id, memoryId, user.sub);
+  }
+
+  @Delete('timeline/:id/memories/:memoryId')
+  @ApiOperation({ summary: 'Detach a memory from a timeline event' })
+  async detachTimelineMemory(
+    @CurrentUser() user: AccessTokenPayload,
+    @Param('id') id: string,
+    @Param('memoryId') memoryId: string,
+  ): Promise<void> {
+    return this.journalService.detachTimelineMemory(id, memoryId, user.sub);
+  }
+
   @Get('timeline/:year/:month')
   @ApiOperation({ summary: 'List timeline events for a month' })
   async findTimelineByMonth(

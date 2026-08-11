@@ -11,6 +11,9 @@ import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
 import { useTimelineEvents, useJournalStats } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
+import { CreateMemoryCapsule } from "@/components/memory/CreateMemoryCapsule";
+import type { TimelineEventResponse } from "@/lib/api/journal";
+
 export const Route = createFileRoute("/app/timeline")({
   component: TimelinePage,
   pendingComponent: PageSkeleton,
@@ -21,6 +24,8 @@ function TimelinePage() {
   useEffect(() => {
     setYear(new Date().getFullYear().toString());
   }, []);
+  const [preservingEvent, setPreservingEvent] = useState<TimelineEventResponse | null>(null);
+
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
   const lineHeight = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
@@ -218,6 +223,27 @@ function TimelinePage() {
                           </span>
                         )}
                       </div>
+                      <div className="mt-5 border-t border-white/5 pt-4">
+                        {rawEvent?.memoryId ? (
+                          <Link
+                            to="/app/memories/$id"
+                            params={{ id: rawEvent.memoryId }}
+                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-primary hover:text-primary-foreground transition-colors"
+                          >
+                            View Memory
+                          </Link>
+                        ) : (
+                          <button
+                            type="button"
+                            onClick={() => {
+                              if (rawEvent) setPreservingEvent(rawEvent);
+                            }}
+                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-white transition-colors"
+                          >
+                            Preserve as Memory
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </PremiumGlass>
                 </motion.div>
@@ -275,6 +301,14 @@ function TimelinePage() {
       >
         <MediaEvolution />
       </motion.section>
+
+      {preservingEvent && (
+        <CreateMemoryCapsule
+          isOpen={true}
+          onClose={() => setPreservingEvent(null)}
+          sourceTimeline={preservingEvent}
+        />
+      )}
     </div>
   );
 }

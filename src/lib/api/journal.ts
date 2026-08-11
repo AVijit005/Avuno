@@ -42,6 +42,7 @@ export interface TimelineEventResponse {
   color: string | null;
   metadata: Record<string, unknown> | null;
   createdAt: string;
+  memoryId?: string | null;
 }
 
 export interface QuoteResponse {
@@ -275,6 +276,14 @@ export async function listTimelineEvents(params?: {
     return apiGet<ItemsPage<TimelineEventResponse>>(`/timeline/${params.year}`);
   }
   return apiGet<ItemsPage<TimelineEventResponse>>("/timeline");
+}
+
+export async function attachTimelineMemory(timelineId: string, memoryId: string): Promise<void> {
+  return apiPost<void>(`/timeline/${timelineId}/memories/${memoryId}`, {});
+}
+
+export async function detachTimelineMemory(timelineId: string, memoryId: string): Promise<void> {
+  return apiDelete<void>(`/timeline/${timelineId}/memories/${memoryId}`);
 }
 
 // Quotes

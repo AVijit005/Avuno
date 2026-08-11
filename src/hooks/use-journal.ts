@@ -179,6 +179,30 @@ export function useCreateTimelineEvent() {
   });
 }
 
+export function useAttachTimelineMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ timelineId, memoryId }: { timelineId: string; memoryId: string }) =>
+      journalApi.attachTimelineMemory(timelineId, memoryId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.timeline.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+    },
+  });
+}
+
+export function useDetachTimelineMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ timelineId, memoryId }: { timelineId: string; memoryId: string }) =>
+      journalApi.detachTimelineMemory(timelineId, memoryId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.timeline.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+    },
+  });
+}
+
 export function useJournalPrompts() {
   const { data: user } = useCurrentUser();
 
