@@ -27,6 +27,8 @@ export interface MemoryResponse {
   mediaCount: number;
   createdAt: string;
   updatedAt: string;
+  journalId: string | null;
+  quoteId: string | null;
 }
 
 export interface TimelineEventResponse {
@@ -106,6 +108,8 @@ export interface CreateMemoryInput {
   coverImage?: string;
   location?: string;
   mediaIds?: string[];
+  journalId?: string;
+  quoteId?: string;
 }
 
 export interface UpdateMemoryInput {
@@ -117,6 +121,8 @@ export interface UpdateMemoryInput {
   isPrivate?: boolean;
   coverImage?: string;
   location?: string;
+  journalId?: string;
+  quoteId?: string;
 }
 
 export interface CreateTimelineEventInput {

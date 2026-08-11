@@ -93,6 +93,8 @@ export class JournalRepository {
     isPrivate?: boolean;
     coverImage?: string;
     location?: string;
+    journalId?: string;
+    quoteId?: string;
   }): Promise<Record<string, any>> {
     return this.prismaAny().memory.create({ data });
   }

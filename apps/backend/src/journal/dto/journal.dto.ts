@@ -161,6 +161,14 @@ export class CreateMemoryDto {
   @IsArray()
   @IsString({ each: true })
   mediaIds?: string[];
+
+  @IsOptional()
+  @IsString()
+  journalId?: string;
+
+  @IsOptional()
+  @IsString()
+  quoteId?: string;
 }
 
 export class UpdateMemoryDto {
@@ -215,6 +223,8 @@ export class MemoryResponseDto {
   mediaCount: number;
   createdAt: string;
   updatedAt: string;
+  journalId: string | null;
+  quoteId: string | null;
 }
 
 // ─── Timeline DTOs ─────────────────────────────────────────────────────────────

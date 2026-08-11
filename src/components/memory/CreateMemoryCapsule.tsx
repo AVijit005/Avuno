@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from "motion/react";
 import { X, Lock, Globe, Image as ImageIcon, Calendar } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
+import { toast } from "sonner";
+import { useCreateMemory } from "@/hooks/use-journal";
 import type { UIJournalEntry } from "@/lib/adapters/types";
 
 interface Props {
@@ -21,19 +23,34 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
   const [isPrivate, setIsPrivate] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // NOTE: This component currently does not submit because the backend CreateMemoryInput
-  // does not accept `journalId` or `quoteId`. It only accepts `mediaIds`.
-  // Submitting this would create a detached Memory, violating the Truth-First flow.
+  const { mutateAsync: createMemory } = useCreateMemory();
+
   const handlePreserve = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!title.trim() || isSubmitting) return;
+
     setIsSubmitting(true);
-    // Simulate submission failure/blocker
-    setTimeout(() => {
+    try {
+      await createMemory({
+        title,
+        isPrivate,
+        journalId: sourceJournal?.id,
+      });
+      toast.success("Memory preserved.");
+      onClose();
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to preserve memory";
+      toast.error(message);
+    } finally {
       setIsSubmitting(false);
-      alert(
-        "BLOCKED: Backend API CreateMemoryDto does not yet accept journalId. Cannot create verified relationship.",
-      );
-    }, 1000);
+    }
+  };
+
+  const handleClose = () => {
+    if (title.trim() && !window.confirm("Abandon this memory? Your title will be lost.")) {
+      return;
+    }
+    onClose();
   };
 
   if (typeof document === "undefined") return null;
@@ -55,7 +72,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0 }}
             aria-label="Close"
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-6 right-6 md:top-12 md:right-12 p-4 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/50 hover:text-white"
           >
             <X className="h-6 w-6" />

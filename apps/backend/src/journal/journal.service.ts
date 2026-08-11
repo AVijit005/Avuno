@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException, BadRequestException } from '@nestjs/common';
 import { JournalRepository } from './journal.repository';
 import { JournalEventService } from './journal-event.service';
 import { TimelineEventFactory } from './timeline-event-factory';
@@ -106,16 +106,39 @@ export class JournalService {
   // ─── Memories ─────────────────────────────────────────────────────────────
 
   async createMemory(userId: string, dto: CreateMemoryDto): Promise<MemoryResponseDto> {
+    if (dto.journalId && dto.quoteId) {
+      throw new BadRequestException('Memory cannot have both journal and quote evidence');
+    }
+
+    if (dto.journalId) {
+      const journal = await this.repository.findEntryById(dto.journalId, userId);
+      if (!journal) {
+        throw new NotFoundException('Journal entry not found or unauthorized');
+      }
+      if (!dto.memoryDate) {
+        dto.memoryDate = journal.createdAt.toISOString();
+      }
+    }
+
+    if (dto.quoteId) {
+      const quote = await this.repository.findQuoteById(dto.quoteId, userId);
+      if (!quote) {
+        throw new NotFoundException('Quote not found or unauthorized');
+      }
+    }
+
     const memory = await this.repository.createMemory({
       userId,
       title: dto.title,
       description: dto.description,
       memoryDate: dto.memoryDate ? new Date(dto.memoryDate) : undefined,
       emotion: dto.emotion,
-      isPinned: dto.isPinned,
-      isPrivate: dto.isPrivate,
+      isPinned: dto.isPinned ?? false,
+      isPrivate: dto.isPrivate ?? true,
       coverImage: dto.coverImage,
       location: dto.location,
+      journalId: dto.journalId,
+      quoteId: dto.quoteId,
     });
 
     // Attach media if provided.
