@@ -13,36 +13,36 @@ test.describe("Authenticated User Journeys", () => {
     // Wait for the page to load (should default to SignIn)
     const submitBtn = page.getByRole("button", { name: "Continue", exact: true });
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
-    
-    // 2. Fill in login form 
+
+    // 2. Fill in login form
     await page.getByPlaceholder("Enter email").fill(testEmail);
     await page.getByPlaceholder("Enter password").fill(testPassword);
 
     // 3. Submit
     await submitBtn.click();
-    
+
     // 4. Wait for successful navigation to app home
     await expect(page).toHaveURL(/\/(app|home)?$/, { timeout: 15000 });
 
     // 5. Library
     await page.goto("/app/library");
     await expect(page).toHaveURL(/\/app\/library/);
-    await expect(page.getByRole('heading', { name: 'Library' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("heading", { name: "Library" })).toBeVisible({ timeout: 10000 });
 
     // 6. Journal
     await page.goto("/app/journal");
     await expect(page).toHaveURL(/\/app\/journal/);
-    await expect(page.getByRole('heading', { name: 'Journal' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("heading", { name: "Journal" })).toBeVisible({ timeout: 10000 });
 
     // 7. Memories
     await page.goto("/app/memories");
     await expect(page).toHaveURL(/\/app\/memories/);
-    await expect(page.getByRole('heading', { name: 'Memories' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("heading", { name: "Memories" })).toBeVisible({ timeout: 10000 });
 
     // 8. Timeline
     await page.goto("/app/timeline");
     await expect(page).toHaveURL(/\/app\/timeline/);
-    await expect(page.getByRole('heading', { name: 'Timeline' })).toBeVisible({ timeout: 10000 });
+    await expect(page.getByRole("heading", { name: "Timeline" })).toBeVisible({ timeout: 10000 });
 
     // 9. Analytics
     await page.goto("/app/analytics");
@@ -52,9 +52,9 @@ test.describe("Authenticated User Journeys", () => {
     // 10. Logout
     await page.goto("/app/settings");
     await expect(page).toHaveURL(/\/app\/settings/);
-    
+
     // Find and click the logout button
-    const logoutBtn = page.getByRole('button', { name: "Log out of Avuno" });
+    const logoutBtn = page.getByRole("button", { name: "Log out of Avuno" });
     await expect(logoutBtn).toBeVisible();
     await logoutBtn.click();
 
