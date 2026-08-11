@@ -2,7 +2,8 @@ import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { format } from "date-fns";
-import { Plus, X, Lock, Globe, Bookmark, Calendar, Trash2 } from "lucide-react";
+import { Plus, X, Lock, Globe, Bookmark, Calendar, Unlink } from "lucide-react";
+import { toast } from "sonner";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { useMemories, useAttachMemory, useDetachMemory } from "@/hooks/use-journal";
 import type { UIMediaItem } from "@/lib/adapters/types";
@@ -83,8 +84,25 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
 }
 
 function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMediaItem }) {
+  const [confirming, setConfirming] = useState(false);
   const detach = useDetachMemory();
   const date = memory.memoryDate ? new Date(memory.memoryDate) : new Date(memory.createdAt);
+
+  const handleDetach = () => {
+    detach.mutate(
+      { memoryId: memory.id, libraryId: item.id, mediaType: item.mediaType },
+      {
+        onSuccess: () => {
+          toast.success("Memory unlinked from this media");
+          setConfirming(false);
+        },
+        onError: () => {
+          toast.error("Failed to remove memory link");
+          setConfirming(false);
+        },
+      },
+    );
+  };
 
   return (
     <PremiumGlass className="group relative p-5 flex flex-col justify-between overflow-hidden">
@@ -95,13 +113,13 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
             {format(date, "MMM d, yyyy")}
           </time>
           {memory.isPrivate ? (
-            <div title="Private">
+            <span aria-label="Private memory">
               <Lock className="h-3.5 w-3.5 text-muted-foreground" />
-            </div>
+            </span>
           ) : (
-            <div title="Public">
+            <span aria-label="Visible on profile">
               <Globe className="h-3.5 w-3.5 text-muted-foreground" />
-            </div>
+            </span>
           )}
         </div>
         <Link to="/app/memories/$id" params={{ id: memory.id }} className="block">
@@ -122,19 +140,35 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
             </span>
           )}
         </div>
-        <button
-          onClick={() => {
-            if (confirm("Remove this memory from this media?")) {
-              detach.mutate({ memoryId: memory.id, libraryId: item.id, mediaType: item.mediaType });
-            }
-          }}
-          disabled={detach.isPending}
-          className="text-xs text-red-400/50 hover:text-red-400 transition-colors flex items-center gap-1 opacity-0 group-hover:opacity-100"
-          title="Detach from media"
-        >
-          <Trash2 className="h-3.5 w-3.5" />
-          Remove
-        </button>
+        {confirming ? (
+          <div className="flex items-center gap-2">
+            <span className="text-xs text-muted-foreground">Remove link?</span>
+            <button
+              onClick={handleDetach}
+              disabled={detach.isPending}
+              aria-label="Confirm remove link"
+              className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-red-400/10 text-red-400 text-xs font-medium px-3 hover:bg-red-400/20 transition-colors"
+            >
+              {detach.isPending ? "…" : "Yes"}
+            </button>
+            <button
+              onClick={() => setConfirming(false)}
+              aria-label="Cancel remove"
+              className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full bg-white/5 text-muted-foreground text-xs font-medium px-3 hover:bg-white/10 transition-colors"
+            >
+              No
+            </button>
+          </div>
+        ) : (
+          <button
+            onClick={() => setConfirming(true)}
+            aria-label={`Remove link between memory "${memory.title}" and this media`}
+            className="min-h-[36px] flex items-center gap-1.5 rounded-full px-3 text-xs text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+          >
+            <Unlink className="h-3.5 w-3.5" />
+            Remove link
+          </button>
+        )}
       </div>
     </PremiumGlass>
   );
@@ -161,7 +195,11 @@ function AttachMemoryView({
     <PremiumGlass className="p-6">
       <div className="flex items-center justify-between mb-6">
         <h4 className="font-display text-xl tracking-tight">Select a Memory from your Vault</h4>
-        <button onClick={onCancel} className="text-muted-foreground hover:text-foreground">
+        <button
+          onClick={onCancel}
+          aria-label="Close memory selection"
+          className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+        >
           <X className="h-5 w-5" />
         </button>
       </div>
@@ -188,11 +226,19 @@ function AttachMemoryView({
               onClick={() => {
                 attach.mutate(
                   { memoryId: m.id, libraryId: item.id, mediaType: item.mediaType },
-                  { onSuccess: () => onCancel() },
+                  {
+                    onSuccess: () => {
+                      toast.success(`"${m.title}" linked to this media`);
+                      onCancel();
+                    },
+                    onError: () => {
+                      toast.error("Failed to link memory");
+                    },
+                  },
                 );
               }}
               disabled={attach.isPending}
-              className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative"
+              className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative min-h-[56px]"
             >
               <h5 className="font-serif text-lg mb-1 truncate group-hover:text-primary transition-colors">
                 {m.title}

@@ -114,9 +114,8 @@ export function useAttachMemory() {
       libraryId: string;
       mediaType: string;
     }) => journalApi.attachMemoryToLibraryItem(libraryId, memoryId, mediaType),
-    onSuccess: (_, { memoryId }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.library.all });
     },
   });
 }
@@ -133,9 +132,8 @@ export function useDetachMemory() {
       libraryId: string;
       mediaType: string;
     }) => journalApi.detachMemoryFromLibraryItem(libraryId, memoryId, mediaType),
-    onSuccess: (_, { memoryId }) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
-      queryClient.invalidateQueries({ queryKey: queryKeys.library.all });
     },
   });
 }
