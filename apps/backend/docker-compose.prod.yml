@@ -48,6 +48,21 @@ services:
     volumes:
       - minio_data:/data
 
+  # ── Migrations ──
+  migrate:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    networks:
+      - chronicle
+    environment:
+      DATABASE_URL: postgresql://chronicle:${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}@postgres:5432/chronicle
+    command: ["npx", "prisma", "migrate", "deploy"]
+    depends_on:
+      postgres:
+        condition: service_healthy
+
   # ── API ──
   api:
     build:
@@ -75,6 +90,8 @@ services:
       GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-https://www.avuno.xyz/api/auth/google/callback}
       OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:?OAUTH_ENCRYPTION_KEY is required}
     depends_on:
+      migrate:
+        condition: service_completed_successfully
       postgres:
         condition: service_healthy
       redis:

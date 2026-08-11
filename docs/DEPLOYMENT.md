@@ -45,10 +45,12 @@ yet confirmed from repository configuration alone. The expected flow is:
 1. SSH into VPS
 2. Navigate to the repository directory
 3. `git pull origin main` (pull latest approved commit)
-4. `docker compose -f docker-compose.prod.yml build api`
+4. `docker compose -f docker-compose.prod.yml build`
 5. `docker compose -f docker-compose.prod.yml up -d`
-6. `docker compose -f docker-compose.prod.yml ps` (verify container health)
+6. `docker compose -f docker-compose.prod.yml ps` (verify `api` becomes healthy, `migrate` exited 0)
 7. Verify `GET /api/health` returns healthy status
+
+> **MIGRATION LIFECYCLE**: The `docker-compose.prod.yml` defines a dedicated `migrate` init-container. It waits for PostgreSQL to be healthy, executes `prisma migrate deploy`, and exits. The `api` container explicitly depends on `migrate` completing successfully. If a migration fails, the `api` container will never start, preventing silent data corruption or application crashes.
 
 ## Rollback
 
