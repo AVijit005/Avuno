@@ -1,8 +1,14 @@
 # Testing
 
 ## Tools
-- **Frontend**: Vitest (Unit/Component), Playwright (Visual Regression / E2E).
-- **Backend**: Bun Test (Unit/Integration).
+- **Unit/Integration (Frontend)**: Vitest
+- **E2E / Browser (Frontend)**: Playwright
+- **Unit/Integration (Backend)**: Bun Test
+
+## Test Runner Separation
+The frontend utilizes a strict separation of test runners:
+- **Vitest** is configured to execute unit and integration tests only (`*.test.ts`, `*.spec.ts`), explicitly excluding the E2E directory to prevent runner collisions.
+- **Playwright** is exclusively configured to discover and execute tests within the `tests/e2e` directory. 
 
 ## Scripts
 
@@ -10,6 +16,7 @@
 - **Type Checking**: `bun run typecheck`
 - **Linting**: `bun run lint`
 - **Unit Tests**: `bun run test` (Vitest)
+- **E2E Tests**: `bunx playwright test` (Playwright)
 - **Visual Tests**: `bun run test:visual`
 
 ### Backend

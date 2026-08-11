@@ -28,6 +28,7 @@ export default defineConfig({
       "**/node_modules/**",
       "apps/**",
       "tests/visual/**",
+      "tests/e2e/**",
       "tests/e2e.test.ts",
       "dist/**",
       ".output/**",
