@@ -1,37 +1,19 @@
-# Security Overview — Chronicle Backend v1.0.0
+# Security
 
 ## Authentication
-
-- **JWT access tokens** — Signed, short-lived (15 min default)
-- **Refresh tokens** — Rotation on every use, httpOnly cookies
-- **Password hashing** — Argon2id (OWASP recommended)
-- **OAuth** — Google OAuth 2.0 with verified email enforcement
-- **Email verification** — Token-based with expiry
+Authentication is managed via Custom Auth and Google OAuth 2.0. State is persisted using HttpOnly cookies or `localStorage` depending on the client flow, with backend validation via JWT.
 
 ## Authorization
+- **Backend Ownership**: Backend ownership checks are authoritative. The backend always verifies `userId` against the requested resource's `userId`.
+- **Frontend Hiding**: Hiding UI elements on the frontend is NOT authorization. The backend guards the data.
 
-- **JwtAuthGuard** — Protects all authenticated endpoints
-- **Ownership validation** — Every operation checks user.id matches resource owner
-- **DTO-based responses** — Only explicitly mapped fields are returned
+## Privacy
+- **Memory & Journal Privacy**: Content like Memories and Journal entries are inherently private to the creator.
+- **IDOR Protection**: All endpoints interacting with user-specific data require strict ownership validation to prevent Insecure Direct Object Reference (IDOR) attacks.
 
-## Data Protection
+## Database Constraints
+- Cascading deletes are enforced to ensure that wiping a user safely wipes all their private data (Memories, Journals, etc.).
+- Strict constraints exist preventing conflicting evidence on a single Memory (e.g., both `journalId` and `quoteId`).
 
-- **SQL injection** — Prevented by Prisma parameterized queries
-- **Mass assignment** — Prevented by DTO whitelisting
-- **Sensitive fields** — Passwords, tokens never exposed in API responses
-- **File upload** — MIME type and size validation before processing
-
-## Transport Security
-
-- **Helmet** — Sets security headers (CSP, XSS, X-Frame, HSTS)
-- **CORS** — Restricted to configured frontend origin
-- **Compression** — Enabled but not applied to encrypted content
-- **Cookies** — httpOnly, SameSite=Lax, Secure in production
-
-## Recommended Additions
-
-1. Install \`@nestjs/throttler\` for rate limiting
-2. Add database read replicas
-3. Enable SQL query logging in production (debug only)
-4. Regular dependency audits: \`npm audit\`
-5. Penetration testing before major releases
+## Secrets Handling
+Secrets (e.g., `DATABASE_URL`, `JWT_SECRET`, OAuth credentials) are loaded via `.env` files and validated heavily on application bootstrap using `Joi` or `Zod`. Never commit secrets to the repository.
