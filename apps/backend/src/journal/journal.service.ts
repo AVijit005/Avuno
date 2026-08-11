@@ -164,10 +164,16 @@ export class JournalService {
 
   async findMemories(
     userId: string,
-    cursor?: string,
-    limit = 20,
+    options: { cursor?: string; limit?: number; mediaId?: string; journalId?: string }
   ): Promise<{ items: MemoryResponseDto[]; hasMore: boolean; cursor: string | null }> {
-    const items = await this.repository.findMemoriesByUserId(userId, limit, cursor);
+    const limit = options.limit ?? 20;
+    
+    if (options.journalId) {
+      const journal = await this.repository.findJournalEntryById(options.journalId, userId);
+      if (!journal) throw new UnauthorizedException('Journal not found or unauthorized');
+    }
+    
+    const items = await this.repository.findMemoriesByUserId(userId, limit, options.cursor, options.mediaId, options.journalId);
     const hasMore = items.length > limit;
     const sliced = hasMore ? items.slice(0, limit) : items;
     return {
@@ -434,20 +440,28 @@ export class JournalService {
     };
   }
 
-  private toMemoryResponse(m: any): MemoryResponseDto {
+  private toMemoryResponse(entity: any): MemoryResponseDto {
+    const mediaIds = (entity.media || [])
+      .map((m: any) => m.movieId || m.tvShowId || m.animeId || m.bookId || m.gameId || m.musicAlbumId || m.podcastId || m.courseId)
+      .filter(Boolean);
+
     return {
-      id: m.id,
-      title: m.title,
-      description: m.description ?? null,
-      memoryDate: m.memoryDate?.toISOString() ?? null,
-      emotion: m.emotion ?? null,
-      isPinned: m.isPinned ?? false,
-      isPrivate: m.isPrivate ?? true,
-      coverImage: m.coverImage ?? null,
-      location: m.location ?? null,
-      mediaCount: m._count?.media ?? 0,
-      createdAt: m.createdAt?.toISOString() ?? new Date().toISOString(),
-      updatedAt: m.updatedAt?.toISOString() ?? new Date().toISOString(),
+      id: entity.id,
+      title: entity.title,
+      description: entity.description,
+      memoryDate: entity.memoryDate?.toISOString(),
+      emotion: entity.emotion,
+      isPinned: entity.isPinned,
+      isPrivate: entity.isPrivate,
+      coverImage: entity.coverImage,
+      location: entity.location,
+      mediaCount: entity._count?.media || 0,
+      metadata: entity.metadata,
+      createdAt: entity.createdAt.toISOString(),
+      updatedAt: entity.updatedAt.toISOString(),
+      journalId: entity.journalId || null,
+      quoteId: entity.quoteId || null,
+      mediaIds: mediaIds,
     };
   }
 

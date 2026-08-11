@@ -104,8 +104,15 @@ export class JournalController {
     @CurrentUser() user: AccessTokenPayload,
     @Query('cursor') cursor?: string,
     @Query('limit') limit?: string,
+    @Query('mediaId') mediaId?: string,
+    @Query('journalId') journalId?: string,
   ) {
-    return this.journalService.findMemories(user.sub, cursor, safeParseInt(limit, 20));
+    return this.journalService.findMemories(user.sub, {
+      cursor,
+      limit: safeParseInt(limit, 20),
+      mediaId,
+      journalId,
+    });
   }
 
   @Get('memories/:id')

@@ -100,20 +100,45 @@ export class JournalRepository {
   async findMemoryById(id: string, userId?: string): Promise<Record<string, any> | null> {
     const memory = await this.prismaAny().memory.findUnique({
       where: { id },
-      include: { _count: { select: { media: true } } },
+      include: { 
+        _count: { select: { media: true } },
+        media: true
+      },
     });
     if (!memory || (userId && memory.userId !== userId)) return null;
     return memory;
   }
 
-  async findMemoriesByUserId(userId: string, limit = 50, cursor?: string): Promise<Record<string, any>[]> {
+  async findMemoriesByUserId(userId: string, limit = 50, cursor?: string, mediaId?: string, journalId?: string): Promise<Record<string, any>[]> {
     const where: Record<string, any> = { userId };
     if (cursor) where.createdAt = { lt: new Date(cursor) };
+    if (journalId) where.journalId = journalId;
+    
+    if (mediaId) {
+      where.media = {
+        some: {
+          OR: [
+            { movieId: mediaId },
+            { tvShowId: mediaId },
+            { animeId: mediaId },
+            { bookId: mediaId },
+            { gameId: mediaId },
+            { musicAlbumId: mediaId },
+            { podcastId: mediaId },
+            { courseId: mediaId }
+          ]
+        }
+      };
+    }
+    
     return this.prismaAny().memory.findMany({
       where,
       orderBy: [{ isPinned: 'desc' }, { createdAt: 'desc' }],
       take: limit + 1,
-      include: { _count: { select: { media: true } } },
+      include: {
+        _count: { select: { media: true } },
+        media: true, // required to flatten mediaIds
+      },
     });
   }
 
