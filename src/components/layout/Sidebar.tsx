@@ -74,7 +74,7 @@ export function Sidebar({
               <ul className="space-y-0.5">
                 {items.map((item) => {
                   const active =
-                    item.to === "/app" || item.to === "/app/library"
+                    item.to === "/app"
                       ? pathname === item.to
                       : pathname === item.to || pathname.startsWith(item.to + "/");
                   return (

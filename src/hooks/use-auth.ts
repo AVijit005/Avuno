@@ -36,14 +36,14 @@ export function useRegister() {
 export function useLogout() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  
+
   return useMutation<void, Error, void>({
     mutationFn: async () => {
       // Optimistically clear local state immediately
       setAccessToken(null);
       queryClient.clear();
       router.navigate({ to: "/auth", replace: true });
-      
+
       // Attempt backend logout (clears httpOnly cookie)
       try {
         await authApi.logoutUser();
@@ -57,14 +57,14 @@ export function useLogout() {
 export function useLogoutAll() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  
+
   return useMutation<void, Error, void>({
     mutationFn: async () => {
       // Optimistically clear local state immediately
       setAccessToken(null);
       queryClient.clear();
       router.navigate({ to: "/auth", replace: true });
-      
+
       try {
         await authApi.logoutAll();
       } catch (e) {

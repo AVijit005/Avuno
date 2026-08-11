@@ -77,34 +77,12 @@ export function AppShell({ children }: { children?: ReactNode }) {
             </AnimatePresence>
           </main>
         </div>
-        <MobileNav onOpenSearch={() => setSearch(true)} />
+        <MobileNav />
         <CommandPalette open={search} onOpenChange={setSearch} />
         <GlobalShortcuts />
         <RightSidebar sections={[{ title: "Lately", content: <ActivityFeed limit={6} /> }]} />
-        <CaptureFab />
         <Toaster />
       </div>
     </MediaActionsProvider>
-  );
-}
-
-function CaptureFab() {
-  const { openAdd } = useMediaActions();
-  return (
-    <button
-      onClick={openAdd}
-      aria-label="Add to Avuno"
-      title="Add to Avuno (⌘N)"
-      className="group press-scale fixed bottom-24 right-5 z-40 inline-flex items-center gap-2 rounded-full px-5 py-3 text-sm font-semibold transition-all duration-300 ease-out lg:bottom-10 lg:right-10
-      bg-background/80 backdrop-blur-xl 
-      ring-1 ring-border
-      shadow-lg
-      hover:-translate-y-1 hover:bg-background hover:ring-primary/50 hover:shadow-primary/20"
-    >
-      <Plus className="h-[18px] w-[18px] text-primary transition-colors duration-300 group-hover:text-primary/80" />
-      <span className="hidden sm:inline text-primary transition-all duration-300 group-hover:text-primary/80">
-        Add
-      </span>
-    </button>
   );
 }
