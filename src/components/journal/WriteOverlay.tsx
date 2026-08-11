@@ -93,7 +93,7 @@ export function WriteOverlay({
                   if (journalText.length > 5 && !isSealing) onSeal();
                 }
               }}
-              className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-center leading-relaxed"
+              className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-left leading-relaxed"
               style={{ boxShadow: "none" }}
             />
 
@@ -112,7 +112,7 @@ export function WriteOverlay({
                   ) : (
                     <Send className="h-5 w-5" />
                   )}
-                  {isSealing ? "Saving..." : "Seal entry"}
+                  {isSealing ? "Saving..." : "Save entry"}
                 </motion.button>
               )}
             </AnimatePresence>

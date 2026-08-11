@@ -4,9 +4,7 @@ import { NotebookPen } from "lucide-react";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { StatCardPremium } from "@/components/analytics/AnalyticsKit";
-import { MemoryDNA } from "@/components/intelligence/MemoryDNA";
 import { YourReflectionsRail } from "@/components/memory/YourReflectionsRail";
-import { LiveStatsStrip } from "@/components/memory/LiveStatsStrip";
 import {
   useJournalEntries,
   useJournalStats,
@@ -234,21 +232,7 @@ function JournalPage() {
         />
       </MemoryZone>
 
-      <MemoryZone
-        title="Your writing, today"
-        sub="Pulled straight from your library — no demo data."
-      >
-        <LiveStatsStrip />
-      </MemoryZone>
-
-      <MemoryZone
-        title="Recurring themes"
-        sub="The algorithm noticed these patterns in your writing."
-      >
-        <MemoryDNA />
-      </MemoryZone>
-
-      <MemoryZone title="Past reflections" sub="Your own words, resurfaced when relevant.">
+      <MemoryZone title="Reflections" sub="Past thoughts, resurfaced when relevant.">
         <YourReflectionsRail />
       </MemoryZone>
 

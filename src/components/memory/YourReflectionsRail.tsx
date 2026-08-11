@@ -16,7 +16,7 @@ interface Props {
 export function YourReflectionsRail({
   limit = 8,
   title = "Your reflections",
-  eyebrow = "Memory",
+  eyebrow = "Writing",
 }: Props) {
   const rows = useUserReflections();
   const { openReflection } = useMediaActions();

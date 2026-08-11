@@ -1,5 +1,5 @@
 import { motion } from "motion/react";
-import { Heart, Clock } from "lucide-react";
+import { Clock, Lock, Globe } from "lucide-react";
 import { DropCap } from "@/components/editorial/DropCap";
 import { cascade } from "@/lib/motion";
 import { countWords } from "@/lib/utils/words";
@@ -12,50 +12,77 @@ interface Props {
 }
 
 export function JournalEntryCard({ entry, index }: Props) {
+  const wordCount = countWords(entry.content);
+  const readingTime = Math.max(1, Math.round(wordCount / 200));
+
   return (
     <PremiumGlass
       interactive
+      variant="subtle"
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={cascade(index, 0.05)}
-      className="group relative overflow-hidden rounded-3xl p-6"
+      className="group relative overflow-hidden rounded-3xl p-6 md:p-8"
       style={{ viewTransitionName: `journal-card-${entry.id}` } as React.CSSProperties}
     >
-      <div
-        className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full blur-3xl opacity-50 transition group-hover:opacity-80"
-        style={{ background: "oklch(0.7 0.18 35)" }}
-      />
       <div className="relative">
-        <div className="flex items-center justify-between">
-          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-            {new Date(entry.createdAt).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })}{" "}
-            · {entry.mood ?? "Neutral"}
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground flex items-center gap-2">
+            <span>
+              {new Date(entry.createdAt).toLocaleDateString("en-US", {
+                weekday: "long",
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </span>
+            {entry.mood && <span>· {entry.mood}</span>}
+          </div>
+
+          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em]">
+            {entry.isPrivate ? (
+              <span
+                className="flex items-center gap-1.5 text-muted-foreground"
+                title="For your eyes only"
+              >
+                <Lock className="h-3 w-3" />
+                <span className="hidden sm:inline">Private</span>
+              </span>
+            ) : (
+              <span
+                className="flex items-center gap-1.5 text-foreground/70"
+                title="Visible on your profile"
+              >
+                <Globe className="h-3 w-3" />
+                <span className="hidden sm:inline">Public</span>
+              </span>
+            )}
           </div>
         </div>
-        <h3 className="mt-3 font-display text-2xl tracking-tight">
-          {entry.title || "Untitled Entry"}
-        </h3>
+
+        {entry.title && (
+          <h3 className="mt-4 font-display text-2xl tracking-tight text-foreground">
+            {entry.title}
+          </h3>
+        )}
+
         {index === 0 ? (
-          <div className="mt-3">
+          <div className="mt-4">
             <DropCap tone="warm">{entry.content}</DropCap>
           </div>
         ) : (
-          <p className="mt-3 text-sm leading-relaxed text-foreground/85 line-clamp-3">
+          <p className="mt-4 text-[15px] leading-relaxed text-foreground/85 line-clamp-4">
             {entry.content}
           </p>
         )}
-        <div className="mt-5 flex items-center gap-3 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-          <span className="flex items-center gap-1">
-            <Clock className="h-3 w-3" /> {Math.max(1, Math.round(countWords(entry.content) / 200))}{" "}
-            min
+
+        <div className="mt-6 flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
+          <span className="flex items-center gap-1.5">
+            <Clock className="h-3 w-3" /> {readingTime} min read
           </span>
-          <span className="flex items-center gap-1">
-            <Heart className="h-3 w-3" /> Saved
-          </span>
+          <span className="flex items-center gap-1.5">{wordCount} words</span>
+          {/* Phase 4C-3: Preserve as Memory action will go here */}
         </div>
       </div>
     </PremiumGlass>
