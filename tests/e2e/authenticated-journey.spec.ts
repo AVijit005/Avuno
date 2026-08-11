@@ -1,44 +1,19 @@
 import { test, expect } from "@playwright/test";
-import { PrismaClient } from "@prisma/client";
-import { hash } from "argon2";
 
-const prisma = new PrismaClient();
 const testEmail = "e2e_user@example.com";
 const testPassword = "SuperSecurePassword123!";
 
 test.describe("Authenticated User Journeys", () => {
-  test.beforeAll(async () => {
-    // Seed the user in the database
-    const passwordHash = await hash(testPassword);
-    
-    await prisma.user.upsert({
-      where: { email: testEmail },
-      update: {
-        passwordHash,
-        emailVerified: new Date(),
-      },
-      create: {
-        email: testEmail,
-        passwordHash,
-        name: "E2E Test User",
-        emailVerified: new Date(),
-      },
-    });
-  });
-
-  test.afterAll(async () => {
-    await prisma.$disconnect();
-  });
-
-  test.beforeEach(async ({ page }) => {
+  // Use a single test to walk through the journey to avoid rate limiting
+  // on the login endpoint (3 requests per minute).
+  test("should login and navigate through all core authenticated routes", async ({ page }) => {
     // 1. Navigate to auth page
     await page.goto("/auth");
 
-    // Wait for the Sign In form to mount
-    const submitBtn = page.getByRole("button", { name: "Continue" });
+    // Wait for the page to load (should default to SignIn)
+    const submitBtn = page.getByRole("button", { name: "Continue", exact: true });
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
-    await page.waitForTimeout(500); // Let animation settle
-
+    
     // 2. Fill in login form 
     await page.getByPlaceholder("Enter email").fill(testEmail);
     await page.getByPlaceholder("Enter password").fill(testPassword);
@@ -46,15 +21,44 @@ test.describe("Authenticated User Journeys", () => {
     // 3. Submit
     await submitBtn.click();
     
-    // Wait for successful navigation to app home
+    // 4. Wait for successful navigation to app home
     await expect(page).toHaveURL(/\/(app|home)?$/, { timeout: 15000 });
-  });
 
-  test("should load library", async ({ page }) => {
+    // 5. Library
     await page.goto("/app/library");
     await expect(page).toHaveURL(/\/app\/library/);
+    await expect(page.getByRole('heading', { name: 'Library' })).toBeVisible({ timeout: 10000 });
+
+    // 6. Journal
+    await page.goto("/app/journal");
+    await expect(page).toHaveURL(/\/app\/journal/);
+    await expect(page.getByRole('heading', { name: 'Journal' })).toBeVisible({ timeout: 10000 });
+
+    // 7. Memories
+    await page.goto("/app/memories");
+    await expect(page).toHaveURL(/\/app\/memories/);
+    await expect(page.getByRole('heading', { name: 'Memories' })).toBeVisible({ timeout: 10000 });
+
+    // 8. Timeline
+    await page.goto("/app/timeline");
+    await expect(page).toHaveURL(/\/app\/timeline/);
+    await expect(page.getByRole('heading', { name: 'Timeline' })).toBeVisible({ timeout: 10000 });
+
+    // 9. Analytics
+    await page.goto("/app/analytics");
+    await expect(page).toHaveURL(/\/app\/analytics/);
+    await expect(page.locator("text=A year of stories")).toBeVisible({ timeout: 10000 });
+
+    // 10. Logout
+    await page.goto("/app/settings");
+    await expect(page).toHaveURL(/\/app\/settings/);
     
-    // Check for some element on the library page
-    await expect(page.locator("text=Your personal media sanctuary").first()).toBeVisible({ timeout: 5000 });
+    // Find and click the logout button
+    const logoutBtn = page.getByRole('button', { name: "Log out of Avuno" });
+    await expect(logoutBtn).toBeVisible();
+    await logoutBtn.click();
+
+    // Should redirect to auth/home
+    await expect(page).toHaveURL(/\/(auth)?$/, { timeout: 10000 });
   });
 });
