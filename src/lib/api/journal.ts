@@ -29,6 +29,7 @@ export interface MemoryResponse {
   updatedAt: string;
   journalId: string | null;
   quoteId: string | null;
+  mediaIds?: string[];
 }
 
 export interface TimelineEventResponse {

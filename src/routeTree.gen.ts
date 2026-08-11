@@ -27,6 +27,7 @@ import { Route as AppGoalsRouteImport } from './routes/app.goals'
 import { Route as AppImportRouteImport } from './routes/app.import'
 import { Route as AppJournalRouteImport } from './routes/app.journal'
 import { Route as AppLibraryRouteImport } from './routes/app.library'
+import { Route as AppMemoriesRouteImport } from './routes/app.memories'
 import { Route as AppMuseumRouteImport } from './routes/app.museum'
 import { Route as AppNotificationsRouteImport } from './routes/app.notifications'
 import { Route as AppOnboardingRouteImport } from './routes/app.onboarding'
@@ -62,6 +63,8 @@ import { Route as AppLibraryPlanningRouteImport } from './routes/app.library.pla
 import { Route as AppLibraryRecentlyFinishedRouteImport } from './routes/app.library.recently-finished'
 import { Route as AppLibraryRewatchingRouteImport } from './routes/app.library.rewatching'
 import { Route as AppMediaIdRouteImport } from './routes/app.media.$id'
+import { Route as AppMemoriesIndexRouteImport } from './routes/app.memories.index'
+import { Route as AppMemoriesIdRouteImport } from './routes/app.memories.$id'
 import { Route as AppSettingsEmailCaptureRouteImport } from './routes/app.settings.email-capture'
 
 const IndexRoute = IndexRouteImport.update({
@@ -152,6 +155,11 @@ const AppJournalRoute = AppJournalRouteImport.update({
 const AppLibraryRoute = AppLibraryRouteImport.update({
   id: '/library',
   path: '/library',
+  getParentRoute: () => AppRoute,
+} as any)
+const AppMemoriesRoute = AppMemoriesRouteImport.update({
+  id: '/memories',
+  path: '/memories',
   getParentRoute: () => AppRoute,
 } as any)
 const AppMuseumRoute = AppMuseumRouteImport.update({
@@ -330,6 +338,16 @@ const AppMediaIdRoute = AppMediaIdRouteImport.update({
   path: '/media/$id',
   getParentRoute: () => AppRoute,
 } as any)
+const AppMemoriesIndexRoute = AppMemoriesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AppMemoriesRoute,
+} as any)
+const AppMemoriesIdRoute = AppMemoriesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => AppMemoriesRoute,
+} as any)
 const AppSettingsEmailCaptureRoute = AppSettingsEmailCaptureRouteImport.update({
   id: '/email-capture',
   path: '/email-capture',
@@ -354,6 +372,7 @@ export interface FileRoutesByFullPath {
   '/app/import': typeof AppImportRoute
   '/app/journal': typeof AppJournalRoute
   '/app/library': typeof AppLibraryRouteWithChildren
+  '/app/memories': typeof AppMemoriesRouteWithChildren
   '/app/museum': typeof AppMuseumRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
@@ -385,12 +404,14 @@ export interface FileRoutesByFullPath {
   '/app/library/recently-finished': typeof AppLibraryRecentlyFinishedRoute
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
+  '/app/memories/$id': typeof AppMemoriesIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
   '/app/characters/': typeof AppCharactersIndexRoute
   '/app/collections/': typeof AppCollectionsIndexRoute
   '/app/creators/': typeof AppCreatorsIndexRoute
   '/app/franchises/': typeof AppFranchisesIndexRoute
   '/app/library/': typeof AppLibraryIndexRoute
+  '/app/memories/': typeof AppMemoriesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -438,12 +459,14 @@ export interface FileRoutesByTo {
   '/app/library/recently-finished': typeof AppLibraryRecentlyFinishedRoute
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
+  '/app/memories/$id': typeof AppMemoriesIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
   '/app/characters': typeof AppCharactersIndexRoute
   '/app/collections': typeof AppCollectionsIndexRoute
   '/app/creators': typeof AppCreatorsIndexRoute
   '/app/franchises': typeof AppFranchisesIndexRoute
   '/app/library': typeof AppLibraryIndexRoute
+  '/app/memories': typeof AppMemoriesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -464,6 +487,7 @@ export interface FileRoutesById {
   '/app/import': typeof AppImportRoute
   '/app/journal': typeof AppJournalRoute
   '/app/library': typeof AppLibraryRouteWithChildren
+  '/app/memories': typeof AppMemoriesRouteWithChildren
   '/app/museum': typeof AppMuseumRoute
   '/app/notifications': typeof AppNotificationsRoute
   '/app/onboarding': typeof AppOnboardingRoute
@@ -495,12 +519,14 @@ export interface FileRoutesById {
   '/app/library/recently-finished': typeof AppLibraryRecentlyFinishedRoute
   '/app/library/rewatching': typeof AppLibraryRewatchingRoute
   '/app/media/$id': typeof AppMediaIdRoute
+  '/app/memories/$id': typeof AppMemoriesIdRoute
   '/app/settings/email-capture': typeof AppSettingsEmailCaptureRoute
   '/app/characters/': typeof AppCharactersIndexRoute
   '/app/collections/': typeof AppCollectionsIndexRoute
   '/app/creators/': typeof AppCreatorsIndexRoute
   '/app/franchises/': typeof AppFranchisesIndexRoute
   '/app/library/': typeof AppLibraryIndexRoute
+  '/app/memories/': typeof AppMemoriesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -522,6 +548,7 @@ export interface FileRouteTypes {
     | '/app/import'
     | '/app/journal'
     | '/app/library'
+    | '/app/memories'
     | '/app/museum'
     | '/app/notifications'
     | '/app/onboarding'
@@ -553,12 +580,14 @@ export interface FileRouteTypes {
     | '/app/library/recently-finished'
     | '/app/library/rewatching'
     | '/app/media/$id'
+    | '/app/memories/$id'
     | '/app/settings/email-capture'
     | '/app/characters/'
     | '/app/collections/'
     | '/app/creators/'
     | '/app/franchises/'
     | '/app/library/'
+    | '/app/memories/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -606,12 +635,14 @@ export interface FileRouteTypes {
     | '/app/library/recently-finished'
     | '/app/library/rewatching'
     | '/app/media/$id'
+    | '/app/memories/$id'
     | '/app/settings/email-capture'
     | '/app/characters'
     | '/app/collections'
     | '/app/creators'
     | '/app/franchises'
     | '/app/library'
+    | '/app/memories'
   id:
     | '__root__'
     | '/'
@@ -631,6 +662,7 @@ export interface FileRouteTypes {
     | '/app/import'
     | '/app/journal'
     | '/app/library'
+    | '/app/memories'
     | '/app/museum'
     | '/app/notifications'
     | '/app/onboarding'
@@ -662,12 +694,14 @@ export interface FileRouteTypes {
     | '/app/library/recently-finished'
     | '/app/library/rewatching'
     | '/app/media/$id'
+    | '/app/memories/$id'
     | '/app/settings/email-capture'
     | '/app/characters/'
     | '/app/collections/'
     | '/app/creators/'
     | '/app/franchises/'
     | '/app/library/'
+    | '/app/memories/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -806,6 +840,13 @@ declare module '@tanstack/react-router' {
       path: '/library'
       fullPath: '/app/library'
       preLoaderRoute: typeof AppLibraryRouteImport
+      parentRoute: typeof AppRoute
+    }
+    '/app/memories': {
+      id: '/app/memories'
+      path: '/memories'
+      fullPath: '/app/memories'
+      preLoaderRoute: typeof AppMemoriesRouteImport
       parentRoute: typeof AppRoute
     }
     '/app/museum': {
@@ -1053,6 +1094,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AppMediaIdRouteImport
       parentRoute: typeof AppRoute
     }
+    '/app/memories/': {
+      id: '/app/memories/'
+      path: '/'
+      fullPath: '/app/memories/'
+      preLoaderRoute: typeof AppMemoriesIndexRouteImport
+      parentRoute: typeof AppMemoriesRoute
+    }
+    '/app/memories/$id': {
+      id: '/app/memories/$id'
+      path: '/$id'
+      fullPath: '/app/memories/$id'
+      preLoaderRoute: typeof AppMemoriesIdRouteImport
+      parentRoute: typeof AppMemoriesRoute
+    }
     '/app/settings/email-capture': {
       id: '/app/settings/email-capture'
       path: '/email-capture'
@@ -1113,6 +1168,20 @@ const AppLibraryRouteWithChildren = AppLibraryRoute._addFileChildren(
   AppLibraryRouteChildren,
 )
 
+interface AppMemoriesRouteChildren {
+  AppMemoriesIdRoute: typeof AppMemoriesIdRoute
+  AppMemoriesIndexRoute: typeof AppMemoriesIndexRoute
+}
+
+const AppMemoriesRouteChildren: AppMemoriesRouteChildren = {
+  AppMemoriesIdRoute: AppMemoriesIdRoute,
+  AppMemoriesIndexRoute: AppMemoriesIndexRoute,
+}
+
+const AppMemoriesRouteWithChildren = AppMemoriesRoute._addFileChildren(
+  AppMemoriesRouteChildren,
+)
+
 interface AppSettingsRouteChildren {
   AppSettingsEmailCaptureRoute: typeof AppSettingsEmailCaptureRoute
 }
@@ -1136,6 +1205,7 @@ interface AppRouteChildren {
   AppImportRoute: typeof AppImportRoute
   AppJournalRoute: typeof AppJournalRoute
   AppLibraryRoute: typeof AppLibraryRouteWithChildren
+  AppMemoriesRoute: typeof AppMemoriesRouteWithChildren
   AppMuseumRoute: typeof AppMuseumRoute
   AppNotificationsRoute: typeof AppNotificationsRoute
   AppOnboardingRoute: typeof AppOnboardingRoute
@@ -1167,6 +1237,7 @@ const AppRouteChildren: AppRouteChildren = {
   AppImportRoute: AppImportRoute,
   AppJournalRoute: AppJournalRoute,
   AppLibraryRoute: AppLibraryRouteWithChildren,
+  AppMemoriesRoute: AppMemoriesRouteWithChildren,
   AppMuseumRoute: AppMuseumRoute,
   AppNotificationsRoute: AppNotificationsRoute,
   AppOnboardingRoute: AppOnboardingRoute,

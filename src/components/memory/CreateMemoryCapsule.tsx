@@ -6,6 +6,7 @@ import { PremiumButton } from "@/components/ui/PremiumButton";
 import { toast } from "sonner";
 import { useCreateMemory } from "@/hooks/use-journal";
 import type { UIJournalEntry } from "@/lib/adapters/types";
+import { useNavigate } from "@tanstack/react-router";
 
 interface Props {
   isOpen: boolean;
@@ -22,6 +23,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
   const [title, setTitle] = useState("");
   const [isPrivate, setIsPrivate] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigate = useNavigate();
 
   const { mutateAsync: createMemory } = useCreateMemory();
 
@@ -31,13 +33,14 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal }: Props) {
 
     setIsSubmitting(true);
     try {
-      await createMemory({
+      const newMemory = await createMemory({
         title,
         isPrivate,
         journalId: sourceJournal?.id,
       });
       toast.success("Memory preserved.");
       onClose();
+      navigate({ to: "/app/memories/$id", params: { id: newMemory.id } });
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to preserve memory";
       toast.error(message);

@@ -97,6 +97,15 @@ export function useMemories(params?: { cursor?: string; limit?: number }) {
   });
 }
 
+export function useMemory(id: string) {
+  const { data: user } = useCurrentUser();
+  return useQuery({
+    queryKey: [...queryKeys.memories.all, id],
+    enabled: !!user && !!id,
+    queryFn: () => journalApi.getMemory(id),
+  });
+}
+
 export function useCreateMemory() {
   const queryClient = useQueryClient();
   return useMutation({
