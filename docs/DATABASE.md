@@ -1,43 +1,31 @@
-# Database
+# Chronicle - Database Schema & Rules
 
-## Technologies
+## The PostgreSQL Schema
 
-- **Engine**: PostgreSQL 16
-- **ORM**: Prisma
-- **Schema Location**: `apps/backend/prisma/schema.prisma`
+Avuno uses PostgreSQL 16. The schema is managed by Prisma ORM (pps/backend/prisma/schema.prisma).
 
-## Core Models
+### Core Tables
+- User: Identity (email, hashed password, google ID, role).
+- JournalEntry: Core raw timeline log.
+- TimelineEvent: Event stream tracking everything.
+- Memory: Curated highlights.
+- MemoryMedia: Junction linking Memories to canonical media (Movie, TV Show, Book, etc).
+- Media tables (Movie, TvShow, Book, Game, etc.): Mirrored metadata from external APIs.
 
-- `User`: The core owner of data.
-- `Memory`: Explicitly saved memory.
-- `JournalEntry`: Chronological written record.
-- `FavoriteQuote`: Saved textual quote.
-- `MemoryMedia`: Join table between Memory and Media entities (Movie, TvShow, Book, Game, etc.).
-- `TimelineEvent`: System recorded events.
+### The Truth-First Constraint (CRITICAL)
+Located in migration: pps/backend/prisma/migrations/20260811105001_add_memory_evidence_check/migration.sql
 
-## Important Constraints & Relationships
+`sql
+ALTER TABLE "Memory"
+ADD CONSTRAINT memory_evidence_check
+CHECK (
+  ("journalId" IS NOT NULL AND "quoteId" IS NULL) OR
+  ("quoteId" IS NOT NULL AND "journalId" IS NULL) OR
+  ("journalId" IS NULL AND "quoteId" IS NULL)
+);
+`
+**Why:** A Memory must come from exactly zero or one piece of source evidence. It cannot be both a Quote and a Journal.
 
-- **Ownership**: Almost all models have a strict relation to `User` and `userId` that must be validated in queries.
-- **Memory Linking**:
-  - `journalId` is nullable.
-  - `quoteId` is nullable.
-  - **CRITICAL**: `journalId` and `quoteId` cannot both be present on the same Memory simultaneously. This is enforced to separate the source of evidence.
-- **Cascade Rules**: Deleting a User cascades to their Memories, Journals, etc.
-
-## Migrations Workflow
-
-Migrations are managed via Prisma.
-
-### Local Development
-
-To apply migrations and sync the Prisma Client:
-\`\`\`bash
-cd apps/backend
-bunx prisma migrate dev
-\`\`\`
-
-### Safe Migration Workflow
-
-- Never run `prisma migrate dev` against production databases.
-- Always review the generated SQL in the `prisma/migrations` folder before committing.
-- Do not run destructive database commands against production.
+## Prisma Best Practices
+- **No cascade deletes across domain boundaries:** Media should not be deleted just because a Memory is deleted.
+- **Relational Integrity:** journalId on Memory enforces that the memory was intentionally derived from that journal entry.

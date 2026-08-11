@@ -1,57 +1,29 @@
-# Local Development
+# Chronicle - Development & Testing
 
-## Prerequisites
+## Tech Stack
+- Frontend: React 19, Vite, TanStack Router, Tailwind CSS v4
+- Backend: NestJS 11, Prisma ORM (Bun/Node)
+- Database: PostgreSQL (Neon / Docker)
 
-- **Node.js**: v22.0.0 or higher
-- **Package Manager**: Bun
-- **Docker**: For running PostgreSQL and Redis locally
+## Commands
 
-## Infrastructure Setup
+### Frontend
+- \un run dev\: Start Vite dev server (proxies to production backend unless overridden)
+- \un run build\: Build React app
+- \un run typecheck\: Run TypeScript compilation check
 
-Start the local database and Redis cache:
-\`\`\`bash
-cd apps/backend
-docker compose up -d postgres redis
-\`\`\`
+### Backend (apps/backend)
+- \un install\: Install backend deps
+- \un run start:dev\: Start NestJS dev server
+- \unx prisma migrate dev\: Run migrations against local DB
+- \un test\: Run the Bun test suite
 
-## Backend Setup
+### Running Tests
+The project uses un:test. Tests are highly specific and focus on relational integrity.
+Run from pps/backend:
+- \un test src/journal/memory-relations.spec.ts\ (22 passing tests)
+- \un test src/journal/memory-creation.spec.ts\ (13 passing tests)
 
-1. Navigate to the backend directory:
-   \`\`\`bash
-   cd apps/backend
-   \`\`\`
-2. Install dependencies:
-   \`\`\`bash
-   bun install
-   \`\`\`
-3. Setup Environment:
-   Copy `.env.example` to `.env` and fill in necessary details (e.g. `DATABASE_URL`).
-4. Run Database Migrations:
-   \`\`\`bash
-   bunx prisma migrate dev
-   \`\`\`
-5. Start the Development Server:
-   \`\`\`bash
-   bun run start:dev
-   \`\`\`
-
-## Frontend Setup
-
-1. Navigate to the project root:
-   \`\`\`bash
-   cd /path/to/repo
-   \`\`\`
-2. Install dependencies:
-   \`\`\`bash
-   bun install
-   \`\`\`
-3. Start the Development Server:
-   \`\`\`bash
-   bun run dev
-   \`\`\`
-
-## Type Checking & Linting
-
-- **Typecheck**: `bun run typecheck` (Frontend)
-- **Lint**: `bun run lint` (Frontend), `bun run lint` (Backend)
-- **Build**: `bun run build` (Frontend and Backend)
+## Local Setup with Docker
+You can spin up local PostgreSQL and Redis using the included docker-compose.yml files in the backend directory.
+Ensure DATABASE_URL in pps/backend/.env points to your local Docker container (e.g., postgresql://postgres:postgres@localhost:5432/avuno).

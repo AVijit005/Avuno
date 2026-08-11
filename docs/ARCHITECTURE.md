@@ -1,47 +1,19 @@
-# Architecture
+# Chronicle - Architecture & Database
 
-## Overview
+## System Architecture
+Avuno is a monorepo separated into a React Frontend (/src) and a NestJS Backend (/apps/backend).
 
-Avuno 2.0 is a modern monorepo web application using a decoupled client-server architecture.
+## Core Models (Prisma)
+- **User**: Core identity.
+- **JournalEntry**: User's written thoughts.
+- **Memory**: Curated capsules. Enforced evidence constraint.
+- **MemoryMedia**: Junction table linking Memory to Canonical Media (Movie, Book, etc).
+- **TimelineEvent**: Chronological system events. Can link to Memory.
 
-## Frontend
+## The Memory Evidence CHECK Constraint
+A raw SQL migration enforces that journalId and quoteId are mutually exclusive on a Memory record.
 
-- **Framework**: React via Vite.
-- **Routing**: TanStack Router.
-- **Data Fetching**: TanStack Query.
-- **Styling**: Tailwind CSS with an OKLCH-based Design System 2.0.
-
-## Backend
-
-- **Framework**: NestJS (TypeScript).
-- **Architecture**: Modular, controller-service pattern.
-- **Task Queue**: BullMQ backed by Redis for background jobs.
-- **Logging**: Pino structured logging.
-
-## Database
-
-- **Engine**: PostgreSQL 16.
-- **ORM**: Prisma.
-- **Schema**: Strongly typed, relational schema enforcing application constraints at the database level.
-
-## Core Systems
-
-- **Memory System**: Handles explicit user memories, optionally linked to Media, Journal entries, Quotes, or Timeline events. Enforces mutual exclusivity between Journal and Quote links.
-- **Journal**: Chronological text entries authored by the user.
-- **Timeline**: System-recorded milestones indicating what happened (can be optionally linked to user Memories via `memoryId`).
-- **Media**: The canonical creative works (Movies, TV, Books, Games, Podcasts, etc.).
-- **Analytics & Insights**: System-derived factual aggregations.
-
-## Authentication & Authorization
-
-- **Authentication**: Custom Auth / OAuth 2.0.
-- **Authorization**: Strict backend ownership checks on every protected resource.
-
-## Production Topology
-
-LOCAL:
-User -> Vite Dev Server -> NestJS Backend -> PostgreSQL
-
-PRODUCTION:
-User -> Cloudflare -> VPS -> (Frontend Static / Backend API) -> PostgreSQL
-_(Note: Production topology is NOT VERIFIED FROM REPOSITORY)_
+## Security
+- API uses Stateless Custom JWT (Access/Refresh tokens).
+- Google OAuth is implemented with a stateless redirect callback.
+- Cookies are used for HTTP-only refresh tokens.

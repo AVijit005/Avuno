@@ -1,30 +1,16 @@
-# Product Principles
+# Chronicle - Product Principles
 
-## Truth-First Philosophy
+## Core Semantic Distinctions
+Avuno is built on strict definitions of user experience.
+1. **Journal**: "The chronological record of what I wrote." (Raw, chronological, user-authored)
+2. **Timeline**: "A system-recorded chronicle." (Factual, auto-generated events)
+3. **Media**: "The canonical creative work involved." (The movie, book, game itself)
+4. **Memory**: "An experience I explicitly chose to preserve." (Curated, user-owned artifact)
 
-Avuno is a digital vault for a user's life and experiences. Its fundamental rule is that it must strictly separate explicit user intention from system-derived information.
+## The "Truth-First" Mandate
+Memories are NOT AI-generated summaries. They are NOT analytics cards. They are NOT duplicates of Journals.
+A Memory requires an explicit user action to create.
+The backend database enforces this with a CHECK constraint: A Memory can optionally be linked to ONE source of evidence (e.g., journalId OR quoteId), but never both, and never falsified.
 
-### 1. Explicit Memory Creation
-
-A **Memory** represents an experience a user explicitly chose to preserve. Memories are NEVER automatically created by the system.
-
-### 2. No Fabricated Relationships
-
-Relationships between entities (e.g., a Memory and a Media item) must represent real interactions. The system must not invent or suggest artificial relationships.
-
-### 3. No Synthetic User Content
-
-Content attributed to the user must be authored by the user. The system must never fabricate memories, emotional interpretations, or personal reflections.
-
-### 4. User-Owned Data vs. System-Derived Data
-
-- **User-Owned Data** (Journal, Memory, Quote) is explicitly authored.
-- **System-Derived Data** (Analytics, Timeline Events) is factual and calculated based on user interactions. System-derived data must NEVER be presented as user-authored memory.
-
-### 5. Privacy-First Evidence
-
-Evidence such as Journal entries or Quotes attached to Memories are inherently private to the user. Security checks in the backend enforce absolute ownership.
-
-### 6. AI Deferred
-
-Artificial Intelligence (AI) generation, interpretation, or pattern synthesis is **CURRENTLY DEFERRED**. Future AI implementation must operate strictly on verified real data and must never fabricate memories.
+## No AI (For Now)
+We do not use LLMs to summarize thoughts, build the "Memory Graph", or generate fake reflections. AI integration is explicitly DEFERRED to later phases.
