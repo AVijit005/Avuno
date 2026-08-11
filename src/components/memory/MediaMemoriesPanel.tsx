@@ -186,7 +186,7 @@ function AttachMemoryView({
   onCancel: () => void;
   existingMemoryIds: string[];
 }) {
-  const { data, isLoading } = useMemories({ limit: 100 });
+  const { data, isLoading, hasNextPage, fetchNextPage, isFetchingNextPage } = useMemories({ limit: 20 });
   const allMemories = data?.pages.flatMap((p) => p.items) || [];
 
   // Filter out memories that are already linked
@@ -201,7 +201,7 @@ function AttachMemoryView({
         <button
           onClick={onCancel}
           aria-label="Close memory selection"
-          className="min-h-[36px] min-w-[36px] flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
         >
           <X className="h-5 w-5" />
         </button>
@@ -209,7 +209,7 @@ function AttachMemoryView({
 
       {isLoading ? (
         <div className="h-40 rounded-2xl bg-white/5 animate-pulse" />
-      ) : availableMemories.length === 0 ? (
+      ) : availableMemories.length === 0 && !hasNextPage ? (
         <div className="text-center py-8">
           <Bookmark className="h-8 w-8 text-white/20 mx-auto mb-3" />
           <p className="text-sm text-muted-foreground">
@@ -217,51 +217,64 @@ function AttachMemoryView({
               ? "You don't have any memories in your vault yet."
               : "All your memories are already linked to this media."}
           </p>
-          <Link to="/app/journal" className="text-primary hover:underline text-sm mt-2 block">
+          <Link to="/app/journal" className="text-primary hover:underline text-sm mt-2 block min-h-[44px] py-3">
             Go to Journal to write a new one
           </Link>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
-          {availableMemories.map((m) => (
-            <button
-              key={m.id}
-              onClick={() => {
-                attach.mutate(
-                  { memoryId: m.id, libraryId: item.id, mediaType: item.mediaType },
-                  {
-                    onSuccess: () => {
-                      toast.success(`"${m.title}" linked to this media`);
-                      onCancel();
+        <div className="max-h-[60vh] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {availableMemories.map((m) => (
+              <button
+                key={m.id}
+                onClick={() => {
+                  attach.mutate(
+                    { memoryId: m.id, libraryId: item.id, mediaType: item.mediaType },
+                    {
+                      onSuccess: () => {
+                        toast.success(`"${m.title}" linked to this media`);
+                        onCancel();
+                      },
+                      onError: () => {
+                        toast.error("Failed to link memory");
+                      },
                     },
-                    onError: () => {
-                      toast.error("Failed to link memory");
-                    },
-                  },
-                );
-              }}
-              disabled={attach.isPending}
-              className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative min-h-[56px]"
-            >
-              <h5 className="font-serif text-lg mb-1 truncate group-hover:text-primary transition-colors">
-                {m.title}
-              </h5>
-              <div className="flex items-center justify-between text-xs text-muted-foreground">
-                <time>
-                  {format(
-                    m.memoryDate ? new Date(m.memoryDate) : new Date(m.createdAt),
-                    "MMM d, yyyy",
-                  )}
-                </time>
-                {m.emotion && <span>{m.emotion}</span>}
-              </div>
-              {attach.isPending && (
-                <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
-                  <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  );
+                }}
+                disabled={attach.isPending}
+                className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative min-h-[56px]"
+              >
+                <h5 className="font-serif text-lg mb-1 truncate group-hover:text-primary transition-colors">
+                  {m.title}
+                </h5>
+                <div className="flex items-center justify-between text-xs text-muted-foreground">
+                  <time>
+                    {format(
+                      m.memoryDate ? new Date(m.memoryDate) : new Date(m.createdAt),
+                      "MMM d, yyyy",
+                    )}
+                  </time>
+                  {m.emotion && <span>{m.emotion}</span>}
                 </div>
-              )}
-            </button>
-          ))}
+                {attach.isPending && (
+                  <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
+                    <div className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+                  </div>
+                )}
+              </button>
+            ))}
+          </div>
+          {hasNextPage && (
+            <div className="pt-6 pb-2 text-center">
+              <button
+                onClick={() => fetchNextPage()}
+                disabled={isFetchingNextPage}
+                className="min-h-[44px] text-xs text-muted-foreground hover:text-foreground transition-colors px-6 py-2 rounded-full border border-border/40 hover:bg-white/5"
+              >
+                {isFetchingNextPage ? "Loading..." : "Load more"}
+              </button>
+            </div>
+          )}
         </div>
       )}
     </div>
