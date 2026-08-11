@@ -1950,6 +1950,7 @@ model JournalEntry {
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
   user       User     @relation("JournalEntryUser", fields: [userId], references: [id], onDelete: Cascade)
+  memories   Memory[] @relation("MemoryJournal")
 
   @@index([createdAt])
   @@index([updatedAt])
@@ -1959,21 +1960,26 @@ model JournalEntry {
 }
 
 model Memory {
-  id          String        @id @default(uuid()) @map("id") @db.Uuid
-  userId      String        @map("user_id") @db.Uuid
-  title       String        @map("title")
-  description String?       @map("description")
-  memoryDate  DateTime?     @map("memory_date")
-  coverImage  String?       @map("cover_image")
-  location    String?       @map("location")
-  emotion     String?       @map("emotion")
-  isPinned    Boolean       @default(false) @map("is_pinned")
-  isPrivate   Boolean       @default(true) @map("is_private")
-  metadata    Json?         @map("metadata")
-  createdAt   DateTime      @default(now()) @map("created_at")
-  updatedAt   DateTime      @updatedAt @map("updated_at")
-  user        User          @relation("MemoryUser", fields: [userId], references: [id], onDelete: Cascade)
-  media       MemoryMedia[] @relation("MemoryMediaItems")
+  id             String          @id @default(uuid()) @map("id") @db.Uuid
+  userId         String          @map("user_id") @db.Uuid
+  title          String          @map("title")
+  description    String?         @map("description")
+  memoryDate     DateTime?       @map("memory_date")
+  coverImage     String?         @map("cover_image")
+  location       String?         @map("location")
+  emotion        String?         @map("emotion")
+  isPinned       Boolean         @default(false) @map("is_pinned")
+  isPrivate      Boolean         @default(true) @map("is_private")
+  metadata       Json?           @map("metadata")
+  createdAt      DateTime        @default(now()) @map("created_at")
+  updatedAt      DateTime        @updatedAt @map("updated_at")
+  journalId      String?         @map("journal_id") @db.Uuid
+  quoteId        String?         @map("quote_id") @db.Uuid
+  user           User            @relation("MemoryUser", fields: [userId], references: [id], onDelete: Cascade)
+  media          MemoryMedia[]   @relation("MemoryMediaItems")
+  journal        JournalEntry?   @relation("MemoryJournal", fields: [journalId], references: [id], onDelete: SetNull)
+  quote          FavoriteQuote?  @relation("MemoryQuote", fields: [quoteId], references: [id], onDelete: SetNull)
+  timelineEvents TimelineEvent[] @relation("TimelineEventMemory")
 
   @@index([createdAt])
   @@index([updatedAt])
@@ -2038,7 +2044,9 @@ model TimelineEvent {
   color       String?           @map("color")
   metadata    Json?             @map("metadata")
   createdAt   DateTime          @default(now()) @map("created_at")
+  memoryId    String?           @map("memory_id") @db.Uuid
   user        User              @relation("TimelineEventUser", fields: [userId], references: [id], onDelete: Cascade)
+  memory      Memory?           @relation("TimelineEventMemory", fields: [memoryId], references: [id], onDelete: SetNull)
 
   @@index([createdAt])
   @@index([eventDate])
@@ -2073,6 +2081,7 @@ model FavoriteQuote {
   podcast     Podcast? @relation("FavoriteQuotePodcast", fields: [podcastId], references: [id], onDelete: Cascade)
   tvShow      TvShow?  @relation("FavoriteQuoteTvShow", fields: [tvShowId], references: [id], onDelete: Cascade)
   user        User     @relation("FavoriteQuoteUser", fields: [userId], references: [id], onDelete: Cascade)
+  memories    Memory[] @relation("MemoryQuote")
 
   @@index([userId])
   @@index([movieId])
@@ -2651,13 +2660,13 @@ model Like {
 }
 
 model Comment {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String   @map("user_id") @db.Uuid
-  entityType String   @map("entity_type")
-  entityId   String   @map("entity_id")
-  content    String   @map("content")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @map("user_id") @db.Uuid
+  entityType String    @map("entity_type")
+  entityId   String    @map("entity_id")
+  content    String    @map("content")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
   deletedAt  DateTime? @map("deleted_at")
 
   @@index([userId])
@@ -2666,15 +2675,15 @@ model Comment {
 }
 
 model Review {
-  id         String   @id @default(uuid()) @db.Uuid
-  userId     String   @map("user_id") @db.Uuid
-  mediaType  String   @map("media_type")
-  mediaId    String   @map("media_id")
-  rating     Float    @map("rating")
-  content    String?  @map("content")
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  deletedAt  DateTime? @map("deleted_at")
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @map("user_id") @db.Uuid
+  mediaType String    @map("media_type")
+  mediaId   String    @map("media_id")
+  rating    Float     @map("rating")
+  content   String?   @map("content")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@unique([userId, mediaType, mediaId])
   @@index([userId])
@@ -2683,14 +2692,14 @@ model Review {
 }
 
 model Subscription {
-  id        String   @id @default(uuid()) @db.Uuid
-  userId    String   @unique @map("user_id") @db.Uuid
-  planTier  String   @map("plan_tier")
-  status    String   @map("status")
-  stripeId  String?  @map("stripe_id")
+  id        String    @id @default(uuid()) @db.Uuid
+  userId    String    @unique @map("user_id") @db.Uuid
+  planTier  String    @map("plan_tier")
+  status    String    @map("status")
+  stripeId  String?   @map("stripe_id")
   expiresAt DateTime? @map("expires_at")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
 
   @@map("subscriptions")
 }
