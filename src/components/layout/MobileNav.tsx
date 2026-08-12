@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="glass-elevated fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 lg:hidden"
+      className="glass-floating fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 lg:hidden"
       style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
     >
       {items.map((it) => {

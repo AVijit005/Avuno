@@ -90,7 +90,7 @@ export function MediaCard({
                 decoding="async"
                 onLoad={() => setLoaded(true)}
                 onError={() => setErrored(true)}
-                className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.06]"
+                className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.06]"
               />
             </motion.div>
           )}

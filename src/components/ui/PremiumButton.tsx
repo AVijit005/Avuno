@@ -47,7 +47,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, Props>(
       primary:
         "bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-0.5",
       secondary:
-        "glass text-foreground hover:-translate-y-0.5 hover:shadow-[var(--shadow-ghost-hover)]",
+        "glass-subtle text-foreground hover:-translate-y-0.5 hover:shadow-[var(--shadow-ghost-hover)]",
       ghost: "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
       icon: "h-11 w-11 p-0 rounded-2xl glass-subtle hover:bg-foreground/5 hover:text-primary",
     };

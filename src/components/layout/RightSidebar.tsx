@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { PanelRightOpen, PanelRightClose } from "lucide-react";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { cn } from "@/lib/utils";
 import type { ReactNode } from "react";
 
@@ -45,7 +44,7 @@ export function RightSidebar({
             id="right-sidebar"
             aria-label="Helper panel"
           >
-            <PremiumGlass variant="strong">
+            <div className="glass-floating rounded-2xl">
               <div className="p-5">
                 <div className="text-eyebrow">Helper</div>
                 <div className="mt-4 space-y-5">
@@ -57,7 +56,7 @@ export function RightSidebar({
                   ))}
                 </div>
               </div>
-            </PremiumGlass>
+            </div>
           </motion.aside>
         )}
       </AnimatePresence>

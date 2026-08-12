@@ -15,7 +15,7 @@ export function PremiumErrorState({
   action?: ReactNode;
 }) {
   return (
-    <PremiumGlass variant="strong" className="mx-auto max-w-2xl" role="alert">
+    <PremiumGlass variant="default" className="mx-auto max-w-2xl" role="alert">
       <div className="p-10 text-center md:p-12">
         <div className="text-eyebrow text-primary/85">{eyebrow}</div>
         <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">{title}</h2>

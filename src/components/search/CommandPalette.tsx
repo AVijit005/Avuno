@@ -367,7 +367,7 @@ export function CommandPalette({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[100] grid place-items-start overflow-y-auto bg-background/45 px-4 pt-[12vh] pb-12 backdrop-blur-2xl"
+          className="fixed inset-0 z-[100] grid place-items-start overflow-y-auto bg-black/60 px-4 pt-[12vh] pb-12 backdrop-blur-sm"
           onClick={close}
         >
           <motion.div

@@ -6,8 +6,8 @@ import type { MediaItem } from "@/lib/types";
 export function CinematicHero({ item }: { item: MediaItem }) {
   return (
     <motion.section
-      initial={{ opacity: 0, filter: "blur(12px)" }}
-      animate={{ opacity: 1, filter: "blur(0px)" }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
       className="relative overflow-hidden rounded-[40px]"
       style={{ boxShadow: "0 40px 100px -30px oklch(0 0 0 / 0.6)" }}
@@ -28,9 +28,9 @@ export function CinematicHero({ item }: { item: MediaItem }) {
         />
 
         <div className="absolute inset-0 flex items-end p-6 md:p-12">
-          <div className="max-w-xl group/panel glass-subtle rounded-[2rem] border border-white/10 bg-black/40 p-8 shadow-2xl backdrop-blur-2xl transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:border-white/20 hover:shadow-[0_24px_48px_-12px_oklch(0_0_0/0.8),0_0_24px_oklch(0.72_0.18_255/0.15)]">
-            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-primary-foreground/80 backdrop-blur-xl shadow-[inset_0_0_12px_oklch(0.72_0.18_255/0.2)]">
-              <span className="h-1.5 w-1.5 rounded-full bg-primary animate-pulse shadow-[0_0_8px_oklch(0.72_0.18_255/0.8)]" />
+          <div className="max-w-xl group/panel glass-subtle rounded-[2rem] p-8 transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-2 hover:border-white/20 hover:shadow-[0_24px_48px_-12px_oklch(0_0_0/0.8),0_0_24px_oklch(0.72_0.18_255/0.15)]">
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-[10px] uppercase tracking-[0.18em] text-primary-foreground/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-primary" />
               Continue your story
             </div>
             <h2 className="font-display text-4xl leading-[1.05] tracking-tight text-white md:text-6xl text-balance">
@@ -61,13 +61,13 @@ export function CinematicHero({ item }: { item: MediaItem }) {
               <Link
                 to="/app/media/$id"
                 params={{ id: item.id }}
-                className="press-scale inline-flex items-center gap-2 rounded-2xl border border-white/15 bg-white/10 px-6 py-3 text-sm font-medium text-white backdrop-blur-xl transition-[transform,border-color,background-color,box-shadow] duration-300 ease-out hover:-translate-y-[2px] hover:border-white/30 hover:bg-white/15 hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5),0_0_16px_oklch(0.72_0.18_255/0.3)] cursor-pointer"
+                className="glass press-scale inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-medium text-white transition-[transform,border-color,background-color,box-shadow] duration-300 ease-out hover:-translate-y-[2px] hover:border-white/30 hover:bg-white/15 hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5),0_0_16px_oklch(0.72_0.18_255/0.3)] cursor-pointer"
               >
                 <Play className="h-4 w-4 fill-white" /> Continue
               </Link>
               <Link
                 to="/app/journal"
-                className="press-scale inline-flex items-center gap-2 rounded-2xl border border-white/5 bg-white/[0.03] px-6 py-3 text-sm font-medium text-white/80 backdrop-blur-xl transition-[transform,border-color,background-color,color,box-shadow] duration-300 ease-out hover:-translate-y-[2px] hover:border-white/15 hover:bg-white/10 hover:text-white hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5)] cursor-pointer"
+                className="glass press-scale inline-flex items-center gap-2 rounded-2xl px-6 py-3 text-sm font-medium text-white/80 transition-[transform,border-color,background-color,color,box-shadow] duration-300 ease-out hover:-translate-y-[2px] hover:border-white/15 hover:bg-white/10 hover:text-white hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5)] cursor-pointer"
               >
                 <BookmarkPlus className="h-4 w-4" /> Add to journal
               </Link>

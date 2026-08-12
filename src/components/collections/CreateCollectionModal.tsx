@@ -48,7 +48,7 @@ export function CreateCollectionModal({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25 }}
-          className="fixed inset-0 z-[110] grid place-items-center bg-background/55 px-4 py-10 backdrop-blur-2xl"
+          className="fixed inset-0 z-[110] grid place-items-center bg-black/60 px-4 py-10 backdrop-blur-sm"
           onClick={() => onOpenChange(false)}
         >
           <motion.div

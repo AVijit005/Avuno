@@ -673,7 +673,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "waveform":
       return wrap(
-        <div className="relative w-[140px] rounded-xl border border-white/10 bg-[oklch(0.18_0.02_270_/_0.85)] p-2.5 shadow-[0_18px_40px_-16px_oklch(0_0_0/0.8),inset_0_1px_0_oklch(1_0_0/0.06)] backdrop-blur-md">
+        <div className="glass-subtle relative w-[140px] rounded-xl p-2.5">
           <div className="flex items-center gap-1.5">
             <Music2 className="h-2.5 w-2.5 text-primary/80" />
             <span className="text-[9px] font-medium text-foreground/90">{artifact.title}</span>
@@ -703,7 +703,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "progress":
       return wrap(
-        <div className="w-[130px] rounded-xl border border-white/10 bg-[oklch(0.18_0.02_270_/_0.85)] p-2.5 shadow-[0_18px_40px_-16px_oklch(0_0_0/0.8)] backdrop-blur-md">
+        <div className="glass-subtle w-[130px] rounded-xl p-2.5">
           <div className="flex items-center justify-between text-[9px]">
             <span className="text-foreground/85">{artifact.title}</span>
             <span className="font-display text-foreground">{artifact.pct}%</span>
@@ -723,7 +723,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "badge":
       return wrap(
-        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[oklch(0.18_0.02_270_/_0.85)] px-2.5 py-1.5 text-[9px] text-foreground/85 shadow-[0_14px_32px_-14px_oklch(0_0_0/0.8)] backdrop-blur-md">
+        <div className="glass-subtle flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[9px] text-foreground/85">
           <Award className="h-3 w-3 text-amber-300/90" />
           <span>{artifact.label}</span>
           <span className="text-muted-foreground">· {artifact.year}</span>
@@ -732,7 +732,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "datelabel":
       return wrap(
-        <div className="flex items-center gap-1.5 rounded-full bg-black/40 px-2.5 py-1 text-[9px] tracking-wide text-foreground/75 ring-1 ring-white/10 backdrop-blur-md">
+        <div className="glass-subtle flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] tracking-wide text-foreground/75">
           <Calendar className="h-2.5 w-2.5 text-primary/80" />
           {artifact.text}
         </div>,
@@ -740,7 +740,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "rating":
       return wrap(
-        <div className="flex items-center gap-1.5 rounded-full bg-black/45 px-2.5 py-1 text-[9px] text-foreground/85 ring-1 ring-white/10 backdrop-blur-md">
+        <div className="glass-subtle flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[9px] text-foreground/85">
           <span className="italic">{artifact.title}</span>
           <span className="flex">
             {Array.from({ length: artifact.rating }).map((_, i) => (
@@ -752,7 +752,7 @@ function ArtifactCard({ artifact, delay }: { artifact: Artifact; delay: number }
 
     case "favorite":
       return wrap(
-        <div className="flex items-center gap-1.5 rounded-full border border-white/10 bg-[oklch(0.18_0.02_270_/_0.85)] px-2.5 py-1.5 text-[9px] text-foreground/85 shadow-[0_14px_32px_-14px_oklch(0_0_0/0.8)] backdrop-blur-md">
+        <div className="glass-subtle flex items-center gap-1.5 rounded-full px-2.5 py-1.5 text-[9px] text-foreground/85">
           <Bookmark className="h-2.5 w-2.5 fill-rose-300/80 text-rose-300/80" />
           {artifact.label}
         </div>,

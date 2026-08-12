@@ -6,8 +6,6 @@ import { useMediaActions } from "@/lib/store/MediaActionsContext";
 import { useNotifications } from "@/hooks/use-notifications";
 import { useCurrentUser, useLogout } from "@/hooks/use-auth";
 
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
-
 const TITLES: Record<string, { title: string; subtitle?: string }> = {
   "/app/library": { title: "Your Library", subtitle: "Everything you've experienced." },
   "/app/collections": { title: "Collections", subtitle: "Curated stories, grouped your way." },
@@ -56,10 +54,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="sticky top-0 z-30 px-4 pt-4 sm:px-6 lg:px-10"
     >
-      <PremiumGlass
-        variant="subtle"
-        className="flex items-center justify-between gap-4 px-3 py-2.5 md:px-5"
-      >
+      <div className="glass-subtle flex items-center justify-between gap-4 px-3 py-2.5 md:px-5 rounded-2xl">
         <div className="flex min-w-0 items-center gap-4">
           {isHome ? (
             <div className="hidden flex-col leading-tight md:flex" suppressHydrationWarning>
@@ -140,7 +135,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             <LogOut className="h-4 w-4" />
           </button>
         </div>
-      </PremiumGlass>
+      </div>
     </motion.header>
   );
 }

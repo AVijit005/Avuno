@@ -26,8 +26,8 @@ export function EmptyState({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: reduced ? 0 : 12, filter: reduced ? "none" : "blur(6px)" }}
-      animate={{ opacity: 1, y: 0, filter: reduced ? "none" : "blur(0px)" }}
+      initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+      animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduced ? 0 : dur.large, ease: ease.out }}
       className={`glass-subtle relative grid place-items-center overflow-hidden rounded-[32px] px-8 py-14 text-center md:px-12 ${className}`}
     >
