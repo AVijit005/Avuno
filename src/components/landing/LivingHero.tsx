@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router";
-import { motion, useScroll, useTransform } from "motion/react";
+import { motion, useScroll, useTransform, useReducedMotion } from "motion/react";
 import { useRef } from "react";
 import {
   ArrowRight,
@@ -21,13 +21,14 @@ export function LivingHero() {
   const heroOpacity = useTransform(scrollYProgress, [0, 0.6], [1, 0.3]);
   const heroScale = useTransform(scrollYProgress, [0, 0.6], [1, 0.94]);
   const { x: mx, y: my } = useMouseParallax(15);
+  const reduced = useReducedMotion();
 
-  const px = useTransform(mx, (v) => v * 0.8);
-  const py = useTransform(my, (v) => v * 0.8);
-  const pxDeep = useTransform(mx, (v) => v * 1.5);
-  const pyDeep = useTransform(my, (v) => v * 1.5);
-  const rx = useTransform(my, (v) => v * -0.05);
-  const ry = useTransform(mx, (v) => v * 0.05);
+  const px = useTransform(mx, (v) => (reduced ? 0 : v * 0.8));
+  const py = useTransform(my, (v) => (reduced ? 0 : v * 0.8));
+  const pxDeep = useTransform(mx, (v) => (reduced ? 0 : v * 1.5));
+  const pyDeep = useTransform(my, (v) => (reduced ? 0 : v * 1.5));
+  const rx = useTransform(my, (v) => (reduced ? 0 : v * -0.05));
+  const ry = useTransform(mx, (v) => (reduced ? 0 : v * 0.05));
 
   const headline = ["Your", "personal", "media", "archive", "—", "connected."];
 
