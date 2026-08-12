@@ -43,6 +43,7 @@ export class LibraryController {
       private: filter.private,
       sortBy: filter.sortBy,
       sortOrder: filter.sortOrder,
+      search: filter.search,
       cursor: filter.cursor,
       limit: filter.limit,
     });
@@ -61,6 +62,7 @@ export class LibraryController {
       private: filter.private,
       sortBy: filter.sortBy,
       sortOrder: filter.sortOrder,
+      search: filter.search,
       cursor: filter.cursor,
       limit: filter.limit,
     });
@@ -79,6 +81,7 @@ export class LibraryController {
       private: filter.private,
       sortBy: filter.sortBy,
       sortOrder: filter.sortOrder,
+      search: filter.search,
       cursor: filter.cursor,
       limit: filter.limit,
     });

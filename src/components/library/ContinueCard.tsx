@@ -32,6 +32,7 @@ export function ContinueCard({ item }: { item: UIMediaItem }) {
             alt={item.title}
             className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.05]"
             loading="lazy"
+            decoding="async"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-transparent" />
           <div

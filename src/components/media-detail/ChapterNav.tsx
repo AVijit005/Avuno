@@ -1,5 +1,12 @@
 import { useEffect, useState } from "react";
-import { motion, AnimatePresence, useMotionValue, useSpring, useReducedMotion } from "motion/react";
+import {
+  motion,
+  AnimatePresence,
+  useSpring,
+  useReducedMotion,
+  useScroll,
+  useMotionValueEvent,
+} from "motion/react";
 import { ArrowUp } from "lucide-react";
 import { useShortcuts } from "@/lib/shortcuts";
 
@@ -13,10 +20,17 @@ export interface ChapterRef {
  *  Watches anchor sections via IntersectionObserver. */
 export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?: string }) {
   const [activeId, setActiveId] = useState(chapters[0]?.id);
-  const [progress, setProgress] = useState(0);
   const reduced = useReducedMotion();
-  const scaleX = useMotionValue(0);
-  const smoothScaleX = useSpring(scaleX, { stiffness: 300, damping: 40, mass: 0.2 });
+  const { scrollYProgress } = useScroll();
+  const smoothScaleX = useSpring(scrollYProgress, { stiffness: 300, damping: 40, mass: 0.2 });
+  const [showSticky, setShowSticky] = useState(false);
+
+  useMotionValueEvent(scrollYProgress, "change", (latest) => {
+    const shouldShow = Boolean(title) && latest > 0.06;
+    if (showSticky !== shouldShow) {
+      setShowSticky(shouldShow);
+    }
+  });
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -35,21 +49,8 @@ export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?
       { rootMargin: "-30% 0px -55% 0px", threshold: [0, 0.25, 0.5, 0.75, 1] },
     );
     els.forEach((el) => observer.observe(el));
-
-    const onScroll = () => {
-      const doc = document.documentElement;
-      const total = doc.scrollHeight - doc.clientHeight;
-      const p = total > 0 ? Math.min(1, Math.max(0, window.scrollY / total)) : 0;
-      setProgress(p);
-      scaleX.set(p);
-    };
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
-    };
-  }, [chapters, scaleX]);
+    return () => observer.disconnect();
+  }, [chapters]);
 
   const go = (id: string) => {
     const el = document.getElementById(id);
@@ -59,15 +60,13 @@ export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?
   // Number keys jump straight to a chapter — this component renders once per page.
   useShortcuts(Object.fromEntries(chapters.map((c, i) => [String(i + 1), () => go(c.id)])));
 
-  const showSticky = Boolean(title) && progress > 0.06;
-
   return (
     <>
       {/* Reading progress bar — under TopBar height */}
       <div className="pointer-events-none fixed inset-x-0 top-0 z-40 h-[2px]">
         <motion.div
           className="h-full origin-left bg-gradient-to-r from-primary via-secondary to-primary"
-          style={{ scaleX: reduced ? progress : smoothScaleX }}
+          style={{ scaleX: reduced ? scrollYProgress : smoothScaleX }}
         />
       </div>
 
@@ -88,7 +87,7 @@ export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: reduced ? "auto" : "smooth" })}
               aria-label="Back to top"
-              className="press-scale tap-target grid h-8 w-8 shrink-0 place-items-center rounded-full bg-white/[0.06] text-muted-foreground ring-1 ring-white/10 hover:text-foreground"
+              className="press-scale tap-target grid h-8 w-8 shrink-0 place-items-center rounded-full bg-foreground/[0.06] text-muted-foreground ring-1 ring-foreground/10 hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             >
               <ArrowUp className="h-3.5 w-3.5" />
             </button>
@@ -112,7 +111,7 @@ export function ChapterNav({ chapters, title }: { chapters: ChapterRef[]; title?
                   aria-current={active ? "true" : undefined}
                 >
                   <span
-                    className={`h-px transition-all duration-500 ${
+                    className={`h-px transition-[width,background-color] duration-300 ${
                       active
                         ? "w-10 bg-primary"
                         : "w-5 bg-foreground/25 group-hover:w-8 group-hover:bg-foreground/60"

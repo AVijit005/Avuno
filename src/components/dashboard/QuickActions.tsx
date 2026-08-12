@@ -106,7 +106,7 @@ function InteractiveWidget({
         }}
       />
       <div className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500 pointer-events-none mix-blend-screen bg-primary/20 blur-[20px]" />
-      <div className="relative grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.04] shadow-sm transition-all duration-300 group-hover:bg-primary/20 group-hover:border-primary/40 group-hover:shadow-[0_0_12px_rgba(var(--primary),0.3)] z-10">
+      <div className="relative grid h-11 w-11 place-items-center rounded-xl border border-white/10 bg-white/[0.04] shadow-sm transition-[background-color,border-color,box-shadow] duration-300 group-hover:bg-primary/20 group-hover:border-primary/40 group-hover:shadow-[0_0_12px_rgba(var(--primary),0.3)] z-10">
         <q.icon className="h-[18px] w-[18px] text-muted-foreground group-hover:text-primary transition-colors duration-300 drop-shadow-sm group-hover:drop-shadow-[0_0_4px_rgba(255,255,255,0.6)]" />
       </div>
       <div className="flex-1 relative z-10">
@@ -117,7 +117,7 @@ function InteractiveWidget({
           {q.hint}
         </div>
       </div>
-      <ChevronRight className="h-4 w-4 text-muted-foreground/40 transition-all duration-300 group-hover:translate-x-1 group-hover:text-primary relative z-10" />
+      <ChevronRight className="h-4 w-4 text-muted-foreground/40 transition-[transform,color] duration-300 group-hover:translate-x-1 group-hover:text-primary relative z-10" />
     </motion.button>
   );
 }

@@ -48,7 +48,7 @@ export function CollectionCard({
       <PremiumGlass
         interactive
         glow={accent}
-        className={`relative block ${aspect} overflow-hidden rounded-3xl transition-shadow duration-500 group-hover:shadow-[0_30px_80px_-30px_oklch(0_0_0/0.7)]`}
+        className={`relative block ${aspect} overflow-hidden rounded-3xl transition-shadow duration-300 group-hover:shadow-[0_20px_40px_-20px_oklch(0_0_0/0.5)]`}
       >
         <Link
           to="/app/collections/$id"
@@ -64,7 +64,7 @@ export function CollectionCard({
                   key={i}
                   src={src}
                   alt=""
-                  className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
+                  className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
                 />
               ))}
             </div>
@@ -72,7 +72,7 @@ export function CollectionCard({
             <PremiumImage
               src={coverSrc}
               alt=""
-              className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.08]"
+              className="h-full w-full object-cover transition duration-300 group-hover:scale-[1.04]"
             />
           )}
           {/* tinted gradient */}
@@ -86,7 +86,7 @@ export function CollectionCard({
           {/* accent edge */}
           <span
             aria-hidden
-            className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-500 group-hover:opacity-100"
+            className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition duration-300 group-hover:opacity-100"
             style={{ boxShadow: `inset 0 0 0 1px ${accent}` }}
           />
 
@@ -96,7 +96,7 @@ export function CollectionCard({
               {c.itemCount} items
             </div>
             <div className="mt-2 font-display text-2xl leading-tight text-white">{c.name}</div>
-            <div className="mt-1 max-w-md translate-y-2 text-[12px] text-white/75 opacity-0 transition duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+            <div className="mt-1 max-w-md translate-y-2 text-[12px] text-white/75 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100">
               {c.description}
             </div>
             <div className="mt-2 text-[10px] uppercase tracking-[0.18em] text-white/55">

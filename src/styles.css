@@ -320,6 +320,26 @@ select {
   --sidebar-accent-foreground: var(--color-text-primary);
   --sidebar-border: oklch(0.16 0.02 270 / 0.08);
   --sidebar-ring: oklch(0.55 0.2 255 / 0.5);
+
+  /* Light mode shadow overrides — softer depth */
+  --shadow-sm: 0 1px 2px 0 oklch(0 0 0 / 0.03);
+  --shadow-md: 0 4px 6px -1px oklch(0 0 0 / 0.06), 0 2px 4px -2px oklch(0 0 0 / 0.04);
+  --shadow-lg: 0 10px 15px -3px oklch(0 0 0 / 0.06), 0 4px 6px -4px oklch(0 0 0 / 0.04);
+  --shadow-xl: 0 20px 25px -5px oklch(0 0 0 / 0.06), 0 8px 10px -6px oklch(0 0 0 / 0.04);
+
+  --shadow-glass:
+    0 1px 0 oklch(1 0 0 / 0.5) inset, 0 -1px 0 oklch(0 0 0 / 0.04) inset,
+    0 12px 40px -12px oklch(0 0 0 / 0.12);
+  --shadow-elevated: 0 20px 60px -20px oklch(0 0 0 / 0.15), 0 0 0 1px oklch(0 0 0 / 0.04);
+
+  --shadow-poster-hover: 0 16px 40px -12px oklch(0 0 0 / 0.2);
+  --shadow-button: 0 2px 8px -2px oklch(0 0 0 / 0.12);
+  --shadow-button-hover: 0 6px 16px -6px oklch(0 0 0 / 0.18);
+  --shadow-ghost-hover: 0 2px 8px -4px oklch(0 0 0 / 0.12);
+  --shadow-card: 0 8px 16px oklch(0 0 0 / 0.06);
+
+  --glass-highlight: oklch(1 0 0 / 0.5);
+  --glass-highlight-strong: oklch(1 0 0 / 0.7);
 }
 
 /* ============================================================
@@ -353,7 +373,7 @@ select {
   -webkit-backdrop-filter: blur(16px) saturate(120%);
   backdrop-filter: blur(16px) saturate(120%);
   border: 1px solid var(--color-border-default);
-  box-shadow: 
+  box-shadow:
     0 1px 0 oklch(1 0 0 / 0.06) inset,
     var(--shadow-sm);
 }
@@ -367,7 +387,7 @@ select {
   -webkit-backdrop-filter: blur(24px) saturate(130%);
   backdrop-filter: blur(24px) saturate(130%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 
+  box-shadow:
     0 1px 0 oklch(1 0 0 / 0.1) inset,
     var(--shadow-md);
 }
@@ -381,7 +401,7 @@ select {
   -webkit-backdrop-filter: blur(32px) saturate(140%);
   backdrop-filter: blur(32px) saturate(140%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 
+  box-shadow:
     0 1px 0 oklch(1 0 0 / 0.15) inset,
     0 0 0 1px oklch(1 0 0 / 0.05) inset,
     var(--shadow-xl);
@@ -493,6 +513,49 @@ select {
   color: var(--color-text-muted);
 }
 
+@utility text-display {
+  font-family: var(--font-display);
+  font-size: 3rem;
+  letter-spacing: -0.025em;
+  line-height: 1.05;
+}
+
+@utility text-secondary {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  color: var(--color-text-secondary);
+}
+
+@utility text-caption {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+@utility text-eyebrow {
+  font-family: var(--font-sans);
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+}
+
+/* Standardized tracking scale — use these instead of arbitrary values */
+@utility tracking-eyebrow {
+  letter-spacing: 0.2em;
+}
+
+@utility tracking-label {
+  letter-spacing: 0.12em;
+}
+
+@utility tracking-display {
+  letter-spacing: -0.025em;
+}
+
 /* ============================================================
  * Keyframes
  * ============================================================ */
@@ -568,9 +631,7 @@ select {
   }
 }
 
-@utility animate-aurora {
-  animation: aurora-drift 28s ease-in-out infinite;
-}
+
 @utility animate-fade-blur-in {
   animation: fade-blur-in 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
 }

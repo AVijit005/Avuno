@@ -288,10 +288,15 @@ export async function detachTimelineMemory(timelineId: string, memoryId: string)
 
 // Quotes
 export async function createQuote(
-  libraryId: string,
+  mediaId: string,
+  type: string,
   input: CreateQuoteInput,
 ): Promise<QuoteResponse> {
-  return apiPost<QuoteResponse>(`/library/${libraryId}/quotes`, input);
+  return apiPost<QuoteResponse>(`/library/${mediaId}/quotes?type=${type}`, input);
+}
+
+export async function getQuote(id: string): Promise<QuoteResponse> {
+  return apiGet<QuoteResponse>(`/quotes/${id}`);
 }
 
 export async function updateQuote(

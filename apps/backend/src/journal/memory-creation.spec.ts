@@ -1,4 +1,4 @@
-import { describe, beforeAll, beforeEach, it, expect, mock, spyOn } from 'bun:test';
+import { describe, beforeEach, it, expect, mock, spyOn } from 'bun:test';
 import { Test, TestingModule } from '@nestjs/testing';
 import { JournalService } from './journal.service';
 import { JournalRepository } from './journal.repository';

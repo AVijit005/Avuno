@@ -365,6 +365,12 @@ export class JournalService {
     return this.toQuoteResponse(quote);
   }
 
+  async getQuote(quoteId: string, userId: string): Promise<QuoteResponseDto> {
+    const quote = await this.repository.findQuoteById(quoteId, userId);
+    if (!quote) throw new NotFoundException('Quote not found');
+    return this.toQuoteResponse(quote);
+  }
+
   async findQuotes(
     userId: string,
     cursor?: string,

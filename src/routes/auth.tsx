@@ -357,7 +357,7 @@ function AuthPage() {
                   // implementation ineffective.
                   window.location.href = `${API_BASE_URL}/auth/google`;
                 }}
-                className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-all duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
+                className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-[transform,border-color,background-color] duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
                 style={{
                   boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)",
                 }}
@@ -366,7 +366,7 @@ function AuthPage() {
                 Continue with Google
                 <span
                   aria-hidden
-                  className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-all duration-700 ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
+                  className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
                   style={{
                     background:
                       "linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent)",
@@ -596,7 +596,7 @@ function PremiumButton({
         {/* shimmer sweep */}
         <span
           aria-hidden
-          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-all duration-[900ms] ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
+          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-[transform,opacity] duration-[900ms] ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
           style={{
             background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)",
           }}

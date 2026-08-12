@@ -7,6 +7,7 @@ import type {
   CreateJournalEntryInput,
   UpdateJournalEntryInput,
   CreateMemoryInput,
+  UpdateMemoryInput,
 } from "@/lib/api/journal";
 import { analytics } from "@/lib/analytics";
 
@@ -29,6 +30,16 @@ export function useJournalEntry(id: string) {
   return useQuery({
     queryKey: queryKeys.journal.entry(id),
     queryFn: () => journalApi.getJournalEntry(id),
+    enabled: !!id && !!user,
+  });
+}
+
+export function useQuote(id: string) {
+  const { data: user } = useCurrentUser();
+
+  return useQuery({
+    queryKey: queryKeys.journal.quote(id),
+    queryFn: () => journalApi.getQuote(id),
     enabled: !!id && !!user,
   });
 }
@@ -155,6 +166,29 @@ export function useCreateMemory() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (input: CreateMemoryInput) => journalApi.createMemory(input),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+      queryClient.invalidateQueries({ queryKey: queryKeys.analytics.all });
+    },
+  });
+}
+
+export function useUpdateMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, input }: { id: string; input: UpdateMemoryInput }) =>
+      journalApi.updateMemory(id, input),
+    onSuccess: (_data, { id }) => {
+      queryClient.invalidateQueries({ queryKey: [...queryKeys.memories.all, id] });
+      queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
+    },
+  });
+}
+
+export function useDeleteMemory() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => journalApi.deleteMemory(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: queryKeys.memories.all });
       queryClient.invalidateQueries({ queryKey: queryKeys.analytics.all });

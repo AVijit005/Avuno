@@ -68,11 +68,6 @@ export function StatusOverviewRow() {
         return (
           <Link key={c.status} to={c.to}>
             <PremiumGlass className="group/sc h-full p-5">
-              <div
-                aria-hidden
-                className="pointer-events-none absolute -top-16 -left-16 h-40 w-40 rounded-full opacity-30 blur-3xl transition-opacity duration-500 group-hover/sc:opacity-60"
-                style={{ background: tint }}
-              />
               <div className="relative flex items-center gap-4">
                 <div className="flex shrink-0 -space-x-3">
                   {collage.map((src, i) => (

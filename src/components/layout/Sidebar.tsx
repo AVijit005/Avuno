@@ -32,9 +32,7 @@ export function Sidebar({
         {!collapsed && (
           <div className="min-w-0">
             <div className="truncate font-display text-lg leading-none">Avuno</div>
-            <div className="mt-1 text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-              Memory operating system
-            </div>
+            <div className="mt-1 text-eyebrow">Memory operating system</div>
           </div>
         )}
       </div>
@@ -44,7 +42,7 @@ export function Sidebar({
         onClick={onOpenSearch}
         aria-label="Search"
         className={cn(
-          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-border/60 bg-background/40 px-3 py-2.5 text-left text-sm text-muted-foreground transition press-scale hover:bg-background/70 hover:text-foreground",
+          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-border/60 bg-background/40 px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors press-scale hover:bg-background/70 hover:text-foreground",
         )}
       >
         <Command className="h-4 w-4 shrink-0" />
@@ -65,9 +63,7 @@ export function Sidebar({
           return (
             <div key={g} className="mb-4">
               {!collapsed && GROUP_LABELS[g] && (
-                <div className="px-3 pb-2 text-[10px] font-medium uppercase tracking-[0.18em] text-muted-foreground/70">
-                  {GROUP_LABELS[g]}
-                </div>
+                <div className="text-eyebrow px-3 pb-2">{GROUP_LABELS[g]}</div>
               )}
               <ul className="space-y-0.5">
                 {items.map((item) => {
@@ -81,7 +77,7 @@ export function Sidebar({
                         to={item.to}
                         aria-current={active ? "page" : undefined}
                         className={cn(
-                          "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition press-scale",
+                          "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors press-scale",
                           active
                             ? "bg-muted text-foreground"
                             : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
@@ -90,12 +86,8 @@ export function Sidebar({
                         {active && (
                           <motion.span
                             layoutId="nav-active"
-                            className="absolute inset-0 -z-10 rounded-xl"
-                            style={{
-                              background:
-                                "linear-gradient(120deg, oklch(0.72 0.18 255 / 0.18), oklch(0.65 0.22 295 / 0.14))",
-                              boxShadow: "inset 0 0 0 1px oklch(1 0 0 / 0.08)",
-                            }}
+                            aria-hidden="true"
+                            className="absolute inset-0 -z-10 rounded-xl bg-primary/10 ring-1 ring-primary/20"
                             transition={{ type: "spring", stiffness: 400, damping: 32 }}
                           />
                         )}
@@ -115,7 +107,7 @@ export function Sidebar({
       <button
         onClick={onToggle}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className="mx-3 mb-3 flex items-center justify-center gap-2 rounded-xl border border-border/50 bg-background/30 py-2 text-xs text-muted-foreground transition press-scale hover:text-foreground"
+        className="mx-3 mb-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-border/50 bg-background/30 py-2 text-xs text-muted-foreground transition-colors press-scale hover:text-foreground"
       >
         {collapsed ? (
           <ChevronsRight className="h-4 w-4" />

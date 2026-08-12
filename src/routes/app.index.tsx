@@ -65,12 +65,10 @@ function Home() {
   ].map(adaptContinueItem);
 
   return (
-    <div className="flex flex-col min-h-screen pt-4 pb-24 md:pt-10 space-y-16">
+    <div className="flex flex-col min-h-screen pt-2 pb-24 md:pt-6 space-y-10">
       <section className="px-1 md:px-0 flex flex-col md:flex-row md:items-end justify-between gap-6">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-3 font-medium">
-            {today}
-          </div>
+          <div className="text-eyebrow mb-3 font-medium">{today}</div>
           <ErrorBoundary fallback={<div />}>
             <DashboardGreeting />
           </ErrorBoundary>
@@ -101,9 +99,7 @@ function Home() {
             <section>
               <div className="flex items-center gap-2 mb-6 px-1 md:px-0">
                 <Clock className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Jump Back In
-                </h2>
+                <h2 className="text-eyebrow font-medium">Jump Back In</h2>
               </div>
               <div className="flex gap-4 overflow-x-auto pb-4 snap-x hide-scrollbar">
                 {activeItems.map((item) => (
@@ -116,12 +112,10 @@ function Home() {
           )}
 
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-[24px] border border-border/40 bg-surface-1 p-6 md:p-8">
+            <div className="rounded-2xl border border-border/40 bg-surface-1 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <Library className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Library Pulse
-                </h2>
+                <h2 className="text-eyebrow font-medium">Library Pulse</h2>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -147,12 +141,10 @@ function Home() {
               </div>
             </div>
 
-            <div className="rounded-[24px] border border-border/40 bg-surface-1 p-6 md:p-8">
+            <div className="rounded-2xl border border-border/40 bg-surface-1 p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <History className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-sm font-medium uppercase tracking-wider text-muted-foreground">
-                  Insights
-                </h2>
+                <h2 className="text-eyebrow font-medium">Insights</h2>
               </div>
               <MemoryInsights max={2} />
             </div>
@@ -167,7 +159,7 @@ function OnboardingGuide() {
   const navigate = useNavigate();
   return (
     <div className="mt-4">
-      <div className="bg-surface-1 border border-border/40 rounded-[24px] p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row gap-12 items-center">
+      <div className="bg-surface-1 border border-border/40 rounded-2xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row gap-12 items-center">
         <div className="flex-1 space-y-6">
           <h2 className="text-2xl md:text-3xl font-medium tracking-tight">
             Your media life, recorded.

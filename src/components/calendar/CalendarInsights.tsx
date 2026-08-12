@@ -72,7 +72,7 @@ export function CalendarInsights({ insights: propInsights }: Props) {
             whileTap={{ scale: 0.98 }}
             className="flex items-start gap-4 p-5 cursor-pointer press-scale relative z-10"
           >
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.06]">
+            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-foreground/5">
               <Sparkles className="h-4 w-4 text-primary" />
             </div>
             <p className="text-sm text-foreground/90">{line}</p>

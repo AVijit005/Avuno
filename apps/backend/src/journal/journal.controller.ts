@@ -250,6 +250,15 @@ export class JournalController {
     return this.journalService.createQuote(user.sub, id, dto, query.type);
   }
 
+  @Get('quotes/:quoteId')
+  @ApiOperation({ summary: 'Get a specific quote' })
+  async getQuote(
+    @CurrentUser() user: AccessTokenPayload,
+    @Param('quoteId') quoteId: string,
+  ): Promise<QuoteResponseDto> {
+    return this.journalService.getQuote(quoteId, user.sub);
+  }
+
   @Patch('library/:id/quotes/:quoteId')
   @ApiOperation({ summary: 'Update a quote' })
   async updateQuote(

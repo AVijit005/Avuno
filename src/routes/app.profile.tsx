@@ -10,7 +10,6 @@ import { Section } from "@/components/common/Section";
 import { BookmarkPanel } from "@/components/profile/BookmarkPanel";
 import { SaveForLaterPanel } from "@/components/profile/SaveForLaterPanel";
 import { UniversalNotes } from "@/components/profile/UniversalNotes";
-import { PullQuote } from "@/components/editorial/PullQuote";
 import { Collage } from "@/components/editorial/Collage";
 import { useOverview, useStreaks } from "@/hooks/use-analytics";
 import { adaptOverview, adaptStreaks } from "@/lib/adapters/analytics";
@@ -41,9 +40,7 @@ function ProfilePage() {
     <div className="pt-2 pb-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-border/40 pb-6">
         <div>
-          <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-2">
-            Your Profile
-          </div>
+          <div className="text-eyebrow mb-2">Your Profile</div>
           <h1 className="font-display text-4xl tracking-tight">The story of your stories</h1>
           <p className="mt-2 max-w-md text-sm text-muted-foreground">
             A living portrait of your media life — the patterns, the preferences, and the moments

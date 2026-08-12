@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Museum } from "@/components/profile/Museum";
-import { PullQuote } from "@/components/editorial/PullQuote";
 
 export const Route = createFileRoute("/app/museum")({ component: MuseumPage });
 

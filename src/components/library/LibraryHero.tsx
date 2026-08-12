@@ -37,7 +37,13 @@ export function LibraryHero() {
         <div className="grid h-full w-full grid-cols-9 opacity-40 grayscale-[0.2]">
           {posters.map((p, i) => (
             <div key={i} className="relative overflow-hidden">
-              <img src={p} alt="" className="h-full w-full object-cover" loading="lazy" />
+              <img
+                src={p}
+                alt=""
+                className="h-full w-full object-cover"
+                loading="lazy"
+                decoding="async"
+              />
             </div>
           ))}
         </div>

@@ -105,9 +105,6 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
               className="p-8 md:p-12 overflow-hidden shadow-2xl relative border-white/20"
               glow="oklch(0.7 0.18 200 / 0.3)"
             >
-              {/* Subtle ambient light inside the capsule */}
-              <div className="absolute -top-32 -right-32 w-64 h-64 bg-primary/20 rounded-full blur-3xl pointer-events-none" />
-
               <div className="relative z-10">
                 <div className="text-primary/70 text-[10px] tracking-[0.25em] uppercase font-bold mb-6 flex items-center justify-between">
                   <span>Preserve this moment</span>

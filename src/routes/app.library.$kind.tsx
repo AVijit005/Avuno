@@ -49,7 +49,7 @@ function LibraryKind() {
       {items.length === 0 ? (
         <EmptyState
           title={`No ${KIND_LABEL[kind].toLowerCase()} yet`}
-          description="When you add something here, it'll appear with all the cinematic care it deserves."
+          description="Add an item to see it here."
           icon={<Search className="h-6 w-6 text-muted-foreground" />}
           action={
             <button

@@ -19,10 +19,6 @@ export function YearOverview({ monthIdx, onSelectMonth, months = [] }: Props) {
             whileHover={{ y: -3 }}
             className={`glass group relative overflow-hidden rounded-2xl p-4 text-left transition ${active ? "ring-2 ring-primary/60" : ""}`}
           >
-            <div
-              className="pointer-events-none absolute -right-10 -top-10 h-28 w-28 rounded-full blur-3xl opacity-50 transition group-hover:opacity-80"
-              style={{ background: m.accent }}
-            />
             <div className="relative">
               <div className="grid grid-cols-2 gap-1">
                 {m.collage.map((src: string, i: number) => (

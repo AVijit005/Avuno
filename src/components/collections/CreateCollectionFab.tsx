@@ -14,7 +14,7 @@ export function CreateCollectionFab({ onClick }: { onClick: () => void }) {
       <span className="grid h-9 w-9 place-items-center rounded-full bg-gradient-to-br from-primary to-secondary text-primary-foreground">
         <Plus className="h-4 w-4" />
       </span>
-      <span className="max-w-0 overflow-hidden whitespace-nowrap pr-0 opacity-0 transition-all duration-500 group-hover:max-w-[180px] group-hover:pr-2 group-hover:opacity-100">
+      <span className="max-w-0 overflow-hidden whitespace-nowrap pr-0 opacity-0 transition-[max-width,padding,opacity] duration-500 group-hover:max-w-[180px] group-hover:pr-2 group-hover:opacity-100">
         Create collection
       </span>
     </motion.button>

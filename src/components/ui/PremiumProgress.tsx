@@ -14,7 +14,11 @@ export function PremiumProgress({ value, accent, className, height = 6 }: Props)
   const fill = accent ?? "var(--primary)";
   return (
     <div
-      className={cn("relative w-full overflow-hidden rounded-full bg-white/[0.08]", className)}
+      role="progressbar"
+      aria-valuenow={v}
+      aria-valuemin={0}
+      aria-valuemax={100}
+      className={cn("relative w-full overflow-hidden rounded-full bg-foreground/[0.08]", className)}
       style={{ height }}
     >
       <motion.div

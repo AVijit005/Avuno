@@ -42,7 +42,7 @@ export function StatsGrid({ stats }: { stats?: LibraryStatsResponse }) {
         return (
           <button
             key={it.key}
-            className="group/pill relative flex flex-col items-start justify-between min-w-[120px] flex-1 sm:flex-none overflow-hidden rounded-[2rem] px-5 py-4 text-left transition-all duration-400 ease-out hover:-translate-y-1.5 hover:scale-[1.02]"
+            className="group/pill relative flex flex-col items-start justify-between min-w-[120px] flex-1 sm:flex-none overflow-hidden rounded-[2rem] px-5 py-4 text-left transition-[transform] duration-400 ease-out hover:-translate-y-1.5 hover:scale-[1.02]"
             style={{
               background: "rgba(255, 255, 255, 0.02)",
               backdropFilter: "blur(24px)",

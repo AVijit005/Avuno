@@ -76,7 +76,7 @@ export function FAQSection() {
               >
                 <button
                   onClick={() => setOpenIndex(isOpen ? null : i)}
-                  className={`group flex w-full items-start gap-4 rounded-2xl px-6 py-5 text-left transition-all duration-300 ${
+                  className={`group flex w-full items-start gap-4 rounded-2xl px-6 py-5 text-left transition-[background-color,border-color,box-shadow] duration-300 ${
                     isOpen
                       ? "glass-elevated ring-1 ring-primary/15"
                       : "glass ring-1 ring-white/[0.04] hover:ring-white/[0.08]"

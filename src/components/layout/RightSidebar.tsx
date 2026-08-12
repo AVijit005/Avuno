@@ -26,7 +26,7 @@ export function RightSidebar({
         aria-label={open ? "Close sidebar" : "Open sidebar"}
         aria-expanded={open}
         aria-controls="right-sidebar"
-        className="fixed bottom-24 right-16 z-40 hidden lg:grid h-11 w-11 place-items-center rounded-full bg-white/[0.06] text-muted-foreground ring-1 ring-white/10 backdrop-blur transition hover:text-foreground"
+        className="fixed bottom-24 right-16 z-40 hidden lg:grid h-11 w-11 place-items-center rounded-full bg-foreground/[0.06] text-muted-foreground ring-1 ring-foreground/10 backdrop-blur-none transition hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
       >
         {open ? <PanelRightClose className="h-4 w-4" /> : <PanelRightOpen className="h-4 w-4" />}
       </button>
@@ -47,15 +47,11 @@ export function RightSidebar({
           >
             <PremiumGlass variant="strong">
               <div className="p-5">
-                <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
-                  Helper
-                </div>
+                <div className="text-eyebrow">Helper</div>
                 <div className="mt-4 space-y-5">
                   {sections.map((s) => (
                     <section key={s.title}>
-                      <h3 className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/75">
-                        {s.title}
-                      </h3>
+                      <h3 className="text-eyebrow opacity-75">{s.title}</h3>
                       <div className="mt-2 text-sm">{s.content}</div>
                     </section>
                   ))}

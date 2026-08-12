@@ -31,7 +31,13 @@ export function ActivityFeed({ className, limit = 10 }: { className?: string; li
 
   if (isLoading) {
     return (
-      <div className="p-5 text-muted-foreground animate-pulse text-sm">Loading activity...</div>
+      <div
+        role="status"
+        aria-live="polite"
+        className="p-5 text-muted-foreground animate-pulse motion-reduce:animate-none text-sm"
+      >
+        Loading activity...
+      </div>
     );
   }
 
@@ -53,7 +59,10 @@ export function ActivityFeed({ className, limit = 10 }: { className?: string; li
             const Icon = ICONS[a.type] || Film;
             const node = (
               <div className="flex items-start gap-3">
-                <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-white/[0.06] ring-1 ring-white/10">
+                <span
+                  aria-hidden
+                  className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-foreground/[0.06] ring-1 ring-foreground/10"
+                >
                   <Icon className="h-3.5 w-3.5 text-primary" />
                 </span>
                 <div className="min-w-0 flex-1">

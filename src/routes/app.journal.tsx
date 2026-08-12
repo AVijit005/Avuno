@@ -242,7 +242,7 @@ function JournalPage() {
             <div className="col-span-full">
               <EmptyState
                 title="Your journal is empty"
-                description="Write your first entry and capture your current mood."
+                description="Write your first entry."
                 action={
                   <PremiumButton variant="primary" onClick={() => setIsWriting(true)}>
                     Write entry
@@ -274,7 +274,7 @@ function JournalPage() {
             <button
               key={r}
               onClick={() => setMoodRange(r as 7 | 30 | 90)}
-              className={`glass-subtle rounded-full px-4 py-1.5 text-[10px] uppercase tracking-[0.18em] transition-all duration-300 hover:-translate-y-0.5 cursor-pointer ${moodRange === r ? "border-white/20 text-foreground shadow-[0_0_12px_rgba(255,255,255,0.06)]" : "text-muted-foreground border border-transparent hover:border-white/5"}`}
+              className={`glass-subtle rounded-full px-4 py-1.5 text-[10px] uppercase tracking-[0.18em] transition-[transform,border-color,color,box-shadow] duration-300 hover:-translate-y-0.5 cursor-pointer ${moodRange === r ? "border-white/20 text-foreground shadow-[0_0_12px_rgba(255,255,255,0.06)]" : "text-muted-foreground border border-transparent hover:border-white/5"}`}
             >
               {r === 7 ? "Week" : r === 30 ? "Month" : "Quarter"}
             </button>

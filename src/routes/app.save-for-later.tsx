@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { SaveForLaterPanel } from "@/components/profile/SaveForLaterPanel";
-import { PullQuote } from "@/components/editorial/PullQuote";
 
 export const Route = createFileRoute("/app/save-for-later")({ component: SaveForLaterPage });
 

@@ -104,10 +104,6 @@ export function StatCardPremium({
       transition={{ type: "spring", stiffness: 350, damping: 25 }}
       className="glass group relative overflow-hidden rounded-3xl p-5 transition-shadow duration-[var(--dur-large)] hover:shadow-[var(--shadow-elevated)]"
     >
-      <div
-        className="pointer-events-none absolute -right-16 -top-16 h-28 w-28 rounded-full blur-3xl opacity-25 transition group-hover:opacity-40"
-        style={{ background: accent ?? "oklch(0.72 0.18 255 / 0.4)" }}
-      />
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px"

@@ -17,7 +17,7 @@ export function PremiumErrorState({
   return (
     <PremiumGlass variant="strong" className="mx-auto max-w-2xl" role="alert">
       <div className="p-10 text-center md:p-12">
-        <div className="text-[10px] uppercase tracking-[0.24em] text-primary/85">{eyebrow}</div>
+        <div className="text-eyebrow text-primary/85">{eyebrow}</div>
         <h2 className="mt-3 font-display text-3xl tracking-tight md:text-4xl">{title}</h2>
         {description && (
           <p className="mx-auto mt-3 max-w-prose text-sm text-muted-foreground">{description}</p>

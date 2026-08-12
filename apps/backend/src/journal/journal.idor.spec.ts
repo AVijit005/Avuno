@@ -85,6 +85,23 @@ function createHarness() {
       attached.push({ type, mediaId });
       return Promise.resolve();
     },
+    findQuoteById: (id: string, userId?: string) => {
+      if (id === 'quote-mine') {
+        if (userId && userId !== 'user-1') return Promise.resolve(null);
+        return Promise.resolve({ id, userId: 'user-1', content: 'Mine', createdAt: new Date(), updatedAt: new Date() });
+      }
+      if (id === 'quote-theirs') {
+        if (userId && userId !== 'user-2') return Promise.resolve(null);
+        return Promise.resolve({
+          id,
+          userId: 'user-2',
+          content: 'Theirs',
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        });
+      }
+      return Promise.resolve(null);
+    },
   };
 
   const service = new JournalService(
@@ -113,6 +130,17 @@ describe('Journal media lookup — ownership scoping', () => {
 
   beforeEach(() => {
     harness = createHarness();
+  });
+
+  describe('getQuote', () => {
+    it("returns the caller's own quote", async () => {
+      const quote = await harness.service.getQuote('quote-mine', 'user-1');
+      expect(quote).toBeDefined();
+    });
+
+    it("refuses another user's quote", async () => {
+      await expect(harness.service.getQuote('quote-theirs', 'user-1')).rejects.toBeInstanceOf(NotFoundException);
+    });
   });
 
   describe('createQuote', () => {

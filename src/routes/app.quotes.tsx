@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { PullQuote } from "@/components/editorial/PullQuote";
 import { YourQuotesRail } from "@/components/memory/YourQuotesRail";
 
 export const Route = createFileRoute("/app/quotes")({ component: QuotesPage });

@@ -132,7 +132,7 @@ export function MediaCard({
             </div>
           )}
         </motion.div>
-        <div className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center opacity-0 translate-y-2 scale-95 transition-all duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100">
+        <div className="pointer-events-none absolute inset-x-2 bottom-2 z-20 flex justify-center opacity-0 translate-y-2 scale-95 transition-[transform,opacity] duration-300 ease-out group-hover:opacity-100 group-hover:translate-y-0 group-hover:scale-100">
           <div className="pointer-events-auto w-full max-w-[220px]">
             <ItemActionBar id={item.id} title={item.title} variant="overlay" />
           </div>

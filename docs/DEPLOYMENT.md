@@ -54,23 +54,28 @@ yet confirmed from repository configuration alone. The expected flow is:
 
 ## Rollback
 
-No documented automated rollback procedure exists in the repository.
-Manual rollback would involve:
+A safe local rollback helper is provided in the repository:
 
-1. SSH into VPS
-2. `git log --oneline -5` (identify previous known-good commit)
-3. `git checkout <previous-commit>`
-4. Rebuild and restart Docker containers
-5. Verify health endpoint
+```bash
+./scripts/rollback.sh
+```
 
-> Classification: **P2 OPERATIONAL HARDENING** — A formal rollback
-> script is recommended but not currently a production blocker.
+This script will:
+
+1. Identify the previous known revision.
+2. Warn about database migration limitations (Prisma migrations are forward-only; a destructive migration requires a manual database restore).
+3. Request explicit confirmation before `git reset --hard`.
+4. Rebuild and restart the Docker containers.
+5. Wait for and verify the `GET /api/health` endpoint.
+
+> Classification: **P0 OPERATIONAL HARDENING** — Rollback script implemented and available.
 
 ## Environment Variables
 
 See `apps/backend/.env.example` for the complete list.
 
 Critical production variables (all required):
+
 - `DATABASE_URL` — PostgreSQL connection string
 - `REDIS_PASSWORD` — Redis authentication
 - `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` — Token signing
@@ -84,7 +89,7 @@ Critical production variables (all required):
 - **Script**: `apps/backend/scripts/backup.sh`
 - **Restore**: `apps/backend/scripts/restore.sh`
 - **Schedule**: Daily at 03:00 UTC via backup sidecar container
-- **Encryption**: Optional `age` encryption via `BACKUP_AGE_RECIPIENT`
+- **Encryption**: Required in production via `BACKUP_AGE_RECIPIENT` (fail-closed)
 - **Offsite**: Optional S3 upload via `BACKUP_S3_URI`
 - **Retention**: Configurable via `BACKUP_RETENTION_DAYS` (default: 7)
 

@@ -82,7 +82,7 @@ export const BottomBorderInput = forwardRef<HTMLInputElement, Props>(function Bo
             onBlur?.(e);
           }}
           placeholder={`Enter ${label.toLowerCase()}`}
-          className={`login-input-field relative z-0 flex-1 w-full h-[52px] rounded-full text-base tracking-wide placeholder:text-white/20 transition-all ${icon ? "pl-12" : "pl-5"} ${success ? "pr-12" : "pr-5"}`}
+          className={`login-input-field relative z-0 flex-1 w-full h-[52px] rounded-full text-base tracking-wide placeholder:text-white/20 transition-[padding,border-color] ${icon ? "pl-12" : "pl-5"} ${success ? "pr-12" : "pr-5"}`}
           style={{
             caretColor: "#b0a8ff",
             ...(isError ? { borderColor: "rgba(252,165,165,0.5)" } : {}),

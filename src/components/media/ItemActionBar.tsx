@@ -256,7 +256,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
           title={v.label}
           {...heroMotion}
           className={cn(
-            "press-scale overflow-hidden min-h-0 min-w-0 transition-all duration-300 ease-out",
+            "press-scale overflow-hidden min-h-0 min-w-0 transition-[transform,background-color,color,box-shadow] duration-300 ease-out",
             variant === "overlay"
               ? "flex aspect-square flex-1 items-center justify-center rounded-full bg-white/[0.10] text-white ring-1 ring-white/15 hover:-translate-y-[2px] hover:bg-white hover:text-black hover:shadow-[0_8px_16px_-4px_var(--primary)]"
               : "inline-flex shrink-0 items-center gap-1.5 rounded-full bg-gradient-to-r from-primary to-secondary text-xs font-medium text-primary-foreground",
@@ -276,7 +276,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
         aria-pressed={fav}
         {...heroMotion}
         className={cn(
-          "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-all duration-300 ease-out",
+          "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-[transform,background-color,box-shadow] duration-300 ease-out",
           variant === "overlay"
             ? "flex aspect-square flex-1 items-center justify-center rounded-full ring-1 ring-white/10 hover:-translate-y-[2px] hover:shadow-[0_8px_16px_-4px_var(--primary)]"
             : "grid h-8 w-8 place-items-center rounded-full ring-1 ring-white/10",
@@ -299,7 +299,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
         aria-pressed={bookmarked}
         {...heroMotion}
         className={cn(
-          "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-all duration-300 ease-out",
+          "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-[transform,background-color,box-shadow] duration-300 ease-out",
           variant === "overlay"
             ? "flex aspect-square flex-1 items-center justify-center rounded-full ring-1 ring-white/10 hover:-translate-y-[2px] hover:shadow-[0_8px_16px_-4px_var(--primary)]"
             : "grid h-8 w-8 place-items-center rounded-full ring-1 ring-white/10",
@@ -322,7 +322,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
             aria-label="More actions"
             {...heroMotion}
             className={cn(
-              "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-all duration-300 ease-out",
+              "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-[transform,background-color,color,box-shadow] duration-300 ease-out",
               variant === "overlay"
                 ? "flex aspect-square flex-1 items-center justify-center rounded-full bg-white/[0.06] text-white ring-1 ring-white/10 hover:-translate-y-[2px] hover:bg-white/[0.15] hover:ring-white/20 hover:shadow-[0_8px_16px_-4px_oklch(0.72_0.18_255/0.3)]"
                 : "grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] text-muted-foreground ring-1 ring-white/10 hover:bg-white/[0.15] hover:text-foreground",

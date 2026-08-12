@@ -8,6 +8,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       position="bottom-right"
       offset={24}
+      mobileOffset={96}
       gap={10}
       duration={4500}
       toastOptions={{

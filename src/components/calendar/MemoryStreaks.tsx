@@ -43,7 +43,7 @@ function StreakCard({ s, idx }: { s: StreakData; idx: number }) {
       role="figure"
       aria-label={`${s.label}: ${s.value} of ${s.total} days, ${Math.round(progress)}% complete`}
     >
-      <PremiumGlass className="h-full border-white/[0.04] group-hover:border-white/[0.1] shadow-lg group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-all duration-500 overflow-hidden">
+      <PremiumGlass className="h-full border-white/[0.04] group-hover:border-white/[0.1] shadow-lg group-hover:shadow-[0_20px_40px_rgba(0,0,0,0.4)] transition-[border-color,box-shadow] duration-500 overflow-hidden">
         <div className="flex flex-col items-center justify-between px-4 py-8 h-full relative box-border w-full z-10 min-h-[230px]">
           <div className="relative flex items-center justify-center w-28 h-28 mb-6">
             <div

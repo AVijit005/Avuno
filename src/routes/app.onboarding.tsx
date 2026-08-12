@@ -39,12 +39,10 @@ function OnboardingPage() {
     <div className="flex min-h-screen flex-col items-center justify-center p-6 pb-32">
       <PremiumGlass className="w-full max-w-2xl p-8 md:p-12" variant="strong">
         {step === 1 ? (
-          <div className="animate-fade-blur-in">
-            <h1 className="font-display text-4xl tracking-tight md:text-5xl">
-              What stories do you follow?
-            </h1>
-            <p className="mt-4 text-muted-foreground">
-              Select the types of media you want to track in Avuno. You can change this later.
+          <div>
+            <h1 className="font-display text-3xl tracking-tight">Select Media Types</h1>
+            <p className="mt-2 text-muted-foreground">
+              Choose the categories you want to track. You can update these preferences later.
             </p>
             <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-3">
               {MEDIA_TYPES.map((t) => {
@@ -53,7 +51,7 @@ function OnboardingPage() {
                   <button
                     key={t.id}
                     onClick={() => toggle(t.id)}
-                    className={`press-scale relative flex flex-col items-center gap-3 rounded-2xl border border-white/10 p-6 transition-all duration-[var(--dur-normal)] ${
+                    className={`press-scale relative flex flex-col items-center gap-3 rounded-2xl border border-white/10 p-6 transition-[background-color,box-shadow] duration-[var(--dur-normal)] ${
                       isActive
                         ? "bg-white/[0.08] shadow-[0_0_20px_var(--accent)]"
                         : "bg-black/20 hover:bg-white/[0.04]"
@@ -82,16 +80,14 @@ function OnboardingPage() {
             </div>
           </div>
         ) : (
-          <div className="animate-fade-blur-in text-center">
-            <div className="mx-auto mb-8 grid h-20 w-20 place-items-center rounded-full bg-white/[0.06]">
-              <Film className="h-10 w-10 text-primary" />
+          <div className="text-center">
+            <div className="mx-auto mb-6 grid h-16 w-16 place-items-center rounded-full bg-white/[0.06]">
+              <Film className="h-8 w-8 text-primary" />
             </div>
-            <h1 className="font-display text-4xl tracking-tight md:text-5xl">
-              Your library is ready.
-            </h1>
-            <p className="mx-auto mt-4 max-w-md text-muted-foreground">
-              Start by adding your first story. Search for a movie you recently watched, a book
-              you're reading, or a game you love.
+            <h1 className="font-display text-3xl tracking-tight">Library Ready</h1>
+            <p className="mx-auto mt-2 max-w-md text-muted-foreground">
+              Start adding your media. Search for a movie, book, or game you've recently engaged
+              with.
             </p>
             <div className="mt-10">
               <PremiumButton onClick={handleNext} size="lg">

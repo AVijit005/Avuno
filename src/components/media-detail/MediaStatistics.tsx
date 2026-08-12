@@ -32,11 +32,6 @@ export function MediaStatistics({ item }: { item: UIMediaItem }) {
             transition={{ duration: 0.6, delay: i * 0.05, ease: [0.22, 1, 0.36, 1] }}
             className="glass relative overflow-hidden rounded-2xl p-5 hover-lift"
           >
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -top-12 -right-12 h-32 w-32 rounded-full opacity-30 blur-3xl"
-              style={{ background: accent }}
-            />
             <div className="grid h-9 w-9 place-items-center rounded-xl bg-white/[0.05] ring-1 ring-white/10 text-primary">
               <Icon className="h-4 w-4" />
             </div>

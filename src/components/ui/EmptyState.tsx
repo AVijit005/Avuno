@@ -29,16 +29,8 @@ export function EmptyState({
       initial={{ opacity: 0, y: reduced ? 0 : 12, filter: reduced ? "none" : "blur(6px)" }}
       animate={{ opacity: 1, y: 0, filter: reduced ? "none" : "blur(0px)" }}
       transition={{ duration: reduced ? 0 : dur.large, ease: ease.out }}
-      className={`glass relative grid place-items-center overflow-hidden rounded-[32px] px-8 py-14 text-center md:px-12 ${className}`}
+      className={`glass-subtle relative grid place-items-center overflow-hidden rounded-[32px] px-8 py-14 text-center md:px-12 ${className}`}
     >
-      {/* ambient glow */}
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-16 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full opacity-20 blur-2xl"
-        style={{
-          background: "radial-gradient(circle, oklch(0.72 0.18 255 / 0.35), transparent 65%)",
-        }}
-      />
       {icon && (
         <motion.div
           animate={reduced ? {} : { y: [0, -6, 0] }}
@@ -65,11 +57,7 @@ export function EmptyState({
           {secondaryAction}
         </div>
       )}
-      {hint && (
-        <p className="relative mt-4 text-[11px] uppercase tracking-[0.2em] text-muted-foreground/70">
-          {hint}
-        </p>
-      )}
+      {hint && <p className="relative mt-4 text-eyebrow opacity-70">{hint}</p>}
     </motion.div>
   );
 }

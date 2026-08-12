@@ -39,9 +39,9 @@ export function GlobalShortcuts() {
           exit={{ opacity: 0 }}
           className="fixed inset-0 z-[120] grid place-items-center bg-background/45 px-4 backdrop-blur-2xl"
           onClick={() => setHelp(false)}
-          role="button"
-          aria-label="Close shortcuts help"
-          tabIndex={0}
+          role="dialog"
+          aria-modal="true"
+          aria-label="Keyboard shortcuts"
         >
           <motion.div
             initial={{ y: 8, opacity: 0 }}

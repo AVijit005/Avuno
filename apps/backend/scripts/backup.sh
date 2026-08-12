@@ -47,6 +47,10 @@ command -v pg_dump >/dev/null 2>&1 || fail "pg_dump not found (install postgresq
 
 ENCRYPT=1
 if [ -z "${BACKUP_AGE_RECIPIENT:-}" ]; then
+  # Enforce encryption by default for production
+  if [ "${NODE_ENV:-production}" = "production" ] && [ "${ALLOW_PLAINTEXT_BACKUP:-0}" != "1" ]; then
+    fail "BACKUP_AGE_RECIPIENT is not set. Production backups MUST be encrypted. To explicitly allow plaintext backups, set ALLOW_PLAINTEXT_BACKUP=1."
+  fi
   ENCRYPT=0
   log "WARNING: BACKUP_AGE_RECIPIENT not set — the dump will NOT be encrypted."
   log "         A plaintext dump contains every user record. Set a recipient:"

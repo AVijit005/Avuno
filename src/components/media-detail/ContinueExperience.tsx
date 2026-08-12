@@ -30,11 +30,6 @@ export function ContinueExperience({ item }: { item: UIMediaItem }) {
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="glass relative overflow-hidden rounded-3xl p-6 md:p-8"
     >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-20 -right-20 h-48 w-48 rounded-full opacity-30 blur-3xl"
-        style={{ background: accent }}
-      />
       <div className="grid items-center gap-6 md:grid-cols-[1fr_auto]">
         <div className="min-w-0">
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">

@@ -1,6 +1,23 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useMemory, useJournalEntry } from "@/hooks/use-journal";
+import {
+  useMemory,
+  useJournalEntry,
+  useUpdateMemory,
+  useDeleteMemory,
+  useQuote,
+} from "@/hooks/use-journal";
 import { useMedia } from "@/hooks/use-media";
+import { useState } from "react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 import {
   Lock,
   Globe,
@@ -23,6 +40,49 @@ function MemoryDetail() {
   const { id } = Route.useParams();
   const navigate = useNavigate();
   const { data: memory, isLoading, isError } = useMemory(id);
+  const updateMemory = useUpdateMemory();
+  const deleteMemory = useDeleteMemory();
+
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
+
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+
+  const handleOpenEdit = () => {
+    if (memory) {
+      setEditTitle(memory.title || "");
+      setEditDescription(memory.description || "");
+      setIsEditDialogOpen(true);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      await updateMemory.mutateAsync({
+        id,
+        input: {
+          title: editTitle,
+          description: editDescription,
+        },
+      });
+      toast.success("Memory updated successfully");
+      setIsEditDialogOpen(false);
+    } catch {
+      toast.error("Failed to update memory");
+    }
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteMemory.mutateAsync(id);
+      toast.success("Memory deleted");
+      setIsDeleteDialogOpen(false);
+      navigate({ to: "/app/memories" });
+    } catch {
+      toast.error("Failed to delete memory");
+    }
+  };
 
   if (isLoading) {
     return (
@@ -124,24 +184,91 @@ function MemoryDetail() {
 
       {/* ACTIONS */}
       <footer className="pt-12 border-t border-border/40 flex items-center justify-end gap-4">
-        {/* Update and Delete will be wired to API in a future phase if not provided yet. */}
         <button
-          disabled
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2 text-muted-foreground text-sm opacity-50 cursor-not-allowed"
-          title="Edit functionality coming soon"
+          onClick={handleOpenEdit}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
         >
           <Edit className="w-4 h-4" />
           Edit
         </button>
         <button
-          disabled
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-400/10 text-red-400/40 text-sm opacity-50 cursor-not-allowed"
-          title="Delete functionality coming soon"
+          onClick={() => setIsDeleteDialogOpen(true)}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-400/10 text-red-400 text-sm hover:bg-red-400/20 transition-colors"
         >
           <Trash2 className="w-4 h-4" />
           Delete
         </button>
       </footer>
+
+      {/* EDIT DIALOG */}
+      <Dialog open={isEditDialogOpen} onOpenChange={setIsEditDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Edit Memory</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Title</label>
+              <Input
+                value={editTitle}
+                onChange={(e) => setEditTitle(e.target.value)}
+                placeholder="Memory title"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">Description</label>
+              <textarea
+                value={editDescription}
+                onChange={(e) => setEditDescription(e.target.value)}
+                placeholder="Add some details..."
+                className="flex min-h-[100px] w-full rounded-xl border border-border/60 bg-foreground/[0.04] px-3 py-2 text-base shadow-none transition-[color,background-color,border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-ring/30 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+              />
+            </div>
+          </div>
+          <DialogFooter>
+            <button
+              onClick={() => setIsEditDialogOpen(false)}
+              className="px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleSaveEdit}
+              disabled={updateMemory.isPending}
+              className="px-4 py-2 rounded-full bg-foreground text-background text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+            >
+              {updateMemory.isPending ? "Saving..." : "Save Changes"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {/* DELETE DIALOG */}
+      <Dialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Memory</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this memory? This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="mt-4">
+            <button
+              onClick={() => setIsDeleteDialogOpen(false)}
+              className="px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleDelete}
+              disabled={deleteMemory.isPending}
+              className="px-4 py-2 rounded-full bg-red-400 text-white text-sm hover:bg-red-500 transition-colors disabled:opacity-50"
+            >
+              {deleteMemory.isPending ? "Deleting..." : "Delete"}
+            </button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
@@ -174,17 +301,45 @@ function JournalEvidence({ journalId }: { journalId: string }) {
 }
 
 function QuoteEvidence({ quoteId }: { quoteId: string }) {
-  // We do not have useQuote yet according to Phase 4C-3 rules
+  const { data: quote, isLoading, isError } = useQuote(quoteId);
+
+  if (isLoading) return <div className="h-32 bg-foreground/5 rounded-2xl animate-pulse" />;
+
+  if (isError || !quote) {
+    return (
+      <section className="space-y-4">
+        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+          <Quote className="w-4 h-4" />
+          Saved quote
+        </h3>
+        <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl flex flex-col items-center justify-center text-center">
+          <Quote className="w-8 h-8 text-muted-foreground/30 mb-3" />
+          <p className="text-muted-foreground text-sm font-medium">Quote unavailable</p>
+          <p className="text-muted-foreground/70 text-xs mt-1 max-w-[200px]">
+            This quote may have been removed or is no longer accessible.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section className="space-y-4">
       <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
         <Quote className="w-4 h-4" />
         Saved quote
       </h3>
-      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl">
-        <p className="text-muted-foreground italic text-sm">
-          Quote content will be available in a future phase.
-        </p>
+      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl relative group">
+        <Quote className="absolute top-6 left-6 w-8 h-8 text-foreground/5 pointer-events-none" />
+        <div className="prose prose-invert max-w-none relative z-10 pl-6 border-l-2 border-primary/20">
+          <p className="text-foreground italic leading-relaxed text-lg">"{quote.content}"</p>
+          {quote.speaker && (
+            <p className="text-muted-foreground text-sm mt-3 font-medium flex items-center gap-2">
+              <span className="w-4 h-[1px] bg-muted-foreground/30 block"></span>
+              {quote.speaker}
+            </p>
+          )}
+        </div>
       </div>
     </section>
   );

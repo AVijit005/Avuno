@@ -35,7 +35,7 @@ export function PremiumSquircle({ icon, size = "md", variant = "glass", classNam
     >
       <span
         className={cn(
-          "grid place-items-center transition-all duration-500 ease-out active:scale-95 group-hover/squircle:scale-110",
+          "grid place-items-center transition-[transform,box-shadow,background,ring-color] duration-500 ease-out active:scale-95 group-hover/squircle:scale-110 motion-reduce:transform-none",
           variants[variant],
           sizes[size],
         )}

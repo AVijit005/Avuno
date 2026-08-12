@@ -63,6 +63,7 @@ export const queryKeys = {
     entries: (params?: Record<string, unknown>) =>
       [...queryKeys.journal.all, "entries", params ? JSON.stringify(params) : ""] as const,
     entry: (id: string) => [...queryKeys.journal.all, "entry", id] as const,
+    quote: (id: string) => [...queryKeys.journal.all, "quote", id] as const,
     stats: () => [...queryKeys.journal.all, "stats"] as const,
   },
   memories: {

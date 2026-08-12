@@ -22,7 +22,7 @@ export function MediaHeatmap({ heatmap }: Props) {
                 <Tooltip key={`${c.w}-${c.d}`}>
                   <TooltipTrigger asChild>
                     <div
-                      className="relative aspect-square rounded-[3px] cursor-crosshair overflow-hidden group transition-all duration-300 hover:scale-110 hover:z-10 hover:shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
+                      className="relative aspect-square rounded-[3px] cursor-crosshair overflow-hidden group transition-[transform,box-shadow] duration-300 hover:scale-110 hover:z-10 hover:shadow-[0_4px_12px_rgba(0,0,0,0.5)]"
                       role="img"
                       aria-label={`Week ${c.w + 1}, Day ${c.d + 1}: ${(c.v * 100).toFixed(0)}% activity`}
                       style={{

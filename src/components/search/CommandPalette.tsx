@@ -536,7 +536,7 @@ function RowContent({ row }: { row: Row }) {
           alt={row.item.title}
           aspectRatio="poster"
           className="h-10 w-7 rounded-md object-cover ring-1 ring-white/10"
-          style={{ viewTransitionName: `poster-${row.item.id}` }}
+          style={{ viewTransitionName: `search-poster-${row.item.id}` }}
         />
         <div className="min-w-0 flex-1 ml-3">
           <div className="truncate text-sm">{row.item.title}</div>

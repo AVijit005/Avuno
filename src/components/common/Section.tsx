@@ -50,9 +50,11 @@ export function StatCard({
   return (
     <PremiumGlass
       glow={accent ?? "oklch(0.72 0.18 255 / 0.35)"}
-      className="p-5 cursor-pointer press-scale"
+      className="p-5 cursor-pointer press-scale focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
+      role="button"
+      tabIndex={0}
     >
       <div className="text-[11px] uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
       <div className="mt-2 font-display text-4xl tracking-tight">{value}</div>
@@ -72,9 +74,11 @@ export function EmptyState({
 }) {
   return (
     <PremiumGlass
-      className="relative overflow-hidden p-10 text-center cursor-pointer press-scale"
+      className="relative overflow-hidden p-10 text-center cursor-pointer press-scale focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
       whileHover={{ y: -4 }}
       whileTap={{ scale: 0.98 }}
+      role="button"
+      tabIndex={0}
     >
       <div className="mx-auto mb-5 grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-primary/30 to-secondary/30">
         <div className="h-6 w-6 rounded-md bg-gradient-to-br from-primary to-secondary animate-slow-float" />

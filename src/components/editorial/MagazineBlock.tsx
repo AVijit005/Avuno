@@ -33,7 +33,13 @@ export function MagazineBlock({
           className="relative aspect-[5/6] overflow-hidden rounded-3xl ring-1 ring-white/8"
           style={{ boxShadow: "0 40px 80px -40px oklch(0 0 0 / 0.85)" }}
         >
-          <img src={image} alt="" loading="lazy" className="h-full w-full object-cover" />
+          <img
+            src={image}
+            alt=""
+            loading="lazy"
+            decoding="async"
+            className="h-full w-full object-cover"
+          />
           <span
             aria-hidden
             className="absolute inset-0"

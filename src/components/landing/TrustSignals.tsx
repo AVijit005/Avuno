@@ -71,7 +71,7 @@ export function TrustSignals() {
                 duration: 0.6,
                 ease: [0.22, 1, 0.36, 1],
               }}
-              className="group glass-elevated relative overflow-hidden rounded-3xl p-6 ring-1 ring-white/[0.06] transition-all duration-500 hover:ring-primary/20"
+              className="group glass-elevated relative overflow-hidden rounded-3xl p-6 ring-1 ring-white/[0.06] transition-[box-shadow] duration-500 hover:ring-primary/20"
             >
               {/* Hover glow */}
               <div

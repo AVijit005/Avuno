@@ -68,7 +68,7 @@ export function MediaConstellation() {
             <button
               key={cat}
               onClick={() => toggleCategory(cat)}
-              className={`shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide transition-all duration-300 border ${
+              className={`shrink-0 px-2.5 py-1 rounded-full text-[10px] font-semibold tracking-wide transition-[background-color,border-color,color,box-shadow] duration-300 border ${
                 isSelected
                   ? "bg-white/10 border-white/20 text-white shadow-[0_0_10px_rgba(255,255,255,0.1)] backdrop-blur-md"
                   : "bg-transparent border-white/5 text-muted-foreground/60 hover:bg-white/5 hover:text-white"
@@ -204,7 +204,7 @@ export function MediaConstellation() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
                     key={item.label}
-                    className={`flex-1 min-w-[140px] max-w-[200px] flex flex-col gap-3 p-4 rounded-2xl transition-all duration-300 cursor-pointer border ${isActive ? "bg-white/10 border-white/10 shadow-xl scale-[1.02]" : "border-transparent hover:bg-white/[0.04]"}`}
+                    className={`flex-1 min-w-[140px] max-w-[200px] flex flex-col gap-3 p-4 rounded-2xl transition-[transform,box-shadow,background-color,border-color] duration-300 cursor-pointer border ${isActive ? "bg-white/10 border-white/10 shadow-xl scale-[1.02]" : "border-transparent hover:bg-white/[0.04]"}`}
                     onMouseEnter={() => setHovered(item.label)}
                     onMouseLeave={() => setHovered(null)}
                   >

@@ -281,6 +281,7 @@ export function AuthStage() {
                       alt=""
                       aria-hidden
                       loading="lazy"
+                      decoding="async"
                       className="h-full w-full object-cover"
                     />
                     {/* Cinematic dim & vignette per poster */}

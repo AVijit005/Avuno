@@ -38,7 +38,9 @@ describe('Memory Relations E2E', () => {
     const journal = await prisma.journalEntry.create({ data: { userId: user.id, content: 'j' } });
     const quote = await prisma.favoriteQuote.create({ data: { userId: user.id, content: 'q' } });
     try {
-      await prisma.memory.create({ data: { userId: user.id, title: 'Test 4', journalId: journal.id, quoteId: quote.id } });
+      await prisma.memory.create({
+        data: { userId: user.id, title: 'Test 4', journalId: journal.id, quoteId: quote.id },
+      });
       expect(true).toBe(false); // Should not reach here
     } catch (e: any) {
       expect(e.message).toMatch(/check_evidence_limit/);
@@ -65,7 +67,12 @@ describe('Memory Relations E2E', () => {
     const movie1 = await prisma.movie.create({ data: { title: 'M1', slug: 'm1_t7_' + Date.now() } });
     const movie2 = await prisma.movie.create({ data: { title: 'M2', slug: 'm2_t7_' + Date.now() } });
     const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 7' } });
-    await prisma.memoryMedia.createMany({ data: [{ memoryId: memory.id, movieId: movie1.id }, { memoryId: memory.id, movieId: movie2.id }] });
+    await prisma.memoryMedia.createMany({
+      data: [
+        { memoryId: memory.id, movieId: movie1.id },
+        { memoryId: memory.id, movieId: movie2.id },
+      ],
+    });
     const fetched = await prisma.memory.findUnique({ where: { id: memory.id }, include: { media: true } });
     expect(fetched!.media.length).toBe(2);
   });
@@ -134,14 +141,18 @@ describe('Memory Relations E2E', () => {
 
   it('TEST 15: Timeline without Memory -> PASS', async () => {
     const user = await prisma.user.create({ data: { email: 't15_' + Date.now() + '@a.com' } });
-    const tl = await prisma.timelineEvent.create({ data: { userId: user.id, title: 'TL', type: 'JOURNAL_CREATED', eventDate: new Date() } });
+    const tl = await prisma.timelineEvent.create({
+      data: { userId: user.id, title: 'TL', type: 'JOURNAL_CREATED', eventDate: new Date() },
+    });
     expect(tl.id).toBeDefined();
   });
 
   it('TEST 16: Timeline with Memory -> PASS', async () => {
     const user = await prisma.user.create({ data: { email: 't16_' + Date.now() + '@a.com' } });
     const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 16' } });
-    const tl = await prisma.timelineEvent.create({ data: { userId: user.id, title: 'TL', type: 'JOURNAL_CREATED', eventDate: new Date(), memoryId: memory.id } });
+    const tl = await prisma.timelineEvent.create({
+      data: { userId: user.id, title: 'TL', type: 'JOURNAL_CREATED', eventDate: new Date(), memoryId: memory.id },
+    });
     expect(tl.memoryId).toBe(memory.id);
   });
 
@@ -153,10 +164,10 @@ describe('Memory Relations E2E', () => {
     const memB = await prisma.memory.create({ data: { userId: user.id, title: 'Mem B' } });
     await prisma.memoryMedia.create({ data: { memoryId: memA.id, movieId: movieA.id } });
     await prisma.memoryMedia.create({ data: { memoryId: memB.id, movieId: movieB.id } });
-    
+
     // Simulate repository query
     const results = await prisma.memory.findMany({
-      where: { userId: user.id, media: { some: { OR: [{ movieId: movieA.id }] } } }
+      where: { userId: user.id, media: { some: { OR: [{ movieId: movieA.id }] } } },
     });
     expect(results.length).toBe(1);
     expect(results[0].id).toBe(memA.id);
@@ -168,9 +179,9 @@ describe('Memory Relations E2E', () => {
     const movieB = await prisma.movie.create({ data: { title: 'B', slug: 'b_t18_' + Date.now() } });
     const memA = await prisma.memory.create({ data: { userId: user.id, title: 'Mem A' } });
     await prisma.memoryMedia.create({ data: { memoryId: memA.id, movieId: movieA.id } });
-    
+
     const results = await prisma.memory.findMany({
-      where: { userId: user.id, media: { some: { OR: [{ movieId: movieB.id }] } } }
+      where: { userId: user.id, media: { some: { OR: [{ movieId: movieB.id }] } } },
     });
     expect(results.length).toBe(0);
   });
@@ -180,10 +191,10 @@ describe('Memory Relations E2E', () => {
     const journalX = await prisma.journalEntry.create({ data: { userId: user.id, content: 'jX' } });
     const journalY = await prisma.journalEntry.create({ data: { userId: user.id, content: 'jY' } });
     const memX = await prisma.memory.create({ data: { userId: user.id, title: 'Mem X', journalId: journalX.id } });
-    const memY = await prisma.memory.create({ data: { userId: user.id, title: 'Mem Y', journalId: journalY.id } });
-    
+    await prisma.memory.create({ data: { userId: user.id, title: 'Mem Y', journalId: journalY.id } });
+
     const results = await prisma.memory.findMany({
-      where: { userId: user.id, journalId: journalX.id }
+      where: { userId: user.id, journalId: journalX.id },
     });
     expect(results.length).toBe(1);
     expect(results[0].id).toBe(memX.id);
@@ -193,11 +204,11 @@ describe('Memory Relations E2E', () => {
     const userA = await prisma.user.create({ data: { email: 't20A_' + Date.now() + '@a.com' } });
     const userB = await prisma.user.create({ data: { email: 't20B_' + Date.now() + '@a.com' } });
     const journalB = await prisma.journalEntry.create({ data: { userId: userB.id, content: 'jB' } });
-    const memB = await prisma.memory.create({ data: { userId: userB.id, title: 'Mem B', journalId: journalB.id } });
-    
+    await prisma.memory.create({ data: { userId: userB.id, title: 'Mem B', journalId: journalB.id } });
+
     // User A querying User B's journal
     const results = await prisma.memory.findMany({
-      where: { userId: userA.id, journalId: journalB.id }
+      where: { userId: userA.id, journalId: journalB.id },
     });
     expect(results.length).toBe(0);
   });
@@ -206,10 +217,10 @@ describe('Memory Relations E2E', () => {
     const user = await prisma.user.create({ data: { email: 't21_' + Date.now() + '@a.com' } });
     const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 21' } });
     const movie = await prisma.movie.create({ data: { title: 'M1', slug: 'm1_t21_' + Date.now() } });
-    
+
     // simulate addMemoryMedia
     await prisma.memoryMedia.create({ data: { memoryId: memory.id, movieId: movie.id } });
-    
+
     const relations = await prisma.memoryMedia.findMany({ where: { memoryId: memory.id, movieId: movie.id } });
     expect(relations.length).toBe(1);
   });
@@ -219,13 +230,13 @@ describe('Memory Relations E2E', () => {
     const memory = await prisma.memory.create({ data: { userId: user.id, title: 'Test 22' } });
     const movie = await prisma.movie.create({ data: { title: 'M1', slug: 'm1_t22_' + Date.now() } });
     await prisma.memoryMedia.create({ data: { memoryId: memory.id, movieId: movie.id } });
-    
+
     // simulate removeMemoryMedia
     await prisma.memoryMedia.deleteMany({ where: { memoryId: memory.id, movieId: movie.id } });
-    
+
     const relations = await prisma.memoryMedia.findMany({ where: { memoryId: memory.id, movieId: movie.id } });
     expect(relations.length).toBe(0);
-    
+
     // Memory and Media should still exist
     const m1 = await prisma.memory.findUnique({ where: { id: memory.id } });
     const m2 = await prisma.movie.findUnique({ where: { id: movie.id } });
@@ -233,4 +244,3 @@ describe('Memory Relations E2E', () => {
     expect(m2).not.toBeNull();
   });
 });
-

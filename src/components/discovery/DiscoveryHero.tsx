@@ -25,7 +25,7 @@ interface Props {
 }
 
 const secondaryBtnClass =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-white/[0.03] text-xs text-muted-foreground ring-1 ring-white/10 backdrop-blur-xl transition-all duration-300 ease-out press-scale hover:-translate-y-[2px] hover:bg-white/[0.08] hover:text-foreground hover:ring-white/20 hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5),0_0_16px_oklch(1_1_1/0.1)]";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full bg-white/[0.03] text-xs text-muted-foreground ring-1 ring-white/10 backdrop-blur-xl transition-[transform,background-color,color,box-shadow] duration-300 ease-out press-scale hover:-translate-y-[2px] hover:bg-white/[0.08] hover:text-foreground hover:ring-white/20 hover:shadow-[0_8px_16px_-4px_oklch(0_0_0/0.5),0_0_16px_oklch(1_1_1/0.1)]";
 
 export function DiscoveryHero({ className, recommendedToday: rec }: Props) {
   if (!rec) return null;

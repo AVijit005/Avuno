@@ -221,7 +221,7 @@ function Slide({
               alt=""
               className="absolute inset-0 h-full w-full object-cover opacity-20"
             />
-            <div className="absolute inset-0 bg-background/80 backdrop-blur-3xl" />
+            <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" />
           </>
         )}
       </div>

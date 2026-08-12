@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { motion, AnimatePresence } from "motion/react";
@@ -37,6 +37,28 @@ function LibraryIndex() {
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [favorite, setFavorite] = useState<boolean>(false);
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
+  const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
+
+  // Keyboard friendly interaction for search
+  const searchInputRef = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "f" && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        searchInputRef.current?.focus();
+      }
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
 
   const { data: stats } = useLibraryStats();
 
@@ -45,6 +67,7 @@ function LibraryIndex() {
       ...(mediaType !== "all" && { mediaType }),
       ...(status !== "all" && { status }),
       ...(favorite && { favorite: true }),
+      ...(debouncedSearch && { search: debouncedSearch }),
       sortBy,
       sortOrder,
       limit: 50,
@@ -120,15 +143,43 @@ function LibraryIndex() {
 
       {/* FILTER BAR */}
       <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        {/* Search - Disabled per Phase 3 specs until backend supports it natively */}
+        {/* Search */}
         <div className="relative flex-1 max-w-sm">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground/50" />
           <input
+            ref={searchInputRef}
             type="text"
-            disabled
-            placeholder="Search library (Coming soon)..."
-            className="h-10 w-full rounded-full border border-white/10 bg-white/5 pl-9 pr-4 text-sm placeholder:text-muted-foreground/50 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20 disabled:opacity-50"
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            placeholder="Search your library (⌘F)..."
+            className="h-10 w-full rounded-full border border-white/10 bg-white/5 pl-9 pr-8 text-sm placeholder:text-muted-foreground/50 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20 transition-colors"
+            onKeyDown={(e) => {
+              if (e.key === "Escape") {
+                setSearchTerm("");
+                searchInputRef.current?.blur();
+              }
+            }}
           />
+          {searchTerm && (
+            <button
+              onClick={() => setSearchTerm("")}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground/50 hover:text-foreground transition-colors"
+            >
+              <svg
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
+          )}
         </div>
 
         <div className="flex items-center gap-2">
@@ -206,17 +257,18 @@ function LibraryIndex() {
           ))}
         </div>
       ) : items.length === 0 ? (
-        status !== "all" || mediaType !== "all" || favorite ? (
+        status !== "all" || mediaType !== "all" || favorite || debouncedSearch ? (
           <EmptyState
             icon={<LayoutGrid />}
             title="No matches found"
-            description="Try adjusting your filters to see more results."
+            description="Try adjusting your filters or search query to see more results."
             action={
               <button
                 onClick={() => {
                   setMediaType("all");
                   setStatus("all");
                   setFavorite(false);
+                  setSearchTerm("");
                 }}
                 className="rounded-full bg-surface-2 px-4 py-2 text-sm font-medium hover:bg-surface-3 transition-colors border border-border/40"
               >

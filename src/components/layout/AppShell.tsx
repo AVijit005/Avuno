@@ -35,7 +35,11 @@ export function AppShell({ children }: { children?: ReactNode }) {
     <MediaActionsProvider>
       <div className="relative min-h-dvh">
         {!online && (
-          <div className="sticky top-0 z-[150] bg-amber-500/90 text-black text-center py-2 text-sm font-medium">
+          <div
+            role="status"
+            aria-live="polite"
+            className="sticky top-0 z-[150] bg-amber-500/90 text-black text-center pt-[calc(env(safe-area-inset-top)+8px)] pb-2 px-4 text-sm font-medium"
+          >
             You're offline. Changes will sync when you reconnect.
           </div>
         )}
@@ -60,8 +64,7 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <TopBar onOpenSearch={() => setSearch(true)} />
           <main
             id="main-content"
-            className="px-4 sm:px-6 lg:px-10 lg:pb-16"
-            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 7rem)" }}
+            className="px-4 sm:px-6 lg:px-10 pb-[calc(env(safe-area-inset-bottom)+7rem)] lg:pb-16"
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div
@@ -70,7 +73,6 @@ export function AppShell({ children }: { children?: ReactNode }) {
                 initial="hidden"
                 animate="visible"
                 exit="exit"
-                className="will-change-[opacity,filter,transform]"
               >
                 {children ?? <Outlet />}
               </motion.div>

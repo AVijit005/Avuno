@@ -24,7 +24,7 @@ describe('JournalStatisticsService', () => {
     service = new JournalStatisticsService(repoMock as any);
   });
 
-  it('returns all stats aggregations', async () => {
+  it('returns all stats aggregations for multiple records', async () => {
     const result = await service.getStats('user-1');
     expect(result.journalCount).toBe(5);
     expect(result.memoryCount).toBe(3);
@@ -32,6 +32,40 @@ describe('JournalStatisticsService', () => {
     expect(result.favoriteQuoteCount).toBe(2);
     expect(result.highlightCount).toBe(1);
     expect(result.writingStreak).toBeGreaterThanOrEqual(0);
+  });
+
+  it('returns all stats aggregations for 0 records', async () => {
+    repoMock.countEntries.mockResolvedValueOnce(0);
+    repoMock.countMemories.mockResolvedValueOnce(0);
+    repoMock.countTimelineEvents.mockResolvedValueOnce(0);
+    repoMock.countQuotes.mockResolvedValueOnce(0);
+    repoMock.countHighlights.mockResolvedValueOnce(0);
+    repoMock.getRecentEntryDates.mockResolvedValueOnce([]);
+
+    const result = await service.getStats('user-1');
+    expect(result.journalCount).toBe(0);
+    expect(result.memoryCount).toBe(0);
+    expect(result.timelineEventCount).toBe(0);
+    expect(result.favoriteQuoteCount).toBe(0);
+    expect(result.highlightCount).toBe(0);
+    expect(result.writingStreak).toBe(0);
+  });
+
+  it('returns all stats aggregations for 1 record', async () => {
+    repoMock.countEntries.mockResolvedValueOnce(1);
+    repoMock.countMemories.mockResolvedValueOnce(1);
+    repoMock.countTimelineEvents.mockResolvedValueOnce(1);
+    repoMock.countQuotes.mockResolvedValueOnce(1);
+    repoMock.countHighlights.mockResolvedValueOnce(1);
+    repoMock.getRecentEntryDates.mockResolvedValueOnce([new Date()]);
+
+    const result = await service.getStats('user-1');
+    expect(result.journalCount).toBe(1);
+    expect(result.memoryCount).toBe(1);
+    expect(result.timelineEventCount).toBe(1);
+    expect(result.favoriteQuoteCount).toBe(1);
+    expect(result.highlightCount).toBe(1);
+    expect(result.writingStreak).toBe(1);
   });
 
   it('returns zero streak when no entries', async () => {

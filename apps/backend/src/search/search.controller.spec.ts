@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, mock } from 'bun:test';
 import { SearchController } from './search.controller';
 import { SearchService } from './search.service';
-import { SearchQueryDto } from './dto';
 
 describe('SearchController', () => {
   let controller: SearchController;

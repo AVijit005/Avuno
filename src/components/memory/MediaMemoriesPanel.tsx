@@ -106,7 +106,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
   };
 
   return (
-    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-1 border border-border/40 shadow-sm transition-all hover:bg-surface-2 hover:border-border/60">
+    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-1 border border-border/40 shadow-sm transition-[background-color,border-color] hover:bg-surface-2 hover:border-border/60">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-3">
           <time className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-wider">

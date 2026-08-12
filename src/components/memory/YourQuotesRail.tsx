@@ -55,10 +55,6 @@ export function YourQuotesRail({
             transition={{ duration: 0.6, delay: i * 0.04 }}
             className="glass group relative overflow-hidden rounded-3xl p-6"
           >
-            <div
-              className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-40 blur-3xl"
-              style={{ background: q.accent ?? "var(--primary)" }}
-            />
             <div className="relative">
               <Quote className="h-4 w-4 text-primary/70" />
               <blockquote className="mt-2 font-display text-xl tracking-tight leading-snug text-foreground/95">

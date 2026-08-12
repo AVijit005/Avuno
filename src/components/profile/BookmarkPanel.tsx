@@ -12,10 +12,7 @@ export function BookmarkPanel() {
 
   if (items.length === 0) {
     return (
-      <EmptyState
-        title="No bookmarks yet"
-        description="Bookmark stories, collections, journals, or quotes — they'll surface here, always within reach."
-      />
+      <EmptyState title="No bookmarks yet" description="Items you bookmark will appear here." />
     );
   }
 

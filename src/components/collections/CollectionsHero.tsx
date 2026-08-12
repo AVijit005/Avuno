@@ -21,16 +21,7 @@ export function CollectionsHero() {
       style={{ boxShadow: "0 60px 140px -40px oklch(0 0 0 / 0.65)" }}
     >
       {/* atmosphere */}
-      <div aria-hidden className="absolute inset-0">
-        <div
-          className="absolute -top-32 -left-24 h-96 w-96 rounded-full opacity-40 blur-3xl animate-aurora"
-          style={{ background: "oklch(0.65 0.2 230 / 0.6)" }}
-        />
-        <div
-          className="absolute -bottom-40 right-0 h-[28rem] w-[28rem] rounded-full opacity-30 blur-3xl animate-aurora"
-          style={{ background: "oklch(0.65 0.22 295 / 0.6)" }}
-        />
-      </div>
+      <div aria-hidden className="absolute inset-0"></div>
 
       <div className="relative grid grid-cols-1 gap-10 p-8 md:grid-cols-[1.1fr_1fr] md:items-center md:p-14 lg:p-20">
         <motion.div style={{ y }}>
@@ -72,7 +63,12 @@ export function CollectionsHero() {
                 className="absolute h-28 w-44 overflow-hidden rounded-2xl ring-1 ring-white/15 shadow-[0_20px_50px_-15px_oklch(0_0_0/0.7)]"
                 style={{ top, left, animation: `slow-float ${6 + i}s ease-in-out infinite` }}
               >
-                <img src={coverImg} alt="" className="h-full w-full object-cover" />
+                <img
+                  src={coverImg}
+                  alt=""
+                  decoding="async"
+                  className="h-full w-full object-cover"
+                />
                 <div
                   className="absolute inset-0"
                   style={{

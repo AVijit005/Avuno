@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion, useScroll, useTransform } from "motion/react";
 import { Star, ImageOff } from "lucide-react";
 import type { UIMediaItem } from "@/lib/adapters/types";
 import { useArtworkAccent } from "@/lib/useArtworkAccent";
@@ -19,6 +19,11 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
   const [backdropErrored, setBackdropErrored] = useState(false);
   const [posterErrored, setPosterErrored] = useState(false);
 
+  // Parallax Scroll Hooks
+  const { scrollY } = useScroll();
+  const bgY = useTransform(scrollY, [0, 1000], [0, 250]);
+  const posterY = useTransform(scrollY, [0, 1000], [0, -100]);
+
   return (
     <section
       className="relative overflow-hidden rounded-[40px]"
@@ -28,7 +33,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
       }}
     >
       {/* backdrop */}
-      <div className="absolute inset-0">
+      <motion.div className="absolute inset-0" style={{ y: reduced ? 0 : bgY }}>
         {backdropErrored ? (
           <div
             className="h-full w-full"
@@ -93,7 +98,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
               "conic-gradient(from 200deg at 80% 0%, transparent 0deg, oklch(1 0 0 / 0.06) 30deg, transparent 60deg)",
           }}
         />
-      </div>
+      </motion.div>
 
       <div className="relative grid grid-cols-1 gap-8 p-7 pt-32 md:grid-cols-[auto_1fr] md:items-end md:gap-12 md:p-12 md:pt-48 lg:p-16 lg:pt-56">
         {/* poster */}
@@ -102,6 +107,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           whileHover={reduced ? undefined : { scale: 1.015, transition: motionT.spring }}
           transition={{ duration: 0.9, delay: 0.15, ease }}
+          style={{ y: reduced ? 0 : posterY }}
           className="relative hidden w-56 md:block lg:w-64"
         >
           <div className="relative aspect-[2/3] overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/15 shadow-[0_40px_80px_-20px_oklch(0_0_0/0.7)]">
@@ -114,7 +120,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
                 src={item.poster}
                 alt={item.title}
                 aspectRatio="poster"
-                style={{ viewTransitionName: `poster-${item.id}` }}
+                style={{ viewTransitionName: `hero-poster-${item.id}` }}
                 onError={() => setPosterErrored(true)}
               />
             )}
@@ -142,11 +148,6 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
             style={{
               background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.4), transparent)",
             }}
-          />
-          <span
-            aria-hidden
-            className="pointer-events-none absolute -top-24 -right-20 h-56 w-56 rounded-full opacity-40 blur-3xl"
-            style={{ background: accent.glow }}
           />
 
           <motion.div

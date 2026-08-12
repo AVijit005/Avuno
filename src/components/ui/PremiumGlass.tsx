@@ -94,7 +94,7 @@ export const PremiumGlass = forwardRef<HTMLDivElement, Props>(
         className={cn(
           "group/glass relative rounded-3xl",
           interactive &&
-            "cursor-pointer transition-all duration-[300ms] ease-out hover:-translate-y-1 hover:shadow-[0_12px_24px_var(--glass-highlight),0_0_20px_color-mix(in_oklch,var(--primary),transparent_90%)] active:scale-[0.98]",
+            "cursor-pointer transition-[transform,box-shadow] duration-[300ms] ease-out hover:-translate-y-1 hover:shadow-[0_12px_24px_var(--glass-highlight),0_0_20px_color-mix(in_oklch,var(--primary),transparent_90%)] active:scale-[0.98] motion-reduce:hover:translate-y-0 motion-reduce:active:scale-100",
           className,
         )}
         style={
@@ -139,15 +139,6 @@ export const PremiumGlass = forwardRef<HTMLDivElement, Props>(
               boxShadow: `inset 0 -1px 0 ${isLight ? "oklch(1 0 0 / 0.25)" : "oklch(0 0 0 / 0.25)"}, inset 0 0 0 1px ${isLight ? "oklch(0 0 0 / calc(0.04 + var(--glass-rev)*0.06))" : "oklch(1 0 0 / calc(0.04 + var(--glass-rev)*0.06))"}`,
             }}
           />
-
-          {/* artwork tint glow */}
-          {glow && (
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -top-24 -right-24 h-64 w-64 rounded-full opacity-40 blur-3xl"
-              style={{ background: glow }}
-            />
-          )}
 
           {/* Living diagonal reflection — follows pointer, fades on leave. */}
           {reflection && (

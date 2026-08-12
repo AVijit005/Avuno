@@ -105,7 +105,7 @@ export function WriteOverlay({
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 20 }}
                   disabled={isSealing}
-                  className="mt-8 flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:scale-105 transition-all shadow-[0_0_40px_oklch(0.72_0.18_255/0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="mt-8 flex items-center gap-3 px-8 py-4 rounded-full bg-primary text-primary-foreground font-medium hover:scale-105 transition-[transform,opacity] shadow-[0_0_40px_oklch(0.72_0.18_255/0.6)] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                 >
                   {isSealing ? (
                     <span className="h-5 w-5 animate-spin rounded-full border-2 border-primary-foreground/30 border-t-primary-foreground" />

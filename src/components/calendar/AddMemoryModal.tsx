@@ -191,7 +191,7 @@ export function AddMemoryModal({ isOpen, onClose, selectedDay, monthName, curren
                       className="group flex flex-col items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-wait"
                     >
                       <div
-                        className={`relative flex h-[72px] w-[72px] sm:h-[84px] sm:w-[84px] items-center justify-center rounded-[1.5rem] sm:rounded-[1.75rem] border border-white/[0.06] ${type.bg} transition-all duration-500 group-hover:shadow-[0_0_40px_-10px_currentColor] group-hover:border-white/[0.2] ${type.color} overflow-hidden shadow-xl`}
+                        className={`relative flex h-[72px] w-[72px] sm:h-[84px] sm:w-[84px] items-center justify-center rounded-[1.5rem] sm:rounded-[1.75rem] border border-white/[0.06] ${type.bg} transition-[box-shadow,border-color] duration-500 group-hover:shadow-[0_0_40px_-10px_currentColor] group-hover:border-white/[0.2] ${type.color} overflow-hidden shadow-xl`}
                       >
                         <div className="absolute inset-0 bg-gradient-to-br from-white/20 via-white/0 to-white/5 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
                         <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />

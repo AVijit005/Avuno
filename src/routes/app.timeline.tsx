@@ -56,11 +56,9 @@ function TimelinePage() {
         initial={{ opacity: 0, y: reduced ? 0 : 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: reduced ? 0 : 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="mb-16 border-b border-border/40 pb-12"
+        className="mb-10 border-b border-border/40 pb-8"
       >
-        <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
-          Life through media
-        </div>
+        <div className="text-eyebrow">Life through media</div>
         <h1 className="mt-4 font-display text-3xl sm:text-4xl tracking-tight md:text-5xl text-foreground">
           Your timeline.
         </h1>
@@ -78,9 +76,7 @@ function TimelinePage() {
               key={s.l}
               className="rounded-xl bg-surface-1 border border-border/30 p-4 shadow-sm"
             >
-              <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                {s.l}
-              </div>
+              <div className="text-eyebrow">{s.l}</div>
               <div className="mt-2 font-display text-3xl tracking-tight text-foreground">
                 {typeof s.v === "number" ? <CountUp to={s.v} suffix={s.s ?? ""} /> : s.v}
               </div>
@@ -269,8 +265,7 @@ function TimelinePage() {
         <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
           {[
             { l: "Stories tracked", v: allEvents?.length || 0 },
-            { l: "Journal entries", v: 0 },
-            { l: "Achievements", v: 0 },
+            { l: "Journal entries", v: statsData?.journalCount ?? 0 },
           ].map((s) => (
             <div
               key={s.l}

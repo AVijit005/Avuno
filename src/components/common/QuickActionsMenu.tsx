@@ -57,7 +57,7 @@ export function QuickActionsMenu({
         <button
           aria-label={ariaLabel}
           className={cn(
-            "grid h-8 w-8 place-items-center rounded-full bg-white/[0.04] text-muted-foreground ring-1 ring-white/10 transition hover:bg-white/[0.08] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+            "grid h-11 w-11 sm:h-8 sm:w-8 place-items-center rounded-full bg-foreground/[0.04] text-muted-foreground ring-1 ring-foreground/10 transition-colors hover:bg-foreground/[0.08] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
             className,
           )}
         >

@@ -108,6 +108,10 @@ export class LibraryFilterDto extends CursorPaginationDto {
   @IsOptional()
   @IsIn(['asc', 'desc'])
   sortOrder: 'asc' | 'desc' = 'desc';
+
+  @IsOptional()
+  @IsString()
+  search?: string;
 }
 
 export class LibrarySortDto extends SortDto {

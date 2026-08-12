@@ -60,38 +60,6 @@ export const PremiumButton = forwardRef<HTMLButtonElement, Props>(
         {...rest}
         className={cn(base, variant !== "icon" && sizes[size], variantClass[variant], className)}
       >
-        {/* primary: subtle breathing highlight + moving sheen */}
-        {variant === "primary" && (
-          <>
-            <span
-              aria-hidden
-              className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:opacity-100"
-              style={{
-                background:
-                  "linear-gradient(120deg, transparent 30%, oklch(1 0 0 / 0.45) 50%, transparent 70%)",
-                animation: reduced ? undefined : "sheen 2.2s ease-in-out forwards",
-              }}
-            />
-            <span
-              aria-hidden
-              className="pointer-events-none absolute -inset-2 rounded-3xl opacity-0 blur-2xl transition-opacity duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:opacity-60"
-              style={{
-                background: "radial-gradient(circle, oklch(0.72 0.18 255 / 0.6), transparent 60%)",
-              }}
-            />
-          </>
-        )}
-        {variant === "secondary" && (
-          <span
-            aria-hidden
-            className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:opacity-100"
-            style={{
-              background:
-                "linear-gradient(120deg, transparent 35%, oklch(1 0 0 / 0.08) 50%, transparent 65%)",
-              mixBlendMode: "overlay",
-            }}
-          />
-        )}
         <span className="relative inline-flex items-center gap-2">
           <AnimatePresence initial={false}>
             <motion.span

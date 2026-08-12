@@ -29,13 +29,12 @@ import { CollectionJournal } from "@/components/collections/CollectionJournal";
 import { CollectionDiscussions } from "@/components/collections/CollectionDiscussions";
 import { CollectionAnalyticsPreview } from "@/components/collections/CollectionAnalyticsPreview";
 import { CompanionCollections } from "@/components/collections/CompanionCollections";
-import { CuratorNotes } from "@/components/collections/CuratorNotes";
+
 import { CollectionFooter } from "@/components/collections/CollectionFooter";
 import { CollectionQuickActions } from "@/components/collections/CollectionQuickActions";
 
 import { Chapter } from "@/components/media-detail/Chapter";
 import { DropCap } from "@/components/editorial/DropCap";
-import { PullQuote } from "@/components/editorial/PullQuote";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { PremiumErrorState } from "@/components/common/PremiumErrorState";
 import type { UICollection } from "@/lib/adapters/types";
@@ -267,7 +266,6 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
         accent={c.color ?? undefined}
       >
         <DropCap>{c.description ?? "A collection of stories."}</DropCap>
-        <CuratorNotes collection={c as never} />
       </Chapter>
 
       <CollectionFooter />

@@ -41,11 +41,6 @@ export function MediaJournalPreview({ item }: { item: UIMediaItem }) {
         border: "1px solid oklch(1 0 0 / 0.06)",
       }}
     >
-      <span
-        aria-hidden
-        className="pointer-events-none absolute -top-20 -left-20 h-56 w-56 rounded-full opacity-30 blur-3xl"
-        style={{ background: accent }}
-      />
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">

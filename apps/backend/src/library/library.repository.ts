@@ -205,12 +205,21 @@ export class LibraryRepository {
     return all.slice(0, params.limit);
   }
 
-  private buildWhere(userId: string, params: LibraryFindManyParams): Record<string, unknown> {
+  private buildWhere(userId: string, params: LibraryFindManyParams, type: string): Record<string, unknown> {
     const where: Record<string, unknown> = { userId, deletedAt: null };
     if (params.status) where.status = params.status;
     if (params.favorite !== undefined) where.favorite = params.favorite;
     if (params.hidden !== undefined) where.hidden = params.hidden;
     if (params.private !== undefined) where.private = params.private;
+
+    if (params.search) {
+      const cfg = this.modelConfig[type];
+      if (cfg) {
+        where[cfg.includeKey] = {
+          title: { contains: params.search, mode: 'insensitive' },
+        };
+      }
+    }
     return where;
   }
 
@@ -226,7 +235,7 @@ export class LibraryRepository {
     type: string,
     params: LibraryFindManyParams,
   ): Promise<LibraryRow[]> {
-    const where = this.buildWhere(userId, params);
+    const where = this.buildWhere(userId, params, type);
     const orderBy = this.buildOrderBy(params);
     const cfg = this.modelConfig[type];
 

@@ -65,7 +65,6 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
             alt={item.title}
             aspectRatio="poster"
             className="transition-[transform,filter] duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:scale-[1.03] group-hover:brightness-[1.02] motion-reduce:group-hover:scale-100"
-            style={{ viewTransitionName: `poster-${item.id}` }}
           />
         )}
         {/* gradient base */}
@@ -106,7 +105,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
             className="absolute inset-x-0 bottom-0 p-3 text-white transition-transform duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:-translate-y-0.5 motion-reduce:group-hover:translate-y-0"
           >
             <div className="truncate font-display text-base leading-tight">{item.title}</div>
-            <div className="mt-0.5 text-[10px] uppercase tracking-[0.18em] text-white/65">
+            <div className="mt-0.5 text-eyebrow text-white/65">
               {item.kind} · {item.year}
             </div>
             {item.progress != null && item.progress > 0 && item.progress < 100 && (
@@ -131,12 +130,13 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
         aria-pressed={fav}
         onClick={(e) => {
           e.preventDefault();
+          e.stopPropagation();
           toggleFavorite(item.id);
         }}
-        className="focus-ring absolute right-2 top-2 grid h-9 w-9 place-items-center rounded-full bg-black/80 text-white/90 opacity-0 transition duration-[var(--dur-normal)] ease-[var(--ease-out)] group-hover:opacity-100 hover:scale-110 hover:text-rose-400 md:h-7 md:w-7"
+        className="focus-ring absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full bg-black/80 text-white/90 opacity-100 transition duration-[var(--dur-normal)] ease-[var(--ease-out)] md:opacity-0 md:group-hover:opacity-100 md:h-8 md:w-8 hover:scale-110 hover:text-rose-400"
       >
         <Heart
-          className={`h-3.5 w-3.5 transition-transform duration-[var(--dur-normal)] ease-[var(--ease-out)] ${fav ? "fill-[var(--status-dropped)] text-[var(--status-dropped)] motion-safe:animate-pulse" : ""}`}
+          className={`h-4 w-4 transition-transform duration-[var(--dur-normal)] ease-[var(--ease-out)] ${fav ? "fill-[var(--status-dropped)] text-[var(--status-dropped)] motion-safe:animate-pulse" : ""}`}
         />
       </button>
     </motion.div>

@@ -42,7 +42,7 @@ export function MobileMemoryHero() {
         transition={{ duration: 1.2, delay: 0.2, ease: ease.out }}
         className="absolute left-[6%] top-[14%] aspect-[2/3] w-[96px] -rotate-[7deg] overflow-hidden rounded-[10px] ring-1 ring-white/10 shadow-[0_24px_56px_-24px_oklch(0_0_0/0.85)]"
       >
-        <img src={second.poster} alt="" className="h-full w-full object-cover" />
+        <img src={second.poster} alt="" decoding="async" className="h-full w-full object-cover" />
       </motion.div>
 
       {/* hero poster */}
@@ -53,7 +53,7 @@ export function MobileMemoryHero() {
         transition={{ duration: 1.2, delay: 0.3, ease: ease.out }}
         className="absolute right-[8%] top-[10%] aspect-[2/3] w-[148px] rotate-[4deg] overflow-hidden rounded-[14px] ring-1 ring-white/15 shadow-[0_30px_70px_-26px_oklch(0_0_0/0.9)]"
       >
-        <img src={hero.poster} alt="" className="h-full w-full object-cover" />
+        <img src={hero.poster} alt="" decoding="async" className="h-full w-full object-cover" />
         <div
           className="absolute inset-0"
           style={{

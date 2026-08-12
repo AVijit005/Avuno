@@ -114,7 +114,7 @@ export function MonthlyGrid({ monthIdx, grid, selectedDay, onSelectDay }: Props)
                 role="gridcell"
                 aria-selected={isSel}
                 aria-label={`${c.day}${c.hasMedia ? ", has media" : ""}${c.hasJournal ? ", journal entry" : ""}${c.hasAchievement ? ", achievement" : ""}`}
-                className="group relative aspect-square overflow-hidden rounded-[12px] transition-all duration-400 ease-out focus-visible:ring-2 focus-visible:ring-primary focus-visible:z-20"
+                className="group relative aspect-square overflow-hidden rounded-[12px] transition-[box-shadow] duration-400 ease-out focus-visible:ring-2 focus-visible:ring-primary focus-visible:z-20"
                 style={{
                   background: c.hasMedia ? "transparent" : "rgba(255,255,255,0.02)",
                   backdropFilter: c.hasMedia ? "none" : "blur(12px)",

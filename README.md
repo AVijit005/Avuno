@@ -21,8 +21,9 @@ The \docs/\ directory contains the complete, canonical, and verified documentati
 - [Roadmap](./docs/ROADMAP.md)
 
 ## Tech Stack Overview
+
 - **Frontend:** React 19, Vite, TanStack Router, TailwindCSS 4
 - **Backend:** NestJS 11, Prisma, PostgreSQL 16
 - **Deployment:** Cloudflare Pages (Frontend) / Ubuntu VPS Docker (Backend)
 
-*(All legacy documentation has been consolidated and audited during the Phase 0 cleanup. Do not recreate stale phase reports.)*
+_(All legacy documentation has been consolidated and audited during the Phase 0 cleanup. Do not recreate stale phase reports.)_

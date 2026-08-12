@@ -14,7 +14,7 @@ export function SaveForLaterPanel() {
     return (
       <EmptyState
         title="Nothing saved for later"
-        description="Stories you bookmark for later land here — with reasons, priority and dates."
+        description="Items you save for later will appear here."
       />
     );
   }

@@ -33,10 +33,6 @@ export function JournalPreview() {
             background: `linear-gradient(180deg, color-mix(in oklab, var(--card) 65%, transparent), color-mix(in oklab, var(--card) 45%, transparent))`,
           }}
         >
-          <div
-            className="absolute -right-14 -top-14 h-40 w-40 rounded-full opacity-40 blur-3xl"
-            style={{ background: "var(--primary)" }}
-          />
           <div className="relative">
             <div className="flex items-center justify-between text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               <span>{new Date(j.createdAt).toLocaleDateString()}</span>

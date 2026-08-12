@@ -59,10 +59,6 @@ export function YourReflectionsRail({
             transition={{ duration: 0.6, delay: i * 0.04 }}
             className="glass group relative overflow-hidden rounded-3xl p-5"
           >
-            <div
-              className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full opacity-50 blur-3xl"
-              style={{ background: r.item.accent ?? "var(--primary)" }}
-            />
             <div className="relative flex gap-4">
               <img
                 src={r.item.poster || undefined}

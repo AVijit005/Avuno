@@ -113,7 +113,7 @@ export function TasteProfile({ className, tasteProfile: tp }: Props) {
 
 function Fact({ label, value }: { label: string; value: React.ReactNode }) {
   return (
-    <div className="group/fact cursor-pointer rounded-xl px-3 py-2.5 -mx-2 transition-all duration-300 ease-out hover:bg-white/[0.08] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_0_16px_-4px_rgba(255,255,255,0.06)] active:scale-[0.98]">
+    <div className="group/fact cursor-pointer rounded-xl px-3 py-2.5 -mx-2 transition-[transform,background-color,box-shadow] duration-300 ease-out hover:bg-white/[0.08] hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.08),0_0_16px_-4px_rgba(255,255,255,0.06)] active:scale-[0.98]">
       <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70 group-hover/fact:text-muted-foreground transition-colors duration-300">
         {label}
       </div>

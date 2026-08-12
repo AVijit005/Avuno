@@ -106,10 +106,6 @@ export function ThisWeek() {
           transition={{ duration: 0.5, delay: i * 0.04, ease: [0.22, 1, 0.36, 1] }}
           className="glass relative overflow-hidden rounded-2xl p-4"
         >
-          <div
-            className="absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-50 blur-2xl"
-            style={{ background: it.color }}
-          />
           <div className="relative">
             <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
               <it.icon className="h-3 w-3" /> {it.label}

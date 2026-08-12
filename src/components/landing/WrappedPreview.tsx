@@ -11,19 +11,6 @@ const STATS = [
 export function WrappedPreview() {
   return (
     <div className="glass-elevated relative overflow-hidden rounded-[40px] p-10 md:p-16">
-      <motion.div
-        className="absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full blur-3xl"
-        style={{ background: "var(--secondary)", opacity: 0.4 }}
-        animate={{ x: [0, 30, -10, 0], y: [0, 20, -10, 0] }}
-        transition={{ duration: 24, repeat: Infinity, ease: "easeInOut" }}
-      />
-      <motion.div
-        className="absolute -bottom-40 -left-20 h-[28rem] w-[28rem] rounded-full blur-3xl"
-        style={{ background: "var(--primary)", opacity: 0.35 }}
-        animate={{ x: [0, -20, 20, 0], y: [0, -20, 10, 0] }}
-        transition={{ duration: 28, repeat: Infinity, ease: "easeInOut" }}
-      />
-
       <div className="relative">
         <div className="text-[11px] uppercase tracking-[0.22em] text-primary">
           Your year, told back

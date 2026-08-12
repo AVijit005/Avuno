@@ -66,7 +66,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
               <span className="font-display text-base text-foreground tabular-nums">
                 {now ? now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }) : "—"}
               </span>
-              <span className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
+              <span className="text-eyebrow">
                 {now
                   ? now.toLocaleDateString(undefined, {
                       weekday: "short",
@@ -94,7 +94,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <button
             onClick={onOpenSearch}
             aria-label="Search"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary md:hidden press-scale"
+            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary md:hidden press-scale"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -102,14 +102,14 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={openAdd}
             aria-label="Add to Avuno"
             title="Add (⌘N)"
-            className="hidden md:grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="hidden md:grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Plus className="h-4 w-4" />
           </button>
           <Link
             to="/app/notifications"
             aria-label="Notifications"
-            className="relative grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="relative grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Bell className="h-4 w-4" />
             {notifications?.unreadCount ? (
@@ -119,7 +119,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Link
             to="/app/settings"
             aria-label="Quick settings"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
           >
             <Settings className="h-4 w-4" />
           </Link>
@@ -127,7 +127,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             to="/app/profile"
             aria-label="Profile"
             style={{ viewTransitionName: "user-avatar" }}
-            className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-white/20 press-scale"
+            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-foreground/20 press-scale"
           >
             {initials}
           </Link>
@@ -135,7 +135,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={() => logout.mutate()}
             aria-label="Log out"
             title="Log out"
-            className="grid h-9 w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-red-400 hover:bg-red-400/10 press-scale ml-1"
+            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-red-400 hover:bg-red-400/10 press-scale ml-1"
           >
             <LogOut className="h-4 w-4" />
           </button>

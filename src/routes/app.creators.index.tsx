@@ -1,7 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { allCreators } from "@/lib/creatorEngine";
-import { PullQuote } from "@/components/editorial/PullQuote";
 import { ComingSoon } from "@/components/common/ComingSoon";
 
 export const Route = createFileRoute("/app/creators/")({ component: CreatorsIndex });
