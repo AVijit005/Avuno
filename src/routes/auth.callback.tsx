@@ -1,10 +1,21 @@
 import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useEffect, useRef } from "react";
+import { motion } from "motion/react";
 import { setAccessToken, apiPost } from "@/lib/api/fetch";
 import { toast } from "sonner";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
+import { Loader2 } from "lucide-react";
 
 export const Route = createFileRoute("/auth/callback")({
+  head: () => ({
+    meta: [
+      { title: "Signing you in — Avuno" },
+      {
+        name: "description",
+        content: "Completing your sign-in to Avuno.",
+      },
+    ],
+  }),
   component: AuthCallback,
 });
 
@@ -68,17 +79,38 @@ function AuthCallback() {
   }, [router]);
 
   return (
-    <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
+    <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[oklch(0.08_0.02_270)] px-4">
       <AtmosphereBackground intensity="soft" />
-      <div className="glass-elevated max-w-sm rounded-3xl p-8 text-center">
-        <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-          <span className="font-display text-xl font-bold leading-none">A</span>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="relative max-w-sm rounded-3xl p-10 text-center"
+        style={{
+          background: "oklch(0.18 0.014 270 / 0.4)",
+          backdropFilter: "blur(20px)",
+          WebkitBackdropFilter: "blur(20px)",
+          border: "1px solid oklch(1 0 0 / 0.08)",
+          boxShadow: "0 20px 40px -10px oklch(0 0 0 / 0.4), inset 0 1px 0 oklch(1 0 0 / 0.08)",
+        }}
+      >
+        <div className="mx-auto grid h-14 w-14 place-items-center rounded-2xl bg-gradient-to-br from-[oklch(0.58_0.26_292)] to-[oklch(0.55_0.24_218)]">
+          <span className="font-display text-2xl font-bold leading-none text-white">A</span>
         </div>
-        <h2 className="mt-4 font-display text-xl">Logging you into Avuno…</h2>
-        <p className="mt-2 text-xs text-muted-foreground">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          className="mx-auto mt-6"
+        >
+          <Loader2 className="h-6 w-6 text-[oklch(0.72_0.18_255)]" />
+        </motion.div>
+        <h2 className="mt-5 font-display text-xl tracking-tight text-[oklch(0.97_0.005_270)]">
+          Logging you into Avuno…
+        </h2>
+        <p className="mt-2 text-[12px] leading-relaxed text-[oklch(0.68_0.012_270)]">
           Setting up your personal media universe
         </p>
-      </div>
+      </motion.div>
     </div>
   );
 }

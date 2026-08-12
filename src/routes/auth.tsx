@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowRight, Lock, Mail, Check, Loader as Loader2, User } from "lucide-react";
+import { ArrowRight, Lock, Mail, Check, Loader2, User, Eye, EyeOff } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 import { AuthStage } from "@/components/auth/AuthStage";
 import { MobileMemoryHero } from "@/components/auth/MobileMemoryHero";
-import { BottomBorderInput } from "@/components/auth/BottomBorderInput";
+import { PremiumInput } from "@/components/auth/PremiumInput";
 import { LiquidGlassCard } from "@/components/auth/LiquidGlassCard";
 import { ParticleBurst } from "@/components/auth/ParticleBurst";
 import { useMouseParallax } from "@/lib/useParallax";
@@ -83,12 +83,11 @@ function AuthPage() {
   const [mode, setMode] = useState<Mode>("signin");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [passwordStrength, setPasswordStrength] = useState<number>(0);
   const { x: ax, y: ay } = useMouseParallax(18);
 
   const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(() => {
-    // Capture the array identity now: reading timeoutRefs.current inside the
-    // cleanup would see whatever the ref points at on unmount.
     const pending = timeoutRefs.current;
     return () => pending.forEach(clearTimeout);
   }, []);
@@ -103,11 +102,37 @@ function AuthPage() {
   const signIn = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
+    mode: "onBlur",
   });
   const signUp = useForm<SignUp>({
     resolver: zodResolver(signUpSchema),
     defaultValues: { fullName: "", email: "", password: "", confirmPassword: "" },
+    mode: "onBlur",
   });
+
+  // Password strength calculation (for signup)
+  const calculatePasswordStrength = (password: string): number => {
+    let strength = 0;
+    if (password.length >= 12) strength += 1;
+    if (password.length >= 16) strength += 1;
+    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
+    if (/\d/.test(password)) strength += 1;
+    if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
+    return Math.min(strength, 5);
+  };
+
+  useEffect(() => {
+    if (mode === "signup") {
+      const subscription = signUp.watch((value) => {
+        if (value.password) {
+          setPasswordStrength(calculatePasswordStrength(value.password));
+        } else {
+          setPasswordStrength(0);
+        }
+      });
+      return () => subscription.unsubscribe();
+    }
+  }, [mode, signUp]);
 
   const onSubmit = async (data: SignIn | SignUp) => {
     setStatus("loading");
@@ -122,10 +147,10 @@ function AuthPage() {
         });
         analytics.identify(user.user.id);
         setStatus("success");
-        safeTimeout(() => navigate({ to: "/app" }), 700);
+        safeTimeout(() => navigate({ to: "/app" }), 600);
       } else {
         const values = data as SignUp;
-        const newUser = await registerMutation.mutateAsync({
+        await registerMutation.mutateAsync({
           email: values.email,
           password: values.password,
           name: values.fullName,
@@ -139,19 +164,17 @@ function AuthPage() {
           analytics.identify(user.user.id);
           analytics.track("signup");
           setStatus("success");
-          safeTimeout(() => navigate({ to: "/app" }), 700);
+          safeTimeout(() => navigate({ to: "/app" }), 600);
         } catch (loginErr: unknown) {
-          if (
-            (loginErr as { message?: string; status?: number })?.message === "Email not verified" ||
-            (loginErr as { message?: string; status?: number })?.status === 403
-          ) {
+          const loginError = loginErr as { message?: string; status?: number };
+          if (loginError?.message === "Email not verified" || loginError?.status === 403) {
             analytics.track("signup");
             setStatus("success");
             setErrorMessage("Account created! Please check your email to verify your account.");
             safeTimeout(() => {
               setStatus("idle");
               switchMode("signin");
-            }, 3000);
+            }, 4000);
           } else {
             analytics.track("signup");
             setStatus("success");
@@ -165,16 +188,34 @@ function AuthPage() {
       }
     } catch (err: unknown) {
       setStatus("error");
-      const message =
-        err instanceof Error ? err.message : "Something went wrong. Please try again.";
+      const error = err as { message?: string; status?: number };
+
+      // Enhanced error messages
+      let message = "Something went wrong. Please try again.";
+      if (error.status === 401) {
+        message = "Email or password is incorrect.";
+      } else if (error.status === 429) {
+        message = "Too many attempts. Please wait a moment before trying again.";
+      } else if (error.status === 403 && error.message?.includes("verified")) {
+        message = "Please verify your email before signing in.";
+      } else if (error.status === 409) {
+        message = "An account with this email already exists.";
+      } else if (error.message?.includes("network") || error.message?.includes("fetch")) {
+        message = "We couldn't reach Avuno. Check your connection and try again.";
+      } else if (error.message) {
+        message = error.message;
+      }
+
       setErrorMessage(message);
-      safeTimeout(() => setStatus("idle"), 3000);
+      safeTimeout(() => setStatus("idle"), 4000);
     }
   };
 
   const switchMode = (next: Mode) => {
     setMode(next);
     setStatus("idle");
+    setErrorMessage(null);
+    setPasswordStrength(0);
   };
 
   return (
@@ -448,7 +489,7 @@ function AuthPage() {
                     onSubmit={signIn.handleSubmit(onSubmit)}
                     className="space-y-5"
                   >
-                    <BottomBorderInput
+                    <PremiumInput
                       label="Email"
                       type="email"
                       autoComplete="email"
@@ -456,7 +497,7 @@ function AuthPage() {
                       error={signIn.formState.errors.email?.message}
                       {...signIn.register("email")}
                     />
-                    <BottomBorderInput
+                    <PremiumInput
                       label="Password"
                       type="password"
                       autoComplete="current-password"
@@ -468,7 +509,7 @@ function AuthPage() {
                     <div className="flex justify-end pt-1 text-[11px]">
                       <Link
                         to="/auth/forgot-password"
-                        className="text-white/45 hover:text-white/85 transition-colors duration-150"
+                        className="text-[oklch(0.68_0.012_270_/_0.6)] transition-colors hover:text-[oklch(0.72_0.18_255)]"
                       >
                         Forgot password?
                       </Link>
@@ -483,13 +524,10 @@ function AuthPage() {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -10 }}
                     transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
-                    onSubmit={signUp.handleSubmit(onSubmit, (errors) => {
-                      console.error("Form validation failed:", errors);
-                      setErrorMessage(Object.values(errors)[0]?.message || "Validation failed");
-                    })}
+                    onSubmit={signUp.handleSubmit(onSubmit)}
                     className="space-y-5"
                   >
-                    <BottomBorderInput
+                    <PremiumInput
                       label="Full Name"
                       type="text"
                       autoComplete="name"
@@ -497,7 +535,7 @@ function AuthPage() {
                       error={signUp.formState.errors.fullName?.message}
                       {...signUp.register("fullName")}
                     />
-                    <BottomBorderInput
+                    <PremiumInput
                       label="Email"
                       type="email"
                       autoComplete="email"
@@ -505,15 +543,63 @@ function AuthPage() {
                       error={signUp.formState.errors.email?.message}
                       {...signUp.register("email")}
                     />
-                    <BottomBorderInput
-                      label="Password"
-                      type="password"
-                      autoComplete="new-password"
-                      icon={<Lock className="h-4 w-4" />}
-                      error={signUp.formState.errors.password?.message}
-                      {...signUp.register("password")}
-                    />
-                    <BottomBorderInput
+                    <div>
+                      <PremiumInput
+                        label="Password"
+                        type="password"
+                        autoComplete="new-password"
+                        icon={<Lock className="h-4 w-4" />}
+                        error={signUp.formState.errors.password?.message}
+                        helperText={
+                          !signUp.formState.errors.password?.message
+                            ? "At least 12 characters"
+                            : undefined
+                        }
+                        {...signUp.register("password")}
+                      />
+
+                      {/* Password strength indicator */}
+                      {passwordStrength > 0 && !signUp.formState.errors.password?.message && (
+                        <motion.div
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: "auto" }}
+                          exit={{ opacity: 0, height: 0 }}
+                          className="mt-2 pl-5"
+                        >
+                          <div className="flex gap-1">
+                            {[...Array(5)].map((_, i) => (
+                              <div
+                                key={i}
+                                className="h-1 flex-1 overflow-hidden rounded-full bg-white/5"
+                              >
+                                <motion.div
+                                  initial={{ width: 0 }}
+                                  animate={{
+                                    width: i < passwordStrength ? "100%" : "0%",
+                                    backgroundColor:
+                                      passwordStrength <= 2
+                                        ? "oklch(0.66 0.22 18)"
+                                        : passwordStrength <= 3
+                                          ? "oklch(0.82 0.16 80)"
+                                          : "oklch(0.72 0.16 160)",
+                                  }}
+                                  transition={{ duration: 0.3, ease: "easeOut" }}
+                                  className="h-full"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                          <p className="mt-1 text-[10.5px] text-[oklch(0.68_0.012_270_/_0.5)]">
+                            {passwordStrength <= 2
+                              ? "Weak password"
+                              : passwordStrength <= 3
+                                ? "Good password"
+                                : "Strong password"}
+                          </p>
+                        </motion.div>
+                      )}
+                    </div>
+                    <PremiumInput
                       label="Confirm Password"
                       type="password"
                       autoComplete="new-password"
@@ -521,7 +607,7 @@ function AuthPage() {
                       error={signUp.formState.errors.confirmPassword?.message}
                       {...signUp.register("confirmPassword")}
                     />
-                    <PremiumButton status={status} label="Begin Avuno" error={errorMessage} />
+                    <PremiumButton status={status} label="Create Account" error={errorMessage} />
                   </motion.form>
                 )}
               </AnimatePresence>
