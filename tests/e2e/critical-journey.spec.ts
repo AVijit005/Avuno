@@ -21,11 +21,11 @@ test.describe("Critical User Journey", () => {
 
     // Wait for the auth form to mount
     await expect(
-      page.getByRole("button", { name: /continue|sign in|sign up/i }).first(),
+      page.locator("button[type='submit']").first(),
     ).toBeVisible();
 
     // Check for email input
-    const emailInput = page.getByPlaceholder(/email|name@example.com/i).first();
+    const emailInput = page.getByLabel(/email/i).first();
     if (await emailInput.isVisible()) {
       await expect(emailInput).toBeEditable();
     }

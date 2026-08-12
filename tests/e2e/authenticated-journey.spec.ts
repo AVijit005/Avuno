@@ -11,12 +11,12 @@ test.describe("Authenticated User Journeys", () => {
     await page.goto("/auth");
 
     // Wait for the page to load (should default to SignIn)
-    const submitBtn = page.getByRole("button", { name: "Continue", exact: true });
+    const submitBtn = page.locator("button[type='submit']").first();
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
 
     // 2. Fill in login form
-    await page.getByPlaceholder("Enter email").fill(testEmail);
-    await page.getByPlaceholder("Enter password").fill(testPassword);
+    await page.getByLabel(/email/i).fill(testEmail);
+    await page.getByLabel("Password", { exact: true }).fill(testPassword);
 
     // 3. Submit
     await submitBtn.click();
