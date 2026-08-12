@@ -42,6 +42,7 @@ function Page() {
 
   const applyTheme = (t: "light" | "dark" | "system") => {
     setTheme(t);
+    localStorage.setItem("theme", t);
     const isLight =
       t === "light" ||
       (t === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);

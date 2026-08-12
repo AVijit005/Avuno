@@ -14,7 +14,7 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { analytics } from "../lib/analytics";
 import { queryKeys } from "../lib/api/query-keys";
 import { authApi } from "../lib/api";
-import { setAccessToken, getAccessToken, AUTH_EXPIRED_EVENT } from "../lib/api/fetch";
+import { setAccessToken, getAccessToken, AUTH_EXPIRED_EVENT, forceRefreshValidToken } from "../lib/api/fetch";
 import { ErrorBoundary } from "../components/common/ErrorBoundary";
 import { PageSkeleton } from "../components/common/PageSkeleton";
 
@@ -155,7 +155,8 @@ function RootShell({ children }: { children: ReactNode }) {
             __html: `
               try {
                 const storedTheme = localStorage.getItem('theme');
-                const isLight = storedTheme === 'light' || (!storedTheme && window.matchMedia('(prefers-color-scheme: light)').matches);
+                const isSystemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                const isLight = storedTheme === 'light' || ((!storedTheme || storedTheme === 'system') && !isSystemDark);
                 if (isLight) {
                   document.documentElement.classList.add('light');
                   document.documentElement.classList.remove('dark');
@@ -187,7 +188,6 @@ function RootComponent() {
       let token = getAccessToken();
       if (!token) {
         try {
-          const { forceRefreshValidToken } = await import("@/lib/api/fetch");
           token = await forceRefreshValidToken();
         } catch {
           if (mounted) setIsRestoring(false);
@@ -231,24 +231,41 @@ function RootComponent() {
 
   // Apply theme on boot
   useEffect(() => {
+    // Initial sync
     const saved = queryClient.getQueryData<{ themePreference?: string }>(queryKeys.auth.me());
-    const pref = saved?.themePreference || localStorage.getItem("theme") || "system";
+    const applyPref = (pref: string) => {
+      const isLight =
+        pref === "light" ||
+        (pref === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+      if (isLight) {
+        document.documentElement.classList.add("light");
+        document.documentElement.classList.remove("dark");
+      } else {
+        document.documentElement.classList.add("dark");
+        document.documentElement.classList.remove("light");
+      }
+      if (pref !== "system" && localStorage.getItem("theme") !== pref) {
+        localStorage.setItem("theme", pref);
+      }
+    };
+    
+    applyPref(saved?.themePreference || localStorage.getItem("theme") || "system");
 
-    const isLight =
-      pref === "light" ||
-      (pref === "system" && window.matchMedia("(prefers-color-scheme: light)").matches);
+    // Listen for auth user data changes (e.g. login / session restore completion)
+    const unsubscribe = queryClient.getQueryCache().subscribe((event) => {
+      if (
+        event.query.queryKey.join(",") === queryKeys.auth.me().join(",") &&
+        event.query.state.status === "success" &&
+        event.query.state.data
+      ) {
+        const user = event.query.state.data as any;
+        if (user.themePreference) {
+          applyPref(user.themePreference);
+        }
+      }
+    });
 
-    if (isLight) {
-      document.documentElement.classList.add("light");
-      document.documentElement.classList.remove("dark");
-    } else {
-      document.documentElement.classList.add("dark");
-      document.documentElement.classList.remove("light");
-    }
-
-    if (pref !== "system" && localStorage.getItem("theme") !== pref) {
-      localStorage.setItem("theme", pref);
-    }
+    return () => unsubscribe();
   }, [queryClient]);
 
   const router = useRouter();
