@@ -110,7 +110,9 @@ services:
   # being down, must not block its event loop, and must run once for the whole
   # stack rather than once per replica.
   backup:
-    image: postgres:16-alpine
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
     <<: *common
     depends_on:
       postgres:
@@ -131,7 +133,6 @@ services:
     entrypoint: ["/bin/sh", "-c"]
     command:
       - |
-        apk add --no-cache age aws-cli >/dev/null 2>&1 || true
         /scripts/backup.sh --verify-only || exit 1
         echo "[backup] sidecar ready; taking a daily backup at 03:00 UTC"
         while true; do

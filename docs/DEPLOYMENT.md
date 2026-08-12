@@ -39,16 +39,21 @@ SSH into VPS → git pull → Docker rebuild/restart → Health verification
 
 ## VPS Deployment Procedure
 
-Exact VPS deployment commands require runtime verification and are not
-yet confirmed from repository configuration alone. The expected flow is:
+Exact VPS deployment commands must be executed in this order:
 
 1. SSH into VPS
-2. Navigate to the repository directory
-3. `git pull origin main` (pull latest approved commit)
-4. `docker compose -f docker-compose.prod.yml build`
-5. `docker compose -f docker-compose.prod.yml up -d`
-6. `docker compose -f docker-compose.prod.yml ps` (verify `api` becomes healthy, `migrate` exited 0)
-7. Verify `GET /api/health` returns healthy status
+2. Navigate to the repository directory (`apps/backend`)
+3. Verify VPS health (`docker compose -f docker-compose.prod.yml ps`)
+4. Verify backup environment and Execute backup:
+   ```bash
+   docker compose -f docker-compose.prod.yml run --rm backup /scripts/backup.sh
+   ```
+5. **Confirm backup SUCCESS.** (If exit code is non-zero, STOP immediately. Do NOT continue).
+6. Only then: `git pull origin main`
+7. `docker compose -f docker-compose.prod.yml build`
+8. `docker compose -f docker-compose.prod.yml up -d`
+9. `docker compose -f docker-compose.prod.yml ps` (verify `api` becomes healthy, `migrate` exited 0)
+10. Verify `GET /api/health` returns healthy status
 
 > **MIGRATION LIFECYCLE**: The `docker-compose.prod.yml` defines a dedicated `migrate` init-container. It waits for PostgreSQL to be healthy, executes `prisma migrate deploy`, and exits. The `api` container explicitly depends on `migrate` completing successfully. If a migration fails, the `api` container will never start, preventing silent data corruption or application crashes.
 
@@ -76,7 +81,9 @@ See `apps/backend/.env.example` for the complete list.
 
 Critical production variables (all required):
 
-- `DATABASE_URL` — PostgreSQL connection string
+- `DATABASE_URL` — PostgreSQL connection string (REQUIRED in VPS production, REQUIRED locally)
+- `BACKUP_AGE_RECIPIENT` — Public key for Age encryption (REQUIRED in VPS production, optional locally if ALLOW_PLAINTEXT_BACKUP=1 is set)
+- `BACKUP_S3_URI` — S3 destination path (OPTIONAL in VPS production, optional locally)
 - `REDIS_PASSWORD` — Redis authentication
 - `JWT_ACCESS_SECRET` / `JWT_REFRESH_SECRET` — Token signing
 - `OAUTH_ENCRYPTION_KEY` — Provider token encryption
