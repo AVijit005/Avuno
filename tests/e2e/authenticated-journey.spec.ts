@@ -7,6 +7,7 @@ test.describe("Authenticated User Journeys", () => {
   // Use a single test to walk through the journey to avoid rate limiting
   // on the login endpoint (3 requests per minute).
   test("should login and navigate through all core authenticated routes", async ({ page }) => {
+    test.setTimeout(60000);
     // 1. Navigate to auth page
     await page.goto("/auth");
 

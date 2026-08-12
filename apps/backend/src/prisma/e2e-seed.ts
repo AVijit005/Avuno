@@ -13,7 +13,7 @@ async function main() {
   const testPassword = 'SuperSecurePassword123!';
   const passwordHash = await argon2.hash(testPassword);
 
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     where: { email: testEmail },
     update: {
       passwordHash,
@@ -27,6 +27,26 @@ async function main() {
     },
   });
   console.log('Seeded E2E user');
+
+  // Clean library for deterministic E2E test
+  await prisma.userMovie.deleteMany({
+    where: { userId: user.id },
+  });
+  console.log('Cleaned E2E user library');
+
+  // Seed deterministic catalog item
+  await prisma.movie.upsert({
+    where: { slug: 'e2e-deterministic-movie' },
+    update: {},
+    create: {
+      slug: 'e2e-deterministic-movie',
+      title: 'E2E Deterministic Movie',
+      overview: 'A movie created specifically for deterministic E2E testing.',
+      releaseYear: 2026,
+      status: 'PUBLISHED',
+    },
+  });
+  console.log('Seeded E2E catalog items');
 }
 
 main()

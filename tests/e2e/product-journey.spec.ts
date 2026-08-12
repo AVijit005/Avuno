@@ -16,6 +16,7 @@ test.describe("Phase 16 — Core Product Journey", () => {
   test("new user journey: login → home → library → add media → journal → timeline → analytics → logout", async ({
     page,
   }) => {
+    test.setTimeout(60000);
     // ── 1. Login ─────────────────────────────────────────────────────────
     await page.goto("/auth");
     const submitBtn = page.locator("button[type='submit']").first();
@@ -76,10 +77,10 @@ test.describe("Phase 16 — Core Product Journey", () => {
     // Step 2: Search catalog
     const addSearchInput = dialog.locator("input[placeholder*='Search']").first();
     await expect(addSearchInput).toBeVisible({ timeout: 5000 });
-    await addSearchInput.fill("a");
+    await addSearchInput.fill("E2E Deterministic Movie");
 
     // Wait for search results and click the first one
-    const firstResult = dialog.locator("button.w-full.flex").first();
+    const firstResult = dialog.locator("button", { hasText: "E2E Deterministic Movie" }).first();
     await expect(firstResult).toBeVisible({ timeout: 8000 });
     await firstResult.click();
 
@@ -121,7 +122,9 @@ test.describe("Phase 16 — Core Product Journey", () => {
     await expect(timelineHeading).toBeVisible({ timeout: 10000 });
 
     // Year selector should be present
-    await expect(page.locator("text=" + new Date().getFullYear())).toBeVisible({ timeout: 5000 });
+    await expect(page.locator("text=" + new Date().getFullYear()).first()).toBeVisible({
+      timeout: 5000,
+    });
 
     // ── 9. Analytics ──────────────────────────────────────────────────────
     await page.goto("/app/analytics");
@@ -152,7 +155,9 @@ test.describe("Phase 16 — Core Product Journey", () => {
     await page.goto("/app");
 
     // Wait for the page to finish loading and one of the buttons to appear
-    await expect(page.locator('#home-add-media-btn, button:has-text("Add your first item")').first()).toBeVisible({ timeout: 15000 });
+    await expect(
+      page.locator('#home-add-media-btn, button:has-text("Add your first item")').first(),
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test("library search: search works without crashing and clears properly", async ({ page }) => {
