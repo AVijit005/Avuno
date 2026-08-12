@@ -89,6 +89,8 @@ services:
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET}
       GOOGLE_CALLBACK_URL: ${GOOGLE_CALLBACK_URL:-https://www.avuno.xyz/api/auth/google/callback}
       OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:?OAUTH_ENCRYPTION_KEY is required}
+      EMAIL_API_KEY: ${EMAIL_API_KEY:?EMAIL_API_KEY is required}
+      EMAIL_FROM: ${EMAIL_FROM:-noreply@avuno.xyz}
     depends_on:
       migrate:
         condition: service_completed_successfully
