@@ -2,30 +2,11 @@ import { motion } from "motion/react";
 import { Pencil, ArrowUpRight, NotebookPen } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import type { UIMediaItem } from "@/lib/adapters/types";
-import { useJournalEntries } from "@/hooks/use-journal";
-import { adaptJournalEntry } from "@/lib/adapters/journal";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
 
 export function MediaJournalPreview({ item }: { item: UIMediaItem }) {
-  const accent = item.accent ?? "var(--primary)";
-  const { data: journalData, isLoading } = useJournalEntries({ limit: 1 });
-  const entries = journalData?.pages.flatMap((p) => p.items).map(adaptJournalEntry) ?? [];
-  const latestEntry = entries[0];
   const { openReflection } = useMediaActions();
-
-  if (isLoading) {
-    return (
-      <div className="glass relative overflow-hidden rounded-[28px] p-7 md:p-9">
-        <div className="h-3 w-40 animate-pulse rounded bg-white/10" />
-        <div className="mt-3 h-7 w-56 animate-pulse rounded bg-white/10" />
-        <div className="mt-6 space-y-2">
-          <div className="h-6 w-full animate-pulse rounded bg-white/5" />
-          <div className="h-6 w-4/5 animate-pulse rounded bg-white/5" />
-        </div>
-      </div>
-    );
-  }
 
   return (
     <motion.div
@@ -44,31 +25,29 @@ export function MediaJournalPreview({ item }: { item: UIMediaItem }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
-            {latestEntry
-              ? `${new Date(latestEntry.createdAt).toLocaleDateString()} · ${latestEntry.mood ?? "No mood"}`
-              : `${item.lastInteractionAt ? new Date(item.lastInteractionAt).toLocaleDateString() : "No date"} · ${item.status}`}
+            Journal
           </div>
-          <h3 className="mt-2 font-display text-2xl tracking-tight md:text-3xl">
-            {latestEntry ? latestEntry.title || "Untitled entry" : "Latest entry"}
-          </h3>
+          <h3 className="mt-2 font-display text-2xl tracking-tight md:text-3xl">Your reflection</h3>
         </div>
         <PremiumButton
           variant="icon"
           icon={<Pencil className="h-4 w-4" />}
-          aria-label="Edit"
+          aria-label="Write reflection"
           onClick={() => openReflection(item.id)}
         />
       </div>
-      {latestEntry || item.synopsis ? (
+
+      {item.synopsis ? (
         <p className="mt-5 font-display text-2xl leading-snug text-foreground/90 md:text-3xl">
-          &ldquo;{latestEntry ? latestEntry.content.slice(0, 200) : item.synopsis}&rdquo;
+          &ldquo;{item.synopsis}&rdquo;
         </p>
       ) : (
         <p className="mt-5 flex items-center gap-2 text-base text-muted-foreground">
-          <NotebookPen className="h-4 w-4 opacity-60" /> No journal entry yet — your first
-          reflection will appear here.
+          <NotebookPen className="h-4 w-4 opacity-60" /> No reflection yet — write how this made you
+          feel.
         </p>
       )}
+
       <div className="mt-6 flex items-center justify-between">
         <span className="text-xs text-muted-foreground">
           {item.genres

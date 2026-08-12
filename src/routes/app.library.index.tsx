@@ -1,8 +1,8 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
-import { motion, AnimatePresence } from "motion/react";
-import { Search, SlidersHorizontal, ChevronDown, Check, LayoutGrid, List } from "lucide-react";
+import { motion } from "motion/react";
+import { Search, SlidersHorizontal, ChevronDown, LayoutGrid } from "lucide-react";
 import { useLibrary, useLibraryStats } from "@/hooks/use-library";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
@@ -10,6 +10,7 @@ import { adaptLibraryItem } from "@/lib/adapters/media";
 import { MediaCard } from "@/components/media/MediaCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
+import { useMediaActions } from "@/lib/store/MediaActionsContext";
 
 import {
   DropdownMenu,
@@ -36,9 +37,9 @@ function LibraryIndex() {
   const [sortBy, setSortBy] = useState<SortOption>("createdAt");
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc");
   const [favorite, setFavorite] = useState<boolean>(false);
-  const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
+  const { openAdd } = useMediaActions();
 
   // Keyboard friendly interaction for search
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -106,13 +107,23 @@ function LibraryIndex() {
   return (
     <div className="flex flex-col min-h-screen pt-2 pb-24">
       {/* HEADER */}
-      <header className="mb-8">
-        <h1 className="font-display text-3xl sm:text-4xl tracking-tight">Library</h1>
-        <p className="mt-1 text-sm text-muted-foreground">
-          {stats?.total
-            ? `${stats.total.toLocaleString()} items in archive`
-            : "Your master archive"}
-        </p>
+      <header className="mb-8 flex items-start justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl sm:text-4xl tracking-tight">Library</h1>
+          <p className="mt-1 text-sm text-muted-foreground">
+            {stats?.total
+              ? `${stats.total.toLocaleString()} items in archive`
+              : "Your master archive"}
+          </p>
+        </div>
+        <button
+          id="library-add-media-btn"
+          onClick={openAdd}
+          className="hidden sm:flex shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm press-scale"
+        >
+          <span className="text-base leading-none">+</span>
+          Add media
+        </button>
       </header>
 
       {/* TAXONOMY SEGMENTED CONTROL */}
@@ -296,14 +307,7 @@ function LibraryIndex() {
                   </ul>
                 </div>
                 <div className="pt-4">
-                  <PremiumButton
-                    variant="primary"
-                    onClick={() => {
-                      document.dispatchEvent(
-                        new KeyboardEvent("keydown", { key: "k", metaKey: true }),
-                      );
-                    }}
-                  >
+                  <PremiumButton variant="primary" onClick={openAdd}>
                     Add your first story
                   </PremiumButton>
                 </div>

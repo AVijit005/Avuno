@@ -116,7 +116,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
 
       <Chapter
         id="ch-connections"
-        number="04"
+        number="03"
         eyebrow="Chapter three"
         title="Where it lives in your world"
         description="The collections, journal entries, and stories it touches."
@@ -133,7 +133,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
       {/* ───── Chapter 05 — Journey (timeline) ────────────────────────── */}
       <Chapter
         id="ch-journey"
-        number="05"
+        number="04"
         eyebrow="Chapter four"
         title="Your journey through it"
         description="History, sessions, and what's still ahead."
@@ -148,8 +148,8 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
       {/* ───── Chapter 06 — Archive (technical) ───────────────────────── */}
       <Chapter
         id="ch-archive"
-        number="06"
-        eyebrow="Chapter six"
+        number="05"
+        eyebrow="Chapter five"
         title="The archive"
         description="The deeper record — open when you want it."
         tone="technical"

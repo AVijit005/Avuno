@@ -121,7 +121,18 @@ function TimelinePage() {
           </div>
           <div className="space-y-8">
             {yearEvents.length === 0 && !isLoading && (
-              <div className="pl-14 md:pl-20 text-muted-foreground">No events for this year.</div>
+              <div className="pl-14 md:pl-20">
+                <div className="rounded-2xl border border-border/30 bg-surface-1 p-6 text-sm text-muted-foreground">
+                  <p className="font-medium text-foreground/80">No events for {year}</p>
+                  <p className="mt-1">
+                    Timeline events are recorded automatically when you track media — start by{" "}
+                    <Link to="/app/library" className="text-primary underline underline-offset-2">
+                      adding to your library
+                    </Link>
+                    .
+                  </p>
+                </div>
+              </div>
             )}
             {yearEvents.map((e, i) => {
               // Map UI event properties from metadata or fallback

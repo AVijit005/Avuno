@@ -20,9 +20,7 @@ test.describe("Critical User Journey", () => {
     await page.goto("/auth");
 
     // Wait for the auth form to mount
-    await expect(
-      page.locator("button[type='submit']").first(),
-    ).toBeVisible();
+    await expect(page.locator("button[type='submit']").first()).toBeVisible();
 
     // Check for email input
     const emailInput = page.getByLabel(/email/i).first();

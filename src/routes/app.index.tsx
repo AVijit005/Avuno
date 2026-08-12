@@ -1,7 +1,7 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
 import React from "react";
 import { format } from "date-fns";
-import { Plus, NotebookPen, Clock, Library, History } from "lucide-react";
+import { NotebookPen, Clock, Library, History, BookOpen, BarChart3 } from "lucide-react";
 import { DashboardGreeting } from "@/components/dashboard/DashboardGreeting";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
@@ -9,6 +9,7 @@ import { PremiumErrorState } from "@/components/common/PremiumErrorState";
 import { ErrorBoundary } from "@/components/common/ErrorBoundary";
 import { ContinueCard } from "@/components/library/ContinueCard";
 import { MemoryInsights } from "@/components/memory/MemoryInsights";
+import { useMediaActions } from "@/lib/store/MediaActionsContext";
 
 import { useDashboard, useOverview } from "@/hooks/use-analytics";
 import { adaptContinueItem } from "@/lib/adapters/media";
@@ -30,6 +31,7 @@ export const Route = createFileRoute("/app/")({
 function Home() {
   const { data: dashboard, isLoading, isError, error } = useDashboard();
   const { data: overview } = useOverview();
+  const { openAdd } = useMediaActions();
 
   const today = format(new Date(), "EEEE, MMMM do");
 
@@ -81,13 +83,14 @@ function Home() {
             <NotebookPen className="w-4 h-4 text-muted-foreground" />
             Write Entry
           </Link>
-          <Link
-            to="/app/library"
-            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm"
+          <button
+            id="home-add-media-btn"
+            onClick={openAdd}
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm press-scale"
           >
-            <Plus className="w-4 h-4" />
+            <span className="text-base leading-none">+</span>
             Add Media
-          </Link>
+          </button>
         </div>
       </section>
 
@@ -156,28 +159,47 @@ function Home() {
 }
 
 function OnboardingGuide() {
-  const navigate = useNavigate();
+  const { openAdd } = useMediaActions();
+  const pillars = [
+    { icon: Library, label: "Library", hint: "Your master archive" },
+    { icon: Clock, label: "Timeline", hint: "Stories over time" },
+    { icon: BookOpen, label: "Journal", hint: "Reflections & notes" },
+    { icon: BarChart3, label: "Analytics", hint: "Patterns & insights" },
+  ];
   return (
     <div className="mt-4">
-      <div className="bg-surface-1 border border-border/40 rounded-2xl p-8 md:p-12 text-center md:text-left flex flex-col md:flex-row gap-12 items-center">
-        <div className="flex-1 space-y-6">
+      <div className="bg-surface-1 border border-border/40 rounded-2xl p-8 md:p-12">
+        <div className="max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-medium tracking-tight">
-            Your media life, recorded.
+            Add your first piece of media.
           </h2>
-          <p className="text-muted-foreground leading-relaxed max-w-md mx-auto md:mx-0">
-            Avuno is the command center for the stories you consume. Track movies, books, and games.
-            Log your progress, write your reflections, and let the timeline map your tastes over
-            time.
+          <p className="mt-3 text-muted-foreground leading-relaxed">
+            Avuno tracks every movie, book, game, and show you consume. Once you add something, it
+            powers your entire experience:
           </p>
-          <div className="pt-2">
-            <PremiumButton variant="primary" onClick={() => navigate({ to: "/app/library" })}>
-              Start building your library
-            </PremiumButton>
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+            {pillars.map(({ icon: Icon, label, hint }) => (
+              <div
+                key={label}
+                className="flex flex-col gap-2 rounded-xl border border-border/40 bg-surface-2/60 p-4"
+              >
+                <Icon className="h-4 w-4 text-primary" />
+                <div className="text-sm font-medium">{label}</div>
+                <div className="text-[11px] text-muted-foreground leading-snug">{hint}</div>
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="flex-1 w-full max-w-sm">
-          <div className="aspect-[4/3] rounded-xl border border-border/40 bg-surface-2 flex items-center justify-center p-6 text-center text-muted-foreground/60 text-sm">
-            Your library begins here.
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <PremiumButton variant="primary" onClick={openAdd}>
+              Add your first item
+            </PremiumButton>
+            <span className="text-xs text-muted-foreground">
+              or press{" "}
+              <kbd className="rounded border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px]">
+                ⌘N
+              </kbd>{" "}
+              anywhere
+            </span>
           </div>
         </div>
       </div>
