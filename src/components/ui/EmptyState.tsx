@@ -34,7 +34,7 @@ export function EmptyState({
       {/* ambient glow */}
       <span
         aria-hidden
-        className="pointer-events-none absolute -top-24 left-1/2 h-64 w-64 -translate-x-1/2 rounded-full opacity-40 blur-3xl"
+        className="pointer-events-none absolute -top-16 left-1/2 h-40 w-40 -translate-x-1/2 rounded-full opacity-20 blur-2xl"
         style={{
           background: "radial-gradient(circle, oklch(0.72 0.18 255 / 0.35), transparent 65%)",
         }}

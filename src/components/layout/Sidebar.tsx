@@ -22,7 +22,7 @@ export function Sidebar({
     <motion.aside
       animate={{ width: collapsed ? 76 : 264 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl bg-surface-1 border border-border/40 lg:flex shadow-sm"
+      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass-subtle lg:flex"
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">

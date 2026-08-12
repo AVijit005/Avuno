@@ -133,7 +133,7 @@ export function CinematicHero({ item }: { item: UIMediaItem }) {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9, delay: 0.3, ease }}
-          className="glass-strong relative max-w-2xl overflow-hidden rounded-3xl p-6 md:p-8"
+          className="glass-elevated relative max-w-2xl overflow-hidden rounded-3xl p-6 md:p-8"
           style={{ boxShadow: "0 30px 80px -30px oklch(0 0 0 / 0.7)" }}
         >
           <span

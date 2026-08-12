@@ -76,7 +76,7 @@ export function AnalyticsPreview() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7 }}
-          className="glass-strong relative col-span-1 overflow-hidden rounded-3xl p-6 md:col-span-2"
+          className="glass-elevated relative col-span-1 overflow-hidden rounded-3xl p-6 md:col-span-2"
         >
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Watch time · last 30 days
@@ -116,7 +116,7 @@ export function AnalyticsPreview() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.1 }}
-          className="glass-strong relative overflow-hidden rounded-3xl p-6"
+          className="glass-elevated relative overflow-hidden rounded-3xl p-6"
         >
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Streak
@@ -151,7 +151,7 @@ export function AnalyticsPreview() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.15 }}
-          className="glass-strong relative flex items-center gap-4 overflow-hidden rounded-3xl p-6"
+          className="glass-elevated relative flex items-center gap-4 overflow-hidden rounded-3xl p-6"
         >
           <div className="relative h-32 w-32 shrink-0">
             <ResponsiveContainer>
@@ -193,7 +193,7 @@ export function AnalyticsPreview() {
           whileInView="visible"
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, delay: 0.2 }}
-          className="glass-strong col-span-1 overflow-hidden rounded-3xl p-6 md:col-span-2"
+          className="glass-elevated col-span-1 overflow-hidden rounded-3xl p-6 md:col-span-2"
         >
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Monthly completions

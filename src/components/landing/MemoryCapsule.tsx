@@ -59,7 +59,7 @@ export function MemoryCapsule() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ delay: i * 0.12, duration: 0.8 }}
-            className="glass-strong relative overflow-hidden rounded-3xl p-5"
+            className="glass-elevated relative overflow-hidden rounded-3xl p-5"
           >
             <div className="relative aspect-[4/3] overflow-hidden rounded-2xl">
               <img

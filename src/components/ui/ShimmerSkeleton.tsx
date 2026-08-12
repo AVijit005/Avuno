@@ -22,7 +22,7 @@ export function ShimmerSkeleton({ className, variant = "glass" }: Props) {
           className="absolute inset-0"
           style={{
             background:
-              "linear-gradient(110deg, transparent 30%, oklch(1 0 0 / 0.08) 50%, transparent 70%)",
+              "linear-gradient(110deg, transparent 30%, oklch(1 0 0 / 0.12) 50%, transparent 70%)",
             backgroundSize: "200% 100%",
             animation: "shimmer 2.4s linear infinite",
           }}

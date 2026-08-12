@@ -78,7 +78,7 @@ export function FAQSection() {
                   onClick={() => setOpenIndex(isOpen ? null : i)}
                   className={`group flex w-full items-start gap-4 rounded-2xl px-6 py-5 text-left transition-all duration-300 ${
                     isOpen
-                      ? "glass-strong ring-1 ring-primary/15"
+                      ? "glass-elevated ring-1 ring-primary/15"
                       : "glass ring-1 ring-white/[0.04] hover:ring-white/[0.08]"
                   }`}
                   aria-expanded={isOpen}

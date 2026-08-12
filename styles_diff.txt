@@ -1,0 +1,88 @@
+diff --git a/src/styles.css b/src/styles.css
+index e577c5d..3116eb3 100644
+--- a/src/styles.css
++++ b/src/styles.css
+@@ -323,42 +323,68 @@ select {
+ }
+ 
+ /* ============================================================
+- * Glass + atmosphere utilities
++ * Liquid Glass Material System
++ * 
++ * Hierarchy:
++ * 1. glass-subtle: flat, barely detached (e.g. inactive elements, flat panels)
++ * 2. glass: standard surface (e.g. cards, dropdowns)
++ * 3. glass-elevated: lifted (e.g. hover states, highlighted cards)
++ * 4. glass-floating: highest elevation (e.g. command palette, dialogs, floating action buttons)
+  * ============================================================ */
+ 
++@utility glass-subtle {
++  background: color-mix(
++    in oklab,
++    var(--color-surface-1) calc(var(--glass-subtle-alpha) * 100%),
++    transparent
++  );
++  -webkit-backdrop-filter: blur(8px) saturate(110%);
++  backdrop-filter: blur(8px) saturate(110%);
++  border: 1px solid var(--color-border-subtle);
++  box-shadow: 0 1px 0 oklch(1 0 0 / 0.03) inset;
++}
++
+ @utility glass {
+   background: color-mix(
+     in oklab,
+     var(--color-surface-2) calc(var(--glass-base-alpha) * 100%),
+     transparent
+   );
+-  -webkit-backdrop-filter: blur(12px) saturate(120%);
+-  backdrop-filter: blur(12px) saturate(120%);
+-  border: 1px solid var(--color-border-subtle);
+-  box-shadow: var(--shadow-sm);
++  -webkit-backdrop-filter: blur(16px) saturate(120%);
++  backdrop-filter: blur(16px) saturate(120%);
++  border: 1px solid var(--color-border-default);
++  box-shadow: 
++    0 1px 0 oklch(1 0 0 / 0.06) inset,
++    var(--shadow-sm);
+ }
+ 
+-@utility glass-strong {
++@utility glass-elevated {
+   background: color-mix(
+     in oklab,
+     var(--color-surface-3) calc(var(--glass-strong-alpha) * 100%),
+     transparent
+   );
+-  -webkit-backdrop-filter: blur(20px) saturate(140%);
+-  backdrop-filter: blur(20px) saturate(140%);
+-  border: 1px solid var(--color-border-default);
+-  box-shadow: var(--shadow-md);
++  -webkit-backdrop-filter: blur(24px) saturate(130%);
++  backdrop-filter: blur(24px) saturate(130%);
++  border: 1px solid var(--color-border-strong);
++  box-shadow: 
++    0 1px 0 oklch(1 0 0 / 0.1) inset,
++    var(--shadow-md);
+ }
+ 
+-@utility glass-subtle {
++@utility glass-floating {
+   background: color-mix(
+     in oklab,
+-    var(--color-surface-1) calc(var(--glass-subtle-alpha) * 100%),
++    var(--color-surface-3) calc(var(--glass-strong-alpha) * 100%),
+     transparent
+   );
+-  -webkit-backdrop-filter: blur(8px) saturate(110%);
+-  backdrop-filter: blur(8px) saturate(110%);
+-  border: 1px solid var(--color-border-subtle);
++  -webkit-backdrop-filter: blur(32px) saturate(140%);
++  backdrop-filter: blur(32px) saturate(140%);
++  border: 1px solid var(--color-border-strong);
++  box-shadow: 
++    0 1px 0 oklch(1 0 0 / 0.15) inset,
++    0 0 0 1px oklch(1 0 0 / 0.05) inset,
++    var(--shadow-xl);
+ }
+ 
+ @utility hover-lift {

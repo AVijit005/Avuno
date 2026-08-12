@@ -70,7 +70,7 @@ function AuthCallback() {
   return (
     <div className="relative flex min-h-screen items-center justify-center bg-background px-4">
       <AtmosphereBackground intensity="soft" />
-      <div className="glass-strong max-w-sm rounded-3xl p-8 text-center">
+      <div className="glass-elevated max-w-sm rounded-3xl p-8 text-center">
         <div className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
           <span className="font-display text-xl font-bold leading-none">A</span>
         </div>

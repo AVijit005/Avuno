@@ -105,14 +105,14 @@ export function StatCardPremium({
       className="glass group relative overflow-hidden rounded-3xl p-5 transition-shadow duration-[var(--dur-large)] hover:shadow-[var(--shadow-elevated)]"
     >
       <div
-        className="pointer-events-none absolute -right-12 -top-12 h-40 w-40 rounded-full blur-3xl opacity-50 transition group-hover:opacity-80"
+        className="pointer-events-none absolute -right-16 -top-16 h-28 w-28 rounded-full blur-3xl opacity-25 transition group-hover:opacity-40"
         style={{ background: accent ?? "oklch(0.72 0.18 255 / 0.4)" }}
       />
       <span
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 h-px"
         style={{
-          background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.35), transparent)",
+          background: "linear-gradient(90deg, transparent, oklch(1 0 0 / 0.15), transparent)",
         }}
       />
       <div className="relative">
@@ -218,7 +218,7 @@ export function GlassTooltip({
 }) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="glass-strong rounded-2xl px-3.5 py-2.5 text-xs shadow-2xl">
+    <div className="glass-elevated rounded-2xl px-3.5 py-2.5 text-xs shadow-2xl">
       {label && (
         <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">{label}</div>
       )}

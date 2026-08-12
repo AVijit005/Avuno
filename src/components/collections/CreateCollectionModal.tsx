@@ -60,7 +60,7 @@ export function CreateCollectionModal({
             role="dialog"
             aria-modal="true"
             aria-labelledby="modal-title"
-            className="glass-strong relative w-full max-w-xl overflow-hidden rounded-[32px] p-8"
+            className="glass-floating relative w-full max-w-xl overflow-hidden rounded-[32px] p-8"
             style={{ boxShadow: "0 60px 140px -30px oklch(0 0 0 / 0.75)" }}
           >
             <span

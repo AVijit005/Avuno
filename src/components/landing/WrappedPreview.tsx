@@ -10,7 +10,7 @@ const STATS = [
 
 export function WrappedPreview() {
   return (
-    <div className="glass-strong relative overflow-hidden rounded-[40px] p-10 md:p-16">
+    <div className="glass-elevated relative overflow-hidden rounded-[40px] p-10 md:p-16">
       <motion.div
         className="absolute -right-32 -top-32 h-[28rem] w-[28rem] rounded-full blur-3xl"
         style={{ background: "var(--secondary)", opacity: 0.4 }}

@@ -15,7 +15,7 @@ interface Props extends HTMLMotionProps<"div"> {
 const variantClass: Record<Variant, string> = {
   subtle: "glass-subtle",
   default: "glass",
-  strong: "glass-strong",
+  strong: "glass-elevated",
 };
 
 /**

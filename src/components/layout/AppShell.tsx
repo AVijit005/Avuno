@@ -60,8 +60,8 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <TopBar onOpenSearch={() => setSearch(true)} />
           <main
             id="main-content"
-            className="px-6 lg:px-10 lg:pb-16"
-            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 8rem)" }}
+            className="px-4 sm:px-6 lg:px-10 lg:pb-16"
+            style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 7rem)" }}
           >
             <AnimatePresence mode="wait" initial={false}>
               <motion.div

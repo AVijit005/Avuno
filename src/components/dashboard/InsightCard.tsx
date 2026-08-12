@@ -36,7 +36,7 @@ export function InsightCard() {
   const current = statements[Math.min(i, statements.length - 1)];
 
   return (
-    <div className="glass-strong relative overflow-hidden rounded-3xl p-6">
+    <div className="glass-elevated relative overflow-hidden rounded-3xl p-6">
       <div className="absolute -right-20 -top-20 h-56 w-56 rounded-full bg-primary/30 blur-3xl" />
       <div className="absolute -left-16 bottom-0 h-40 w-40 rounded-full bg-secondary/25 blur-3xl" />
       <div className="relative flex items-start gap-4">

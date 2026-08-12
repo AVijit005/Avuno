@@ -37,7 +37,7 @@ export function CrossPlatform() {
         animate={{ y: [0, -6, 0] }}
         transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
       >
-        <div className="glass-strong overflow-hidden rounded-[28px] p-2 ring-1 ring-white/10">
+        <div className="glass-elevated overflow-hidden rounded-[28px] p-2 ring-1 ring-white/10">
           <div className="flex items-center gap-1.5 px-3 py-2">
             <span className="h-2 w-2 rounded-full bg-white/20" />
             <span className="h-2 w-2 rounded-full bg-white/20" />
@@ -66,7 +66,7 @@ export function CrossPlatform() {
         animate={{ y: [0, -10, 0] }}
         transition={{ duration: 10, delay: 0.4, repeat: Infinity, ease: "easeInOut" }}
       >
-        <div className="glass-strong overflow-hidden rounded-[24px] p-1.5 ring-1 ring-white/10">
+        <div className="glass-elevated overflow-hidden rounded-[24px] p-1.5 ring-1 ring-white/10">
           <div className="relative aspect-[3/4] overflow-hidden rounded-[18px]">
             <img src={tablet.poster} alt="" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
@@ -84,7 +84,7 @@ export function CrossPlatform() {
         animate={{ y: [0, -8, 0] }}
         transition={{ duration: 9, delay: 0.8, repeat: Infinity, ease: "easeInOut" }}
       >
-        <div className="glass-strong overflow-hidden rounded-[22px] p-1 ring-1 ring-white/10">
+        <div className="glass-elevated overflow-hidden rounded-[22px] p-1 ring-1 ring-white/10">
           <div className="relative aspect-[9/19] overflow-hidden rounded-[18px]">
             <img src={mobile.poster} alt="" className="h-full w-full object-cover" />
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 to-transparent" />

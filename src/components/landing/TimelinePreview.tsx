@@ -54,7 +54,7 @@ export function TimelinePreview() {
               className={`relative pl-16 md:pl-0 ${side}`}
             >
               <div
-                className="glass-strong absolute left-6 top-2 grid h-5 w-5 -translate-x-1/2 place-items-center rounded-full ring-2 md:left-1/2"
+                className="glass-elevated absolute left-6 top-2 grid h-5 w-5 -translate-x-1/2 place-items-center rounded-full ring-2 md:left-1/2"
                 style={{ background: e.accent, boxShadow: `0 0 24px ${e.accent}` }}
               >
                 <Icon className="h-2.5 w-2.5 text-white" />

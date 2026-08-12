@@ -19,7 +19,7 @@ export function ComingSoon({
         initial={{ opacity: 0, y: 20, filter: "blur(8px)" }}
         animate={{ opacity: 1, y: 0, filter: "blur(0)" }}
         transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-        className="glass-strong relative overflow-hidden rounded-[40px] p-10 md:p-16"
+        className="glass-elevated relative overflow-hidden rounded-[40px] p-10 md:p-16"
       >
         <div
           className="absolute -right-20 -top-20 h-80 w-80 rounded-full blur-3xl"

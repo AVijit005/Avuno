@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="glass-strong fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-2 py-2 pb-safe lg:hidden"
+      className="glass-elevated fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 pb-safe lg:hidden"
       style={{ bottom: "env(safe-area-inset-bottom, 12px)" }}
     >
       {items.map((it) => {
@@ -42,7 +42,7 @@ export function MobileNav() {
             to={it.to}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-1.5 text-[10px] transition",
+              "flex flex-1 flex-col items-center gap-1 rounded-xl px-2 py-2 text-[10px] transition",
               active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >

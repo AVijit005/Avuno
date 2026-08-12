@@ -26,7 +26,7 @@ function MemoryDetail() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen pt-24 pb-32 px-4 max-w-4xl mx-auto space-y-12">
+      <div className="pt-8 pb-32 px-4 max-w-4xl mx-auto space-y-12">
         <div className="h-6 w-24 bg-foreground/5 rounded-full animate-pulse mb-12" />
         <div className="h-24 bg-foreground/5 rounded-3xl animate-pulse" />
         <div className="h-64 bg-foreground/5 rounded-3xl animate-pulse" />
@@ -36,7 +36,7 @@ function MemoryDetail() {
 
   if (isError || !memory) {
     return (
-      <div className="min-h-screen pt-32 px-4 flex flex-col items-center justify-center text-center space-y-6">
+      <div className="pt-16 pb-32 px-4 flex flex-col items-center justify-center text-center space-y-6">
         <div className="w-16 h-16 rounded-full bg-red-400/10 text-red-400 flex items-center justify-center">
           <Lock className="w-8 h-8" />
         </div>
@@ -52,7 +52,7 @@ function MemoryDetail() {
   }
 
   return (
-    <div className="min-h-screen pt-24 pb-32 px-4 max-w-4xl mx-auto space-y-12">
+    <div className="pt-8 pb-32 px-4 max-w-4xl mx-auto space-y-12">
       <nav>
         <Link
           to="/app/memories"
@@ -65,7 +65,7 @@ function MemoryDetail() {
 
       {/* MEMORY HERO */}
       <header className="space-y-6 text-center">
-        <h1 className="text-4xl md:text-6xl font-serif text-foreground tracking-tight leading-tight">
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-foreground tracking-tight leading-tight">
           {memory.title}
         </h1>
 

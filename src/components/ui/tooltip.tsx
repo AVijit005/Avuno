@@ -21,9 +21,7 @@ const TooltipContent = React.forwardRef<
       sideOffset={sideOffset}
       className={cn(
         // Premium glass tooltip with soft shadow + scale/slide on entry
-        "z-50 overflow-hidden rounded-xl border border-white/10 px-3 py-1.5 text-xs text-foreground/95",
-        "bg-[color:color-mix(in_oklab,var(--popover)_82%,transparent)] backdrop-blur-xl",
-        "shadow-[0_18px_44px_-22px_oklch(0_0_0/0.7),0_0_0_1px_oklch(1_0_0/0.04)]",
+        "z-50 overflow-hidden rounded-xl border border-white/10 glass px-3 py-1.5 text-xs text-foreground/95",
         "animate-in fade-in-0 zoom-in-95 duration-200 ease-out",
         "data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95",
         "data-[side=bottom]:slide-in-from-top-1 data-[side=left]:slide-in-from-right-1 data-[side=right]:slide-in-from-left-1 data-[side=top]:slide-in-from-bottom-1",

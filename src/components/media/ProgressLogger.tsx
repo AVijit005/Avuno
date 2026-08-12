@@ -65,7 +65,7 @@ export function ProgressLogger({ id, onClose }: { id: string | null; onClose: ()
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-md border-border/60 bg-background/95">
+      <DialogContent className="max-w-md">
         <DialogTitle className="font-display text-xl tracking-tight">Log progress</DialogTitle>
         <DialogDescription className="text-sm text-muted-foreground">
           {item?.title ?? ""}

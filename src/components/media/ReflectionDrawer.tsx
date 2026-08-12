@@ -59,7 +59,7 @@ export function ReflectionDrawer({ id, onClose }: { id: string | null; onClose: 
 
   return (
     <Dialog open={open} onOpenChange={(v) => !v && onClose()}>
-      <DialogContent className="max-w-lg border-border/60 bg-background/95">
+      <DialogContent className="max-w-lg">
         <DialogTitle className="font-display text-2xl tracking-tight">
           What did it leave with you?
         </DialogTitle>

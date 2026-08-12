@@ -122,7 +122,7 @@ export function DashboardShowcase() {
 
       <motion.div
         style={{ rotateX, transformPerspective: 1400 }}
-        className="glass-strong relative mx-auto overflow-hidden rounded-[36px] p-3 md:p-4"
+        className="glass-elevated relative mx-auto overflow-hidden rounded-[36px] p-3 md:p-4"
       >
         <div className="relative aspect-[16/9.5] w-full overflow-hidden rounded-[28px]">
           <AnimatePresence mode="wait">

@@ -61,7 +61,7 @@ function TimelinePage() {
         <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground">
           Life through media
         </div>
-        <h1 className="mt-4 font-display text-4xl tracking-tight md:text-5xl text-foreground">
+        <h1 className="mt-4 font-display text-3xl sm:text-4xl tracking-tight md:text-5xl text-foreground">
           Your timeline.
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
@@ -272,7 +272,10 @@ function TimelinePage() {
             { l: "Journal entries", v: 0 },
             { l: "Achievements", v: 0 },
           ].map((s) => (
-            <div key={s.l} className="p-6 bg-surface-1 border border-border/30 rounded-2xl shadow-sm">
+            <div
+              key={s.l}
+              className="p-6 bg-surface-1 border border-border/30 rounded-2xl shadow-sm"
+            >
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 {s.l}
               </div>

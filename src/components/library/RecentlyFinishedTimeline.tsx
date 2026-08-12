@@ -31,7 +31,7 @@ export function RecentlyFinishedTimeline({ limit }: { limit?: number }) {
           groups[b].length === 0 ? null : (
             <div key={b}>
               <div className="mb-3 flex items-center gap-3 pl-8">
-                <span className="absolute left-[6px] h-3 w-3 -translate-y-0.5 rounded-full bg-gradient-to-br from-primary to-secondary shadow-[0_0_16px_oklch(0.72_0.18_255/0.6)]" />
+                <span className="absolute left-[6px] h-3 w-3 -translate-y-0.5 rounded-full bg-gradient-to-br from-primary to-secondary shadow-[0_0_10px_oklch(0.72_0.18_255/0.25)]" />
                 <span className="text-[10px] uppercase tracking-[0.22em] text-primary/90">{b}</span>
               </div>
               <div className="grid grid-cols-1 gap-3 pl-8 md:grid-cols-2">

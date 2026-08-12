@@ -47,7 +47,7 @@ test.describe("Authenticated User Journeys", () => {
     // 9. Analytics
     await page.goto("/app/analytics");
     await expect(page).toHaveURL(/\/app\/analytics/);
-    await expect(page.locator("text=A year of stories")).toBeVisible({ timeout: 10000 });
+    await expect(page.locator("text=Library Insights")).toBeVisible({ timeout: 10000 });
 
     // 10. Logout
     await page.goto("/app/settings");

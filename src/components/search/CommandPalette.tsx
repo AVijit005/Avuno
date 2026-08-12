@@ -378,7 +378,7 @@ export function CommandPalette({
             exit={{ y: -10, opacity: 0, scale: 0.96 }}
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="glass-strong relative mx-auto w-full max-w-2xl overflow-hidden rounded-3xl"
+            className="glass-floating relative mx-auto w-full max-w-2xl overflow-hidden rounded-3xl"
             style={{
               boxShadow: "0 60px 140px -30px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.04)",
             }}

@@ -84,7 +84,7 @@ function LibraryIndex() {
     <div className="flex flex-col min-h-screen pt-2 pb-24">
       {/* HEADER */}
       <header className="mb-8">
-        <h1 className="font-display text-4xl tracking-tight">Library</h1>
+        <h1 className="font-display text-3xl sm:text-4xl tracking-tight">Library</h1>
         <p className="mt-1 text-sm text-muted-foreground">
           {stats?.total
             ? `${stats.total.toLocaleString()} items in archive`
@@ -93,7 +93,7 @@ function LibraryIndex() {
       </header>
 
       {/* TAXONOMY SEGMENTED CONTROL */}
-      <div className="-mx-6 mb-8 overflow-x-auto px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
+      <div className="-mx-4 sm:-mx-6 mb-8 overflow-x-auto px-4 sm:px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
         <div className="flex w-max space-x-1 rounded-full bg-surface-1 p-1 ring-1 ring-border/40 shadow-sm">
           {TAXONOMY.map((tab) => (
             <button
@@ -200,7 +200,7 @@ function LibraryIndex() {
           }
         />
       ) : isLoading ? (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+        <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {Array.from({ length: 12 }).map((_, i) => (
             <ShimmerSkeleton key={i} className="aspect-[2/3] w-full rounded-2xl" />
           ))}
@@ -261,7 +261,7 @@ function LibraryIndex() {
         )
       ) : (
         <>
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
+          <div className="grid grid-cols-2 gap-3 sm:gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
             {items.map((item, index) => {
               const isLast = index === items.length - 1;
               return (
