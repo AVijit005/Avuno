@@ -1,7 +1,7 @@
 import { motion } from "motion/react";
 import { Play, Pause, RotateCcw, Check, NotebookPen, FolderPlus, History } from "lucide-react";
 import type { UIMediaItem } from "@/lib/adapters/types";
-import { useTimelineEvents } from "@/hooks/use-journal";
+import { useTimelineEvents, useMemories } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
 
 const ICONS: Record<string, typeof Play> = {
@@ -23,7 +23,14 @@ const ICONS: Record<string, typeof Play> = {
 };
 
 export function MediaTimelinePreview({ item }: { item: UIMediaItem }) {
-  const { data: timelineData, isLoading } = useTimelineEvents();
+  const { data: timelineData, isLoading: isTimelineLoading } = useTimelineEvents();
+
+  // We need to fetch memories for this media to deterministically match Memory-related timeline events
+  const { data: memoriesData, isLoading: isMemoriesLoading } = useMemories({
+    mediaId: item.mediaId,
+  });
+
+  const isLoading = isTimelineLoading || isMemoriesLoading;
 
   if (isLoading) {
     return (
@@ -38,14 +45,21 @@ export function MediaTimelinePreview({ item }: { item: UIMediaItem }) {
     );
   }
 
-  // Filter events by media title to avoid showing unrelated events.
-  // Backend does not expose a mediaId filter on timeline yet; title matching
-  // is best-effort until the API is extended.
   const allEvents = (timelineData?.items ?? []).map(adaptTimelineEvent);
+
+  const memoryIds = new Set(memoriesData?.pages.flatMap((p) => p.items.map((m) => m.id)) ?? []);
+
   const mediaEvents = allEvents
     .filter((e) => {
-      const titleMatch = e.title.toLowerCase().includes(item.title.toLowerCase().slice(0, 10));
-      return titleMatch;
+      // Deterministic matching:
+      // 1. Event metadata explicitly references this library item's ID
+      if (e.metadata?.libraryId === item.id) return true;
+
+      // 2. Event is explicitly linked to a memory that is attached to this media
+      if (e.memoryId && memoryIds.has(e.memoryId)) return true;
+      if (e.metadata?.memoryId && memoryIds.has(e.metadata.memoryId as string)) return true;
+
+      return false;
     })
     .slice(0, 6);
 

@@ -124,6 +124,9 @@ export interface UIMemory {
   coverImage: string | null;
   mediaCount: number;
   createdAt: string;
+  mediaIds: string[];
+  journalId: string | null;
+  quoteId: string | null;
 }
 
 // ─── Timeline ──────────────────────────────────────────────
@@ -137,6 +140,8 @@ export interface UITimelineEvent {
   icon: string | null;
   color: string | null;
   createdAt: string;
+  metadata?: Record<string, unknown> | null;
+  memoryId?: string | null;
 }
 
 // ─── Dashboard ─────────────────────────────────────────────

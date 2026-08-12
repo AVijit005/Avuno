@@ -1,4 +1,3 @@
-// Universal capture flow. Frontend-only, writes into useLibraryStore.
 import { useEffect, useId, useState } from "react";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import {
@@ -15,14 +14,19 @@ import {
   FileText,
   ArrowLeft,
   Check,
+  Search,
+  Loader2,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useNavigate } from "@tanstack/react-router";
 import { toast } from "sonner";
-import type { UIMediaItem as MediaItem, UIMediaKind as MediaKind } from "@/lib/adapters/types";
-import { useLibraryStore } from "@/lib/store/libraryStore";
+import type { UIMediaKind as MediaKind } from "@/lib/adapters/types";
+import { useSearch } from "@/hooks/use-search";
+import { useAddToLibrary } from "@/hooks/use-library";
+import { useDebounce } from "@/hooks/use-debounce";
 import type { MediaStatus } from "@/lib/library";
 import { cn } from "@/lib/utils";
+import type { SearchResultItem } from "@/lib/api/search";
 
 const TYPES: { kind: MediaKind | "article"; label: string; icon: LucideIcon }[] = [
   { kind: "movie", label: "Movie", icon: Film },
@@ -45,8 +49,6 @@ const STATUS: { value: MediaStatus; label: string; hint: string }[] = [
   { value: "paused", label: "Paused", hint: "Begun but set aside." },
 ];
 
-const DEFAULT_POSTER = "";
-
 export function AddSheet({
   open,
   onOpenChange,
@@ -55,28 +57,37 @@ export function AddSheet({
   onOpenChange: (v: boolean) => void;
 }) {
   const navigate = useNavigate();
-  const addCustomItem = useLibraryStore((s) => s.addCustomItem);
+  const addToLibrary = useAddToLibrary();
 
   const [step, setStep] = useState(1);
   const [kind, setKind] = useState<MediaKind | "article" | null>(null);
-  const [title, setTitle] = useState("");
-  const [creator, setCreator] = useState("");
-  const [year, setYear] = useState<string>(String(new Date().getFullYear()));
-  const [poster, setPoster] = useState("");
+
+  // Search state
+  const [query, setQuery] = useState("");
+  const debouncedQuery = useDebounce(query, 300);
+  const [selectedMedia, setSelectedMedia] = useState<SearchResultItem | null>(null);
+
+  // Metadata state
   const [status, setStatus] = useState<MediaStatus>("planning");
   const [favorite, setFavorite] = useState(false);
   const [reason, setReason] = useState("");
 
+  const { data: searchResults, isLoading: isSearching } = useSearch(
+    {
+      q: debouncedQuery,
+      mode: "media",
+      type: kind === "article" ? "youtube" : (kind ?? undefined),
+    },
+    step === 2 && debouncedQuery.length > 0,
+  );
+
   useEffect(() => {
     if (!open) {
-      // Reset after close animation.
       const t = setTimeout(() => {
         setStep(1);
         setKind(null);
-        setTitle("");
-        setCreator("");
-        setYear(String(new Date().getFullYear()));
-        setPoster("");
+        setQuery("");
+        setSelectedMedia(null);
         setStatus("planning");
         setFavorite(false);
         setReason("");
@@ -85,66 +96,29 @@ export function AddSheet({
     }
   }, [open]);
 
-  const canConfirm = title.trim().length > 0 && kind;
+  async function confirm() {
+    if (!selectedMedia || !kind) return;
 
-  function confirm() {
-    if (!canConfirm || !kind) return;
-    const id = `u_${title
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .slice(0, 40)}_${Date.now().toString(36)}`;
-    const yearNum = Number(year) || new Date().getFullYear();
     const storeKind: MediaKind = kind === "article" ? "youtube" : kind;
-    const item: MediaItem = {
-      id,
-      mediaId: id,
-      title: title.trim(),
-      kind: storeKind,
-      year: yearNum,
-      poster: poster.trim() || DEFAULT_POSTER,
-      backdrop: null,
-      rating: 0,
-      progress: 0,
-      progressLabel: null,
-      status:
-        status === "completed"
-          ? "completed"
-          : status === "planning"
-            ? "planning"
-            : status === "paused"
-              ? "paused"
-              : "in_progress",
-      genres: [],
-      runtime: null,
-      creator: creator.trim() || null,
-      synopsis: reason.trim() || "Added by you.",
-      accent: null,
-      favorite: favorite,
-      slug: id,
-      mediaType: storeKind,
-      lastInteractionAt: new Date().toISOString(),
-      rewatchCount: 0,
-    };
-    addCustomItem(item, {
-      status,
-      favorite: favorite || undefined,
-      reasonSaved: reason.trim() || undefined,
-      addedAt: "Just now",
-      ...(status === "completed" ? { completedAt: "Today", progress: 100 } : {}),
-    });
-    // NOTE: this stays local-only, and deliberately says so.
-    //
-    // POST /library requires a mediaId that already exists in the catalog
-    // (LibraryService.add verifies it), but this sheet creates free-text
-    // entries for things the catalog does not know about. Silently pretending
-    // they were saved is what the rest of this phase is fixing, so the copy is
-    // explicit instead. Wiring this properly needs a catalog search step, or a
-    // backend endpoint that accepts user-authored media.
-    toast.success("Added to your library", {
-      description: `${title.trim()} — saved on this device`,
-    });
-    onOpenChange(false);
-    setTimeout(() => navigate({ to: "/app/media/$id", params: { id } }), 60);
+    const backendStatus = status === "in_progress" ? "WATCHING" : status.toUpperCase();
+
+    try {
+      await addToLibrary.mutateAsync({
+        mediaType: storeKind,
+        mediaId: selectedMedia.id,
+        status: backendStatus,
+      });
+
+      toast.success("Added to your library", {
+        description: selectedMedia.title,
+      });
+      onOpenChange(false);
+      setTimeout(() => navigate({ to: "/app/media/$id", params: { id: selectedMedia.id } }), 60);
+    } catch (err) {
+      toast.error("Failed to add media", {
+        description: "It might already be in your library or there was an error.",
+      });
+    }
   }
 
   return (
@@ -196,53 +170,71 @@ export function AddSheet({
         )}
 
         {step === 2 && (
-          <div className="px-6 pb-6 pt-4">
-            <DialogTitle className="font-display text-2xl tracking-tight">Add Details</DialogTitle>
-            <DialogDescription className="text-sm text-muted-foreground">
-              Enter the title and optional metadata.
+          <div className="px-6 pb-6 pt-4 flex flex-col h-[60vh] max-h-[500px]">
+            <DialogTitle className="font-display text-2xl tracking-tight">
+              Search Catalog
+            </DialogTitle>
+            <DialogDescription className="text-sm text-muted-foreground shrink-0">
+              Find the exact item you're looking for.
             </DialogDescription>
-            <div className="mt-5 space-y-3">
-              <Field
-                label="Title"
-                value={title}
-                onChange={setTitle}
-                placeholder="e.g. Severance"
+
+            <div className="mt-5 relative shrink-0">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search by title..."
                 autoFocus
+                className="w-full rounded-xl border border-border/60 bg-white/[0.03] pl-10 pr-3 py-3 text-sm outline-none focus:border-primary/40"
               />
-              <div className="grid grid-cols-2 gap-3">
-                <Field
-                  label="Creator / Author"
-                  value={creator}
-                  onChange={setCreator}
-                  placeholder="optional"
-                />
-                <Field
-                  label="Year"
-                  value={year}
-                  onChange={setYear}
-                  placeholder={String(new Date().getFullYear())}
-                />
-              </div>
-              <Field
-                label="Poster URL"
-                value={poster}
-                onChange={setPoster}
-                placeholder="optional · jpg/png"
-              />
+              {isSearching && (
+                <Loader2 className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 animate-spin text-muted-foreground" />
+              )}
             </div>
-            <div className="mt-6 flex items-center justify-between">
+
+            <div className="mt-4 flex-1 overflow-y-auto space-y-2 pr-2">
+              {debouncedQuery.length > 0 && searchResults?.items.length === 0 && !isSearching && (
+                <div className="text-center text-sm text-muted-foreground py-10">
+                  No results found.
+                </div>
+              )}
+
+              {searchResults?.items.map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    setSelectedMedia(item);
+                    setStep(3);
+                  }}
+                  className="w-full flex items-start gap-4 rounded-xl border border-border/60 bg-white/[0.02] p-3 text-left transition hover:border-primary/40 hover:bg-white/[0.06] press-scale"
+                >
+                  {item.imageUrl ? (
+                    <img
+                      src={item.imageUrl}
+                      alt={item.title}
+                      className="h-16 w-12 rounded object-cover"
+                    />
+                  ) : (
+                    <div className="flex h-16 w-12 items-center justify-center rounded bg-white/5 text-muted-foreground">
+                      <Film className="h-4 w-4" />
+                    </div>
+                  )}
+                  <div className="flex-1 min-w-0">
+                    <div className="font-medium truncate text-sm">{item.title}</div>
+                    <div className="text-xs text-muted-foreground mt-1 truncate">
+                      {item.subtitle || (item.metadata?.releaseYear as string) || "Unknown Year"}
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-4 shrink-0 flex items-center justify-between">
               <button
                 onClick={() => setStep(1)}
                 className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
               >
                 <ArrowLeft className="h-3 w-3" /> Back
-              </button>
-              <button
-                disabled={!title.trim()}
-                onClick={() => setStep(3)}
-                className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 press-scale"
-              >
-                Continue
               </button>
             </div>
           </div>
@@ -254,7 +246,7 @@ export function AddSheet({
               Where does it belong?
             </DialogTitle>
             <DialogDescription className="text-sm text-muted-foreground">
-              This decides where it lives in your library.
+              {selectedMedia?.title}
             </DialogDescription>
             <div className="mt-5 grid grid-cols-1 gap-2 sm:grid-cols-2">
               {STATUS.map((s) => (
@@ -276,39 +268,21 @@ export function AddSheet({
                 </button>
               ))}
             </div>
-            <label className="mt-4 flex items-center gap-2 text-sm text-muted-foreground">
-              <input
-                type="checkbox"
-                checked={favorite}
-                onChange={(e) => setFavorite(e.target.checked)}
-                className="h-4 w-4 rounded border-border/60 bg-white/[0.04]"
-              />
-              Mark as a favorite
-            </label>
-            <div className="mt-3">
-              <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-                Why are you saving this?
-              </label>
-              <textarea
-                value={reason}
-                onChange={(e) => setReason(e.target.value)}
-                rows={2}
-                placeholder="optional · one line is plenty"
-                className="mt-1 w-full resize-none rounded-xl border border-border/60 bg-white/[0.03] px-3 py-2 text-sm outline-none focus:border-primary/40"
-              />
-            </div>
+
             <div className="mt-6 flex items-center justify-between">
               <button
                 onClick={() => setStep(2)}
-                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+                className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground disabled:opacity-50"
+                disabled={addToLibrary.isPending}
               >
                 <ArrowLeft className="h-3 w-3" /> Back
               </button>
               <button
-                disabled={!canConfirm}
+                disabled={addToLibrary.isPending}
                 onClick={confirm}
-                className="rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 press-scale"
+                className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2 text-sm font-medium text-primary-foreground disabled:opacity-40 press-scale"
               >
+                {addToLibrary.isPending && <Loader2 className="h-4 w-4 animate-spin" />}
                 Add to Avuno
               </button>
             </div>
@@ -316,36 +290,5 @@ export function AddSheet({
         )}
       </DialogContent>
     </Dialog>
-  );
-}
-
-function Field({
-  label,
-  value,
-  onChange,
-  placeholder,
-  autoFocus,
-}: {
-  label: string;
-  value: string;
-  onChange: (v: string) => void;
-  placeholder?: string;
-  autoFocus?: boolean;
-}) {
-  const id = useId();
-  return (
-    <div>
-      <label htmlFor={id} className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-        {label}
-      </label>
-      <input
-        id={id}
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        autoFocus={autoFocus}
-        className="mt-1 w-full rounded-xl border border-border/60 bg-white/[0.03] px-3 py-2 text-sm outline-none focus:border-primary/40"
-      />
-    </div>
   );
 }

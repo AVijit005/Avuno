@@ -61,8 +61,8 @@ test.describe("Phase 16 — Core Product Journey", () => {
     await expect(libraryAddBtn).toBeAttached({ timeout: 5000 });
 
     // ── 4. Add Media (via AddSheet) ───────────────────────────────────────
-    // Open AddSheet using keyboard shortcut ⌘N / Ctrl+N
-    await page.keyboard.press("Control+n");
+    // Open AddSheet by clicking the Add Media button
+    await page.locator("#library-add-media-btn").click();
 
     // Dialog should open
     const dialog = page.getByRole("dialog");
@@ -73,14 +73,15 @@ test.describe("Phase 16 — Core Product Journey", () => {
     await expect(movieBtn).toBeVisible({ timeout: 5000 });
     await movieBtn.click();
 
-    // Step 2: Enter title
-    const titleInput = dialog.locator("input").first();
-    await expect(titleInput).toBeVisible({ timeout: 5000 });
-    await titleInput.fill("The Shawshank Redemption");
+    // Step 2: Search catalog
+    const addSearchInput = dialog.locator("input[placeholder*='Search']").first();
+    await expect(addSearchInput).toBeVisible({ timeout: 5000 });
+    await addSearchInput.fill("a");
 
-    // Continue to step 3
-    const continueBtn = dialog.getByRole("button", { name: "Continue" });
-    await continueBtn.click();
+    // Wait for search results and click the first one
+    const firstResult = dialog.locator("button.w-full.flex").first();
+    await expect(firstResult).toBeVisible({ timeout: 8000 });
+    await firstResult.click();
 
     // Step 3: Select status — Save for later
     const saveForLaterBtn = dialog.getByRole("button", { name: /Save for later/i });
@@ -150,14 +151,8 @@ test.describe("Phase 16 — Core Product Journey", () => {
 
     await page.goto("/app");
 
-    // Either the add button or the onboarding CTA should be present
-    const addMediaBtn = page.locator("#home-add-media-btn");
-    const onboardingCTA = page.locator("button:has-text('Add your first item')");
-
-    const hasAddBtn = await addMediaBtn.isVisible().catch(() => false);
-    const hasOnboarding = await onboardingCTA.isVisible().catch(() => false);
-
-    expect(hasAddBtn || hasOnboarding).toBeTruthy();
+    // Wait for the page to finish loading and one of the buttons to appear
+    await expect(page.locator('#home-add-media-btn, button:has-text("Add your first item")').first()).toBeVisible({ timeout: 15000 });
   });
 
   test("library search: search works without crashing and clears properly", async ({ page }) => {

@@ -48,6 +48,9 @@ export function adaptMemory(m: MemoryResponse): UIMemory {
     coverImage: m.coverImage,
     mediaCount: m.mediaCount,
     createdAt: m.createdAt,
+    mediaIds: m.mediaIds ?? [],
+    journalId: m.journalId ?? null,
+    quoteId: m.quoteId ?? null,
   };
 }
 
@@ -61,5 +64,7 @@ export function adaptTimelineEvent(e: TimelineEventResponse): UITimelineEvent {
     icon: e.icon,
     color: e.color,
     createdAt: e.createdAt,
+    metadata: e.metadata as Record<string, unknown> | null,
+    memoryId: e.memoryId,
   };
 }
