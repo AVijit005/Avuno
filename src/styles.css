@@ -853,3 +853,26 @@ select {
     transform: scale(1) translateY(0);
   }
 }
+
+/* ============================================================
+ * 3D / Perspective utilities (used in landing hero)
+ * ============================================================ */
+.perspective-1000 {
+  perspective: 1000px;
+}
+
+.perspective-1400 {
+  perspective: 1400px;
+}
+
+.transform-style-3d {
+  transform-style: preserve-3d;
+}
+
+.transform-z-\[-20px\] {
+  transform: translateZ(-20px);
+}
+
+.transform-z-\[40px\] {
+  transform: translateZ(40px);
+}

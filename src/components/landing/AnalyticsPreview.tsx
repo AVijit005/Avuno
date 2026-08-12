@@ -86,7 +86,6 @@ export function AnalyticsPreview() {
               <CountUp to={DEMO_STATS.totalHours} />
               <span className="ml-1 text-base text-muted-foreground">hrs</span>
             </div>
-            <div className="text-xs text-success">+ 14% vs last month</div>
           </div>
           <div className="mt-4 h-40 w-full">
             <ResponsiveContainer>

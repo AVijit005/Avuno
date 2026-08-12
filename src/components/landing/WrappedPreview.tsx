@@ -1,12 +1,4 @@
 import { motion } from "motion/react";
-import { CountUp } from "./CountUp";
-
-const STATS = [
-  { label: "Hours watched", to: 1284, suffix: "h" },
-  { label: "Stories completed", to: 312 },
-  { label: "Longest marathon", to: 14, suffix: "h" },
-  { label: "Favorite year", to: 2024 },
-];
 
 export function WrappedPreview() {
   return (
@@ -19,12 +11,17 @@ export function WrappedPreview() {
           <span className="text-gradient-aurora">Wrapped, but for everything.</span>
         </h2>
         <p className="mt-5 max-w-xl text-muted-foreground md:text-lg">
-          At the end of every year Avuno replays your most-loved stories as a cinematic short — your
-          genres, your binges, the books that stayed.
+          At the end of every year Avuno replays your most-loved stories — your genres, your binges,
+          the books that stayed. Your numbers, not anyone else's.
         </p>
 
         <div className="mt-10 grid grid-cols-2 gap-4 md:grid-cols-4">
-          {STATS.map((s, i) => (
+          {[
+            { label: "Hours consumed", example: true },
+            { label: "Stories completed", example: true },
+            { label: "Longest session", example: true },
+            { label: "Favourite genre", example: true },
+          ].map((s, i) => (
             <motion.div
               key={s.label}
               initial={{ opacity: 0, y: 24 }}
@@ -33,18 +30,19 @@ export function WrappedPreview() {
               transition={{ delay: i * 0.08, duration: 0.7 }}
               className="glass rounded-2xl p-5"
             >
-              <div
-                className="font-display text-3xl md:text-4xl"
-                style={{ textShadow: "0 0 30px oklch(0.72 0.18 255 / 0.6)" }}
-              >
-                <CountUp to={s.to} suffix={s.suffix} />
-              </div>
-              <div className="mt-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              <div className="h-8 w-16 rounded-lg bg-white/[0.06] mb-3" aria-hidden />
+              <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 {s.label}
+              </div>
+              <div className="mt-1 text-[10px] text-white/30 uppercase tracking-widest">
+                Your data
               </div>
             </motion.div>
           ))}
         </div>
+        <p className="mt-6 text-xs text-muted-foreground/50">
+          Numbers above will reflect your own activity once you start tracking.
+        </p>
       </div>
     </div>
   );
