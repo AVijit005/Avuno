@@ -1,10 +1,10 @@
 import { useRouterState, Link } from "@tanstack/react-router";
-import { Bell, Search, Settings, Plus, LogOut } from "lucide-react";
+import { Bell, Search, Settings, Plus } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
 import { useNotifications } from "@/hooks/use-notifications";
-import { useCurrentUser, useLogout } from "@/hooks/use-auth";
+import { useCurrentUser } from "@/hooks/use-auth";
 
 const TITLES: Record<string, { title: string; subtitle?: string }> = {
   "/app/library": { title: "Your Library", subtitle: "Everything you've experienced." },
@@ -22,7 +22,6 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
   const { openAdd } = useMediaActions();
   const { data: notifications } = useNotifications();
   const { data: user } = useCurrentUser();
-  const logout = useLogout();
   const initials = user?.name
     ? user.name
         .split(" ")
@@ -126,14 +125,6 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           >
             {initials}
           </Link>
-          <button
-            onClick={() => logout.mutate()}
-            aria-label="Log out"
-            title="Log out"
-            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-red-400 hover:bg-red-400/10 press-scale ml-1"
-          >
-            <LogOut className="h-4 w-4" />
-          </button>
         </div>
       </div>
     </motion.header>
