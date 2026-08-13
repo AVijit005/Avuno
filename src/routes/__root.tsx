@@ -14,7 +14,12 @@ import { reportLovableError } from "../lib/lovable-error-reporting";
 import { analytics } from "../lib/analytics";
 import { queryKeys } from "../lib/api/query-keys";
 import { authApi } from "../lib/api";
-import { setAccessToken, getAccessToken, AUTH_EXPIRED_EVENT, forceRefreshValidToken } from "../lib/api/fetch";
+import {
+  setAccessToken,
+  getAccessToken,
+  AUTH_EXPIRED_EVENT,
+  forceRefreshValidToken,
+} from "../lib/api/fetch";
 import { ErrorBoundary } from "../components/common/ErrorBoundary";
 import { PageSkeleton } from "../components/common/PageSkeleton";
 
@@ -248,7 +253,7 @@ function RootComponent() {
         localStorage.setItem("theme", pref);
       }
     };
-    
+
     applyPref(saved?.themePreference || localStorage.getItem("theme") || "system");
 
     // Listen for auth user data changes (e.g. login / session restore completion)

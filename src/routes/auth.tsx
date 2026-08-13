@@ -1,33 +1,29 @@
 import { createFileRoute, Link, useNavigate, Outlet, useMatchRoute } from "@tanstack/react-router";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
-import { ArrowRight, Lock, Mail, Check, Loader2, User, Eye, EyeOff } from "lucide-react";
+import { ArrowRight, Check, Loader2, Eye, EyeOff, AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { useState, useEffect, useRef } from "react";
-import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
-import { AuthStage } from "@/components/auth/AuthStage";
-import { MobileMemoryHero } from "@/components/auth/MobileMemoryHero";
-import { PremiumInput } from "@/components/auth/PremiumInput";
-import { LiquidGlassCard } from "@/components/auth/LiquidGlassCard";
-import { ParticleBurst } from "@/components/auth/ParticleBurst";
-import { useMouseParallax } from "@/lib/useParallax";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import { useLogin, useRegister } from "@/hooks/use-auth";
 import { analytics } from "@/lib/analytics";
 import { API_BASE_URL } from "@/lib/api/constants";
+import { ArchiveVisual } from "@/components/auth/ArchiveVisual";
 
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Enter Avuno — the portal" },
+      { title: "Enter Avuno — your personal media archive" },
       {
         name: "description",
-        content: "Sign in to Avuno. Pick up your story where you left it.",
+        content: "Sign in to Avuno. Your personal media archive — connected.",
       },
     ],
   }),
   component: AuthLayout,
 });
+
+// ── Schemas ──────────────────────────────────────────────────────────────────
 
 const signInSchema = z.object({
   email: z.string().trim().email("Enter a valid email"),
@@ -49,42 +45,42 @@ const signUpSchema = z
 type SignIn = z.infer<typeof signInSchema>;
 type SignUp = z.infer<typeof signUpSchema>;
 type Mode = "signin" | "signup";
+type Status = "idle" | "loading" | "success" | "error";
 
-/* ── Stagger variants ── */
-const cardContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.08, delayChildren: 0.55 } },
-};
-const cardLine = {
-  hidden: { opacity: 0, y: 16, filter: "blur(8px)" },
-  show: {
-    opacity: 1,
-    y: 0,
-    filter: "blur(0px)",
-    transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] },
-  },
-};
+// ── Route layout ──────────────────────────────────────────────────────────────
 
 function AuthLayout() {
   const matchRoute = useMatchRoute();
   const isChildRoute =
-    matchRoute({ to: "/auth/callback" }) || matchRoute({ to: "/auth/forgot-password" });
+    matchRoute({ to: "/auth/callback" }) ||
+    matchRoute({ to: "/auth/forgot-password" }) ||
+    matchRoute({ to: "/auth/reset-password" });
 
-  if (isChildRoute) {
-    return <Outlet />;
-  }
-
+  if (isChildRoute) return <Outlet />;
   return <AuthPage />;
 }
+
+// ── Password strength ─────────────────────────────────────────────────────────
+
+function calcStrength(pw: string): number {
+  let s = 0;
+  if (pw.length >= 12) s++;
+  if (pw.length >= 16) s++;
+  if (/[a-z]/.test(pw) && /[A-Z]/.test(pw)) s++;
+  if (/\d/.test(pw)) s++;
+  if (/[^a-zA-Z0-9]/.test(pw)) s++;
+  return Math.min(s, 5);
+}
+
+// ── Main Auth Page ────────────────────────────────────────────────────────────
 
 function AuthPage() {
   const navigate = useNavigate();
   const reduced = useReducedMotion();
   const [mode, setMode] = useState<Mode>("signin");
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<Status>("idle");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [passwordStrength, setPasswordStrength] = useState<number>(0);
-  const { x: ax, y: ay } = useMouseParallax(18);
+  const [passwordStrength, setPasswordStrength] = useState(0);
 
   const timeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(() => {
@@ -98,7 +94,7 @@ function AuthPage() {
 
   const loginMutation = useLogin();
   const registerMutation = useRegister();
-  // Forms
+
   const signIn = useForm<SignIn>({
     resolver: zodResolver(signInSchema),
     defaultValues: { email: "", password: "" },
@@ -110,104 +106,65 @@ function AuthPage() {
     mode: "onBlur",
   });
 
-  // Password strength calculation (for signup)
-  const calculatePasswordStrength = (password: string): number => {
-    let strength = 0;
-    if (password.length >= 12) strength += 1;
-    if (password.length >= 16) strength += 1;
-    if (/[a-z]/.test(password) && /[A-Z]/.test(password)) strength += 1;
-    if (/\d/.test(password)) strength += 1;
-    if (/[^a-zA-Z0-9]/.test(password)) strength += 1;
-    return Math.min(strength, 5);
-  };
-
   useEffect(() => {
-    if (mode === "signup") {
-      const subscription = signUp.watch((value) => {
-        if (value.password) {
-          setPasswordStrength(calculatePasswordStrength(value.password));
-        } else {
-          setPasswordStrength(0);
-        }
-      });
-      return () => subscription.unsubscribe();
-    }
+    if (mode !== "signup") return;
+    const sub = signUp.watch((v) => setPasswordStrength(v.password ? calcStrength(v.password) : 0));
+    return () => sub.unsubscribe();
   }, [mode, signUp]);
 
   const onSubmit = async (data: SignIn | SignUp) => {
     setStatus("loading");
     setErrorMessage(null);
-
     try {
       if (mode === "signin") {
-        const values = data as SignIn;
-        const user = await loginMutation.mutateAsync({
-          email: values.email,
-          password: values.password,
-        });
+        const v = data as SignIn;
+        const user = await loginMutation.mutateAsync({ email: v.email, password: v.password });
         analytics.identify(user.user.id);
         setStatus("success");
-        safeTimeout(() => navigate({ to: "/app" }), 600);
+        safeTimeout(() => navigate({ to: "/app" }), 500);
       } else {
-        const values = data as SignUp;
+        const v = data as SignUp;
         await registerMutation.mutateAsync({
-          email: values.email,
-          password: values.password,
-          name: values.fullName,
+          email: v.email,
+          password: v.password,
+          name: v.fullName,
         });
-
         try {
-          const user = await loginMutation.mutateAsync({
-            email: values.email,
-            password: values.password,
-          });
+          const user = await loginMutation.mutateAsync({ email: v.email, password: v.password });
           analytics.identify(user.user.id);
           analytics.track("signup");
           setStatus("success");
-          safeTimeout(() => navigate({ to: "/app" }), 600);
+          safeTimeout(() => navigate({ to: "/app" }), 500);
         } catch (loginErr: unknown) {
-          const loginError = loginErr as { message?: string; status?: number };
-          if (loginError?.message === "Email not verified" || loginError?.status === 403) {
-            analytics.track("signup");
-            setStatus("success");
-            setErrorMessage("Account created! Please check your email to verify your account.");
-            safeTimeout(() => {
-              setStatus("idle");
-              switchMode("signin");
-            }, 4000);
+          const e = loginErr as { message?: string; status?: number };
+          analytics.track("signup");
+          setStatus("success");
+          if (e?.message === "Email not verified" || e?.status === 403) {
+            setErrorMessage("Account created! Please check your email to verify.");
           } else {
-            analytics.track("signup");
-            setStatus("success");
-            setErrorMessage("Account created successfully! Please sign in.");
-            safeTimeout(() => {
-              setStatus("idle");
-              switchMode("signin");
-            }, 3000);
+            setErrorMessage("Account created! Please sign in.");
           }
+          safeTimeout(() => {
+            setStatus("idle");
+            switchMode("signin");
+          }, 4000);
         }
       }
     } catch (err: unknown) {
       setStatus("error");
-      const error = err as { message?: string; status?: number };
-
-      // Enhanced error messages
-      let message = "Something went wrong. Please try again.";
-      if (error.status === 401) {
-        message = "Email or password is incorrect.";
-      } else if (error.status === 429) {
-        message = "Too many attempts. Please wait a moment before trying again.";
-      } else if (error.status === 403 && error.message?.includes("verified")) {
-        message = "Please verify your email before signing in.";
-      } else if (error.status === 409) {
-        message = "An account with this email already exists.";
-      } else if (error.message?.includes("network") || error.message?.includes("fetch")) {
-        message = "We couldn't reach Avuno. Check your connection and try again.";
-      } else if (error.message) {
-        message = error.message;
-      }
-
-      setErrorMessage(message);
-      safeTimeout(() => setStatus("idle"), 4000);
+      const e = err as { message?: string; status?: number };
+      let msg = "Something went wrong. Please try again.";
+      if (e.status === 401) msg = "Email or password is incorrect.";
+      else if (e.status === 429)
+        msg = "Too many attempts. Please wait a moment before trying again.";
+      else if (e.status === 403 && e.message?.includes("verified"))
+        msg = "Please verify your email before signing in.";
+      else if (e.status === 409) msg = "An account with this email already exists.";
+      else if (e.message?.includes("network") || e.message?.includes("fetch"))
+        msg = "We couldn't reach Avuno. Check your connection and try again.";
+      else if (e.message) msg = e.message;
+      setErrorMessage(msg);
+      safeTimeout(() => setStatus("idle"), 5000);
     }
   };
 
@@ -219,336 +176,268 @@ function AuthPage() {
   };
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden overflow-y-auto bg-[oklch(0.08_0.02_270)]">
-      <AtmosphereBackground intensity="vivid" />
+    <div
+      className="flex min-h-[100dvh] w-full"
+      style={{ background: "oklch(0.08 0.02 270)", color: "oklch(0.97 0.005 270)" }}
+    >
+      {/* ─── LEFT: Archive Visual ─────────────────────────────────── */}
+      <div
+        className="relative hidden flex-col lg:flex"
+        style={{ width: "54%", flexShrink: 0, borderRight: "1px solid oklch(1 0 0 / 0.04)" }}
+      >
+        <ArchiveVisual />
 
-      {/* Full-canvas memory stage */}
-      <div className="absolute inset-0">
-        <AuthStage />
+        {/* Logo — absolute top-left over the visual */}
+        <div className="absolute left-10 top-8 z-10 flex items-center gap-2.5">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.18_255)] rounded-lg"
+          >
+            <div
+              className="grid h-8 w-8 place-items-center rounded-lg"
+              style={{
+                background: "linear-gradient(145deg, oklch(0.58 0.26 292), oklch(0.55 0.24 218))",
+                boxShadow:
+                  "0 0 0 1px oklch(1 0 0 / 0.12), 0 4px 12px -4px oklch(0.58 0.26 268 / 0.5)",
+              }}
+            >
+              <span className="font-display text-base font-bold leading-none text-white">A</span>
+            </div>
+            <span className="font-display text-xl tracking-tight text-white">Avuno</span>
+          </Link>
+        </div>
+
+        {/* Bottom tagline */}
+        <div className="absolute bottom-8 left-10 z-10">
+          <motion.p
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reduced ? 0 : 0.7, delay: reduced ? 0 : 1.0 }}
+            className="text-[11px] tracking-[0.18em] uppercase"
+            style={{ color: "oklch(0.68 0.012 270 / 0.55)" }}
+          >
+            Your media. Your journal. Your story.
+          </motion.p>
+        </div>
       </div>
 
-      {/* Mobile memory hero */}
-      <MobileMemoryHero />
+      {/* ─── RIGHT: Form Panel ───────────────────────────────────────── */}
+      <div
+        className="relative flex w-full flex-1 flex-col overflow-y-auto"
+        style={{ background: "oklch(0.09 0.018 270)" }}
+      >
+        {/* Subtle top-left ambient inside form panel */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute left-0 top-0 h-[40%] w-[60%]"
+          style={{
+            background:
+              "radial-gradient(ellipse at 0% 0%, oklch(0.45 0.18 255 / 0.06) 0%, transparent 70%)",
+          }}
+        />
 
-      {/* === AURORA HALO behind card === */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -right-[12%] top-1/2 z-[2] hidden h-[900px] w-[900px] -translate-y-1/2 rounded-full lg:block"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(0.52 0.24 290 / 0.32) 0%, oklch(0.60 0.22 240 / 0.20) 35%, transparent 68%)",
-          filter: "blur(90px)",
-          x: reduced ? 0 : (ax as never),
-          y: reduced ? 0 : (ay as never),
-        }}
-        animate={
-          reduced ? undefined : { scale: [1, 1.07, 0.97, 1], opacity: [0.85, 1, 0.88, 0.85] }
-        }
-        transition={reduced ? undefined : { duration: 18, repeat: Infinity, ease: "easeInOut" }}
-      />
+        {/* Mobile logo */}
+        <div className="flex items-center gap-2.5 px-6 pt-8 lg:hidden">
+          <Link
+            to="/"
+            className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[oklch(0.72_0.18_255)] rounded-lg"
+          >
+            <div
+              className="grid h-7 w-7 place-items-center rounded-lg"
+              style={{
+                background: "linear-gradient(145deg, oklch(0.58 0.26 292), oklch(0.55 0.24 218))",
+              }}
+            >
+              <span className="font-display text-sm font-bold leading-none text-white">A</span>
+            </div>
+            <span className="font-display text-lg tracking-tight">Avuno</span>
+          </Link>
+        </div>
 
-      {/* warm counter-leak */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute bottom-[-22%] right-[6%] z-[2] hidden h-[560px] w-[560px] rounded-full lg:block"
-        style={{
-          background: "radial-gradient(circle, oklch(0.80 0.18 35 / 0.24) 0%, transparent 68%)",
-          filter: "blur(75px)",
-          x: reduced ? 0 : (ax as never),
-          y: reduced ? 0 : (ay as never),
-        }}
-        animate={
-          reduced ? undefined : { scale: [1, 1.05, 0.98, 1], opacity: [0.7, 0.95, 0.75, 0.7] }
-        }
-        transition={reduced ? undefined : { duration: 14, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* cool top-right leak */}
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -top-[8%] right-[10%] z-[2] hidden h-[480px] w-[480px] rounded-full lg:block"
-        style={{
-          background: "radial-gradient(circle, oklch(0.70 0.20 220 / 0.18) 0%, transparent 70%)",
-          filter: "blur(80px)",
-        }}
-        animate={reduced ? undefined : { opacity: [0.6, 0.9, 0.6], scale: [1, 1.04, 1] }}
-        transition={reduced ? undefined : { duration: 20, repeat: Infinity, ease: "easeInOut" }}
-      />
-
-      {/* === FLOATING CARD ZONE === */}
-      <div className="relative z-10 flex min-h-[100dvh] items-center justify-center px-4 py-8 lg:items-center lg:justify-end lg:px-0 lg:py-0 lg:pr-[5vw] xl:pr-[7vw]">
-        {/* Ambient light depth — violet halo that drifts slowly behind the card */}
-        {!reduced && (
-          <motion.div
-            aria-hidden
-            className="pointer-events-none absolute hidden lg:block"
-            style={{
-              width: "560px",
-              height: "560px",
-              borderRadius: "50%",
-              background:
-                "radial-gradient(circle, rgba(130,108,255,0.07) 0%, rgba(100,80,220,0.04) 45%, transparent 72%)",
-              filter: "blur(60px)",
-              zIndex: 0,
-            }}
-            animate={{
-              x: [0, 28, -18, 10, 0],
-              y: [0, -16, 22, -8, 0],
-              opacity: [0.6, 1, 0.7, 0.9, 0.6],
-            }}
-            transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-          />
-        )}
-
-        <LiquidGlassCard className="relative z-10 w-full max-w-[448px] p-7 md:p-9">
-          <ParticleBurst active={status === "success"} />
-
-          {/* Staggered card content */}
-          <motion.div className="relative" variants={cardContainer} initial="hidden" animate="show">
-            {/* Mobile brand */}
-            <motion.div variants={cardLine}>
-              <Link to="/" className="mb-5 inline-flex items-center gap-2 lg:hidden">
-                <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-                  <span className="font-display leading-none">A</span>
-                </div>
-                <span className="font-display text-lg">Avuno</span>
-              </Link>
+        {/* Form content — vertically centered */}
+        <div className="flex min-h-full flex-1 flex-col items-center justify-center px-6 py-12 sm:px-10 lg:px-12 xl:px-16">
+          <div className="w-full max-w-[400px]">
+            {/* Heading */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reduced ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={mode}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: reduced ? 0 : 0.22 }}
+                >
+                  <h1
+                    className="font-display text-[2rem] leading-[1.1] tracking-tight lg:text-[2.2rem]"
+                    style={{ color: "oklch(0.97 0.005 270)" }}
+                  >
+                    {mode === "signin" ? "Welcome back." : "Join Avuno."}
+                  </h1>
+                  <p
+                    className="mt-2 text-[13px] leading-relaxed"
+                    style={{ color: "oklch(0.68 0.012 270)" }}
+                  >
+                    {mode === "signin"
+                      ? "Enter your archive."
+                      : "Start building your personal media archive."}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
             </motion.div>
 
-            {/* Portal label — frosted glass pill badge */}
-            <motion.div variants={cardLine} className="mb-4 inline-flex">
-              <span
-                className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[9.5px] uppercase tracking-[0.32em]"
-                style={{
-                  background:
-                    "linear-gradient(120deg, rgba(160,145,255,0.10) 0%, rgba(120,110,210,0.06) 60%, rgba(255,180,200,0.07) 100%)",
-                  backdropFilter: "blur(12px)",
-                  WebkitBackdropFilter: "blur(12px)",
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.08), 0 2px 12px rgba(130,110,255,0.08)",
-                  color: "rgba(255,255,255,0.52)",
-                }}
-              >
-                <span
-                  className="inline-block h-1.5 w-1.5 rounded-full"
-                  style={{
-                    background:
-                      "radial-gradient(circle, rgba(180,165,255,0.95) 0%, rgba(140,120,240,0.70) 100%)",
-                    boxShadow: "0 0 6px rgba(160,145,255,0.60)",
-                    animation: "pulse 2s cubic-bezier(0.4,0,0.6,1) infinite",
-                  }}
-                />
-                Portal
-              </span>
+            {/* Mode switcher */}
+            <motion.div
+              className="mt-7"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduced ? 0 : 0.5,
+                delay: reduced ? 0 : 0.08,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <AuthModeSwitcher mode={mode} onChange={switchMode} />
             </motion.div>
 
-            {/* Living Text Area — illuminated sanctuary prose */}
-            <motion.div variants={cardLine} className="relative mt-1 mb-1 py-5 text-center">
-              {/* Slow-breathing violet radial glow */}
-              <motion.div
-                aria-hidden
-                className="pointer-events-none absolute inset-0"
-                style={{
-                  background:
-                    "radial-gradient(ellipse 80% 70% at 50% 55%, rgba(148,128,255,0.13) 0%, rgba(120,100,240,0.06) 55%, transparent 80%)",
-                  borderRadius: "16px",
-                }}
-                animate={{ opacity: [0.45, 1, 0.45], scale: [0.94, 1.04, 0.94] }}
-                transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-              />
-
-              {/* Primary line — crisp off-white with violet bloom */}
-              <p
-                className="relative font-display text-[1.55rem] leading-snug md:text-[1.75rem]"
-                style={{
-                  letterSpacing: "0.02em",
-                  fontWeight: 300,
-                  color: "#f8f8ff",
-                  textShadow: "0 0 10px rgba(139,92,246,0.50), 0 1px 2px rgba(0,0,0,0.30)",
-                }}
-              >
-                Welcome back
-              </p>
-
-              {/* Secondary — airy, readable grey */}
-              <p
-                className="relative mt-2.5 text-[12.5px]"
-                style={{
-                  letterSpacing: "0.02em",
-                  lineHeight: 1.6,
-                  fontWeight: 300,
-                  color: "rgba(255,255,255,0.70)",
-                  textShadow: "0 1px 2px rgba(0,0,0,0.25)",
-                }}
-              >
-                Your personal media sanctuary. Track, collect, and curate your digital history.
-              </p>
-            </motion.div>
-
-            {/* Google button */}
-            <motion.div variants={cardLine}>
-              <button
-                type="button"
-                onClick={() => {
-                  // The CSRF state is minted and verified server-side (see
-                  // GoogleOAuthGuard / OAuthStateService). Passing a client
-                  // -generated `state` here would override the server's value
-                  // and defeat the check, which is what made the previous
-                  // implementation ineffective.
-                  window.location.href = `${API_BASE_URL}/auth/google`;
-                }}
-                className="group relative mt-7 flex w-full items-center justify-center gap-2.5 overflow-hidden rounded-full border border-white/10 bg-white/[0.05] px-4 py-2 text-[12.5px] font-medium tracking-wide text-white/90 transition-[transform,border-color,background-color] duration-300 hover:scale-[1.015] hover:border-white/18 hover:bg-white/[0.08] active:scale-[0.99]"
-                style={{
-                  boxShadow: "0 4px 12px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.10)",
-                }}
-              >
-                <GoogleColorIcon />
-                Continue with Google
-                <span
-                  aria-hidden
-                  className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
-                  style={{
-                    background:
-                      "linear-gradient(90deg, transparent, rgba(255,255,255,0.16), transparent)",
-                  }}
-                />
-              </button>
+            {/* Google OAuth */}
+            <motion.div
+              className="mt-5"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduced ? 0 : 0.5,
+                delay: reduced ? 0 : 0.12,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
+              <GoogleButton />
             </motion.div>
 
             {/* Divider */}
-            <motion.div variants={cardLine} className="my-6 flex items-center gap-3">
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-              <span className="text-[9px] uppercase tracking-[0.28em] text-white/30">
-                or with email
+            <motion.div
+              className="my-5 flex items-center gap-3"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.16 }}
+            >
+              <div className="h-px flex-1" style={{ background: "oklch(1 0 0 / 0.07)" }} />
+              <span
+                className="text-[10px] uppercase tracking-[0.2em]"
+                style={{ color: "oklch(0.68 0.012 270 / 0.5)" }}
+              >
+                or continue with email
               </span>
-              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+              <div className="h-px flex-1" style={{ background: "oklch(1 0 0 / 0.07)" }} />
             </motion.div>
 
-            {/* ── TAB TOGGLE — right above the email field ── */}
-            <motion.div variants={cardLine} className="mb-5">
-              <motion.div
-                className="relative flex rounded-full p-[3px]"
-                style={{ background: "transparent", backdropFilter: "blur(12px)" }}
-                animate={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.08)" }}
-                whileHover={{ boxShadow: "0 0 0 1px rgba(255,255,255,0.22)", scale: 1.005 }}
-                transition={{ duration: 0.25, ease: "easeOut" }}
-              >
-                {/* Sliding active-tab glass pill */}
+            {/* Error banner */}
+            <AnimatePresence>
+              {errorMessage && status === "error" && <AuthErrorBanner message={errorMessage} />}
+            </AnimatePresence>
+
+            {/* Success info (account created) */}
+            <AnimatePresence>
+              {errorMessage && status === "success" && (
                 <motion.div
-                  className="absolute inset-[3px] w-[calc(50%-3px)] rounded-full"
-                  animate={{ x: mode === "signin" ? 0 : "100%" }}
-                  transition={{ type: "spring", stiffness: 340, damping: 32 }}
+                  initial={{ opacity: 0, y: -8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0 }}
+                  className="mb-5 flex items-start gap-3 rounded-xl border p-4 text-[13px]"
                   style={{
-                    background: "rgba(255,255,255,0.05)",
-                    boxShadow:
-                      "inset 0 0 0 1px rgba(255,255,255,0.14), inset 0 1px 0 rgba(255,255,255,0.10), 0 2px 8px rgba(0,0,0,0.18)",
+                    borderColor: "oklch(0.72 0.16 160 / 0.25)",
+                    background: "oklch(0.72 0.16 160 / 0.05)",
+                    color: "oklch(0.72 0.16 160)",
                   }}
-                />
-                <motion.button
-                  type="button"
-                  onClick={() => switchMode("signin")}
-                  className="relative z-10 flex-1 rounded-full py-2 text-[11.5px] font-medium tracking-wide"
-                  style={{
-                    color: mode === "signin" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
-                  }}
-                  whileHover={{
-                    color: mode === "signin" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)",
-                  }}
-                  transition={{ duration: 0.2 }}
                 >
-                  Sign In
-                </motion.button>
-                <motion.button
-                  type="button"
-                  onClick={() => switchMode("signup")}
-                  className="relative z-10 flex-1 rounded-full py-2 text-[11.5px] font-medium tracking-wide"
-                  style={{
-                    color: mode === "signup" ? "rgba(255,255,255,0.95)" : "rgba(255,255,255,0.35)",
-                  }}
-                  whileHover={{
-                    color: mode === "signup" ? "rgba(255,255,255,1)" : "rgba(255,255,255,0.65)",
-                  }}
-                  transition={{ duration: 0.2 }}
-                >
-                  Create Account
-                </motion.button>
-              </motion.div>
-            </motion.div>
+                  <Check className="mt-0.5 h-4 w-4 shrink-0" />
+                  <p className="leading-relaxed">{errorMessage}</p>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             {/* Forms */}
-            <motion.div variants={cardLine}>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{
+                duration: reduced ? 0 : 0.5,
+                delay: reduced ? 0 : 0.2,
+                ease: [0.22, 1, 0.36, 1],
+              }}
+            >
               <AnimatePresence mode="wait">
                 {mode === "signin" ? (
                   <motion.form
                     key="signin"
-                    initial={{ opacity: 0, x: -10 }}
+                    initial={{ opacity: 0, x: -14 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 10 }}
-                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                    exit={{ opacity: 0, x: 14 }}
+                    transition={{ duration: reduced ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
                     onSubmit={signIn.handleSubmit(onSubmit)}
-                    className="space-y-5"
+                    className="space-y-4"
+                    noValidate
                   >
-                    <PremiumInput
+                    <AuthInput
                       label="Email"
                       type="email"
                       autoComplete="email"
-                      icon={<Mail className="h-4 w-4" />}
                       error={signIn.formState.errors.email?.message}
                       {...signIn.register("email")}
                     />
-                    <PremiumInput
+                    <AuthInput
                       label="Password"
                       type="password"
                       autoComplete="current-password"
-                      icon={<Lock className="h-4 w-4" />}
                       error={signIn.formState.errors.password?.message}
                       {...signIn.register("password")}
                     />
-
-                    <div className="flex justify-end pt-1 text-[11px]">
+                    <div className="flex justify-end pt-1">
                       <Link
                         to="/auth/forgot-password"
-                        className="text-[oklch(0.68_0.012_270_/_0.6)] transition-colors hover:text-[oklch(0.72_0.18_255)]"
+                        className="text-[11.5px] transition-colors focus-visible:outline-none focus-visible:underline"
+                        style={{ color: "oklch(0.68 0.012 270 / 0.6)" }}
                       >
                         Forgot password?
                       </Link>
                     </div>
-
-                    <PremiumButton status={status} label="Continue" error={errorMessage} />
+                    <div className="pt-2">
+                      <AuthCTAButton status={status} label="Continue" />
+                    </div>
                   </motion.form>
                 ) : (
                   <motion.form
                     key="signup"
-                    initial={{ opacity: 0, x: 10 }}
+                    initial={{ opacity: 0, x: 14 }}
                     animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -10 }}
-                    transition={{ duration: 0.38, ease: [0.22, 1, 0.36, 1] }}
+                    exit={{ opacity: 0, x: -14 }}
+                    transition={{ duration: reduced ? 0 : 0.28, ease: [0.22, 1, 0.36, 1] }}
                     onSubmit={signUp.handleSubmit(onSubmit)}
-                    className="space-y-5"
+                    className="space-y-4"
+                    noValidate
                   >
-                    <PremiumInput
+                    <AuthInput
                       label="Full Name"
                       type="text"
                       autoComplete="name"
-                      icon={<User className="h-4 w-4" />}
                       error={signUp.formState.errors.fullName?.message}
                       {...signUp.register("fullName")}
                     />
-                    <PremiumInput
+                    <AuthInput
                       label="Email"
                       type="email"
                       autoComplete="email"
-                      icon={<Mail className="h-4 w-4" />}
                       error={signUp.formState.errors.email?.message}
                       {...signUp.register("email")}
                     />
                     <div>
-                      <PremiumInput
+                      <AuthInput
                         label="Password"
                         type="password"
                         autoComplete="new-password"
-                        icon={<Lock className="h-4 w-4" />}
                         error={signUp.formState.errors.password?.message}
                         helperText={
                           !signUp.formState.errors.password?.message
@@ -557,57 +446,30 @@ function AuthPage() {
                         }
                         {...signUp.register("password")}
                       />
-
-                      {/* Password strength indicator */}
-                      {passwordStrength > 0 && !signUp.formState.errors.password?.message && (
-                        <motion.div
-                          initial={{ opacity: 0, height: 0 }}
-                          animate={{ opacity: 1, height: "auto" }}
-                          exit={{ opacity: 0, height: 0 }}
-                          className="mt-2 pl-5"
-                        >
-                          <div className="flex gap-1">
-                            {[...Array(5)].map((_, i) => (
-                              <div
-                                key={i}
-                                className="h-1 flex-1 overflow-hidden rounded-full bg-white/5"
-                              >
-                                <motion.div
-                                  initial={{ width: 0 }}
-                                  animate={{
-                                    width: i < passwordStrength ? "100%" : "0%",
-                                    backgroundColor:
-                                      passwordStrength <= 2
-                                        ? "oklch(0.66 0.22 18)"
-                                        : passwordStrength <= 3
-                                          ? "oklch(0.82 0.16 80)"
-                                          : "oklch(0.72 0.16 160)",
-                                  }}
-                                  transition={{ duration: 0.3, ease: "easeOut" }}
-                                  className="h-full"
-                                />
-                              </div>
-                            ))}
-                          </div>
-                          <p className="mt-1 text-[10.5px] text-[oklch(0.68_0.012_270_/_0.5)]">
-                            {passwordStrength <= 2
-                              ? "Weak password"
-                              : passwordStrength <= 3
-                                ? "Good password"
-                                : "Strong password"}
-                          </p>
-                        </motion.div>
-                      )}
+                      {/* Password strength */}
+                      <AnimatePresence>
+                        {passwordStrength > 0 && !signUp.formState.errors.password?.message && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            exit={{ opacity: 0, height: 0 }}
+                            className="mt-2 overflow-hidden"
+                          >
+                            <PasswordStrength strength={passwordStrength} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                     </div>
-                    <PremiumInput
+                    <AuthInput
                       label="Confirm Password"
                       type="password"
                       autoComplete="new-password"
-                      icon={<Lock className="h-4 w-4" />}
                       error={signUp.formState.errors.confirmPassword?.message}
                       {...signUp.register("confirmPassword")}
                     />
-                    <PremiumButton status={status} label="Create Account" error={errorMessage} />
+                    <div className="pt-2">
+                      <AuthCTAButton status={status} label="Begin Chronicle" />
+                    </div>
                   </motion.form>
                 )}
               </AnimatePresence>
@@ -615,122 +477,385 @@ function AuthPage() {
 
             {/* Footer */}
             <motion.p
-              variants={cardLine}
-              className="mt-6 text-center text-[10.5px] tracking-wide text-white/30"
+              className="mt-8 text-center text-[11px]"
+              style={{ color: "oklch(0.68 0.012 270 / 0.35)" }}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: reduced ? 0 : 0.4, delay: reduced ? 0 : 0.4 }}
             >
               By continuing you agree to our{" "}
-              <Link className="text-white/50 underline-offset-4 hover:underline" to="/terms">
+              <Link
+                to="/terms"
+                className="underline underline-offset-2 transition-colors"
+                style={{ color: "oklch(0.68 0.012 270 / 0.55)" }}
+              >
                 Terms
               </Link>{" "}
               &{" "}
-              <Link className="text-white/50 underline-offset-4 hover:underline" to="/privacy">
+              <Link
+                to="/privacy"
+                className="underline underline-offset-2 transition-colors"
+                style={{ color: "oklch(0.68 0.012 270 / 0.55)" }}
+              >
                 Privacy
               </Link>
               .
             </motion.p>
-          </motion.div>
-        </LiquidGlassCard>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
-/* ─── Premium CTA button ─── */
-function PremiumButton({
-  status,
-  label,
-  error,
-}: {
-  status: "idle" | "loading" | "success" | "error";
-  label: string;
-  error?: string | null;
-}) {
+// ── Auth Mode Switcher ────────────────────────────────────────────────────────
+
+function AuthModeSwitcher({ mode, onChange }: { mode: Mode; onChange: (m: Mode) => void }) {
   return (
-    <>
-      {error && (
-        <motion.p
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="text-center text-[11px] text-red-400/90"
-        >
-          {error}
-        </motion.p>
-      )}
-      <motion.button
-        type="submit"
-        disabled={status !== "idle" && status !== "error"}
-        className="group relative mt-2 flex w-full items-center justify-center gap-2 overflow-hidden rounded-full bg-[#F8F8F5] px-5 py-3.5 text-[13.5px] font-medium tracking-wide text-black disabled:opacity-95"
+    <div
+      role="tablist"
+      aria-label="Authentication mode"
+      className="relative flex w-full rounded-xl p-[3px]"
+      style={{
+        background: "oklch(1 0 0 / 0.03)",
+        border: "1px solid oklch(1 0 0 / 0.07)",
+      }}
+    >
+      {/* Sliding indicator */}
+      <motion.div
+        className="absolute bottom-[3px] top-[3px] w-[calc(50%-3px)] rounded-[9px]"
+        animate={{ left: mode === "signin" ? "3px" : "calc(50%)" }}
+        transition={{ type: "spring", stiffness: 380, damping: 32, mass: 0.6 }}
         style={{
-          boxShadow:
-            "0 18px 50px -18px rgba(255,255,255,0.50), inset 0 1px 0 rgba(255,255,255,0.85)",
+          background: "oklch(0.18 0.016 270)",
+          boxShadow: "0 2px 8px oklch(0 0 0 / 0.25), inset 0 1px 0 oklch(1 0 0 / 0.06)",
         }}
-        animate={
-          status === "idle"
-            ? {
-                boxShadow: [
-                  "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
-                  "0 22px 65px -14px rgba(255,255,255,0.72), inset 0 1px 0 rgba(255,255,255,0.90)",
-                  "0 18px 50px -18px rgba(255,255,255,0.45), inset 0 1px 0 rgba(255,255,255,0.85)",
-                ],
-              }
-            : {}
-        }
-        transition={status === "idle" ? { duration: 3.5, repeat: Infinity, ease: "easeInOut" } : {}}
-        whileHover={{ scale: 1.025, transition: { duration: 0.2 } }}
-        whileTap={{ scale: 0.975, transition: { duration: 0.12 } }}
+      />
+      <button
+        role="tab"
+        aria-selected={mode === "signin"}
+        type="button"
+        onClick={() => onChange("signin")}
+        className="relative z-10 w-1/2 rounded-[9px] py-2.5 text-[12.5px] font-medium transition-colors duration-200"
+        style={{
+          color: mode === "signin" ? "oklch(0.97 0.005 270)" : "oklch(0.68 0.012 270 / 0.55)",
+        }}
       >
-        {/* shimmer sweep */}
-        <span
-          aria-hidden
-          className="pointer-events-none absolute inset-y-0 -left-1/3 w-1/3 -translate-x-full opacity-0 transition-[transform,opacity] duration-[900ms] ease-out group-hover:translate-x-[420%] group-hover:opacity-100"
-          style={{
-            background: "linear-gradient(90deg, transparent, rgba(0,0,0,0.06), transparent)",
-          }}
-        />
-        <AnimatePresence mode="wait">
-          {status === "idle" && (
-            <motion.span
-              key="i"
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              className="inline-flex items-center gap-2"
-            >
-              {label}
-              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
-            </motion.span>
-          )}
-          {status === "loading" && (
-            <motion.span
-              key="l"
-              initial={{ opacity: 0, y: 4 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -4 }}
-              className="inline-flex items-center gap-2"
-            >
-              <Loader2 className="h-4 w-4 animate-spin" /> Entering…
-            </motion.span>
-          )}
-          {status === "success" && (
-            <motion.span
-              key="s"
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2"
-            >
-              <Check className="h-4 w-4" /> Welcome
-            </motion.span>
-          )}
-        </AnimatePresence>
-      </motion.button>
-    </>
+        Sign in
+      </button>
+      <button
+        role="tab"
+        aria-selected={mode === "signup"}
+        type="button"
+        onClick={() => onChange("signup")}
+        className="relative z-10 w-1/2 rounded-[9px] py-2.5 text-[12.5px] font-medium transition-colors duration-200"
+        style={{
+          color: mode === "signup" ? "oklch(0.97 0.005 270)" : "oklch(0.68 0.012 270 / 0.55)",
+        }}
+      >
+        Create Account
+      </button>
+    </div>
   );
 }
 
-/* ─── Full-color Google icon ─── */
+// ── Google Button ─────────────────────────────────────────────────────────────
+
+function GoogleButton() {
+  return (
+    <motion.button
+      type="button"
+      onClick={() => {
+        window.location.href = `${API_BASE_URL}/auth/google`;
+      }}
+      className="group flex w-full items-center justify-center gap-3 rounded-xl py-3 text-[13px] font-medium transition-colors"
+      style={{
+        background: "oklch(1 0 0 / 0.03)",
+        border: "1px solid oklch(1 0 0 / 0.08)",
+        color: "oklch(0.90 0.005 270)",
+      }}
+      whileHover={{ scale: 1.008 }}
+      whileTap={{ scale: 0.995 }}
+      onHoverStart={(e) => {
+        (e.target as HTMLElement).style.borderColor = "oklch(1 0 0 / 0.15)";
+        (e.target as HTMLElement).style.background = "oklch(1 0 0 / 0.05)";
+      }}
+      onHoverEnd={(e) => {
+        (e.target as HTMLElement).style.borderColor = "oklch(1 0 0 / 0.08)";
+        (e.target as HTMLElement).style.background = "oklch(1 0 0 / 0.03)";
+      }}
+    >
+      <GoogleColorIcon />
+      Continue with Google
+    </motion.button>
+  );
+}
+
+// ── Auth Input ────────────────────────────────────────────────────────────────
+
+interface AuthInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+  label: string;
+  error?: string;
+  helperText?: string;
+}
+
+const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
+  ({ label, error, helperText, type = "text", id, ...props }, ref) => {
+    const inputId = id ?? `auth-${label.toLowerCase().replace(/\s+/g, "-")}`;
+    const [focused, setFocused] = useState(false);
+    const [showPassword, setShowPassword] = useState(false);
+    const isPassword = type === "password";
+    const inputType = isPassword && showPassword ? "text" : type;
+
+    return (
+      <div>
+        <div
+          className="relative overflow-hidden rounded-xl transition-all duration-150"
+          style={{
+            background: "oklch(1 0 0 / 0.02)",
+            border: error
+              ? "1px solid oklch(0.66 0.22 18 / 0.45)"
+              : focused
+                ? "1px solid oklch(0.72 0.18 255 / 0.45)"
+                : "1px solid oklch(1 0 0 / 0.09)",
+            boxShadow:
+              focused && !error
+                ? "0 0 0 3px oklch(0.72 0.18 255 / 0.06)"
+                : error
+                  ? "0 0 0 3px oklch(0.66 0.22 18 / 0.06)"
+                  : "none",
+          }}
+        >
+          <label
+            htmlFor={inputId}
+            className="block px-4 pt-3 text-[10px] font-medium uppercase tracking-[0.1em]"
+            style={{ color: error ? "oklch(0.66 0.22 18 / 0.8)" : "oklch(0.68 0.012 270 / 0.7)" }}
+          >
+            {label}
+          </label>
+          <div className="flex items-center">
+            <input
+              ref={ref}
+              id={inputId}
+              type={inputType}
+              className="w-full bg-transparent px-4 pb-3 pt-1 text-[14.5px] outline-none"
+              style={{ color: "oklch(0.97 0.005 270)" }}
+              aria-label={label}
+              aria-invalid={!!error}
+              aria-describedby={
+                error ? `${inputId}-error` : helperText ? `${inputId}-hint` : undefined
+              }
+              onFocus={(e) => {
+                setFocused(true);
+                props.onFocus?.(e);
+              }}
+              onBlur={(e) => {
+                setFocused(false);
+                props.onBlur?.(e);
+              }}
+              {...props}
+            />
+            {isPassword && (
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={() => setShowPassword((v) => !v)}
+                className="mr-2 flex min-h-[44px] min-w-[44px] items-center justify-center rounded-lg transition-colors"
+                style={{ color: "oklch(0.68 0.012 270 / 0.5)" }}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+              >
+                {showPassword ? (
+                  <EyeOff className="h-[15px] w-[15px]" />
+                ) : (
+                  <Eye className="h-[15px] w-[15px]" />
+                )}
+              </button>
+            )}
+          </div>
+        </div>
+
+        <AnimatePresence>
+          {error ? (
+            <motion.p
+              id={`${inputId}-error`}
+              role="alert"
+              key="error"
+              initial={{ opacity: 0, height: 0, y: -4 }}
+              animate={{ opacity: 1, height: "auto", y: 0 }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.18 }}
+              className="mt-1.5 flex items-center gap-1.5 px-1 text-[11px]"
+              style={{ color: "oklch(0.66 0.22 18)" }}
+            >
+              <AlertCircle className="h-3 w-3 shrink-0" aria-hidden />
+              {error}
+            </motion.p>
+          ) : helperText ? (
+            <motion.p
+              id={`${inputId}-hint`}
+              key="hint"
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: "auto" }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.18 }}
+              className="mt-1.5 px-1 text-[11px]"
+              style={{ color: "oklch(0.68 0.012 270 / 0.5)" }}
+            >
+              {helperText}
+            </motion.p>
+          ) : null}
+        </AnimatePresence>
+      </div>
+    );
+  },
+);
+AuthInput.displayName = "AuthInput";
+
+// ── Password Strength ─────────────────────────────────────────────────────────
+
+function PasswordStrength({ strength }: { strength: number }) {
+  const label = strength <= 2 ? "Weak" : strength <= 3 ? "Fair" : strength <= 4 ? "Good" : "Strong";
+  const segmentColor =
+    strength <= 2
+      ? "oklch(0.66 0.22 18)"
+      : strength <= 3
+        ? "oklch(0.82 0.16 80)"
+        : "oklch(0.72 0.16 160)";
+
+  return (
+    <div className="px-1">
+      <div className="flex gap-1">
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="h-[3px] flex-1 overflow-hidden rounded-full"
+            style={{ background: "oklch(1 0 0 / 0.06)" }}
+          >
+            <motion.div
+              className="h-full rounded-full"
+              animate={{
+                width: i < strength ? "100%" : "0%",
+                backgroundColor: segmentColor,
+              }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            />
+          </div>
+        ))}
+      </div>
+      <p
+        className="mt-1.5 text-[11px]"
+        style={{
+          color: strength <= 2 ? "oklch(0.66 0.22 18 / 0.8)" : "oklch(0.68 0.012 270 / 0.55)",
+        }}
+      >
+        {label} password
+      </p>
+    </div>
+  );
+}
+
+// ── Auth CTA Button ───────────────────────────────────────────────────────────
+
+function AuthCTAButton({ status, label }: { status: Status; label: string }) {
+  const isDisabled = status === "loading" || status === "success";
+  return (
+    <motion.button
+      type="submit"
+      disabled={isDisabled}
+      className="group relative flex w-full items-center justify-center overflow-hidden rounded-xl py-3.5 text-[14px] font-medium tracking-wide"
+      style={{
+        background: isDisabled ? "oklch(0.85 0.005 270)" : "oklch(0.97 0.005 270)",
+        color: "oklch(0.10 0.015 270)",
+        boxShadow: isDisabled
+          ? "none"
+          : "0 1px 0 oklch(1 0 0 / 0.7) inset, 0 8px 20px -8px oklch(1 0 0 / 0.15)",
+        transition: "background 150ms ease, box-shadow 150ms ease, opacity 150ms ease",
+        opacity: isDisabled && status !== "success" ? 0.7 : 1,
+      }}
+      whileHover={!isDisabled ? { scale: 1.012 } : undefined}
+      whileTap={!isDisabled ? { scale: 0.988 } : undefined}
+    >
+      {/* Shimmer on hover */}
+      <span
+        aria-hidden
+        className="pointer-events-none absolute inset-y-0 -left-[100%] w-full -skew-x-12 bg-gradient-to-r from-transparent via-white/30 to-transparent opacity-0 transition-[transform,opacity] duration-700 ease-out group-hover:translate-x-[200%] group-hover:opacity-100"
+      />
+      <AnimatePresence mode="wait">
+        {(status === "idle" || status === "error") && (
+          <motion.span
+            key="idle"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.15 }}
+            className="inline-flex items-center gap-2"
+          >
+            {label}
+            <ArrowRight
+              className="h-[15px] w-[15px] transition-transform duration-200 group-hover:translate-x-0.5"
+              aria-hidden
+            />
+          </motion.span>
+        )}
+        {status === "loading" && (
+          <motion.span
+            key="loading"
+            initial={{ opacity: 0, y: 5 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -5 }}
+            transition={{ duration: 0.15 }}
+            className="inline-flex items-center gap-2"
+          >
+            <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
+            Authenticating…
+          </motion.span>
+        )}
+        {status === "success" && (
+          <motion.span
+            key="success"
+            initial={{ opacity: 0, scale: 0.85 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+            className="inline-flex items-center gap-2"
+          >
+            <Check className="h-4 w-4" aria-hidden />
+            Welcome
+          </motion.span>
+        )}
+      </AnimatePresence>
+    </motion.button>
+  );
+}
+
+// ── Error Banner ──────────────────────────────────────────────────────────────
+
+function AuthErrorBanner({ message }: { message: string }) {
+  return (
+    <motion.div
+      role="alert"
+      aria-live="polite"
+      initial={{ opacity: 0, y: -8 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, scale: 0.97 }}
+      transition={{ duration: 0.2 }}
+      className="mb-5 flex items-start gap-3 rounded-xl border p-4 text-[13px] leading-relaxed"
+      style={{
+        borderColor: "oklch(0.66 0.22 18 / 0.25)",
+        background: "oklch(0.66 0.22 18 / 0.05)",
+        color: "oklch(0.75 0.12 18)",
+      }}
+    >
+      <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
+      <p>{message}</p>
+    </motion.div>
+  );
+}
+
+// ── Google Color Icon ─────────────────────────────────────────────────────────
+
 function GoogleColorIcon() {
   return (
-    <svg className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" aria-hidden>
+    <svg className="h-4 w-4 shrink-0" viewBox="0 0 24 24" aria-hidden>
       <path
         fill="#4285F4"
         d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -750,3 +875,6 @@ function GoogleColorIcon() {
     </svg>
   );
 }
+
+// Export for re-use across auth sub-pages
+export { AuthInput, AuthCTAButton, AuthErrorBanner, GoogleColorIcon };
