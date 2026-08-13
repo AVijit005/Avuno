@@ -18,10 +18,9 @@ import {
   EyeOff,
   Shield,
   LogOut,
-  Bell,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { LiquidSwitch } from "@/components/ui/LiquidSwitch";
+
 
 export const Route = createFileRoute("/app/settings")({ component: Page });
 
@@ -193,8 +192,6 @@ function Page() {
           </div>
         </div>
 
-        <NotificationSettings />
-
         {sessions && sessions.length > 0 && (
           <div className="p-6 rounded-2xl glass-subtle">
             <h2 className="font-display text-lg tracking-tight mb-4">Active Sessions</h2>
@@ -246,81 +243,3 @@ function Page() {
   );
 }
 
-function NotificationSettings() {
-  const [notifs, setNotifs] = useState({
-    journalReminders: true,
-    weeklyDigest: true,
-    memoryAlerts: false,
-    socialActivity: false,
-    productUpdates: true,
-    completionCelebrations: true,
-  });
-
-  const toggle = (key: keyof typeof notifs) =>
-    setNotifs((prev) => ({ ...prev, [key]: !prev[key] }));
-
-  const rows: { key: keyof typeof notifs; label: string; desc: string }[] = [
-    {
-      key: "journalReminders",
-      label: "Journal Reminders",
-      desc: "Daily nudge to write your entry",
-    },
-    {
-      key: "weeklyDigest",
-      label: "Weekly Digest",
-      desc: "A summary of your week in media",
-    },
-    {
-      key: "memoryAlerts",
-      label: "Memory Alerts",
-      desc: "When a capsule unlocks or a memory resurfaces",
-    },
-    {
-      key: "socialActivity",
-      label: "Social Activity",
-      desc: "Followers, likes, and collection interactions",
-    },
-    {
-      key: "completionCelebrations",
-      label: "Completion Celebrations",
-      desc: "Confetti when you finish something great",
-    },
-    {
-      key: "productUpdates",
-      label: "Product Updates",
-      desc: "New features and announcements from Avuno",
-    },
-  ];
-
-  return (
-    <div className="p-6 rounded-2xl glass-subtle">
-      <h2 className="font-display text-lg tracking-tight mb-1 flex items-center gap-2">
-        <Bell className="h-4 w-4 text-primary" /> Notifications
-      </h2>
-      <p className="text-[13px] text-muted-foreground mb-6">
-        Choose what you want to hear about.
-      </p>
-      <div className="space-y-1 divide-y divide-foreground/[0.05]">
-        {rows.map(({ key, label, desc }) => (
-          <div
-            key={key}
-            className="flex items-center justify-between gap-4 py-4 first:pt-0 last:pb-0"
-          >
-            <div className="min-w-0">
-              <div className="text-sm font-medium">{label}</div>
-              <div className="text-[12px] text-muted-foreground mt-0.5 leading-relaxed">
-                {desc}
-              </div>
-            </div>
-            <div className="shrink-0">
-              <LiquidSwitch
-                checked={notifs[key]}
-                onChange={() => toggle(key)}
-              />
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}

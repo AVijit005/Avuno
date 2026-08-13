@@ -112,14 +112,6 @@ stiffness: 400–500, damping: 28–35, mass: 0.6–0.8
 Main CTA button. Variants: `primary`, `secondary`, `ghost`.
 Props: `loading`, `success`, `icon`, `disabled`.
 
-### LiquidSwitch (`src/components/ui/LiquidSwitch.tsx`)
-Glass toggle switch. Uses `var(--primary)` for ON state, glass-grey for OFF.
-Size: `36×21px` track, `15px` thumb. Spring-animated with Framer Motion.
-
-```tsx
-<LiquidSwitch checked={value} onChange={setValue} />
-```
-
 ### EmptyState (`src/components/ui/EmptyState.tsx`)
 Standard empty state with icon, title, description, and optional CTA.
 Uses `card-interactive` + `glass-subtle` surface.
