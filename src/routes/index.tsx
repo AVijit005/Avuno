@@ -4,17 +4,21 @@ import { ArrowRight } from "lucide-react";
 import { useRef, useEffect, useState } from "react";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 
-import { LivingHero } from "@/components/landing/LivingHero";
-import { HowItWorks } from "@/components/landing/HowItWorks";
-import { ProductStory } from "@/components/landing/ProductStory";
+// New flagship components
+import { ConnectedHero } from "@/components/landing/ConnectedHero";
+import { InteractiveProductDemo } from "@/components/landing/InteractiveProductDemo";
+import { ConnectedSystemVisual } from "@/components/landing/ConnectedSystemVisual";
+
+// Product demonstrations
 import { SceneSection } from "@/components/landing/SceneSection";
-import { UniversalMediaShowcase } from "@/components/landing/UniversalMediaShowcase";
 import { DashboardShowcase } from "@/components/landing/DashboardShowcase";
+import { MemoryCapsule } from "@/components/landing/MemoryCapsule";
 import { TimelinePreview } from "@/components/landing/TimelinePreview";
 import { AnalyticsPreview } from "@/components/landing/AnalyticsPreview";
 import { CollectionsPreview } from "@/components/landing/CollectionsPreview";
-import { MemoryCapsule } from "@/components/landing/MemoryCapsule";
 import { WrappedPreview } from "@/components/landing/WrappedPreview";
+
+// Supporting elements
 import { MagneticButton } from "@/components/landing/MagneticButton";
 import { TrustSignals } from "@/components/landing/TrustSignals";
 import { FAQSection } from "@/components/landing/FAQSection";
@@ -26,21 +30,22 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Track what you watch, read, play, and listen to. Keep your journal, memories, and timeline beautifully connected to every story you finish.",
+          "Track what you watch, read, play, and listen to. Your journal, memories, and timeline — connected to every story you finish. Free, private, and beautifully designed.",
       },
       { property: "og:title", content: "Avuno — Your personal media archive, connected" },
       {
         property: "og:description",
         content:
-          "Track what you watch, read, play, and listen to. Keep your journal, memories, and timeline beautifully connected.",
+          "Track what you watch, read, play, and listen to. Your journal, memories, and timeline — connected to every story you finish.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:url", content: "https://avuno.xyz" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Avuno — Your personal media archive, connected" },
       {
         name: "twitter:description",
         content:
-          "Track what you watch, read, play, and listen to. Keep your journal, memories, and timeline connected.",
+          "Track what you watch, read, play, and listen to. Your journal, memories, and timeline connected.",
       },
     ],
   }),
@@ -48,14 +53,13 @@ export const Route = createFileRoute("/")({
 });
 
 const NAV_LINKS = [
-  { label: "How it works", href: "#how-it-works" },
-  { label: "Library", href: "#library" },
+  { label: "Product", href: "#connected-system" },
   { label: "Journal", href: "#journal" },
   { label: "Timeline", href: "#timeline" },
   { label: "Analytics", href: "#analytics" },
 ];
 
-function Landing() {
+function LandingNav() {
   const navRef = useRef<HTMLDivElement | null>(null);
   const { scrollY } = useScroll();
   const navBlur = useTransform(scrollY, [0, 200], [8, 24]);
@@ -64,140 +68,156 @@ function Landing() {
     [0, 200],
     ["oklch(0.14 0.012 270 / 0.35)", "oklch(0.14 0.012 270 / 0.75)"],
   );
-  const [year, setYear] = useState("");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  // Close mobile menu on nav link click
+  const handleNavClick = () => setMobileMenuOpen(false);
+
+  return (
+    <motion.header
+      ref={navRef}
+      style={{
+        backdropFilter: useTransform(navBlur, (v) => `blur(${v}px) saturate(180%)`),
+        backgroundColor: navBg,
+      }}
+      className="fixed inset-x-0 top-0 z-40 border-b border-white/[0.06]"
+      role="banner"
+    >
+      <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
+        {/* Logo */}
+        <Link
+          to="/"
+          className="flex items-center gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-xl px-1 py-0.5"
+          aria-label="Avuno — home"
+        >
+          <div
+            className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+            aria-hidden="true"
+          >
+            <span className="font-display text-base leading-none">A</span>
+          </div>
+          <span className="font-display text-lg leading-none">Avuno</span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <nav
+          className="hidden items-center gap-1 rounded-2xl px-1 py-1 text-sm md:flex"
+          aria-label="Main navigation"
+        >
+          {NAV_LINKS.map((l) => (
+            <a
+              key={l.label}
+              href={l.href}
+              className="rounded-xl px-3 py-1.5 text-muted-foreground transition hover:bg-white/[0.06] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              {l.label}
+            </a>
+          ))}
+        </nav>
+
+        {/* Right CTAs */}
+        <div className="flex items-center gap-2">
+          <Link
+            to="/auth"
+            className="hidden text-sm text-muted-foreground transition hover:text-foreground md:inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg px-2 py-1"
+          >
+            Sign in
+          </Link>
+          <MagneticButton>
+            <Link
+              to="/auth"
+              className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-4 py-2 text-sm font-medium text-black press-scale hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              Start with Avuno <ArrowRight className="h-3.5 w-3.5" aria-hidden="true" />
+            </Link>
+          </MagneticButton>
+
+          {/* Mobile menu toggle */}
+          <button
+            className="ml-1 grid h-9 w-9 place-items-center rounded-xl glass md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            onClick={() => setMobileMenuOpen((o) => !o)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-nav"
+            aria-label={mobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
+          >
+            <span className="sr-only">{mobileMenuOpen ? "Close menu" : "Menu"}</span>
+            <div className="flex flex-col gap-1" aria-hidden="true">
+              <span
+                className={`block h-px w-5 bg-foreground transition-transform ${mobileMenuOpen ? "translate-y-1 rotate-45" : ""}`}
+              />
+              <span
+                className={`block h-px w-5 bg-foreground transition-opacity ${mobileMenuOpen ? "opacity-0" : ""}`}
+              />
+              <span
+                className={`block h-px w-5 bg-foreground transition-transform ${mobileMenuOpen ? "-translate-y-1 -rotate-45" : ""}`}
+              />
+            </div>
+          </button>
+        </div>
+      </div>
+
+      {/* Mobile Dropdown */}
+      {mobileMenuOpen && (
+        <motion.div
+          id="mobile-nav"
+          initial={{ opacity: 0, y: -8 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -8 }}
+          className="border-t border-white/[0.06] px-6 py-4 md:hidden glass"
+          role="navigation"
+          aria-label="Mobile navigation"
+        >
+          <nav className="flex flex-col gap-1">
+            {NAV_LINKS.map((l) => (
+              <a
+                key={l.label}
+                href={l.href}
+                onClick={handleNavClick}
+                className="rounded-xl px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-white/[0.06] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[44px] flex items-center"
+              >
+                {l.label}
+              </a>
+            ))}
+            <div className="mt-3 pt-3 border-t border-white/[0.06]">
+              <Link
+                to="/auth"
+                className="flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-medium text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary min-h-[44px]"
+                onClick={handleNavClick}
+              >
+                Start with Avuno <ArrowRight className="h-4 w-4" aria-hidden="true" />
+              </Link>
+            </div>
+          </nav>
+        </motion.div>
+      )}
+    </motion.header>
+  );
+}
+
+function Landing() {
+  const [year, setYear] = useState("");
   useEffect(() => setYear(new Date().getFullYear().toString()), []);
 
   return (
     <div className="relative min-h-screen overflow-x-hidden">
       <AtmosphereBackground intensity="vivid" />
 
-      {/* Nav */}
-      <motion.header
-        ref={navRef}
-        style={{
-          backdropFilter: useTransform(navBlur, (v) => `blur(${v}px) saturate(180%)`),
-          backgroundColor: navBg,
-        }}
-        className="fixed inset-x-0 top-0 z-40 border-b border-white/[0.06]"
-      >
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 md:px-10">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-2" aria-label="Avuno home">
-            <div className="grid h-8 w-8 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground">
-              <span className="font-display text-base leading-none">A</span>
-            </div>
-            <span className="font-display text-lg leading-none">Avuno</span>
-          </Link>
+      {/* Navigation */}
+      <LandingNav />
 
-          {/* Desktop Nav */}
-          <nav
-            className="hidden items-center gap-1 rounded-2xl px-1 py-1 text-sm md:flex"
-            aria-label="Main navigation"
-          >
-            {NAV_LINKS.map((l) => (
-              <a
-                key={l.label}
-                href={l.href}
-                className="rounded-xl px-3 py-1.5 text-muted-foreground transition hover:bg-white/[0.06] hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                {l.label}
-              </a>
-            ))}
-          </nav>
+      <main id="main-content">
+        {/* 01 — Hero: The Magic Moment - Interactive Connected System Demo */}
+        <ConnectedHero />
 
-          {/* Right CTAs */}
-          <div className="flex items-center gap-2">
-            <Link
-              to="/auth"
-              className="hidden text-sm text-muted-foreground transition hover:text-foreground md:inline-block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg px-2 py-1"
-            >
-              Sign in
-            </Link>
-            <MagneticButton>
-              <Link
-                to="/auth"
-                className="inline-flex items-center gap-1.5 rounded-2xl bg-white px-4 py-2 text-sm font-medium text-black press-scale hover:bg-white/90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              >
-                Start with Avuno <ArrowRight className="h-3.5 w-3.5" />
-              </Link>
-            </MagneticButton>
+        {/* 02 — Interactive Product Demo: 10 Media Types + Status System */}
+        <InteractiveProductDemo />
 
-            {/* Mobile menu toggle */}
-            <button
-              className="ml-1 grid h-9 w-9 place-items-center rounded-xl glass md:hidden focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
-              onClick={() => setMobileMenuOpen((o) => !o)}
-              aria-expanded={mobileMenuOpen}
-              aria-label="Open navigation menu"
-            >
-              <span className="sr-only">Menu</span>
-              <div className="flex flex-col gap-1">
-                <span
-                  className={`block h-px w-5 bg-foreground transition-transform ${mobileMenuOpen ? "translate-y-1 rotate-45" : ""}`}
-                />
-                <span
-                  className={`block h-px w-5 bg-foreground transition-opacity ${mobileMenuOpen ? "opacity-0" : ""}`}
-                />
-                <span
-                  className={`block h-px w-5 bg-foreground transition-transform ${mobileMenuOpen ? "-translate-y-1 -rotate-45" : ""}`}
-                />
-              </div>
-            </button>
-          </div>
-        </div>
+        {/* 03 — Connected System Visual: The Centerpiece - Library→Journal→Memory→Timeline→Analytics */}
+        <ConnectedSystemVisual />
 
-        {/* Mobile Dropdown */}
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            className="border-t border-white/[0.06] px-6 py-4 md:hidden glass"
-          >
-            <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
-              {NAV_LINKS.map((l) => (
-                <a
-                  key={l.label}
-                  href={l.href}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-xl px-4 py-3 text-sm text-muted-foreground hover:text-foreground hover:bg-white/[0.06]"
-                >
-                  {l.label}
-                </a>
-              ))}
-              <div className="mt-3 pt-3 border-t border-white/[0.06]">
-                <Link
-                  to="/auth"
-                  className="flex items-center justify-center gap-2 rounded-2xl bg-white px-5 py-3 text-sm font-medium text-black"
-                  onClick={() => setMobileMenuOpen(false)}
-                >
-                  Start with Avuno <ArrowRight className="h-4 w-4" />
-                </Link>
-              </div>
-            </nav>
-          </motion.div>
-        )}
-      </motion.header>
-
-      <main>
-        {/* Hero */}
-        <LivingHero />
-
-        {/* How it works — step-by-step system explanation */}
-        <HowItWorks />
-
-        {/* Media types showcase */}
+        {/* 04 — Dashboard: Continue your journey */}
         <SceneSection
-          id="library"
-          eyebrow="Universal library"
-          title={<>Ten media types. One quiet home.</>}
-          intro="Movies, series, anime, books, manga, games, music, podcasts, courses, and YouTube — every kind of story you experience, organized under one design language and one timeline."
-        >
-          <UniversalMediaShowcase />
-        </SceneSection>
-
-        {/* Continue / Dashboard */}
-        <SceneSection
+          id="dashboard"
           eyebrow="Continue your story"
           align="center"
           title={<>A library that knows where you left off.</>}
@@ -206,10 +226,7 @@ function Landing() {
           <DashboardShowcase />
         </SceneSection>
 
-        {/* Product Story — the connected narrative */}
-        <ProductStory />
-
-        {/* Journal */}
+        {/* 05 — Journal: The writing surface */}
         <SceneSection
           id="journal"
           eyebrow="Journal"
@@ -219,7 +236,7 @@ function Landing() {
           <MemoryCapsule />
         </SceneSection>
 
-        {/* Timeline */}
+        {/* 06 — Timeline: Chronological story */}
         <SceneSection
           id="timeline"
           eyebrow="Timeline"
@@ -229,7 +246,7 @@ function Landing() {
           <TimelinePreview />
         </SceneSection>
 
-        {/* Analytics */}
+        {/* 07 — Analytics: Pattern discovery */}
         <SceneSection
           id="analytics"
           eyebrow="Analytics"
@@ -240,7 +257,7 @@ function Landing() {
           <AnalyticsPreview />
         </SceneSection>
 
-        {/* Collections */}
+        {/* 08 — Collections: Curation */}
         <SceneSection
           eyebrow="Collections"
           title={<>Curate like a film festival.</>}
@@ -249,19 +266,19 @@ function Landing() {
           <CollectionsPreview />
         </SceneSection>
 
-        {/* Wrapped */}
+        {/* 09 — Wrapped: Year in review */}
         <SceneSection eyebrow="Wrapped" align="center">
           <WrappedPreview />
         </SceneSection>
 
-        {/* Trust */}
+        {/* 10 — Trust Foundation */}
         <TrustSignals />
 
-        {/* FAQ */}
+        {/* 11 — FAQ */}
         <FAQSection />
 
-        {/* Final CTA */}
-        <section className="relative px-6 py-36 md:px-10">
+        {/* 12 — Closing CTA */}
+        <section className="relative px-6 py-36 md:px-10" aria-labelledby="closing-cta-heading">
           <div className="mx-auto max-w-3xl text-center">
             <motion.div
               initial={{ opacity: 0, y: 8 }}
@@ -272,6 +289,7 @@ function Landing() {
               Begin
             </motion.div>
             <motion.h2
+              id="closing-cta-heading"
               initial={{ opacity: 0, y: 24, filter: "blur(12px)" }}
               whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
               viewport={{ once: true }}
@@ -291,12 +309,12 @@ function Landing() {
                   to="/auth"
                   className="inline-flex items-center gap-2 rounded-2xl bg-white px-7 py-4 text-sm font-medium text-black press-scale animate-pulse-glow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
-                  Start with Avuno <ArrowRight className="h-4 w-4" />
+                  Begin your archive <ArrowRight className="h-4 w-4" aria-hidden="true" />
                 </Link>
               </MagneticButton>
               <MagneticButton strength={0.18}>
                 <a
-                  href="#how-it-works"
+                  href="#connected-system"
                   className="glass inline-flex items-center gap-2 rounded-2xl px-7 py-4 text-sm font-medium press-scale focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
                 >
                   See how it works
@@ -307,11 +325,17 @@ function Landing() {
         </section>
       </main>
 
-      <footer className="relative border-t border-border/40 px-6 py-12 text-xs text-muted-foreground md:px-10">
+      <footer
+        className="relative border-t border-border/40 px-6 py-12 text-xs text-muted-foreground md:px-10"
+        role="contentinfo"
+      >
         <div className="mx-auto flex max-w-6xl flex-wrap items-start justify-between gap-8">
           <div>
             <div className="flex items-center gap-2 mb-3">
-              <div className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-primary to-secondary text-primary-foreground">
+              <div
+                className="grid h-6 w-6 place-items-center rounded-md bg-gradient-to-br from-primary to-secondary text-primary-foreground"
+                aria-hidden="true"
+              >
                 <span className="font-display text-xs leading-none">A</span>
               </div>
               <span className="font-display text-sm text-foreground">Avuno</span>
@@ -327,8 +351,8 @@ function Landing() {
               <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground/50">
                 Product
               </div>
-              <div className="flex flex-col gap-2">
-                <a href="#how-it-works" className="hover:text-foreground transition">
+              <nav className="flex flex-col gap-2" aria-label="Product navigation">
+                <a href="#system" className="hover:text-foreground transition">
                   How it works
                 </a>
                 <a href="#library" className="hover:text-foreground transition">
@@ -343,28 +367,28 @@ function Landing() {
                 <a href="#analytics" className="hover:text-foreground transition">
                   Analytics
                 </a>
-              </div>
+              </nav>
             </div>
 
             <div>
               <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground/50">
                 Account
               </div>
-              <div className="flex flex-col gap-2">
+              <nav className="flex flex-col gap-2" aria-label="Account navigation">
                 <Link to="/auth" className="hover:text-foreground transition">
                   Sign in
                 </Link>
                 <Link to="/auth" className="hover:text-foreground transition">
                   Get started
                 </Link>
-              </div>
+              </nav>
             </div>
 
             <div>
               <div className="mb-3 text-[10px] uppercase tracking-widest text-muted-foreground/50">
                 Legal
               </div>
-              <div className="flex flex-col gap-2">
+              <nav className="flex flex-col gap-2" aria-label="Legal navigation">
                 <Link to="/privacy" className="hover:text-foreground transition">
                   Privacy
                 </Link>
@@ -374,7 +398,7 @@ function Landing() {
                 <a href="mailto:press@avuno.xyz" className="hover:text-foreground transition">
                   Press
                 </a>
-              </div>
+              </nav>
             </div>
           </div>
         </div>

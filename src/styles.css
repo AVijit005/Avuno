@@ -610,6 +610,15 @@ select {
     box-shadow: 0 0 60px oklch(0.72 0.18 255 / 0.45);
   }
 }
+@keyframes memory-pulse-kf {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 oklch(0.72 0.18 255 / 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px oklch(0.72 0.18 255 / 0);
+  }
+}
 @keyframes sheen {
   0% {
     transform: translateX(-100%);
@@ -643,6 +652,9 @@ select {
 }
 @utility animate-pulse-glow {
   animation: pulse-glow 4s ease-in-out infinite;
+}
+@utility memory-pulse {
+  animation: memory-pulse-kf 2s ease-in-out infinite;
 }
 
 /* ============================================================
