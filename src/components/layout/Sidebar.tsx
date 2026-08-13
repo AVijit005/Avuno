@@ -22,7 +22,7 @@ export function Sidebar({
     <motion.aside
       animate={{ width: collapsed ? 76 : 264 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass-subtle border border-foreground/[0.06] lg:flex"
+      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass border-r border-border/80 lg:flex"
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
@@ -80,14 +80,14 @@ export function Sidebar({
                           "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors press-scale",
                           active
                             ? "bg-muted text-foreground"
-                            : "text-muted-foreground hover:bg-foreground/[0.05] hover:text-foreground",
+                            : "text-muted-foreground hover:bg-foreground/[0.08] hover:text-foreground transition-all duration-[140ms] active:scale-[0.98]",
                         )}
                       >
                         {active && (
                           <motion.span
                             layoutId="nav-active"
                             aria-hidden="true"
-                            className="absolute inset-0 -z-10 rounded-xl bg-primary/10 ring-1 ring-primary/20"
+                            className="absolute inset-0 -z-10 rounded-xl bg-primary/[0.12] ring-1 ring-primary/[0.25] shadow-[0_2px_12px_-4px_oklch(0.72_0.18_255/0.2)]"
                             transition={{ type: "spring", stiffness: 400, damping: 32 }}
                           />
                         )}

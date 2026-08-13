@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="glass-floating shadow-[0_-4px_24px_-8px_oklch(0_0_0/0.3)] fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 lg:hidden"
+      className="glass-floating shadow-xl fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 pb-[env(safe-area-inset-bottom)] lg:hidden"
       style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
     >
       {items.map((it) => {
@@ -28,7 +28,7 @@ export function MobileNav() {
               key={it.label}
               onClick={openAdd}
               aria-label={it.label}
-              className="-mt-8 grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_8px_24px_-8px_oklch(0.72_0.18_255/0.5)] press-scale ring-1 ring-foreground/20"
+              className="-mt-8 grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-primary text-primary-foreground shadow-[0_4px_16px_oklch(0.72_0.18_255/0.5),inset_0_1px_0_oklch(1_1_1/0.2)] hover:scale-105 active:scale-95 transition-transform duration-[140ms]"
             >
               <it.icon className="h-6 w-6" />
             </button>

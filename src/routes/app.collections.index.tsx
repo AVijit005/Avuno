@@ -11,6 +11,8 @@ import { CreateCollectionFab } from "@/components/collections/CreateCollectionFa
 import { CreateCollectionModal } from "@/components/collections/CreateCollectionModal";
 import { DiscoveryCollections } from "@/components/discovery/DiscoveryCollections";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { Plus, LibrarySquare } from "lucide-react";
 
 export const Route = createFileRoute("/app/collections/")({
   component: CollectionsIndex,
@@ -52,28 +54,47 @@ function CollectionsIndex() {
         </div>
       </div>
 
-      <div className="mb-12">
-        <SectionHeader eyebrow="Workspace" title="Featured Collections" />
-        <FeaturedCollections />
-      </div>
+      {allCollections.length === 0 ? (
+        <EmptyState
+          icon={<LibrarySquare />}
+          title="No collections yet"
+          description="Create your first collection to start organizing your movies, shows, and books into intentional spaces."
+          action={
+            <button
+              onClick={() => setOpen(true)}
+              className="inline-flex h-9 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+            >
+              <Plus className="mr-2 h-4 w-4" />
+              Create Collection
+            </button>
+          }
+        />
+      ) : (
+        <>
+          <div className="mb-12">
+            <SectionHeader eyebrow="Workspace" title="Featured Collections" />
+            <FeaturedCollections />
+          </div>
 
-      {pinned.length > 0 && (
-        <div className="mb-12">
-          <SectionHeader eyebrow="Pinned" title="Always within reach" />
-          <EditorialGrid collections={pinned} />
-        </div>
+          {pinned.length > 0 && (
+            <div className="mb-12">
+              <SectionHeader eyebrow="Pinned" title="Always within reach" />
+              <EditorialGrid collections={pinned} />
+            </div>
+          )}
+
+          {recent.length > 0 && (
+            <div className="mb-12">
+              <SectionHeader eyebrow="Recent activity" title="Recently updated" />
+              <EditorialGrid collections={recent} />
+            </div>
+          )}
+
+          <RevealSection>
+            <DiscoveryCollections />
+          </RevealSection>
+        </>
       )}
-
-      {recent.length > 0 && (
-        <div className="mb-12">
-          <SectionHeader eyebrow="Recent activity" title="Recently updated" />
-          <EditorialGrid collections={recent} />
-        </div>
-      )}
-
-      <RevealSection>
-        <DiscoveryCollections />
-      </RevealSection>
 
       <CreateCollectionFab onClick={() => setOpen(true)} />
       <CreateCollectionModal open={open} onOpenChange={setOpen} />

@@ -1,6 +1,6 @@
 import { Outlet, useRouterState } from "@tanstack/react-router";
 import { useState, useEffect, type ReactNode } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Plus } from "lucide-react";
 import { AtmosphereBackground } from "@/components/atmosphere/AtmosphereBackground";
 import { Sidebar } from "@/components/layout/Sidebar";
@@ -64,19 +64,9 @@ export function AppShell({ children }: { children?: ReactNode }) {
           <TopBar onOpenSearch={() => setSearch(true)} />
           <main
             id="main-content"
-            className="px-4 sm:px-6 lg:px-10 pb-[calc(env(safe-area-inset-bottom)+7rem)] lg:pb-16"
+            className="relative px-4 sm:px-6 lg:px-10 pb-[calc(env(safe-area-inset-bottom)+7rem)] lg:pb-16"
           >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={pathname}
-                variants={reduced ? pagePresenceReduced : pagePresence}
-                initial="hidden"
-                animate="visible"
-                exit="exit"
-              >
-                {children ?? <Outlet />}
-              </motion.div>
-            </AnimatePresence>
+            {children ?? <Outlet />}
           </main>
         </div>
         <MobileNav />

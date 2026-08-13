@@ -5,23 +5,23 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-[transform,box-shadow,opacity,background-color] duration-[140ms] ease-out disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] active:translate-y-[1px] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap text-sm font-medium transition-all duration-[140ms] ease-out disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] active:translate-y-[1px] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         default:
-          "bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] hover:bg-primary/95",
+          "bg-primary text-primary-foreground shadow-[0_4px_12px_-4px_oklch(0.72_0.18_255/0.6),inset_0_1px_0_oklch(1_1_1/0.2)] hover:bg-primary/90 hover:shadow-[0_6px_16px_-4px_oklch(0.72_0.18_255/0.7),inset_0_1px_0_oklch(1_1_1/0.25)] hover:-translate-y-[1px]",
         primary:
-          "bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] hover:bg-primary/95",
+          "bg-primary text-primary-foreground shadow-[0_4px_12px_-4px_oklch(0.72_0.18_255/0.6),inset_0_1px_0_oklch(1_1_1/0.2)] hover:bg-primary/90 hover:shadow-[0_6px_16px_-4px_oklch(0.72_0.18_255/0.7),inset_0_1px_0_oklch(1_1_1/0.25)] hover:-translate-y-[1px]",
         secondary:
-          "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80 hover:-translate-y-[1px]",
+          "glass text-foreground hover:bg-foreground/[0.08] hover:shadow-md hover:-translate-y-[1px]",
         tertiary: "glass-subtle text-foreground hover:bg-foreground/5 hover:-translate-y-[1px]",
         ghost:
-          "text-muted-foreground hover:text-foreground hover:bg-foreground/5 active:bg-foreground/10",
+          "hover:bg-foreground/[0.08] hover:text-foreground",
         destructive:
           "bg-destructive text-destructive-foreground shadow-[var(--shadow-button)] hover:bg-destructive/90 hover:-translate-y-[1px]",
         outline:
-          "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground hover:-translate-y-[1px]",
+          "glass-subtle border-border/80 hover:bg-foreground/[0.05] hover:text-foreground",
         icon: "glass-subtle hover:bg-foreground/5 hover:text-primary",
         floating:
           "glass-floating text-foreground shadow-[var(--shadow-elevated)] hover:-translate-y-[2px]",

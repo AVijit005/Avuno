@@ -15,8 +15,7 @@ export function SectionHeader({
   return (
     <motion.div
       initial={{ opacity: 0, y: 14, filter: "blur(8px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-80px" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
       className="mb-7 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4"
     >
@@ -49,8 +48,7 @@ export function RevealSection({
     <motion.section
       id={id}
       initial={{ opacity: 0, y: 26, filter: "blur(10px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, margin: "-100px" }}
+      animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
       transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
       className={`mt-24 md:mt-28 ${className}`}
     >
