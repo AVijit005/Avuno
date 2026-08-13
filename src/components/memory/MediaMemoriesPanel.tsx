@@ -26,7 +26,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
         {!isAdding && (
           <button
             onClick={() => setIsAdding(true)}
-            className="flex items-center gap-1.5 rounded-full min-h-[44px] bg-white/5 px-4 py-2 text-xs font-medium text-foreground hover:bg-white/10 transition-colors"
+            className="flex items-center gap-1.5 rounded-full min-h-[44px] bg-white/5 px-4 py-2 text-xs font-medium text-foreground hover:bg-white/10 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
           >
             <Plus className="h-3.5 w-3.5" />
             Add a memory
@@ -56,7 +56,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
           {isLoading ? (
             <div className="h-32 rounded-3xl bg-white/5 animate-pulse" />
           ) : memories.length === 0 ? (
-            <div className="p-8 text-center md:col-span-2 rounded-[32px] glass-subtle">
+            <div className="p-8 text-center md:col-span-2 rounded-[32px] glass shadow-sm">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Vault
               </div>
@@ -68,7 +68,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
               </p>
               <button
                 onClick={() => setIsAdding(true)}
-                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-2.5 min-h-[44px] text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                className="mt-6 inline-flex items-center gap-1.5 rounded-full bg-primary px-6 py-2.5 min-h-[44px] text-sm font-medium text-primary-foreground transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] hover:bg-primary/90"
               >
                 <Plus className="h-4 w-4" /> Add a memory
               </button>
@@ -106,7 +106,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
   };
 
   return (
-    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl glass-subtle transition-[background-color,border-color] hover:bg-foreground/[0.05] hover:border-foreground/10">
+    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl glass shadow-sm card-interactive transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-3">
           <time className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-wider">
@@ -150,14 +150,14 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
               onClick={handleDetach}
               disabled={detach.isPending}
               aria-label="Confirm remove link"
-              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-red-400/10 text-red-400 text-xs font-medium px-3 hover:bg-red-400/20 transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-red-400/10 text-red-400 text-xs font-medium px-3 hover:bg-red-400/20 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
             >
               {detach.isPending ? "…" : "Yes"}
             </button>
             <button
               onClick={() => setConfirming(false)}
               aria-label="Cancel remove"
-              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/5 text-muted-foreground text-xs font-medium px-3 hover:bg-white/10 transition-colors"
+              className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full bg-white/5 text-muted-foreground text-xs font-medium px-3 hover:bg-white/10 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
             >
               No
             </button>
@@ -166,7 +166,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
           <button
             onClick={() => setConfirming(true)}
             aria-label={`Remove link between memory "${memory.title}" and this media`}
-            className="min-h-[44px] flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-colors opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
+            className="min-h-[44px] flex items-center gap-1.5 rounded-full px-4 py-2 text-xs text-muted-foreground hover:text-red-400 hover:bg-red-400/10 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] opacity-0 group-hover:opacity-100 focus-visible:opacity-100"
           >
             <Unlink className="h-3.5 w-3.5" />
             Remove link
@@ -197,13 +197,13 @@ function AttachMemoryView({
   const attach = useAttachMemory();
 
   return (
-    <div className="p-6 rounded-3xl glass-subtle">
+    <div className="p-6 rounded-3xl glass shadow-sm">
       <div className="flex items-center justify-between mb-6">
         <h4 className="font-display text-xl tracking-tight">Select a Memory from your Vault</h4>
         <button
           onClick={onCancel}
           aria-label="Close memory selection"
-          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
+          className="min-h-[44px] min-w-[44px] flex items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
         >
           <X className="h-5 w-5" />
         </button>
@@ -247,7 +247,7 @@ function AttachMemoryView({
                   );
                 }}
                 disabled={attach.isPending}
-                className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-colors border border-transparent hover:border-white/10 group relative min-h-[56px]"
+                className="text-left p-4 rounded-2xl bg-white/5 hover:bg-white/10 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] border border-transparent hover:border-white/10 group relative min-h-[56px]"
               >
                 <h5 className="font-serif text-lg mb-1 truncate group-hover:text-primary transition-colors">
                   {m.title}
@@ -274,7 +274,7 @@ function AttachMemoryView({
               <button
                 onClick={() => fetchNextPage()}
                 disabled={isFetchingNextPage}
-                className="min-h-[44px] text-xs text-muted-foreground hover:text-foreground transition-colors px-6 py-2 rounded-full border border-border/40 hover:bg-white/5"
+                className="min-h-[44px] text-xs text-muted-foreground hover:text-foreground transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] px-6 py-2 rounded-full glass-subtle hover:bg-white/5"
               >
                 {isFetchingNextPage ? "Loading..." : "Load more"}
               </button>

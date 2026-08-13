@@ -72,7 +72,7 @@ function TimelinePage() {
             { l: "Journals", v: statsData?.journalCount ?? 0 },
             { l: "Longest streak", v: statsData?.writingStreak ?? 0, s: "d" },
           ].map((s) => (
-            <div key={s.l} className="rounded-xl glass-subtle p-4 shadow-sm">
+            <div key={s.l} className="rounded-xl glass p-4 shadow-sm">
               <div className="text-eyebrow">{s.l}</div>
               <div className="mt-2 font-display text-3xl tracking-tight text-foreground">
                 {typeof s.v === "number" ? <CountUp to={s.v} suffix={s.s ?? ""} /> : s.v}
@@ -119,7 +119,7 @@ function TimelinePage() {
           <div className="space-y-8">
             {yearEvents.length === 0 && !isLoading && (
               <div className="pl-14 md:pl-20">
-                <div className="rounded-2xl glass-subtle p-6 text-sm text-muted-foreground">
+                <div className="rounded-2xl glass p-6 text-sm text-muted-foreground">
                   <p className="font-medium text-foreground/80">No events for {year}</p>
                   <p className="mt-1">
                     Timeline events are recorded automatically when you track media — start by{" "}
@@ -175,7 +175,7 @@ function TimelinePage() {
                     <span className="h-2 w-2 rounded-full" style={{ background: media.accent }} />
                   </motion.span>
 
-                  <div className="flex gap-5 p-5 bg-surface-1 border border-border/30 rounded-2xl shadow-sm transition hover:border-primary/50">
+                  <div className="flex gap-5 p-5 glass-subtle hover:bg-foreground/[0.08] rounded-2xl shadow-sm transition hover:border-primary/50">
                     <PremiumImage
                       src={media.poster || ""}
                       alt=""
@@ -224,7 +224,7 @@ function TimelinePage() {
                           <Link
                             to="/app/memories/$id"
                             params={{ id: rawEvent.memoryId }}
-                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-primary hover:text-primary-foreground transition-colors"
+                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-primary hover:text-primary-foreground hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
                           >
                             View Memory
                           </Link>
@@ -234,7 +234,7 @@ function TimelinePage() {
                             onClick={() => {
                               if (rawEvent) setPreservingEvent(rawEvent);
                             }}
-                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-white transition-colors"
+                            className="inline-flex items-center text-xs uppercase tracking-[0.18em] text-muted-foreground hover:text-white hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
                           >
                             Preserve as Memory
                           </button>
@@ -275,7 +275,7 @@ function TimelinePage() {
             { l: "Stories tracked", v: allEvents?.length || 0 },
             { l: "Journal entries", v: statsData?.journalCount ?? 0 },
           ].map((s) => (
-            <div key={s.l} className="p-6 glass-subtle rounded-2xl shadow-sm">
+            <div key={s.l} className="p-6 glass rounded-2xl shadow-sm">
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 {s.l}
               </div>

@@ -73,7 +73,7 @@ export function CreateCollectionModal({
             <button
               onClick={() => onOpenChange(false)}
               aria-label="Close"
-              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-xl bg-white/[0.05] text-muted-foreground hover:text-foreground"
+              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-xl bg-white/[0.05] text-muted-foreground hover:text-foreground hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
             >
               <X className="h-4 w-4" />
             </button>
@@ -130,7 +130,7 @@ export function CreateCollectionModal({
                       key={c}
                       onClick={() => setAccent(c)}
                       aria-label={`Select accent color ${c}`}
-                      className={`relative h-8 w-8 rounded-full transition ${accent === c ? "ring-2 ring-foreground/80 ring-offset-2 ring-offset-background" : ""}`}
+                      className={`relative h-8 w-8 rounded-full transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98] ${accent === c ? "ring-2 ring-foreground/80 ring-offset-2 ring-offset-background" : ""}`}
                       style={{ background: c, boxShadow: `0 0 16px ${c}` }}
                     />
                   ))}
@@ -178,7 +178,7 @@ export function CreateCollectionModal({
                         key={opt.v}
                         onClick={() => setPrivacy(opt.v)}
                         aria-label={`Set privacy to ${opt.label}`}
-                        className={`glass-subtle flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs transition ${on ? "ring-2 ring-primary/60" : ""}`}
+                        className={`glass card-interactive flex items-center justify-center gap-2 rounded-xl px-3 py-2.5 text-xs transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98] ${on ? "ring-2 ring-primary/60" : ""}`}
                       >
                         <I className="h-3.5 w-3.5" /> {opt.label}
                       </button>

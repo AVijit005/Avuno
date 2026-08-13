@@ -68,7 +68,7 @@ function MemoryVault() {
               params={{ id: memory.id }}
               className="block group"
             >
-              <div className="h-full p-6 rounded-3xl glass-subtle transition-[background-color,transform,box-shadow] duration-[200ms] hover:bg-foreground/[0.07] hover:-translate-y-[2px] hover:shadow-[var(--shadow-elevated)] flex flex-col gap-4">
+              <div className="h-full p-6 rounded-3xl glass-elevated card-interactive transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] flex flex-col gap-4">
                 <div className="flex justify-between items-start gap-4">
                   <h3 className="text-xl font-display text-foreground/90 group-hover:text-foreground transition-colors line-clamp-2">
                     {memory.title}

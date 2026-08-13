@@ -7,7 +7,7 @@ export function CollectionConnections({ collection: c }: { collection: Collectio
     cy = 140,
     r = 110;
   return (
-    <div className="glass-subtle rounded-3xl p-6 ring-1 ring-white/5">
+    <div className="glass rounded-3xl p-6 ring-1 ring-white/5">
       <svg viewBox="0 0 400 280" className="mx-auto w-full max-w-2xl">
         {rels.map((rel, i) => {
           const a = (i / rels.length) * Math.PI * 2;

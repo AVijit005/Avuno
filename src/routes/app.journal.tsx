@@ -274,10 +274,10 @@ function JournalPage() {
             <button
               key={r}
               onClick={() => setMoodRange(r as 7 | 30 | 90)}
-              className={`cursor-pointer ${
+              className={`cursor-pointer hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98] ${
                 moodRange === r
-                  ? "bg-primary/10 text-primary border border-primary/30 rounded-xl px-3 py-1.5 text-sm transition-[background-color,border-color] duration-[140ms]"
-                  : "text-muted-foreground border border-foreground/[0.08] rounded-xl px-3 py-1.5 text-sm hover:bg-foreground/[0.05] hover:text-foreground transition-[background-color,border-color] duration-[140ms]"
+                  ? "bg-primary/10 text-primary border border-primary/30 rounded-xl px-3 py-1.5 text-sm"
+                  : "text-muted-foreground border border-foreground/[0.08] rounded-xl px-3 py-1.5 text-sm hover:bg-foreground/[0.05] hover:text-foreground"
               }`}
             >
               {r === 7 ? "Week" : r === 30 ? "Month" : "Quarter"}

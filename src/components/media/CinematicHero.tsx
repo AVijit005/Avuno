@@ -18,12 +18,12 @@ export function CinematicHero({ item }: { item: MediaItem }) {
           alt={item.title}
           className="h-full w-full object-cover"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-foreground/95 via-foreground/60 to-transparent" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_75%_50%,transparent_20%,hsl(var(--foreground)/0.8)_100%)]" />
         <div
           className="absolute inset-0"
           style={{
-            background: `linear-gradient(to right, oklch(0 0 0 / 0.95) 0%, oklch(0 0 0 / 0.6) 45%, transparent 100%),
-                         radial-gradient(circle at 75% 50%, transparent 20%, oklch(0 0 0 / 0.8) 100%),
-                         radial-gradient(60% 80% at 100% 0%, color-mix(in oklch, ${item.accent ?? "var(--primary)"} 25%, transparent), transparent 60%)`,
+            background: `radial-gradient(60% 80% at 100% 0%, color-mix(in oklch, ${item.accent ?? "var(--primary)"} 25%, transparent), transparent 60%)`,
           }}
         />
 

@@ -78,7 +78,7 @@ function Home() {
         <div className="flex items-center gap-3">
           <Link
             to="/app/journal"
-            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl glass-subtle hover:bg-foreground/[0.07] transition-[background-color,transform] duration-[140ms] active:scale-[0.98]"
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl glass hover:bg-foreground/[0.08] transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98]"
           >
             <NotebookPen className="w-4 h-4 text-muted-foreground" />
             Write Entry
@@ -86,7 +86,7 @@ function Home() {
           <button
             id="home-add-media-btn"
             onClick={openAdd}
-            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-[background-color,transform,box-shadow] duration-[140ms] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] active:scale-[0.98] active:translate-y-[1px]"
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl bg-primary text-primary-foreground transition-all duration-[140ms] shadow-[0_4px_12px_-4px_oklch(0.72_0.18_255/0.6),inset_0_1px_0_oklch(1_1_1/0.2)] hover:bg-primary/90 hover:shadow-[0_6px_16px_-4px_oklch(0.72_0.18_255/0.7),inset_0_1px_0_oklch(1_1_1/0.25)] hover:-translate-y-[1px] active:scale-[0.98] active:translate-y-[1px]"
           >
             <span className="text-base leading-none">+</span>
             Add Media
@@ -115,10 +115,10 @@ function Home() {
           )}
 
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl glass-subtle p-6 md:p-8">
+            <div className="rounded-[32px] glass p-6 md:p-8 card-interactive">
               <div className="flex items-center gap-2 mb-6">
                 <Library className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-eyebrow font-medium">Library Pulse</h2>
+                <h2 className="text-eyebrow font-medium text-foreground">Library Pulse</h2>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
@@ -144,10 +144,10 @@ function Home() {
               </div>
             </div>
 
-            <div className="rounded-2xl glass-subtle p-6 md:p-8">
+            <div className="rounded-[32px] glass p-6 md:p-8 card-interactive">
               <div className="flex items-center gap-2 mb-6">
                 <History className="w-4 h-4 text-muted-foreground" />
-                <h2 className="text-eyebrow font-medium">Insights</h2>
+                <h2 className="text-eyebrow font-medium text-foreground">Insights</h2>
               </div>
               <MemoryInsights max={2} />
             </div>
@@ -181,10 +181,10 @@ function OnboardingGuide() {
             {pillars.map(({ icon: Icon, label, hint }) => (
               <div
                 key={label}
-                className="flex flex-col gap-2 rounded-xl border border-foreground/[0.07] bg-foreground/[0.04] p-4"
+                className="flex flex-col gap-2 rounded-2xl glass-subtle p-4 transition-all duration-[140ms] hover:bg-foreground/[0.08]"
               >
                 <Icon className="h-4 w-4 text-primary" />
-                <div className="text-sm font-medium">{label}</div>
+                <div className="text-sm font-medium text-foreground">{label}</div>
                 <div className="text-[11px] text-muted-foreground leading-snug">{hint}</div>
               </div>
             ))}

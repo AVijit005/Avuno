@@ -241,7 +241,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
   // Style per variant
   const wrap = cn(
     variant === "overlay" &&
-      "flex w-full items-center justify-between gap-1 rounded-full glass-subtle bg-black/40 p-1.5 shadow-[var(--shadow-glass)] ring-1 ring-white/10",
+      "flex w-full items-center justify-between gap-1 rounded-full glass-subtle bg-foreground/[0.05] p-1.5 shadow-[var(--shadow-glass)] ring-1 ring-white/10",
     variant === "hero" && "flex flex-wrap items-center gap-2",
     variant === "inline" && "flex items-center gap-1.5",
     className,
@@ -259,7 +259,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
             "press-scale overflow-hidden min-h-0 min-w-0 transition-[transform,background-color,color,box-shadow] duration-300 ease-out",
             variant === "overlay"
               ? "flex aspect-square flex-1 items-center justify-center rounded-xl bg-white/[0.10] text-white ring-1 ring-white/15 hover:-translate-y-[2px] hover:bg-white hover:text-black hover:shadow-[0_8px_16px_-4px_var(--primary)]"
-              : "inline-flex shrink-0 items-center gap-1.5 rounded-xl bg-primary text-xs font-medium text-primary-foreground shadow hover:-translate-y-[1px]",
+              : "inline-flex shrink-0 items-center gap-1.5 rounded-xl glass-subtle bg-foreground/[0.02] text-foreground text-xs font-medium shadow hover:bg-foreground/[0.08] active:scale-[0.95] hover:-translate-y-[1px]",
             variant === "hero" ? "px-4 py-2 text-sm" : variant === "inline" ? "px-3 py-1.5" : "",
           )}
         >
@@ -279,15 +279,15 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
           "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-[transform,background-color,box-shadow] duration-300 ease-out",
           variant === "overlay"
             ? "flex aspect-square flex-1 items-center justify-center rounded-xl ring-1 ring-white/10 hover:-translate-y-[2px] hover:shadow-[0_8px_16px_-4px_var(--primary)]"
-            : "glass-subtle grid place-items-center rounded-2xl",
+            : "glass-subtle grid place-items-center rounded-2xl hover:bg-foreground/[0.08] active:scale-[0.95]",
           variant === "hero" ? "h-11 w-11" : "h-8 w-8",
           fav
             ? variant === "overlay"
               ? "bg-rose-500/30 text-rose-300 hover:bg-rose-500/40 hover:ring-rose-500/50"
-              : "text-rose-500"
+              : "text-rose-500 hover:bg-foreground/[0.08] active:scale-[0.95]"
             : variant === "overlay"
               ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20"
-              : "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
+              : "text-muted-foreground hover:text-foreground hover:bg-foreground/[0.08] active:scale-[0.95]",
         )}
       >
         <Heart className={cn("h-3.5 w-3.5", fav && "fill-current")} />
@@ -307,10 +307,10 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
           bookmarked
             ? variant === "overlay"
               ? "bg-primary/30 text-primary-foreground hover:bg-primary/40 hover:ring-primary/50"
-              : "bg-primary/15 text-primary"
+              : "bg-primary/15 text-primary hover:bg-foreground/[0.08] active:scale-[0.95]"
             : variant === "overlay"
               ? "bg-white/[0.06] text-white hover:bg-white/[0.15] hover:ring-white/20"
-              : "bg-white/[0.06] text-muted-foreground hover:bg-white/[0.15] hover:text-foreground",
+              : "glass-subtle text-muted-foreground hover:text-foreground hover:bg-foreground/[0.08] active:scale-[0.95]",
         )}
       >
         <Bookmark className={cn("h-3.5 w-3.5", bookmarked && "fill-current")} />
@@ -325,7 +325,7 @@ function ItemActionBarImpl({ id, title, variant = "inline", className }: Props) 
               "press-scale shrink-0 min-h-0 min-w-0 overflow-hidden transition-[transform,background-color,color,box-shadow] duration-300 ease-out",
               variant === "overlay"
                 ? "flex aspect-square flex-1 items-center justify-center rounded-full bg-white/[0.06] text-white ring-1 ring-white/10 hover:-translate-y-[2px] hover:bg-white/[0.15] hover:ring-white/20 hover:shadow-[0_8px_16px_-4px_oklch(0.72_0.18_255/0.3)]"
-                : "grid h-8 w-8 place-items-center rounded-full bg-white/[0.06] text-muted-foreground ring-1 ring-white/10 hover:bg-white/[0.15] hover:text-foreground",
+                : "grid h-8 w-8 place-items-center rounded-full glass-subtle text-muted-foreground ring-1 ring-white/10 hover:text-foreground hover:bg-foreground/[0.08] active:scale-[0.95]",
               variant === "hero" && "tap-target",
             )}
           >

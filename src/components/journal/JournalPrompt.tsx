@@ -18,8 +18,8 @@ export function JournalPrompt({
   onNextPrompt,
 }: Props) {
   return (
-    <div className="mx-auto flex max-w-2xl flex-col items-center p-8 md:p-14 rounded-3xl glass-subtle">
-      <header className="mb-10 flex w-full items-baseline justify-between border-b border-border/40 pb-4 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+    <div className="mx-auto flex max-w-2xl flex-col items-center p-8 md:p-14 rounded-3xl glass">
+      <header className="mb-10 flex w-full items-baseline justify-between glass-subtle rounded-xl p-4 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
         <span>{timeContext}</span>
         <span className="italic text-muted-foreground">Reflective</span>
       </header>
@@ -33,9 +33,7 @@ export function JournalPrompt({
 
       <div className="mt-12 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
         <motion.button
-          className="group cursor-pointer rounded-2xl bg-primary px-8 py-4 transition-colors hover:bg-primary/90"
-          whileHover={{ y: -3, scale: 1.02 }}
-          whileTap={{ scale: 0.97 }}
+          className="group cursor-pointer rounded-2xl bg-primary px-8 py-4 hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98] hover:bg-primary/90"
           onClick={onStartWriting}
         >
           <div className="flex h-full w-full items-center justify-center gap-3">
@@ -47,9 +45,7 @@ export function JournalPrompt({
         </motion.button>
 
         <motion.button
-          className="cursor-pointer rounded-2xl px-6 py-3.5 transition-colors glass-subtle"
-          whileHover={{ y: -2, scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
+          className="cursor-pointer rounded-2xl px-6 py-3.5 glass-subtle hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
           onClick={onNextPrompt}
         >
           <div className="flex h-full w-full items-center justify-center">

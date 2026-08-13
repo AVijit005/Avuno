@@ -27,7 +27,7 @@ export function FeaturedCollections() {
           <Link
             to="/app/collections/$id"
             params={{ id: c.id }}
-            className="group relative block aspect-[3/2] overflow-hidden rounded-[32px] ring-1 ring-white/10"
+            className="group card-interactive relative block aspect-[3/2] overflow-hidden rounded-[32px] ring-1 ring-white/10 hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
           >
             <img
               src={c.cover ?? ""}

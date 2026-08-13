@@ -104,7 +104,7 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
     <div className="-mt-3 pb-24">
       <Link
         to="/app/collections"
-        className="story-link mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
+        className="story-link mb-4 inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98] hover:text-foreground"
       >
         <ArrowLeft className="h-4 w-4" /> All collections
       </Link>
@@ -228,7 +228,7 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
                   key={m.id}
                   to="/app/media/$id"
                   params={{ id: m.id }}
-                  className="glass flex items-center gap-4 rounded-2xl p-3 hover-lift"
+                  className="glass card-interactive flex items-center gap-4 rounded-2xl p-3 hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98]"
                 >
                   <img
                     src={m.poster}

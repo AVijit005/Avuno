@@ -244,7 +244,7 @@ function CalendarPage() {
                 setMonthIdx((monthIdx + 11) % 12);
                 setSelectedDay(null);
               }}
-              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-white/[0.08]"
+              className="glass-subtle grid h-9 w-9 place-items-center rounded-full transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md hover:bg-white/[0.08] active:scale-[0.98]"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -253,7 +253,7 @@ function CalendarPage() {
                 setMonthIdx((monthIdx + 1) % 12);
                 setSelectedDay(null);
               }}
-              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-white/[0.08]"
+              className="glass-subtle grid h-9 w-9 place-items-center rounded-full transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md hover:bg-white/[0.08] active:scale-[0.98]"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

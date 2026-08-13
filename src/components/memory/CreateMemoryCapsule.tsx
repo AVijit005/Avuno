@@ -84,7 +84,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
             exit={{ opacity: 0 }}
             aria-label="Close"
             onClick={handleClose}
-            className="absolute top-6 right-6 md:top-12 md:right-12 p-4 rounded-full bg-white/5 hover:bg-white/10 transition-colors text-white/50 hover:text-white"
+            className="absolute top-6 right-6 md:top-12 md:right-12 p-4 rounded-full bg-white/5 hover:bg-white/10 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] text-white/50 hover:text-white"
           >
             <X className="h-6 w-6" />
           </motion.button>
@@ -127,7 +127,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                 />
 
                 {sourceJournal && (
-                  <div className="mb-8 rounded-2xl glass-subtle p-5">
+                  <div className="mb-8 rounded-2xl glass shadow-sm p-5">
                     <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
                       From your journal
                     </div>
@@ -138,7 +138,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                 )}
 
                 {sourceTimeline && (
-                  <div className="mb-8 rounded-2xl glass-subtle p-5 flex items-center gap-4">
+                  <div className="mb-8 rounded-2xl glass shadow-sm p-5 flex items-center gap-4">
                     <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground shrink-0">
                       From timeline
                     </div>
@@ -153,7 +153,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                     <button
                       type="button"
                       onClick={() => setIsPrivate(!isPrivate)}
-                      className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground hover:text-white transition-colors"
+                      className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-muted-foreground hover:text-white transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
                       aria-label="Toggle Privacy"
                     >
                       {isPrivate ? (
@@ -173,7 +173,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                     <button
                       type="button"
                       disabled
-                      className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/30 cursor-not-allowed"
+                      className="flex items-center gap-2 text-[11px] uppercase tracking-[0.18em] text-white/30 cursor-not-allowed transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
                       title="Media attachment API is ready in backend, but frontend integration is Phase 4C-4"
                     >
                       <ImageIcon className="h-4 w-4" />

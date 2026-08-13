@@ -259,7 +259,7 @@ export default function AnalyticsPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="mb-12 border-b border-border/40 pb-8"
+          className="mb-12 glass shadow-lg rounded-[32px] p-6 md:p-8"
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
@@ -368,7 +368,7 @@ export default function AnalyticsPage() {
             title="Activity Timeline"
             description="Daily engagement trends across all media types."
           >
-            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[
                   { l: "Monthly total", v: o.hoursSpent, s: "h" },
@@ -444,7 +444,7 @@ export default function AnalyticsPage() {
         {/* ============ Zone 4 — Media distribution ============ */}
         <Zone eyebrow="Zone 4" title="Media distribution" sub="The shape of your library.">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
               <div className="h-72">
                 <ErrorBoundary
                   fallback={
@@ -475,7 +475,7 @@ export default function AnalyticsPage() {
                 </ErrorBoundary>
               </div>
             </div>
-            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
               <div className="space-y-3">
                 {mediaDistribution.map((d) => {
                   const total = mediaDistribution.reduce((a, b) => a + b.value, 0);
@@ -544,7 +544,7 @@ export default function AnalyticsPage() {
             ].map((c) => (
               <div
                 key={c.label}
-                className="flex items-center justify-between rounded-xl p-3 bg-foreground/[0.05] hover:bg-foreground/[0.08] transition-colors border border-border/30"
+                className="flex items-center justify-between rounded-xl p-3 glass-subtle hover:bg-foreground/[0.08] active:scale-[0.98] transition-all cursor-default"
               >
                 <ProgressRing value={c.ring} accent={c.accent}>
                   <div className="font-display text-2xl tracking-tight">
@@ -572,7 +572,7 @@ export default function AnalyticsPage() {
               return (
                 <motion.div
                   key={genre.genre}
-                  className="glass-subtle relative overflow-hidden rounded-2xl p-5"
+                  className="glass shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 relative overflow-hidden rounded-2xl p-5"
                 >
                   <div className="relative">
                     <div className="flex items-center justify-between">
@@ -624,7 +624,7 @@ export default function AnalyticsPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.6, delay: idx * 0.05 }}
-                  className="glass-subtle group flex items-start gap-4 rounded-2xl p-5"
+                  className="glass shadow-lg hover:shadow-xl transition-shadow group flex items-start gap-4 rounded-2xl p-5"
                 >
                   <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-white/[0.06]">
                     <Sparkles className="h-4 w-4 text-primary" />
@@ -664,7 +664,7 @@ export default function AnalyticsPage() {
                 accent: "oklch(0.72 0.16 160 / 0.6)",
               },
             ].map((r) => (
-              <div key={r.label} className="relative overflow-hidden p-5 rounded-2xl glass-subtle">
+              <div key={r.label} className="relative overflow-hidden p-5 rounded-2xl glass shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-3">
                     <Trophy className="h-4 w-4 text-muted-foreground" />

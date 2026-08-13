@@ -186,14 +186,14 @@ function MemoryDetail() {
       <footer className="pt-12 border-t border-border/40 flex items-center justify-end gap-4">
         <button
           onClick={handleOpenEdit}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
         >
           <Edit className="w-4 h-4" />
           Edit
         </button>
         <button
           onClick={() => setIsDeleteDialogOpen(true)}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-400/10 text-red-400 text-sm hover:bg-red-400/20 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-red-400/10 text-red-400 text-sm hover:bg-red-400/20 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
         >
           <Trash2 className="w-4 h-4" />
           Delete
@@ -228,14 +228,14 @@ function MemoryDetail() {
           <DialogFooter>
             <button
               onClick={() => setIsEditDialogOpen(false)}
-              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
+              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
             >
               Cancel
             </button>
             <button
               onClick={handleSaveEdit}
               disabled={updateMemory.isPending}
-              className="px-4 py-2 rounded-full bg-foreground text-background text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
+              className="px-4 py-2 rounded-full bg-foreground text-background text-sm hover:opacity-90 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] disabled:opacity-50"
             >
               {updateMemory.isPending ? "Saving..." : "Save Changes"}
             </button>
@@ -255,14 +255,14 @@ function MemoryDetail() {
           <DialogFooter className="mt-4">
             <button
               onClick={() => setIsDeleteDialogOpen(false)}
-              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
+              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
             >
               Cancel
             </button>
             <button
               onClick={handleDelete}
               disabled={deleteMemory.isPending}
-              className="px-4 py-2 rounded-full bg-red-400 text-white text-sm hover:bg-red-500 transition-colors disabled:opacity-50"
+              className="px-4 py-2 rounded-full bg-red-400 text-white text-sm hover:bg-red-500 transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] disabled:opacity-50"
             >
               {deleteMemory.isPending ? "Deleting..." : "Delete"}
             </button>
@@ -285,7 +285,7 @@ function JournalEvidence({ journalId }: { journalId: string }) {
         <BookOpen className="w-4 h-4" />
         From your journal
       </h3>
-      <div className="p-6 md:p-8 glass-subtle rounded-2xl">
+      <div className="p-6 md:p-8 glass shadow-sm rounded-2xl">
         <div className="prose prose-invert max-w-none">
           <p className="text-secondary-foreground italic leading-relaxed">"{journal.content}"</p>
         </div>
@@ -312,7 +312,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
           <Quote className="w-4 h-4" />
           Saved quote
         </h3>
-        <div className="p-6 md:p-8 glass-subtle rounded-2xl flex flex-col items-center justify-center text-center">
+        <div className="p-6 md:p-8 glass shadow-sm rounded-2xl flex flex-col items-center justify-center text-center">
           <Quote className="w-8 h-8 text-muted-foreground/30 mb-3" />
           <p className="text-muted-foreground text-sm font-medium">Quote unavailable</p>
           <p className="text-muted-foreground/70 text-xs mt-1 max-w-[200px]">
@@ -329,7 +329,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
         <Quote className="w-4 h-4" />
         Saved quote
       </h3>
-      <div className="p-6 md:p-8 glass-subtle rounded-2xl relative group">
+      <div className="p-6 md:p-8 glass shadow-sm rounded-2xl relative group">
         <Quote className="absolute top-6 left-6 w-8 h-8 text-foreground/5 pointer-events-none" />
         <div className="prose prose-invert max-w-none relative z-10 pl-6 border-l-2 border-primary/20">
           <p className="text-foreground italic leading-relaxed text-lg">"{quote.content}"</p>
@@ -353,7 +353,7 @@ function MediaEvidence({ mediaId }: { mediaId: string }) {
 
   return (
     <Link to="/app/media/$id" params={{ id: media.id }} className="block">
-      <div className="p-4 flex items-center gap-4 hover:bg-foreground/[0.05] transition-colors cursor-pointer glass-subtle rounded-2xl shadow-sm">
+      <div className="p-4 flex items-center gap-4 glass shadow-sm rounded-2xl card-interactive transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px] cursor-pointer">
         {media.posterUrl || media.backdropUrl ? (
           <img
             src={media.posterUrl || media.backdropUrl || ""}

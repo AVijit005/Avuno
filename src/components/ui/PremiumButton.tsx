@@ -45,11 +45,11 @@ export const PremiumButton = forwardRef<HTMLButtonElement, Props>(
 
     const variantClass: Record<Variant, string> = {
       primary:
-        "bg-primary text-primary-foreground shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px]",
+        "bg-primary text-primary-foreground shadow-[0_4px_12px_-4px_oklch(0.72_0.18_255/0.6),inset_0_1px_0_oklch(1_1_1/0.2)] hover:bg-primary/90 hover:shadow-[0_6px_16px_-4px_oklch(0.72_0.18_255/0.7),inset_0_1px_0_oklch(1_1_1/0.25)] hover:-translate-y-[1px]",
       secondary:
-        "glass-subtle text-foreground hover:-translate-y-[1px] hover:shadow-[var(--shadow-ghost-hover)]",
-      ghost: "text-muted-foreground hover:text-foreground hover:bg-foreground/5",
-      icon: "h-11 w-11 p-0 rounded-2xl glass-subtle hover:bg-foreground/5 hover:text-primary",
+        "glass text-foreground hover:bg-foreground/[0.08] hover:-translate-y-[1px] hover:shadow-md",
+      ghost: "hover:bg-foreground/[0.08] hover:text-foreground",
+      icon: "h-11 w-11 p-0 rounded-2xl glass-subtle hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95]",
     };
 
     const Comp = asChild ? Slot : "button";

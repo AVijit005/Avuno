@@ -25,7 +25,7 @@ export function MemoryChip({ variant, label, icon, className }: Props) {
       aria-label={`${labelByVariant[variant]}: ${label}`}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[11px] tracking-tight",
-        "glass-subtle text-foreground/80 border border-foreground/[0.08] hover:bg-foreground/[0.1] transition-[background-color,transform] duration-[140ms] active:scale-[0.96]",
+        "glass-subtle text-foreground/80 border border-foreground/[0.08] hover:bg-foreground/[0.1] transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]",
         className,
       )}
     >

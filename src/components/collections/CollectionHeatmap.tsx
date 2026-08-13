@@ -14,7 +14,7 @@ export function CollectionHeatmap({ collection }: { collection: Collection }) {
   const rng = mulberry(hash(collection.id));
   const cells = Array.from({ length: 12 * 7 }, () => rng());
   return (
-    <div className="glass-subtle rounded-2xl p-5 ring-1 ring-white/5">
+    <div className="glass rounded-2xl p-5 ring-1 ring-white/5">
       <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
         Activity heatmap
       </div>

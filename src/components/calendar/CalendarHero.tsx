@@ -46,14 +46,14 @@ export function CalendarHero({ currentYear, yearOffset, onChangeYear, onToday, i
             <button
               onClick={onToday}
               disabled={isAtToday}
-              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5 disabled:opacity-20 disabled:cursor-default"
+              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5 transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98] disabled:opacity-20 disabled:cursor-default disabled:hover:translate-y-0 disabled:active:scale-100"
               aria-label="Today"
             >
               <ChevronsUp className="h-4 w-4" />
             </button>
             <button
               onClick={() => onChangeYear(yearOffset - 1)}
-              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5"
+              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5 transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98]"
               aria-label="Previous year"
             >
               <ChevronLeft className="h-4 w-4" />
@@ -61,7 +61,7 @@ export function CalendarHero({ currentYear, yearOffset, onChangeYear, onToday, i
             <button
               onClick={() => onChangeYear(yearOffset + 1)}
               disabled={yearOffset >= 5}
-              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5 disabled:opacity-30 disabled:cursor-not-allowed"
+              className="glass-subtle grid h-9 w-9 place-items-center rounded-full hover:bg-foreground/5 transition-all duration-[140ms] hover:-translate-y-[1px] hover:shadow-md active:scale-[0.98] disabled:opacity-30 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:active:scale-100"
               aria-label="Next year"
             >
               <ChevronRight className="h-4 w-4" />

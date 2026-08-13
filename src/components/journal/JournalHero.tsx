@@ -18,7 +18,7 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
       initial={{ opacity: 0, y: 24 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      className="mb-16 border-b border-border/40 pb-12"
+      className="mb-16 glass-subtle rounded-3xl p-8"
     >
       <div className="relative z-10 pointer-events-auto">
         <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground flex items-center gap-2">
@@ -48,9 +48,7 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
             ].map((s) => (
               <motion.div
                 key={s.l}
-                className="rounded-xl glass-subtle p-4"
-                whileHover={{ y: -2 }}
-                whileTap={{ scale: 0.98 }}
+                className="rounded-xl glass-subtle card-interactive p-4"
               >
                 <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   {s.l}
