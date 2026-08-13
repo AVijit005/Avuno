@@ -38,7 +38,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       CORS_ORIGIN: http://127.0.0.1:5173,http://localhost:5173
-      OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:-super-secret-key-that-is-at-least-32-chars-long}
+      OAUTH_ENCRYPTION_KEY: ${OAUTH_ENCRYPTION_KEY:-0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef}
       JWT_ACCESS_SECRET: ${JWT_ACCESS_SECRET:-test-secret-super-long-so-it-passes-32-chars-test}
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-test-refresh-secret-super-long-so-it-passes-32-chars-test}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy-client-id}
@@ -73,11 +73,11 @@ services:
     network_mode: "service:app"
     volumes:
       - .:/e2e
-      - /e2e/node_modules
       - ./artifacts:/e2e/artifacts
     working_dir: /e2e
-    command: bash -c "sleep 15 && npm install --legacy-peer-deps && sed -i 's/app:5173/127.0.0.1:5173/g' tests/e2e.test.ts && sed -i 's/localhost:5000/127.0.0.1:5173/g' tests/e2e.test.ts && npx playwright test tests/e2e.test.ts"
+    command: bash -c "sleep 5 && npx playwright test"
     depends_on:
       - app
     environment:
       - CI=1
+      - DATABASE_URL=postgresql://chronicle:chronicle@postgres:5432/chronicle?schema=public
