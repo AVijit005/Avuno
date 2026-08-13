@@ -12,7 +12,7 @@ test.describe("Authenticated User Journeys", () => {
     await page.goto("/auth");
 
     // Wait for the page to load (should default to SignIn)
-    const submitBtn = page.locator("button[type='submit']").first();
+    const submitBtn = page.getByRole("button", { name: "Continue", exact: true }).first();
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
 
     // 2. Fill in login form

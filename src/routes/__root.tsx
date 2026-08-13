@@ -263,7 +263,7 @@ function RootComponent() {
         event.query.state.status === "success" &&
         event.query.state.data
       ) {
-        const user = event.query.state.data as any;
+        const user = event.query.state.data as { themePreference?: string };
         if (user.themePreference) {
           applyPref(user.themePreference);
         }

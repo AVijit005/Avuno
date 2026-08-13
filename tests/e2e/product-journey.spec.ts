@@ -19,7 +19,7 @@ test.describe("Phase 16 — Core Product Journey", () => {
     test.setTimeout(60000);
     // ── 1. Login ─────────────────────────────────────────────────────────
     await page.goto("/auth");
-    const submitBtn = page.locator("button[type='submit']").first();
+    const submitBtn = page.getByRole("button", { name: "Continue", exact: true }).first();
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
     await page.getByLabel(/email/i).fill(testEmail);
     await page.getByLabel("Password", { exact: true }).fill(testPassword);
@@ -145,7 +145,7 @@ test.describe("Phase 16 — Core Product Journey", () => {
   test("home empty state: new user sees onboarding guide with clear CTA", async ({ page }) => {
     // Navigate to home (we may or may not be new — just check the page loads)
     await page.goto("/auth");
-    const submitBtn = page.locator("button[type='submit']").first();
+    const submitBtn = page.getByRole("button", { name: "Continue", exact: true }).first();
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
     await page.getByLabel(/email/i).fill(testEmail);
     await page.getByLabel("Password", { exact: true }).fill(testPassword);
@@ -162,7 +162,7 @@ test.describe("Phase 16 — Core Product Journey", () => {
 
   test("library search: search works without crashing and clears properly", async ({ page }) => {
     await page.goto("/auth");
-    const submitBtn = page.locator("button[type='submit']").first();
+    const submitBtn = page.getByRole("button", { name: "Continue", exact: true }).first();
     await expect(submitBtn).toBeVisible({ timeout: 10000 });
     await page.getByLabel(/email/i).fill(testEmail);
     await page.getByLabel("Password", { exact: true }).fill(testPassword);

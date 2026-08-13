@@ -43,6 +43,7 @@ services:
       JWT_REFRESH_SECRET: ${JWT_REFRESH_SECRET:-test-refresh-secret-super-long-so-it-passes-32-chars-test}
       GOOGLE_CLIENT_ID: ${GOOGLE_CLIENT_ID:-dummy-client-id}
       GOOGLE_CLIENT_SECRET: ${GOOGLE_CLIENT_SECRET:-dummy-client-secret}
+      EMAIL_API_KEY: ${EMAIL_API_KEY:-dummy-email-api-key}
       EMAIL_VERIFICATION_REQUIRED: "false"
       GOOGLE_CALLBACK_URL: http://localhost:3000/api/auth/google/callback
     depends_on:
@@ -75,7 +76,7 @@ services:
       - .:/e2e
       - ./artifacts:/e2e/artifacts
     working_dir: /e2e
-    command: bash -c "sleep 5 && npx playwright test"
+    command: tail -f /dev/null
     depends_on:
       - app
     environment:

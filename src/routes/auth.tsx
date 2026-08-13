@@ -645,6 +645,7 @@ const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
               aria-describedby={
                 error ? `${inputId}-error` : helperText ? `${inputId}-hint` : undefined
               }
+              {...props}
               onFocus={(e) => {
                 setFocused(true);
                 props.onFocus?.(e);
@@ -653,7 +654,6 @@ const AuthInput = forwardRef<HTMLInputElement, AuthInputProps>(
                 setFocused(false);
                 props.onBlur?.(e);
               }}
-              {...props}
             />
             {isPassword && (
               <button

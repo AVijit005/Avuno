@@ -25,22 +25,24 @@ function withSecurityHeaders(response: Response): Response {
   headers.set("Referrer-Policy", "strict-origin-when-cross-origin");
   headers.set("Permissions-Policy", "camera=(), microphone=(), geolocation=()");
   headers.set("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload");
-  headers.set(
-    "Content-Security-Policy",
-    [
-      "default-src 'self'",
-      "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://static.cloudflareinsights.com",
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-      "font-src 'self' https://fonts.gstatic.com",
-      "img-src 'self' data: https:",
-      `connect-src 'self' ${process.env.VITE_API_URL ? new URL(process.env.VITE_API_URL).origin : "https://api.avuno.xyz"}`,
-      "frame-ancestors 'none'",
-      "base-uri 'self'",
-      "form-action 'self'",
-      "object-src 'none'",
-      "upgrade-insecure-requests",
-    ].join("; "),
-  );
+  const csp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://static.cloudflareinsights.com",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: https:",
+    `connect-src 'self' ${process.env.VITE_API_URL ? new URL(process.env.VITE_API_URL).origin : "https://api.avuno.xyz"}`,
+    "frame-ancestors 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "object-src 'none'",
+  ];
+
+  if (process.env.NODE_ENV === "production") {
+    csp.push("upgrade-insecure-requests");
+  }
+
+  headers.set("Content-Security-Policy", csp.join("; "));
   return new Response(response.body, {
     status: response.status,
     statusText: response.statusText,
