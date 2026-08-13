@@ -147,7 +147,7 @@ function ImportExportPage() {
     <div className="mx-auto max-w-3xl py-8">
       <Link
         to="/app/settings"
-        className="inline-flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground"
+        className="inline-flex items-center gap-1 text-xs text-muted-foreground transition-premium hover:text-foreground focus-visible:focus-ring tap-target rounded-md px-2 py-1 -ml-2"
       >
         <ArrowLeft className="h-3 w-3" /> Settings
       </Link>
@@ -157,7 +157,7 @@ function ImportExportPage() {
         shelf, and collection you've made.
       </p>
 
-      <section className="mt-8 rounded-3xl border border-border/60 bg-white/[0.02] p-6">
+      <section className="mt-8 glass border border-foreground/10 rounded-3xl p-6 transition-premium">
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
           <Download className="h-3.5 w-3.5" /> Export
         </div>
@@ -170,14 +170,14 @@ function ImportExportPage() {
           </div>
           <button
             onClick={downloadExport}
-            className="press-scale rounded-full bg-gradient-to-r from-primary to-secondary px-5 py-2 text-sm font-medium text-primary-foreground"
+            className="press-scale tap-target rounded-full bg-primary px-5 py-2 text-sm font-medium text-primary-foreground shadow transition-premium hover:-translate-y-[1px] focus-visible:focus-ring active:scale-[0.98]"
           >
             Download JSON
           </button>
         </div>
       </section>
 
-      <section className="mt-6 rounded-3xl border border-border/60 bg-white/[0.02] p-6">
+      <section className="mt-6 glass border border-foreground/10 rounded-3xl p-6 transition-premium">
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
           <Upload className="h-3.5 w-3.5" /> Import — works now
         </div>
@@ -204,7 +204,7 @@ function ImportExportPage() {
         )}
       </section>
 
-      <section className="mt-6 rounded-3xl border border-border/60 bg-white/[0.02] p-6">
+      <section className="mt-6 glass-subtle border border-foreground/10 rounded-3xl p-6 transition-premium">
         <div className="flex items-center gap-2 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
           <AlertCircle className="h-3.5 w-3.5" /> Coming with the backend
         </div>
@@ -216,7 +216,7 @@ function ImportExportPage() {
           {PENDING_SOURCES.map((s) => (
             <li
               key={s.id}
-              className="rounded-2xl border border-border/60 bg-white/[0.02] px-3 py-2 text-sm text-muted-foreground"
+              className="glass border border-foreground/10 rounded-2xl px-3 py-2 text-sm text-muted-foreground transition-premium"
             >
               {s.name}
             </li>
@@ -241,7 +241,7 @@ function FileTile({
   onFile: (file: File) => void;
 }) {
   return (
-    <label className="press-scale flex cursor-pointer items-start gap-3 rounded-2xl border border-border/60 bg-white/[0.02] p-4 transition hover:border-primary/40 hover:bg-white/[0.05]">
+    <label className="press-scale tap-target flex cursor-pointer items-start gap-3 rounded-2xl border border-foreground/10 glass-subtle p-4 transition-premium hover:border-primary/40 hover:bg-foreground/5 focus-within:focus-ring active:scale-[0.98]">
       <Icon className="mt-0.5 h-5 w-5 text-primary" />
       <div className="min-w-0">
         <div className="text-sm font-medium">{label}</div>

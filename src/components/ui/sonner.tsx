@@ -14,14 +14,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       toastOptions={{
         unstyled: false,
         classNames: {
-          toast: [
-            "group toast",
-            "!rounded-2xl !border !border-foreground/10",
-            "!bg-[color:color-mix(in_oklab,var(--popover)_82%,transparent)]",
-            "!backdrop-blur-xl !text-foreground",
-            "!shadow-[0_20px_50px_-20px_oklch(0_0_0/0.6),inset_0_1px_0_oklch(1_0_0/0.08)]",
-            "!px-4 !py-3.5",
-          ].join(" "),
+          toast: ["group toast", "glass-floating", "!rounded-2xl", "!px-4 !py-3.5"].join(" "),
           title: "text-sm font-medium",
           description: "!text-muted-foreground text-xs leading-relaxed",
           actionButton: "!bg-primary !text-primary-foreground !rounded-lg !text-xs !font-medium",

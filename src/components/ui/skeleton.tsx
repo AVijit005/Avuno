@@ -6,7 +6,7 @@ function Skeleton({ className, ...props }: React.HTMLAttributes<HTMLDivElement>)
       role="status"
       aria-label="Loading"
       className={cn(
-        "animate-pulse rounded-xl bg-foreground/[0.05] ring-1 ring-foreground/[0.04]",
+        "motion-safe:animate-pulse rounded-xl bg-foreground/[0.05] ring-1 ring-foreground/[0.04]",
         className,
       )}
       {...props}
