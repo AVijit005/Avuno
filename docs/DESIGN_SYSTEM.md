@@ -1,154 +1,151 @@
 # AVUNO DESIGN SYSTEM 2.0
 
-**Phase 1 — Core Engineering Specification**
+> Single source of truth for all visual, motion, and component decisions.
 
-This document serves as the single source of truth for the Avuno 2.0 visual language. It is a strict technical specification. Do not deviate from these tokens without explicit architectural approval.
+---
 
 ## 1. Color System (Strict OKLCH)
 
 Avuno uses a semantic color architecture mapped to raw OKLCH values in `src/styles.css`.
 
-### WHAT
+### Tokens
 
-A constrained set of color tokens.
+| Category | Token | Usage |
+|---|---|---|
+| Surfaces | `--color-bg`, `--color-surface-1`, `--color-surface-2` | Page layers |
+| Text | `--color-text-primary`, `--color-text-secondary`, `--color-text-muted` | Hierarchy |
+| Borders | `--color-border-subtle`, `--color-border-default` | Separation |
+| Accent | `--color-accent` (Electric Blue), `--color-accent-soft` | CTAs, active states |
+| Semantic | `--color-success`, `--color-warning`, `--color-error` | Feedback |
 
-- **Surface**: `--color-bg`, `--color-surface-1`, `--color-surface-2`, `--color-surface-3`
-- **Text**: `--color-text-primary`, `--color-text-secondary`, `--color-text-muted`, `--color-text-disabled`
-- **Borders**: `--color-border-subtle`, `--color-border-default`, `--color-border-strong`
-- **Accent**: `--color-accent` (Electric Blue), `--color-accent-soft`
-- **Semantic**: `--color-success`, `--color-warning`, `--color-error`, `--color-info`
+### Rules
 
-### WHEN TO USE
-
-Use surface tokens for elevating content depth. Use text tokens to establish visual hierarchy without relying heavily on font weight.
-
-### WHEN NOT TO USE
-
-Do not hardcode raw OKLCH values in components.
-Do not use `accent` for large background areas; reserve it for interactive elements, active states, and primary actions.
-
-### PERFORMANCE NOTES
-
-CSS variables are inherently fast, but avoid excessive calc() operations within color-mix if they are painted during continuous animations.
+- ✅ Always use CSS variables (`var(--primary)`, `var(--foreground)`)
+- ✅ Use `oklch()` opacity syntax: `oklch(0.5 0 0 / 0.15)` for glass tints
+- ❌ Never hardcode raw hex or RGB values in components
+- ❌ Never use `accent` for large background areas
 
 ---
 
 ## 2. Typography System
 
-### WHAT
+Dual-typeface editorial system.
 
-Dual-typeface system defining the editorial voice of Avuno.
+| Font | Token | Use For |
+|---|---|---|
+| Instrument Serif | `font-display` | Headings, hero moments, quotes |
+| Inter | `font-sans` | Body, buttons, metadata, forms |
 
-- **Display**: Instrument Serif (`var(--font-display)`)
-- **System/Sans**: Inter (`var(--font-sans)`)
-
-Tokens: `@utility text-h1`, `text-h2`, `text-h3`, `text-body`, `text-metadata`.
-
-### WHEN TO USE
-
-- **Instrument Serif**: For editorial display, emotional headings, major story moments, quotes, and selected hero moments.
-- **Inter**: For navigation, buttons, metadata, body text, forms, analytics, and data.
-
-### WHEN NOT TO USE
-
-Do not use Instrument Serif for UI elements (buttons, inputs) or long-form readable body copy. It is strictly a display font.
-
-### ACCESSIBILITY
-
-Ensure body text remains at least 16px (`1rem`) for readability. Metadata can scale to `14px` (`0.875rem`) but must maintain a contrast ratio of at least 4.5:1 (which `--color-text-muted` achieves on `--color-bg`).
+**Rules:**
+- Instrument Serif is display-only. Never use it for buttons or inputs.
+- Minimum body text: `16px`. Metadata may go to `14px` (min 4.5:1 contrast).
 
 ---
 
-## 3. Glass System
+## 3. Glass Material System (Phase 24C)
 
-### WHAT
+Tiered backdrop-blur system for elevated surfaces.
 
-A constrained, tiered blurring system for floating surfaces.
+| Class | Blur | Saturation | Use For |
+|---|---|---|---|
+| `glass-subtle` | 8px | 110% | Sticky headers, sidebars, secondary panels |
+| `glass` | 12px | 120% | Floating menus, info cards, section containers |
+| `glass-floating` | 20px | 140% | Modals, auth panels, command palette |
 
-- **Glass Subtle**: 8px blur, 110% saturation (`@utility glass-subtle`)
-- **Glass Standard**: 12px blur, 120% saturation (`@utility glass`)
-- **Glass Strong**: 20px blur, 140% saturation (`@utility glass-strong`)
+### Interaction Classes
 
-### WHEN TO USE
+- `card-interactive` — adds `hover:-translate-y-[2px]` + shadow lift on hover
+- `hover:bg-foreground/[0.07]` — standard hover tint on glass surfaces
 
-Use `glass-subtle` for sticky headers. Use `glass` (Standard) for contextual floating menus. Use `glass-strong` for modals/dialogs where background context needs to be heavily obscured.
+### Rules
 
-### WHEN NOT TO USE
-
-- **NEVER** use glass for primary page content (cards, main surfaces). Use standard surface colors instead.
-- **NEVER** stack glass elements on top of each other.
-- **NEVER** combine glass with continuous background animations (e.g. noise, particles, ken burns).
-
-### PERFORMANCE NOTES
-
-`backdrop-filter` is expensive. Keep the blur radius under 24px and use it sparingly. We explicitly banned SVG fractal noise (`feTurbulence`) to preserve mobile GPU performance.
+- ✅ Use `glass-subtle` for containers, `glass-floating` for modals/auth
+- ❌ Never stack two glass elements directly on top of each other
+- ❌ Never use glass on primary content cards (media cards are grounded)
+- ❌ Keep blur under 24px for GPU performance
 
 ---
 
 ## 4. Shadow & Elevation System
 
-### WHAT
+| Token | Use For |
+|---|---|
+| `--shadow-sm` | Subtle interactive lift |
+| `--shadow-button` | Primary action buttons (resting) |
+| `--shadow-button-hover` | Primary action buttons (hovered) |
+| `--shadow-elevated` | Cards on hover |
+| `--shadow-floating` | Modals, dialogs |
 
-Elevation implies depth. We define 4 primary shadow tokens:
-
-- `--shadow-sm`: Interactive subtle lift.
-- `--shadow-md`: Dropdowns, tooltips.
-- `--shadow-lg`: Cards on hover, floating action buttons.
-- `--shadow-xl`: Modals, dialogs.
-
-### WHEN TO USE
-
-Shadows should establish logical Z-axis positioning. The further a surface is from the background layer, the larger the shadow.
-
-### WHEN NOT TO USE
-
-Do not apply shadows to inset elements. Avoid heavily saturated colored shadows unless specifically implementing an active brand glow (`--shadow-glow`).
+Shadows establish Z-axis depth. The further from background, the larger the shadow.
 
 ---
 
 ## 5. Motion System
 
-### WHAT
+| Token | Duration | Use For |
+|---|---|---|
+| `--duration-fast` | 140ms | Micro-interactions, hover states |
+| `--duration-normal` | 240ms | State changes, reveals |
+| `--duration-slow` | 360ms | Route transitions |
 
-A restrained motion language for state changes and context transitions.
+**Spring physics (Framer Motion defaults for components):**
+```
+stiffness: 400–500, damping: 28–35, mass: 0.6–0.8
+```
 
-- **Durations**: `--duration-fast` (140ms), `--duration-normal` (240ms), `--duration-slow` (360ms), `--duration-page` (560ms)
-- **Easings**: `--ease-standard`, `--ease-emphasized`, `--ease-decelerate`, `--ease-accelerate`
-
-### WHEN TO USE
-
-Use motion for hover states (`hover-lift`), state changes, focus reveals, and route transitions.
-
-### WHEN NOT TO USE
-
-No continuous ambient animations. No drifting particles or infinite Ken Burns effects on standard surfaces.
-
-### ACCESSIBILITY (Reduced Motion)
-
-All continuous animations must instantly resolve or completely halt if `prefers-reduced-motion: reduce` is detected. `styles.css` handles this natively for root animations.
+**Rules:**
+- ❌ No continuous ambient animations
+- ✅ All animations must respect `prefers-reduced-motion`
 
 ---
 
-## 6. Spacing & Radius System
+## 6. Spacing & Radius
 
-### WHAT
-
-Fixed proportional scales.
-
-- **Spacing**: 4px base (`--space-1` = 0.25rem to `--space-24` = 6rem)
-- **Radius**: `--radius-sm` (8px) to `--radius-4xl` (40px)
-
-### WHEN TO USE
-
-Use `space-4` (16px) or `space-6` (24px) for component padding.
-Use `radius-xl` (20px) or `radius-2xl` (24px) for main content cards.
-
-### WHEN NOT TO USE
-
-Do not use arbitrary pixel values (e.g. `17px`, `43px`) in layouts.
+- **Spacing**: 4px base (`space-1` → `space-24`)
+- **Radius**: `rounded-xl` (12px) for buttons/inputs · `rounded-2xl` (16px) for cards · `rounded-3xl`/`rounded-[2rem]` for large panels
 
 ---
 
-## 7. Future Guidelines (Phase 1 Validation)
+## 7. Component Library
 
-Any future components (Cards, Buttons, Inputs, Data Viz, Empty States) must be constructed purely out of these foundational tokens. If a component cannot be built with these tokens, the tokens should be debated and expanded structurally, not overridden with arbitrary CSS utilities.
+### PremiumButton (`src/components/ui/PremiumButton.tsx`)
+Main CTA button. Variants: `primary`, `secondary`, `ghost`.
+Props: `loading`, `success`, `icon`, `disabled`.
+
+### LiquidSwitch (`src/components/ui/LiquidSwitch.tsx`)
+Glass toggle switch. Uses `var(--primary)` for ON state, glass-grey for OFF.
+Size: `36×21px` track, `15px` thumb. Spring-animated with Framer Motion.
+
+```tsx
+<LiquidSwitch checked={value} onChange={setValue} />
+```
+
+### EmptyState (`src/components/ui/EmptyState.tsx`)
+Standard empty state with icon, title, description, and optional CTA.
+Uses `card-interactive` + `glass-subtle` surface.
+
+### ShimmerSkeleton (`src/components/ui/ShimmerSkeleton.tsx`)
+Loading placeholder. Uses `bg-foreground/[0.05]` with shimmer animation.
+
+---
+
+## 8. Input Standard
+
+All inputs must follow this pattern:
+
+```
+h-11 w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] px-4 text-sm
+transition-[border-color,box-shadow,background-color] duration-[140ms]
+hover:border-foreground/20 hover:bg-foreground/[0.05]
+focus:border-ring/50 focus:ring-2 focus:ring-ring/30
+```
+
+---
+
+## 9. Rules for New Components
+
+Any new component must:
+1. Use only tokens from this document — no arbitrary pixel values
+2. Support both light and dark mode via CSS variables
+3. Include `focus-visible` ring for keyboard accessibility
+4. Respect `prefers-reduced-motion` for any animation
