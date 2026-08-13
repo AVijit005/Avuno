@@ -9,7 +9,7 @@ export function EditorialFooter() {
         </h2>
       </div>
       <div className="mt-8 grid gap-3 md:grid-cols-3">
-        <div className="rounded-2xl bg-surface-1 border border-border/40 shadow-sm p-5 transition-colors hover:bg-surface-2">
+        <div className="rounded-2xl glass-subtle p-5 transition-colors hover:bg-foreground/[0.05]">
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Timeline
           </div>
@@ -17,7 +17,7 @@ export function EditorialFooter() {
             View timeline
           </Link>
         </div>
-        <div className="rounded-2xl bg-surface-1 border border-border/40 shadow-sm p-5 transition-colors hover:bg-surface-2">
+        <div className="rounded-2xl glass-subtle p-5 transition-colors hover:bg-foreground/[0.05]">
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Planning queue
           </div>
@@ -25,7 +25,7 @@ export function EditorialFooter() {
             View planning
           </Link>
         </div>
-        <div className="rounded-2xl bg-surface-1 border border-border/40 shadow-sm p-5 transition-colors hover:bg-surface-2">
+        <div className="rounded-2xl glass-subtle p-5 transition-colors hover:bg-foreground/[0.05]">
           <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
             Journal
           </div>

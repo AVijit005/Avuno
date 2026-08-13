@@ -66,7 +66,10 @@ function CharactersIndex() {
                   key={c.id}
                   to="/app/characters/$id"
                   params={{ id: c.id }}
-                  className={offset + " block"}
+                  className={
+                    offset +
+                    " block transition-[transform,box-shadow] duration-[200ms] hover:-translate-y-[2px]"
+                  }
                 >
                   <PremiumGlass variant="subtle" glow={c.accent + " / 0.25"}>
                     <div className="grid grid-cols-[88px_minmax(0,1fr)_auto] items-center gap-5 p-4 md:gap-6">

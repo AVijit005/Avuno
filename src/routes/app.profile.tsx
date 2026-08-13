@@ -38,7 +38,7 @@ function ProfilePage() {
 
   return (
     <div className="pt-2 pb-20">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-border/40 pb-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-foreground/[0.08] pb-6">
         <div>
           <div className="text-eyebrow mb-2">Your Profile</div>
           <h1 className="font-display text-4xl tracking-tight">The story of your stories</h1>

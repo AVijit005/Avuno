@@ -20,7 +20,7 @@ export function JournalEntryCard({ entry, index }: Props) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
       transition={cascade(index, 0.05)}
-      className="group relative overflow-hidden rounded-[32px] p-6 md:p-8 bg-surface-1 border border-border/40 shadow-sm transition-colors hover:bg-surface-2"
+      className="group relative overflow-hidden rounded-[32px] p-6 md:p-8 bg-foreground/[0.03] border border-foreground/[0.08] shadow-sm transition-colors hover:bg-foreground/[0.05]"
       style={{ viewTransitionName: `journal-card-${entry.id}` } as React.CSSProperties}
     >
       <div className="relative">

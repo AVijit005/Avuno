@@ -24,7 +24,11 @@ function CreatorsIndex() {
       </header>
 
       {hero && (
-        <Link to="/app/creators/$id" params={{ id: hero.id }} className="block">
+        <Link
+          to="/app/creators/$id"
+          params={{ id: hero.id }}
+          className="block transition-[transform,box-shadow] duration-[200ms] hover:-translate-y-[2px]"
+        >
           <PremiumGlass variant="default" glow={hero.accent + " / 0.45"}>
             <div className="grid gap-8 p-8 md:grid-cols-[1fr_1.4fr] md:gap-12 md:p-10">
               <div>
@@ -66,7 +70,8 @@ function CreatorsIndex() {
               to="/app/creators/$id"
               params={{ id: c.id }}
               className={
-                (i % 3 === 0 ? "md:mr-16" : i % 3 === 1 ? "md:mx-8" : "md:ml-16") + " block"
+                (i % 3 === 0 ? "md:mr-16" : i % 3 === 1 ? "md:mx-8" : "md:ml-16") +
+                " block transition-[transform,box-shadow] duration-[200ms] hover:-translate-y-[2px]"
               }
             >
               <PremiumGlass variant="subtle" glow={c.accent + " / 0.25"}>

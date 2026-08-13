@@ -18,7 +18,7 @@ export function MobileNav() {
   return (
     <nav
       aria-label="Mobile navigation"
-      className="glass-floating fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 lg:hidden"
+      className="glass-floating shadow-[0_-4px_24px_-8px_oklch(0_0_0/0.3)] fixed inset-x-3 z-40 flex items-center justify-around rounded-2xl px-1 py-2.5 lg:hidden"
       style={{ bottom: "calc(env(safe-area-inset-bottom, 0px) + 12px)" }}
     >
       {items.map((it) => {
@@ -28,7 +28,7 @@ export function MobileNav() {
               key={it.label}
               onClick={openAdd}
               aria-label={it.label}
-              className="-mt-8 grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.72_0.18_255/0.6)] press-scale ring-1 ring-foreground/20"
+              className="-mt-8 grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_8px_24px_-8px_oklch(0.72_0.18_255/0.5)] press-scale ring-1 ring-foreground/20"
             >
               <it.icon className="h-6 w-6" />
             </button>
@@ -42,7 +42,7 @@ export function MobileNav() {
             to={it.to}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 min-h-[44px] text-[10px] transition-colors focus-visible:ring-2 focus-visible:ring-ring",
+              "flex flex-1 flex-col items-center justify-center gap-1 rounded-xl px-2 py-2 min-h-[44px] text-[10px] transition-colors duration-[140ms] focus-visible:ring-2 focus-visible:ring-ring",
               active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
             )}
           >

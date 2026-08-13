@@ -24,7 +24,10 @@ function MemoryVault() {
       {isLoading && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="h-48 rounded-2xl bg-surface-1 animate-pulse" />
+            <div
+              key={i}
+              className="h-48 rounded-2xl bg-foreground/[0.05] ring-1 ring-foreground/[0.04] animate-pulse"
+            />
           ))}
         </div>
       )}
@@ -37,7 +40,7 @@ function MemoryVault() {
 
       {!isLoading && !isError && memories.length === 0 && (
         <div className="text-center py-24 space-y-6">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-surface-1 text-muted-foreground mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-2xl glass-subtle text-muted-foreground mb-4">
             <Lock className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-display text-foreground">No memories preserved yet.</h2>
@@ -48,7 +51,7 @@ function MemoryVault() {
           <div className="mt-8">
             <Link
               to="/app/journal"
-              className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              className="inline-flex items-center justify-center rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground transition-[background-color,transform,box-shadow] duration-[140ms] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] active:scale-[0.98]"
             >
               Go to Journal
             </Link>
@@ -65,7 +68,7 @@ function MemoryVault() {
               params={{ id: memory.id }}
               className="block group"
             >
-              <div className="h-full p-6 rounded-3xl bg-surface-1 border border-border/40 transition-[background-color,transform] duration-300 hover:bg-surface-2 hover:scale-[1.02] flex flex-col gap-4 shadow-sm">
+              <div className="h-full p-6 rounded-3xl glass-subtle transition-[background-color,transform,box-shadow] duration-[200ms] hover:bg-foreground/[0.07] hover:-translate-y-[2px] hover:shadow-[var(--shadow-elevated)] flex flex-col gap-4">
                 <div className="flex justify-between items-start gap-4">
                   <h3 className="text-xl font-display text-foreground/90 group-hover:text-foreground transition-colors line-clamp-2">
                     {memory.title}

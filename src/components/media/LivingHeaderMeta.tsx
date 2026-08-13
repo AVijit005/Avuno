@@ -10,10 +10,10 @@ export function LivingHeaderMeta({ item }: { item: UIMediaItem }) {
     { k: "Genres", v: item.genres.slice(0, 2).join(", ") || "—" },
   ];
   return (
-    <div className="mt-6 rounded-2xl bg-surface-1 border border-border/40 shadow-sm overflow-hidden">
+    <div className="mt-6 rounded-2xl glass-subtle overflow-hidden">
       <ul className="grid grid-cols-2 gap-px md:grid-cols-3 lg:grid-cols-6 bg-border/20">
         {items.map((i) => (
-          <li key={i.k} className="p-4 bg-surface-1">
+          <li key={i.k} className="p-4 glass-subtle">
             <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground/75">
               {i.k}
             </div>

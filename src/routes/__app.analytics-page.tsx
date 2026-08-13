@@ -368,7 +368,7 @@ export default function AnalyticsPage() {
             title="Activity Timeline"
             description="Daily engagement trends across all media types."
           >
-            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[
                   { l: "Monthly total", v: o.hoursSpent, s: "h" },
@@ -444,7 +444,7 @@ export default function AnalyticsPage() {
         {/* ============ Zone 4 — Media distribution ============ */}
         <Zone eyebrow="Zone 4" title="Media distribution" sub="The shape of your library.">
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
               <div className="h-72">
                 <ErrorBoundary
                   fallback={
@@ -475,7 +475,7 @@ export default function AnalyticsPage() {
                 </ErrorBoundary>
               </div>
             </div>
-            <div className="p-6 md:p-8 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
+            <div className="p-6 md:p-8 rounded-[32px] glass-subtle shadow-sm">
               <div className="space-y-3">
                 {mediaDistribution.map((d) => {
                   const total = mediaDistribution.reduce((a, b) => a + b.value, 0);
@@ -544,7 +544,7 @@ export default function AnalyticsPage() {
             ].map((c) => (
               <div
                 key={c.label}
-                className="flex items-center justify-between rounded-xl p-3 bg-surface-2/50 hover:bg-surface-2 transition-colors border border-border/30"
+                className="flex items-center justify-between rounded-xl p-3 bg-foreground/[0.05] hover:bg-foreground/[0.08] transition-colors border border-border/30"
               >
                 <ProgressRing value={c.ring} accent={c.accent}>
                   <div className="font-display text-2xl tracking-tight">
@@ -572,7 +572,7 @@ export default function AnalyticsPage() {
               return (
                 <motion.div
                   key={genre.genre}
-                  className="bg-surface-1 relative overflow-hidden rounded-2xl p-5 border border-border/40"
+                  className="glass-subtle relative overflow-hidden rounded-2xl p-5"
                 >
                   <div className="relative">
                     <div className="flex items-center justify-between">
@@ -584,7 +584,7 @@ export default function AnalyticsPage() {
                     <div className="mt-1 text-xs text-muted-foreground">
                       {g.genreCompletion[genre.genre] ?? 0} completed
                     </div>
-                    <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-surface-2">
+                    <div className="mt-4 h-1.5 overflow-hidden rounded-full bg-foreground/[0.05]">
                       <motion.div
                         initial={{ width: 0 }}
                         whileInView={{
@@ -664,10 +664,7 @@ export default function AnalyticsPage() {
                 accent: "oklch(0.72 0.16 160 / 0.6)",
               },
             ].map((r) => (
-              <div
-                key={r.label}
-                className="relative overflow-hidden p-5 rounded-2xl bg-surface-1 border border-border/40"
-              >
+              <div key={r.label} className="relative overflow-hidden p-5 rounded-2xl glass-subtle">
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-3">
                     <Trophy className="h-4 w-4 text-muted-foreground" />

@@ -127,7 +127,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                 />
 
                 {sourceJournal && (
-                  <div className="mb-8 rounded-2xl bg-black/20 border border-white/5 p-5">
+                  <div className="mb-8 rounded-2xl glass-subtle p-5">
                     <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground mb-3">
                       From your journal
                     </div>
@@ -138,7 +138,7 @@ export function CreateMemoryCapsule({ isOpen, onClose, sourceJournal, sourceTime
                 )}
 
                 {sourceTimeline && (
-                  <div className="mb-8 rounded-2xl bg-black/20 border border-white/5 p-5 flex items-center gap-4">
+                  <div className="mb-8 rounded-2xl glass-subtle p-5 flex items-center gap-4">
                     <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground shrink-0">
                       From timeline
                     </div>

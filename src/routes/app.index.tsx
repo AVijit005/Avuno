@@ -78,7 +78,7 @@ function Home() {
         <div className="flex items-center gap-3">
           <Link
             to="/app/journal"
-            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-surface-2 hover:bg-surface-3 transition-colors border border-border/40"
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl glass-subtle hover:bg-foreground/[0.07] transition-[background-color,transform] duration-[140ms] active:scale-[0.98]"
           >
             <NotebookPen className="w-4 h-4 text-muted-foreground" />
             Write Entry
@@ -86,7 +86,7 @@ function Home() {
           <button
             id="home-add-media-btn"
             onClick={openAdd}
-            className="flex items-center gap-2 text-sm font-medium px-4 py-2 rounded-full bg-primary text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm press-scale"
+            className="flex items-center gap-2 text-sm font-medium px-4 py-2.5 rounded-xl bg-primary text-primary-foreground hover:bg-primary/95 transition-[background-color,transform,box-shadow] duration-[140ms] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] active:scale-[0.98] active:translate-y-[1px]"
           >
             <span className="text-base leading-none">+</span>
             Add Media
@@ -115,7 +115,7 @@ function Home() {
           )}
 
           <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="rounded-2xl border border-border/40 bg-surface-1 p-6 md:p-8">
+            <div className="rounded-2xl glass-subtle p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <Library className="w-4 h-4 text-muted-foreground" />
                 <h2 className="text-eyebrow font-medium">Library Pulse</h2>
@@ -144,7 +144,7 @@ function Home() {
               </div>
             </div>
 
-            <div className="rounded-2xl border border-border/40 bg-surface-1 p-6 md:p-8">
+            <div className="rounded-2xl glass-subtle p-6 md:p-8">
               <div className="flex items-center gap-2 mb-6">
                 <History className="w-4 h-4 text-muted-foreground" />
                 <h2 className="text-eyebrow font-medium">Insights</h2>
@@ -168,7 +168,7 @@ function OnboardingGuide() {
   ];
   return (
     <div className="mt-4">
-      <div className="bg-surface-1 border border-border/40 rounded-2xl p-8 md:p-12">
+      <div className="glass-subtle rounded-2xl p-8 md:p-12">
         <div className="max-w-2xl">
           <h2 className="text-2xl md:text-3xl font-medium tracking-tight">
             Add your first piece of media.
@@ -181,7 +181,7 @@ function OnboardingGuide() {
             {pillars.map(({ icon: Icon, label, hint }) => (
               <div
                 key={label}
-                className="flex flex-col gap-2 rounded-xl border border-border/40 bg-surface-2/60 p-4"
+                className="flex flex-col gap-2 rounded-xl border border-foreground/[0.07] bg-foreground/[0.04] p-4"
               >
                 <Icon className="h-4 w-4 text-primary" />
                 <div className="text-sm font-medium">{label}</div>

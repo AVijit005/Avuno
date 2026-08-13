@@ -27,7 +27,7 @@ function Page() {
           <button
             onClick={() => markAllRead.mutate()}
             disabled={markAllRead.isPending}
-            className="press-scale inline-flex items-center gap-2 rounded-full bg-white/[0.04] px-4 py-2 text-sm ring-1 ring-white/10 hover:bg-white/[0.08]"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm ring-1 ring-white/10 rounded-xl glass-subtle hover:bg-foreground/[0.07] active:scale-[0.98]"
           >
             <CheckCircle2 className="h-4 w-4" />
             Mark all read
@@ -37,7 +37,7 @@ function Page() {
 
       <div className="space-y-2">
         {items.length === 0 ? (
-          <div className="glass flex flex-col items-center justify-center rounded-[40px] p-16 text-center text-muted-foreground">
+          <div className="glass-subtle flex flex-col items-center justify-center rounded-[40px] p-16 text-center text-muted-foreground">
             <Bell className="mb-4 h-8 w-8 opacity-20" />
             <p>You're all caught up.</p>
           </div>
@@ -46,7 +46,7 @@ function Page() {
             <div
               key={n.id}
               className={cn(
-                "glass flex items-start gap-4 rounded-2xl p-4 transition",
+                "glass-subtle flex items-start gap-4 rounded-2xl p-4 transition",
                 !n.isRead && "ring-1 ring-primary/40 bg-primary/5",
               )}
             >
@@ -73,7 +73,7 @@ function Page() {
                   <button
                     onClick={() => markRead.mutate(n.id)}
                     disabled={markRead.isPending}
-                    className="press-scale grid h-6 w-6 place-items-center rounded-full bg-primary/10 text-primary hover:bg-primary/20"
+                    className="grid h-6 w-6 place-items-center text-primary rounded-xl glass-subtle hover:bg-foreground/[0.07] active:scale-[0.98]"
                     title="Mark as read"
                   >
                     <Check className="h-3 w-3" />

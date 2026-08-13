@@ -51,7 +51,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
       <Link
         to="/app/media/$id"
         params={{ id: item.id }}
-        className="focus-ring relative block aspect-[2/3] overflow-hidden rounded-2xl ring-1 ring-foreground/10 transition-shadow duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:shadow-[var(--shadow-poster-hover)]"
+        className="focus-ring relative block aspect-[2/3] overflow-hidden rounded-2xl ring-1 ring-foreground/10 transition-[transform,box-shadow] duration-[200ms] ease-[var(--ease-out)] hover:-translate-y-1 group-hover:shadow-[var(--shadow-poster-hover)]"
         style={{ viewTransitionName: `poster-${item.id}` }}
         aria-label={`${item.title} — ${item.kind} (${item.year})`}
       >
@@ -64,7 +64,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
             src={item.poster || ""}
             alt={item.title}
             aspectRatio="poster"
-            className="transition-[transform,filter] duration-[var(--dur-large)] ease-[var(--ease-out)] group-hover:scale-[1.03] group-hover:brightness-[1.02] motion-reduce:group-hover:scale-100"
+            className="transition-[transform,filter] duration-[200ms] ease-[var(--ease-out)] group-hover:scale-[1.03] group-hover:brightness-[1.02] motion-reduce:group-hover:scale-100"
           />
         )}
         {/* gradient base */}
@@ -94,7 +94,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
           }}
         />
         {/* rating chip */}
-        <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-black/80 px-2 py-0.5 text-[10px] text-white/90">
+        <div className="absolute left-2 top-2 inline-flex items-center gap-1 rounded-full bg-foreground/[0.85] px-2 py-0.5 text-[10px] text-white/90">
           <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" />
           {(item.rating ?? 0).toFixed(1)}
         </div>
@@ -133,7 +133,7 @@ export function PosterCard({ item, size = "md", showMeta = true, className = "" 
           e.stopPropagation();
           toggleFavorite(item.id);
         }}
-        className="focus-ring absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full bg-black/80 text-white/90 opacity-100 transition duration-[var(--dur-normal)] ease-[var(--ease-out)] md:opacity-0 md:group-hover:opacity-100 md:h-8 md:w-8 hover:scale-110 hover:text-rose-400"
+        className="focus-ring absolute right-2 top-2 grid h-10 w-10 place-items-center rounded-full bg-foreground/[0.85] text-white/90 opacity-100 transition duration-[200ms] ease-[var(--ease-out)] md:opacity-0 md:group-hover:opacity-100 md:h-8 md:w-8 hover:scale-110 hover:text-rose-400"
       >
         <Heart
           className={`h-4 w-4 transition-transform duration-[var(--dur-normal)] ease-[var(--ease-out)] ${fav ? "fill-[var(--status-dropped)] text-[var(--status-dropped)] motion-safe:animate-pulse" : ""}`}

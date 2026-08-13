@@ -3,7 +3,7 @@ import { motion, type HTMLMotionProps } from "motion/react";
 import { forwardRef, useCallback, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { cn } from "@/lib/utils";
 
-type Variant = "subtle" | "default" | "strong";
+type Variant = "subtle" | "base" | "medium" | "elevated" | "floating" | "default" | "strong";
 
 interface Props extends HTMLMotionProps<"div"> {
   variant?: Variant;
@@ -14,8 +14,12 @@ interface Props extends HTMLMotionProps<"div"> {
 
 const variantClass: Record<Variant, string> = {
   subtle: "glass-subtle",
+  base: "glass",
+  medium: "glass",
   default: "glass",
+  elevated: "glass-elevated",
   strong: "glass-elevated",
+  floating: "glass-floating",
 };
 
 /**

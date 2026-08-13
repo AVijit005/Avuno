@@ -62,7 +62,7 @@ export function MediaCard({
         <motion.div
           variants={{ rest: { y: 0 }, hover: { y: -6 } }}
           transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-          className="relative aspect-[2/3] overflow-hidden rounded-2xl"
+          className="relative aspect-[2/3] overflow-hidden rounded-2xl transition-[transform,box-shadow] duration-[200ms] hover:-translate-y-[2px] hover:shadow-[var(--shadow-poster-hover)]"
           style={{ boxShadow: "0 20px 40px -20px oklch(0 0 0 / 0.7)" }}
         >
           <Link
@@ -105,7 +105,7 @@ export function MediaCard({
 
           {/* Rating chip */}
           {rating > 0 && (
-            <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-black/80 px-2 py-0.5 text-[10px] text-white/90">
+            <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-foreground/[0.85] px-2 py-0.5 text-[10px] text-white/90">
               <Star className="h-2.5 w-2.5 fill-[var(--status-favorite)] text-[var(--status-favorite)]" />{" "}
               {rating.toFixed(1)}
             </div>
@@ -114,7 +114,7 @@ export function MediaCard({
           {/* Cross-media glyph — subtle medium identity */}
           <div
             aria-hidden
-            className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-black/80 text-white/90 ring-1 ring-white/10 z-10"
+            className="absolute right-2 top-2 grid h-6 w-6 place-items-center rounded-full bg-foreground/[0.85] text-white/90 ring-1 ring-white/10 z-10"
             title={item.kind}
           >
             <Glyph className="h-3 w-3" />

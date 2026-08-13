@@ -338,8 +338,8 @@ select {
   --shadow-ghost-hover: 0 2px 8px -4px oklch(0 0 0 / 0.12);
   --shadow-card: 0 8px 16px oklch(0 0 0 / 0.06);
 
-  --glass-highlight: oklch(1 0 0 / 0.5);
-  --glass-highlight-strong: oklch(1 0 0 / 0.7);
+  --glass-highlight: oklch(0 0 0 / 0.04);
+  --glass-highlight-strong: oklch(0 0 0 / 0.08);
 }
 
 /* ============================================================
@@ -361,7 +361,7 @@ select {
   -webkit-backdrop-filter: blur(8px) saturate(110%);
   backdrop-filter: blur(8px) saturate(110%);
   border: 1px solid var(--color-border-subtle);
-  box-shadow: 0 1px 0 oklch(1 0 0 / 0.03) inset;
+  box-shadow: 0 1px 0 var(--glass-highlight) inset;
 }
 
 @utility glass {
@@ -405,6 +405,56 @@ select {
     0 1px 0 oklch(1 0 0 / 0.15) inset,
     0 0 0 1px oklch(1 0 0 / 0.05) inset,
     var(--shadow-xl);
+}
+
+/* ============================================================
+ * Interactive surface utilities
+ * ============================================================ */
+
+@utility interactive-surface {
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-emphasized);
+  cursor: pointer;
+  &:active {
+    transform: scale(0.98) translateY(1px);
+  }
+}
+
+@utility icon-btn {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  min-width: 44px;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-lg);
+  transition:
+    background-color var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-emphasized);
+  cursor: pointer;
+  &:hover {
+    background-color: oklch(from var(--foreground) l c h / 0.07);
+  }
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+@utility card-interactive {
+  transition:
+    transform var(--duration-normal) var(--ease-emphasized),
+    box-shadow var(--duration-normal) var(--ease-emphasized);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-elevated);
+  }
+  &:active {
+    transform: translateY(0) scale(0.995);
+  }
 }
 
 @utility hover-lift {
@@ -793,13 +843,13 @@ select {
     scrollbar-color: oklch(0 0 0 / 0.12) transparent;
   }
   .light ::-webkit-scrollbar-thumb {
-    background: oklch(0 0 0 / 0.08);
+    background: oklch(0 0 0 / 0.10);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   .light ::-webkit-scrollbar-thumb:hover {
-    background: oklch(0 0 0 / 0.2);
+    background: oklch(0 0 0 / 0.18);
     background-clip: padding-box;
   }
 

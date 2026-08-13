@@ -73,7 +73,7 @@ export function CreateCollectionModal({
             <button
               onClick={() => onOpenChange(false)}
               aria-label="Close"
-              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-full bg-white/[0.05] text-muted-foreground hover:text-foreground"
+              className="absolute right-4 top-4 grid h-9 w-9 place-items-center rounded-xl bg-white/[0.05] text-muted-foreground hover:text-foreground"
             >
               <X className="h-4 w-4" />
             </button>

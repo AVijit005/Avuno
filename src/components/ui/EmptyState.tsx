@@ -29,7 +29,7 @@ export function EmptyState({
       initial={{ opacity: 0, y: reduced ? 0 : 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: reduced ? 0 : dur.large, ease: ease.out }}
-      className={`glass-subtle relative grid place-items-center overflow-hidden rounded-[32px] px-8 py-14 text-center md:px-12 ${className}`}
+      className={`glass-subtle relative grid place-items-center overflow-hidden rounded-3xl px-8 py-16 text-center md:px-12 ${className}`}
     >
       {icon && (
         <motion.div

@@ -88,7 +88,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <button
             onClick={onOpenSearch}
             aria-label="Search"
-            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary md:hidden press-scale"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.96] cursor-pointer md:hidden"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -96,14 +96,14 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={openAdd}
             aria-label="Add to Avuno"
             title="Add (⌘N)"
-            className="hidden md:grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="hidden md:grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.96] cursor-pointer"
           >
             <Plus className="h-4 w-4" />
           </button>
           <Link
             to="/app/notifications"
             aria-label="Notifications"
-            className="relative grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="relative grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.96] cursor-pointer"
           >
             <Bell className="h-4 w-4" />
             {notifications?.unreadCount ? (
@@ -113,7 +113,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Link
             to="/app/settings"
             aria-label="Quick settings"
-            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/5 transition hover:text-primary press-scale"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.96] cursor-pointer"
           >
             <Settings className="h-4 w-4" />
           </Link>
@@ -121,7 +121,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             to="/app/profile"
             aria-label="Profile"
             style={{ viewTransitionName: "user-avatar" }}
-            className="grid h-11 w-11 sm:h-9 sm:w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-medium text-primary-foreground ring-1 ring-foreground/20 press-scale"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-semibold text-primary-foreground ring-1 ring-foreground/20 transition-transform duration-[140ms] active:scale-[0.96]"
           >
             {initials}
           </Link>

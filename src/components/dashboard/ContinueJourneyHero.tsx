@@ -1,4 +1,3 @@
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { motion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { Play, NotebookPen, Clock, ChevronRight } from "lucide-react";
@@ -21,7 +20,7 @@ export function ContinueJourneyHero({ className }: { className?: string }) {
       aria-label="Continue your journey"
       className={cn("relative", className)}
     >
-      <PremiumGlass variant="strong" className="hover-lift overflow-hidden">
+      <div className="glass-subtle hover-lift overflow-hidden rounded-3xl">
         <div className="relative grid gap-0 md:grid-cols-[1.1fr_1fr]">
           <div className="relative aspect-[16/9] md:aspect-auto md:min-h-[280px]">
             <img src={j.posterUrl ?? ""} alt={j.title} className="h-full w-full object-cover" />
@@ -56,7 +55,12 @@ export function ContinueJourneyHero({ className }: { className?: string }) {
             </div>
 
             <div className="mt-5 flex flex-wrap gap-2">
-              <PremiumButton variant="primary" icon={<Play className="h-4 w-4" />} asChild>
+              <PremiumButton
+                variant="primary"
+                icon={<Play className="h-4 w-4" />}
+                className="rounded-xl"
+                asChild
+              >
                 <Link to="/app/media/$id" params={{ id: j.mediaId }}>
                   Continue
                 </Link>
@@ -87,7 +91,7 @@ export function ContinueJourneyHero({ className }: { className?: string }) {
             </div>
           </div>
         </div>
-      </PremiumGlass>
+      </div>
     </motion.section>
   );
 }

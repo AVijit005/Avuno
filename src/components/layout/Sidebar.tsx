@@ -22,11 +22,11 @@ export function Sidebar({
     <motion.aside
       animate={{ width: collapsed ? 76 : 264 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass-subtle lg:flex"
+      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass-subtle border border-foreground/[0.06] lg:flex"
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_0_24px_oklch(0.72_0.18_255/0.45)]">
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_0_16px_oklch(0.72_0.18_255/0.3)]">
           <span className="font-display text-lg leading-none">A</span>
         </div>
         {!collapsed && (
@@ -42,7 +42,7 @@ export function Sidebar({
         onClick={onOpenSearch}
         aria-label="Search"
         className={cn(
-          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-border/60 bg-background/40 px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors press-scale hover:bg-background/70 hover:text-foreground",
+          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.04] px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors press-scale hover:bg-foreground/[0.07] hover:text-foreground",
         )}
       >
         <Command className="h-4 w-4 shrink-0" />
@@ -80,7 +80,7 @@ export function Sidebar({
                           "group relative flex items-center gap-3 rounded-xl px-3 py-2 text-sm transition-colors press-scale",
                           active
                             ? "bg-muted text-foreground"
-                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground",
+                            : "text-muted-foreground hover:bg-foreground/[0.05] hover:text-foreground",
                         )}
                       >
                         {active && (
@@ -107,7 +107,7 @@ export function Sidebar({
       <button
         onClick={onToggle}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className="mx-3 mb-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-border/50 bg-background/30 py-2 text-xs text-muted-foreground transition-colors press-scale hover:text-foreground"
+        className="mx-3 mb-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-foreground/[0.08] bg-foreground/[0.03] py-2 text-xs text-muted-foreground transition-colors press-scale hover:text-foreground"
       >
         {collapsed ? (
           <ChevronsRight className="h-4 w-4" />

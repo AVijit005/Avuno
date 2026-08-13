@@ -39,7 +39,7 @@ export function WriteOverlay({
           animate={{ opacity: 1, backdropFilter: "blur(24px)" }}
           exit={{ opacity: 0, backdropFilter: "blur(0px)", transition: { duration: 0.4 } }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/60"
+          className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black/50"
         >
           <div className="absolute inset-0 pointer-events-none bg-gradient-to-b from-primary/10 via-transparent to-primary/5" />
 
@@ -93,7 +93,7 @@ export function WriteOverlay({
                   if (journalText.length > 5 && !isSealing) onSeal();
                 }
               }}
-              className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-left leading-relaxed"
+              className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-left leading-relaxed focus-visible:border-ring/40 focus-visible:ring-2 focus-visible:ring-ring/30 rounded-xl"
               style={{ boxShadow: "none" }}
             />
 

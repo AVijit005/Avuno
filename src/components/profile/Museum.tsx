@@ -20,7 +20,7 @@ export function Museum() {
         if (items.length === 0) return null;
 
         return (
-          <PremiumGlass key={g.id} variant="subtle">
+          <div key={g.id} className="glass-subtle rounded-3xl">
             <div className="p-5 md:p-6">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
@@ -37,7 +37,7 @@ export function Museum() {
                     key={m!.id}
                     to="/app/media/$id"
                     params={{ id: m!.id }}
-                    className="group relative block aspect-[2/3] overflow-hidden rounded-xl"
+                    className="group relative block aspect-[2/3] overflow-hidden rounded-xl bg-background hover-lift transition-premium"
                   >
                     <img
                       src={m!.poster}
@@ -56,7 +56,7 @@ export function Museum() {
                 ))}
               </div>
             </div>
-          </PremiumGlass>
+          </div>
         );
       })}
     </div>

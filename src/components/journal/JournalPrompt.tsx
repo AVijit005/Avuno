@@ -18,7 +18,7 @@ export function JournalPrompt({
   onNextPrompt,
 }: Props) {
   return (
-    <div className="mx-auto flex max-w-2xl flex-col items-center p-8 md:p-14 rounded-3xl bg-surface-1 border border-border/40 shadow-sm">
+    <div className="mx-auto flex max-w-2xl flex-col items-center p-8 md:p-14 rounded-3xl glass-subtle">
       <header className="mb-10 flex w-full items-baseline justify-between border-b border-border/40 pb-4 text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
         <span>{timeContext}</span>
         <span className="italic text-muted-foreground">Reflective</span>
@@ -47,7 +47,7 @@ export function JournalPrompt({
         </motion.button>
 
         <motion.button
-          className="cursor-pointer rounded-2xl px-6 py-3.5 transition-colors hover:bg-surface-2 border border-border/40 bg-surface-1 shadow-sm"
+          className="cursor-pointer rounded-2xl px-6 py-3.5 transition-colors glass-subtle"
           whileHover={{ y: -2, scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={onNextPrompt}

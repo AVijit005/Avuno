@@ -119,7 +119,7 @@ function LibraryIndex() {
         <button
           id="library-add-media-btn"
           onClick={openAdd}
-          className="hidden sm:flex shrink-0 items-center gap-2 rounded-full bg-primary px-4 py-2 text-sm font-medium text-primary-foreground hover:bg-primary/90 transition-colors shadow-sm press-scale"
+          className="hidden sm:flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-medium text-primary-foreground hover:bg-primary/95 transition-[background-color,transform,box-shadow] duration-[140ms] shadow-[var(--shadow-button)] hover:shadow-[var(--shadow-button-hover)] hover:-translate-y-[1px] active:scale-[0.98] active:translate-y-[1px]"
         >
           <span className="text-base leading-none">+</span>
           Add media
@@ -128,7 +128,7 @@ function LibraryIndex() {
 
       {/* TAXONOMY SEGMENTED CONTROL */}
       <div className="-mx-4 sm:-mx-6 mb-8 overflow-x-auto px-4 sm:px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
-        <div className="flex w-max space-x-1 rounded-full bg-surface-1 p-1 ring-1 ring-border/40 shadow-sm">
+        <div className="flex w-max space-x-1 rounded-2xl glass-subtle p-1">
           {TAXONOMY.map((tab) => (
             <button
               key={tab.id}
@@ -163,7 +163,7 @@ function LibraryIndex() {
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Search your library (⌘F)..."
-            className="h-10 w-full rounded-full border border-white/10 bg-white/5 pl-9 pr-8 text-sm placeholder:text-muted-foreground/50 focus:border-white/20 focus:outline-none focus:ring-1 focus:ring-white/20 transition-colors"
+            className="h-11 w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] pl-9 pr-8 text-sm placeholder:text-muted-foreground/60 hover:border-foreground/15 hover:bg-foreground/[0.06] focus:border-ring/40 focus:outline-none focus:ring-2 focus:ring-ring/30 transition-[border-color,box-shadow,background-color] duration-[140ms]"
             onKeyDown={(e) => {
               if (e.key === "Escape") {
                 setSearchTerm("");
@@ -196,7 +196,7 @@ function LibraryIndex() {
         <div className="flex items-center gap-2">
           {/* Status Dropdown */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="glass-subtle flex h-10 items-center gap-2 rounded-full px-4 text-sm transition-hover hover:border-white/20">
+            <DropdownMenuTrigger className="glass-subtle flex h-10 items-center gap-2 rounded-xl px-4 text-sm transition-[background-color,transform] duration-[140ms] hover:bg-foreground/[0.07] active:scale-[0.98]">
               {status === "all" ? "Any Status" : status.replace("_", " ")}
               <ChevronDown className="h-4 w-4 text-muted-foreground" />
             </DropdownMenuTrigger>
@@ -215,7 +215,7 @@ function LibraryIndex() {
 
           {/* Advanced Filters */}
           <DropdownMenu>
-            <DropdownMenuTrigger className="glass-subtle flex h-10 w-10 items-center justify-center rounded-full transition-hover hover:border-white/20">
+            <DropdownMenuTrigger className="glass-subtle flex h-10 w-10 min-h-[44px] min-w-[44px] items-center justify-center rounded-xl transition-[background-color,transform] duration-[140ms] hover:bg-foreground/[0.07] active:scale-[0.98]">
               <SlidersHorizontal className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
@@ -255,7 +255,7 @@ function LibraryIndex() {
           action={
             <button
               onClick={() => refetch()}
-              className="rounded-full bg-white/10 px-4 py-2 text-sm font-medium hover:bg-white/20"
+              className="rounded-xl glass-subtle px-4 py-2 text-sm font-medium hover:bg-foreground/[0.07] transition-[background-color,transform] duration-[140ms] active:scale-[0.98]"
             >
               Retry
             </button>
@@ -281,7 +281,7 @@ function LibraryIndex() {
                   setFavorite(false);
                   setSearchTerm("");
                 }}
-                className="rounded-full bg-surface-2 px-4 py-2 text-sm font-medium hover:bg-surface-3 transition-colors border border-border/40"
+                className="rounded-xl glass-subtle px-4 py-2 text-sm font-medium hover:bg-foreground/[0.07] transition-[background-color,transform] duration-[140ms] active:scale-[0.98]"
               >
                 Clear Filters
               </button>
@@ -289,7 +289,7 @@ function LibraryIndex() {
           />
         ) : (
           <div className="flex justify-center mt-12 md:mt-24">
-            <div className="max-w-xl text-center md:text-left md:flex items-center gap-12 bg-surface-1 border border-border/40 rounded-[24px] p-8 md:p-12">
+            <div className="max-w-xl text-center md:text-left md:flex items-center gap-12 glass-subtle rounded-3xl p-8 md:p-12">
               <div className="flex-1 space-y-6">
                 <h2 className="text-2xl font-medium tracking-tight">
                   The foundation of your story

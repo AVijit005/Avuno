@@ -60,8 +60,10 @@ export function SegmentedFilter<T extends string>({
             key={o.value}
             onClick={() => onChange(o.value)}
             className={cn(
-              "relative px-3.5 py-1.5 text-xs uppercase tracking-[0.15em] transition rounded-full",
-              active ? "text-foreground" : "text-muted-foreground hover:text-foreground",
+              "relative px-3.5 py-1.5 text-xs uppercase tracking-[0.15em] transition rounded-full border",
+              active
+                ? "bg-primary/10 text-primary border-primary/30"
+                : "hover:bg-foreground/[0.05] border-foreground/[0.08] text-muted-foreground hover:text-foreground",
             )}
           >
             {active && (

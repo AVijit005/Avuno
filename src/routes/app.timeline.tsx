@@ -72,10 +72,7 @@ function TimelinePage() {
             { l: "Journals", v: statsData?.journalCount ?? 0 },
             { l: "Longest streak", v: statsData?.writingStreak ?? 0, s: "d" },
           ].map((s) => (
-            <div
-              key={s.l}
-              className="rounded-xl bg-surface-1 border border-border/30 p-4 shadow-sm"
-            >
+            <div key={s.l} className="rounded-xl glass-subtle p-4 shadow-sm">
               <div className="text-eyebrow">{s.l}</div>
               <div className="mt-2 font-display text-3xl tracking-tight text-foreground">
                 {typeof s.v === "number" ? <CountUp to={s.v} suffix={s.s ?? ""} /> : s.v}
@@ -122,7 +119,7 @@ function TimelinePage() {
           <div className="space-y-8">
             {yearEvents.length === 0 && !isLoading && (
               <div className="pl-14 md:pl-20">
-                <div className="rounded-2xl border border-border/30 bg-surface-1 p-6 text-sm text-muted-foreground">
+                <div className="rounded-2xl glass-subtle p-6 text-sm text-muted-foreground">
                   <p className="font-medium text-foreground/80">No events for {year}</p>
                   <p className="mt-1">
                     Timeline events are recorded automatically when you track media — start by{" "}
@@ -278,10 +275,7 @@ function TimelinePage() {
             { l: "Stories tracked", v: allEvents?.length || 0 },
             { l: "Journal entries", v: statsData?.journalCount ?? 0 },
           ].map((s) => (
-            <div
-              key={s.l}
-              className="p-6 bg-surface-1 border border-border/30 rounded-2xl shadow-sm"
-            >
+            <div key={s.l} className="p-6 glass-subtle rounded-2xl shadow-sm">
               <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                 {s.l}
               </div>

@@ -367,7 +367,7 @@ export function CommandPalette({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed inset-0 z-[100] grid place-items-start overflow-y-auto bg-black/60 px-4 pt-[12vh] pb-12 backdrop-blur-sm"
+          className="fixed inset-0 z-[100] grid place-items-start overflow-y-auto bg-black/50 px-4 pt-[12vh] pb-12 backdrop-blur-sm"
           onClick={close}
         >
           <motion.div
@@ -405,9 +405,9 @@ export function CommandPalette({
                 aria-label="Search your library"
                 onChange={(e) => handleQ(e.target.value)}
                 placeholder="Search your Avuno…"
-                className="flex-1 bg-transparent text-base placeholder:text-muted-foreground/70 focus:outline-none focus-visible:!shadow-none"
+                className="h-11 w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] px-4 py-2 text-sm placeholder:text-muted-foreground/60 hover:border-foreground/15 focus:border-ring/40 focus:outline-none focus:ring-2 focus:ring-ring/30 transition-[border-color,box-shadow,background-color] duration-[140ms]"
               />
-              <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px] tracking-wider text-muted-foreground">
+              <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px] tracking-wider text-muted-foreground ml-2">
                 ESC
               </kbd>
             </div>
@@ -506,7 +506,7 @@ function RowView({
       data-row={index}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition focus:outline-none"
+      className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition focus:outline-none hover:bg-foreground/[0.06]"
     >
       {focused && (
         <motion.span

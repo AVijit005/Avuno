@@ -56,7 +56,7 @@ export function MediaMemoriesPanel({ item }: { item: UIMediaItem }) {
           {isLoading ? (
             <div className="h-32 rounded-3xl bg-white/5 animate-pulse" />
           ) : memories.length === 0 ? (
-            <div className="p-8 text-center md:col-span-2 rounded-[32px] bg-surface-1 border border-border/40 shadow-sm">
+            <div className="p-8 text-center md:col-span-2 rounded-[32px] glass-subtle">
               <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
                 Vault
               </div>
@@ -106,7 +106,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
   };
 
   return (
-    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl bg-surface-1 border border-border/40 shadow-sm transition-[background-color,border-color] hover:bg-surface-2 hover:border-border/60">
+    <div className="group relative p-5 flex flex-col justify-between overflow-hidden rounded-3xl glass-subtle transition-[background-color,border-color] hover:bg-foreground/[0.05] hover:border-foreground/10">
       <div className="flex-1">
         <div className="flex items-center justify-between mb-3">
           <time className="flex items-center gap-1.5 text-xs text-muted-foreground uppercase tracking-wider">
@@ -138,7 +138,7 @@ function LinkedMemoryCard({ memory, item }: { memory: MemoryResponse; item: UIMe
       <div className="mt-4 flex items-center justify-between border-t border-border/40 pt-4">
         <div className="flex items-center gap-3">
           {memory.emotion && (
-            <span className="text-xs px-2 py-1 bg-surface-3 rounded-full text-foreground/80">
+            <span className="text-xs px-2 py-1 bg-foreground/[0.06] border border-foreground/[0.08] rounded-full text-foreground/80">
               {memory.emotion}
             </span>
           )}
@@ -197,7 +197,7 @@ function AttachMemoryView({
   const attach = useAttachMemory();
 
   return (
-    <div className="p-6 rounded-3xl bg-surface-1 border border-border/40 shadow-sm">
+    <div className="p-6 rounded-3xl glass-subtle">
       <div className="flex items-center justify-between mb-6">
         <h4 className="font-display text-xl tracking-tight">Select a Memory from your Vault</h4>
         <button

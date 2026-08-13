@@ -8,8 +8,8 @@ const Toaster = ({ ...props }: ToasterProps) => {
       className="toaster group"
       position="bottom-right"
       offset={24}
-      mobileOffset={96}
-      gap={10}
+      mobileOffset={80}
+      gap={8}
       duration={4500}
       toastOptions={{
         unstyled: false,
@@ -19,7 +19,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
             "!rounded-2xl !border !border-foreground/10",
             "!bg-[color:color-mix(in_oklab,var(--popover)_82%,transparent)]",
             "!backdrop-blur-xl !text-foreground",
-            "!shadow-[0_24px_60px_-24px_oklch(0_0_0/0.7),inset_0_1px_0_oklch(1_0_0/0.06)]",
+            "!shadow-[0_20px_50px_-20px_oklch(0_0_0/0.6),inset_0_1px_0_oklch(1_0_0/0.08)]",
             "!px-4 !py-3.5",
           ].join(" "),
           title: "text-sm font-medium",

@@ -58,7 +58,7 @@ export function FeaturedCollections() {
               </div>
               <div className="mt-2 max-w-md text-sm text-white/75">{c.description}</div>
             </div>
-            <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-full bg-white/10 text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
+            <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
               <ArrowUpRight className="h-4 w-4" />
             </div>
           </Link>

@@ -186,7 +186,7 @@ function MemoryDetail() {
       <footer className="pt-12 border-t border-border/40 flex items-center justify-end gap-4">
         <button
           onClick={handleOpenEdit}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
         >
           <Edit className="w-4 h-4" />
           Edit
@@ -228,7 +228,7 @@ function MemoryDetail() {
           <DialogFooter>
             <button
               onClick={() => setIsEditDialogOpen(false)}
-              className="px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
+              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
             >
               Cancel
             </button>
@@ -255,7 +255,7 @@ function MemoryDetail() {
           <DialogFooter className="mt-4">
             <button
               onClick={() => setIsDeleteDialogOpen(false)}
-              className="px-4 py-2 rounded-full bg-surface-2 text-foreground text-sm hover:bg-surface-3 transition-colors"
+              className="px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-colors"
             >
               Cancel
             </button>
@@ -285,7 +285,7 @@ function JournalEvidence({ journalId }: { journalId: string }) {
         <BookOpen className="w-4 h-4" />
         From your journal
       </h3>
-      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl">
+      <div className="p-6 md:p-8 glass-subtle rounded-2xl">
         <div className="prose prose-invert max-w-none">
           <p className="text-secondary-foreground italic leading-relaxed">"{journal.content}"</p>
         </div>
@@ -312,7 +312,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
           <Quote className="w-4 h-4" />
           Saved quote
         </h3>
-        <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl flex flex-col items-center justify-center text-center">
+        <div className="p-6 md:p-8 glass-subtle rounded-2xl flex flex-col items-center justify-center text-center">
           <Quote className="w-8 h-8 text-muted-foreground/30 mb-3" />
           <p className="text-muted-foreground text-sm font-medium">Quote unavailable</p>
           <p className="text-muted-foreground/70 text-xs mt-1 max-w-[200px]">
@@ -329,7 +329,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
         <Quote className="w-4 h-4" />
         Saved quote
       </h3>
-      <div className="p-6 md:p-8 bg-surface-1 border border-border/40 rounded-2xl relative group">
+      <div className="p-6 md:p-8 glass-subtle rounded-2xl relative group">
         <Quote className="absolute top-6 left-6 w-8 h-8 text-foreground/5 pointer-events-none" />
         <div className="prose prose-invert max-w-none relative z-10 pl-6 border-l-2 border-primary/20">
           <p className="text-foreground italic leading-relaxed text-lg">"{quote.content}"</p>
@@ -353,7 +353,7 @@ function MediaEvidence({ mediaId }: { mediaId: string }) {
 
   return (
     <Link to="/app/media/$id" params={{ id: media.id }} className="block">
-      <div className="p-4 flex items-center gap-4 hover:bg-surface-2 transition-colors cursor-pointer bg-surface-1 border border-border/40 rounded-2xl shadow-sm">
+      <div className="p-4 flex items-center gap-4 hover:bg-foreground/[0.05] transition-colors cursor-pointer glass-subtle rounded-2xl shadow-sm">
         {media.posterUrl || media.backdropUrl ? (
           <img
             src={media.posterUrl || media.backdropUrl || ""}

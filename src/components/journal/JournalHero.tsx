@@ -48,7 +48,7 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
             ].map((s) => (
               <motion.div
                 key={s.l}
-                className="rounded-xl bg-surface-1 border border-border/30 p-4 shadow-sm"
+                className="rounded-xl glass-subtle p-4"
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
