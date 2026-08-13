@@ -12,6 +12,7 @@ import { CreateCollectionModal } from "@/components/collections/CreateCollection
 import { DiscoveryCollections } from "@/components/discovery/DiscoveryCollections";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { PremiumButton } from "@/components/ui/PremiumButton";
 import { Plus, LibrarySquare } from "lucide-react";
 
 export const Route = createFileRoute("/app/collections/")({
@@ -42,7 +43,7 @@ function CollectionsIndex() {
 
   return (
     <div className="pb-24">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 border-b border-border/40 pb-6 pt-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 glass p-8 rounded-3xl">
         <div>
           <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground mb-2">
             Curated Organization
@@ -60,13 +61,13 @@ function CollectionsIndex() {
           title="No collections yet"
           description="Create your first collection to start organizing your movies, shows, and books into intentional spaces."
           action={
-            <button
+            <PremiumButton
               onClick={() => setOpen(true)}
-              className="inline-flex h-9 items-center justify-center rounded-xl bg-primary px-4 text-sm font-medium text-primary-foreground shadow-sm transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+              variant="primary"
             >
               <Plus className="mr-2 h-4 w-4" />
               Create Collection
-            </button>
+            </PremiumButton>
           }
         />
       ) : (

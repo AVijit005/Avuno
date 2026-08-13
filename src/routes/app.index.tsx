@@ -168,8 +168,10 @@ function OnboardingGuide() {
   ];
   return (
     <div className="mt-4">
-      <div className="glass-subtle rounded-2xl p-8 md:p-12">
-        <div className="max-w-2xl">
+      <div className="glass rounded-3xl p-8 md:p-12 card-interactive relative overflow-hidden">
+        {/* Subtle background glow for empty state */}
+        <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
+        <div className="max-w-2xl relative z-10">
           <h2 className="text-2xl md:text-3xl font-medium tracking-tight">
             Add your first piece of media.
           </h2>
@@ -181,7 +183,7 @@ function OnboardingGuide() {
             {pillars.map(({ icon: Icon, label, hint }) => (
               <div
                 key={label}
-                className="flex flex-col gap-2 rounded-2xl glass-subtle p-4 transition-all duration-[140ms] hover:bg-foreground/[0.08]"
+                className="flex flex-col gap-2 rounded-2xl glass p-4 card-interactive"
               >
                 <Icon className="h-4 w-4 text-primary" />
                 <div className="text-sm font-medium text-foreground">{label}</div>

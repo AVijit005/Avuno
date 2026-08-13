@@ -355,31 +355,31 @@ select {
  * ============================================================ */
 
 @utility glass-subtle {
-  background: color-mix(in oklab, var(--color-surface-1) 45%, transparent);
+  background: color-mix(in oklab, var(--color-surface-1) 50%, transparent);
   backdrop-filter: blur(12px) saturate(120%);
   border: 1px solid var(--color-border-subtle);
-  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.1) inset;
+  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.2) inset;
 }
 
 @utility glass {
-  background: color-mix(in oklab, var(--color-surface-2) 55%, transparent);
-  backdrop-filter: blur(20px) saturate(140%);
+  background: color-mix(in oklab, var(--color-surface-2) 60%, transparent);
+  backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid var(--color-border-default);
-  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.15) inset, var(--shadow-sm);
+  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.3) inset, var(--shadow-sm);
 }
 
 @utility glass-elevated {
-  background: color-mix(in oklab, var(--color-surface-3) 65%, transparent);
-  backdrop-filter: blur(28px) saturate(150%);
+  background: color-mix(in oklab, var(--color-surface-3) 70%, transparent);
+  backdrop-filter: blur(32px) saturate(150%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 0 1px 1px var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.2) inset, var(--shadow-md);
+  box-shadow: 0 1px 1px var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.4) inset, var(--shadow-md);
 }
 
 @utility glass-floating {
-  background: color-mix(in oklab, var(--color-surface-3) 75%, transparent);
-  backdrop-filter: blur(40px) saturate(160%);
+  background: color-mix(in oklab, var(--color-surface-3) 80%, transparent);
+  backdrop-filter: blur(48px) saturate(160%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 0 1px 2px var(--glass-highlight-strong) inset, 0 0 0 1px oklch(1 0 0 / 0.05) inset, 0 -1px 0 oklch(0 0 0 / 0.3) inset, var(--shadow-xl);
+  box-shadow: 0 1px 2px var(--glass-highlight-strong) inset, 0 -1px 0 oklch(0 0 0 / 0.5) inset, var(--shadow-xl);
 }
 
 /* ============================================================
