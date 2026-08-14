@@ -78,15 +78,18 @@ function ResetPasswordPage() {
   return (
     <div className="relative min-h-[100dvh] w-full flex flex-col justify-center items-center px-4 py-12 selection:bg-primary/30">
       <AtmosphereBackground showParticles={true} intensity="vivid" />
-      
+
       {/* Top Logo */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="absolute top-8 left-8 sm:left-12 flex items-center gap-2.5 z-20"
       >
-        <Link to="/" className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+        >
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground shadow-[var(--shadow-button)]">
             <span className="font-display text-base font-bold leading-none">A</span>
           </div>
@@ -111,9 +114,7 @@ function ResetPasswordPage() {
           </Link>
 
           <div className="flex flex-col mb-8">
-            <h1 className="font-display text-3xl font-medium tracking-tight">
-              New password
-            </h1>
+            <h1 className="font-display text-3xl font-medium tracking-tight">New password</h1>
             <p className="text-sm text-muted-foreground mt-2">
               Resetting your password signs you out on all other devices.
             </p>
@@ -123,9 +124,7 @@ function ResetPasswordPage() {
             <div className="flex items-start gap-4 rounded-xl border border-destructive/30 bg-destructive/10 p-5">
               <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden />
               <div>
-                <p className="text-[13.5px] font-medium text-destructive">
-                  Invalid reset link
-                </p>
+                <p className="text-[13.5px] font-medium text-destructive">Invalid reset link</p>
                 <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
                   This link is missing its token. Request a new one to continue.
                 </p>
@@ -148,9 +147,7 @@ function ResetPasswordPage() {
                   <Check className="h-4 w-4" aria-hidden />
                 </div>
                 <div>
-                  <p className="text-[13.5px] font-medium text-primary">
-                    Password updated
-                  </p>
+                  <p className="text-[13.5px] font-medium text-primary">Password updated</p>
                   <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
                     You'll be redirected to sign in shortly.
                   </p>
@@ -186,7 +183,7 @@ function ResetPasswordPage() {
                     "peer h-12 w-full rounded-xl border bg-foreground/[0.04] px-4 text-sm transition-[border-color,box-shadow,background-color] duration-[140ms] ease-out placeholder:text-transparent",
                     tooShort
                       ? "border-destructive/50 focus:border-destructive/70 focus:ring-2 focus:ring-destructive/30"
-                      : "border-foreground/[0.08] hover:border-foreground/20 hover:bg-foreground/[0.05] focus:border-ring/50 focus:ring-2 focus:ring-ring/30 focus:bg-foreground/[0.05]"
+                      : "border-foreground/[0.08] hover:border-foreground/20 hover:bg-foreground/[0.05] focus:border-ring/50 focus:ring-2 focus:ring-ring/30 focus:bg-foreground/[0.05]",
                   )}
                 />
                 <label
@@ -195,12 +192,12 @@ function ResetPasswordPage() {
                     "absolute left-4 top-1/2 -translate-y-1/2 text-sm transition-all duration-[200ms] ease-out pointer-events-none",
                     password
                       ? "-translate-y-[28px] text-[11px] font-medium uppercase tracking-wider text-muted-foreground bg-background px-1 left-3"
-                      : "text-muted-foreground/70"
+                      : "text-muted-foreground/70",
                   )}
                 >
                   New Password
                 </label>
-                
+
                 <AnimatePresence>
                   {tooShort ? (
                     <motion.p
@@ -233,9 +230,17 @@ function ResetPasswordPage() {
                     >
                       <div className="flex gap-1">
                         {Array.from({ length: 5 }).map((_, i) => {
-                          const segColor = strength <= 2 ? "bg-destructive" : strength <= 3 ? "bg-amber-500" : "bg-primary";
+                          const segColor =
+                            strength <= 2
+                              ? "bg-destructive"
+                              : strength <= 3
+                                ? "bg-amber-500"
+                                : "bg-primary";
                           return (
-                            <div key={i} className="h-1 flex-1 overflow-hidden rounded-full bg-foreground/[0.08]">
+                            <div
+                              key={i}
+                              className="h-1 flex-1 overflow-hidden rounded-full bg-foreground/[0.08]"
+                            >
                               <motion.div
                                 className={cn("h-full rounded-full", segColor)}
                                 animate={{ width: i < strength ? "100%" : "0%" }}
@@ -246,7 +251,14 @@ function ResetPasswordPage() {
                         })}
                       </div>
                       <p className="mt-1.5 text-[11px] text-muted-foreground">
-                        {strength <= 2 ? "Weak" : strength <= 3 ? "Fair" : strength <= 4 ? "Good" : "Strong"} password
+                        {strength <= 2
+                          ? "Weak"
+                          : strength <= 3
+                            ? "Fair"
+                            : strength <= 4
+                              ? "Good"
+                              : "Strong"}{" "}
+                        password
                       </p>
                     </motion.div>
                   )}
@@ -266,7 +278,7 @@ function ResetPasswordPage() {
                     "peer h-12 w-full rounded-xl border bg-foreground/[0.04] px-4 text-sm transition-[border-color,box-shadow,background-color] duration-[140ms] ease-out placeholder:text-transparent",
                     mismatch
                       ? "border-destructive/50 focus:border-destructive/70 focus:ring-2 focus:ring-destructive/30"
-                      : "border-foreground/[0.08] hover:border-foreground/20 hover:bg-foreground/[0.05] focus:border-ring/50 focus:ring-2 focus:ring-ring/30 focus:bg-foreground/[0.05]"
+                      : "border-foreground/[0.08] hover:border-foreground/20 hover:bg-foreground/[0.05] focus:border-ring/50 focus:ring-2 focus:ring-ring/30 focus:bg-foreground/[0.05]",
                   )}
                 />
                 <label
@@ -275,12 +287,12 @@ function ResetPasswordPage() {
                     "absolute left-4 top-1/2 -translate-y-1/2 text-sm transition-all duration-[200ms] ease-out pointer-events-none mt-1",
                     confirm
                       ? "-translate-y-[28px] text-[11px] font-medium uppercase tracking-wider text-muted-foreground bg-background px-1 left-3"
-                      : "text-muted-foreground/70"
+                      : "text-muted-foreground/70",
                   )}
                 >
                   Confirm New Password
                 </label>
-                
+
                 <AnimatePresence>
                   {mismatch && (
                     <motion.p

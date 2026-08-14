@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef, useState, useMemo, useEffect } from "react";
 import { useScroll, useTransform, useReducedMotion, motion } from "motion/react";
-import { Star, NotebookPen, Trophy, Layers } from "lucide-react";
+import { Star, NotebookPen, Trophy, Layers, Clock } from "lucide-react";
 import { PremiumImage } from "@/components/ui/PremiumImage";
 import { CountUp, SegmentedFilter, ZoneHeading } from "@/components/analytics/AnalyticsKit";
 import { MediaEvolution } from "@/components/intelligence/MediaEvolution";
@@ -11,6 +11,8 @@ import { useTimelineEvents, useJournalStats } from "@/hooks/use-journal";
 import { adaptTimelineEvent } from "@/lib/adapters/journal";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
 import { CreateMemoryCapsule } from "@/components/memory/CreateMemoryCapsule";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { TimelineIllustration } from "@/components/ui/illustrations";
 import type { TimelineEventResponse } from "@/lib/api/journal";
 
 export const Route = createFileRoute("/app/timeline")({
@@ -59,7 +61,7 @@ function TimelinePage() {
         className="mb-10 border-b border-border/40 pb-8"
       >
         <div className="text-eyebrow">Life through media</div>
-        <h1 className="mt-4 font-display text-3xl sm:text-4xl tracking-tight md:text-5xl text-foreground">
+        <h1 className="mt-4 font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
           Your timeline.
         </h1>
         <p className="mt-4 max-w-xl text-muted-foreground">
@@ -109,26 +111,28 @@ function TimelinePage() {
           sub="Scroll. The line grows with you."
         />
         <div className="relative pl-2 md:pl-4">
-          {/* growing line */}
-          <div className="absolute left-5 top-0 bottom-0 w-px overflow-hidden bg-white/[0.05] md:left-7">
-            <motion.div
-              className="w-full bg-gradient-to-b from-primary via-secondary to-amber-300/70"
-              style={{ height: lineHeight }}
-            />
-          </div>
-          <div className="space-y-8">
+          {/* vertical spine */}
+          <div className="absolute left-[25px] top-0 bottom-0 border-l border-primary/20 md:left-[31px]"></div>
+
+          <div className="space-y-12">
+            <h2 className="pl-14 md:pl-20 font-display text-4xl tracking-tight text-foreground py-4">
+              {year}
+            </h2>
             {yearEvents.length === 0 && !isLoading && (
-              <div className="pl-14 md:pl-20">
-                <div className="rounded-2xl glass p-6 text-sm text-muted-foreground">
-                  <p className="font-medium text-foreground/80">No events for {year}</p>
-                  <p className="mt-1">
-                    Timeline events are recorded automatically when you track media — start by{" "}
-                    <Link to="/app/library" className="text-primary underline underline-offset-2">
-                      adding to your library
-                    </Link>
-                    .
-                  </p>
-                </div>
+              <div className="pl-14 md:pl-20 mt-8">
+                <EmptyState
+                  illustration={<TimelineIllustration className="w-40 h-40 opacity-70" />}
+                  title={`No events for ${year}`}
+                  description="Timeline events are recorded automatically when you track media."
+                  action={
+                    <a
+                      href="/app/library"
+                      className="flex items-center justify-center gap-2 text-sm font-medium px-4 py-2.5 min-h-[44px] rounded-xl glass hover:bg-foreground/[0.07] focus-ring transition-all duration-[140ms]"
+                    >
+                      Add to library
+                    </a>
+                  }
+                />
               </div>
             )}
             {yearEvents.map((e, i) => {
@@ -155,27 +159,27 @@ function TimelinePage() {
               return (
                 <motion.div
                   key={e.id}
-                  initial={{ opacity: 0, x: reduced ? 0 : -16 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  initial={{ opacity: 0, y: reduced ? 0 : 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-100px" }}
-                  transition={{ duration: reduced ? 0 : 0.6, delay: reduced ? 0 : i * 0.04 }}
+                  transition={{
+                    duration: reduced ? 0 : 0.4,
+                    delay: reduced ? 0 : i * 0.05,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
                   className="relative pl-14 md:pl-20"
                 >
                   <motion.span
-                    className="absolute left-2 top-4 grid h-7 w-7 place-items-center rounded-full md:left-4"
+                    className="absolute left-[calc(1.25rem-4px)] top-10 grid h-2.5 w-2.5 place-items-center rounded-full border-2 border-background md:left-[calc(1.75rem-4px)]"
                     style={{
-                      background: "oklch(0.18 0.014 270)",
-                      border: `2px solid ${media.accent ?? undefined}`,
-                      boxShadow: `0 0 18px ${media.accent ?? undefined}`,
+                      background: media.accent ?? "var(--accent)",
                     }}
                     whileInView={{ scale: reduced ? 1 : [0.6, 1.1, 1] }}
                     viewport={{ once: true }}
                     transition={{ duration: reduced ? 0 : 0.6 }}
-                  >
-                    <span className="h-2 w-2 rounded-full" style={{ background: media.accent }} />
-                  </motion.span>
+                  />
 
-                  <div className="flex gap-5 p-5 glass-subtle hover:bg-foreground/[0.08] rounded-2xl shadow-sm transition hover:border-primary/50">
+                  <div className="flex gap-5 p-4 glass rounded-2xl card-interactive">
                     <PremiumImage
                       src={media.poster || ""}
                       alt=""
@@ -183,7 +187,7 @@ function TimelinePage() {
                       style={{ viewTransitionName: `timeline-poster-${e.id}` }}
                     />
                     <div className="min-w-0 flex-1">
-                      <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+                      <div className="text-eyebrow">
                         {when} · {mood}
                       </div>
                       <div className="mt-1 truncate font-display text-2xl tracking-tight">

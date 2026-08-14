@@ -1,3 +1,5 @@
+import { PrismaClient } from '@prisma/client';
+
 let argon2Module: any;
 try {
   argon2Module = require('argon2');

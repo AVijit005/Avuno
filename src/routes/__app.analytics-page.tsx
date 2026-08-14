@@ -263,12 +263,14 @@ export default function AnalyticsPage() {
         >
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
             <div>
-              <div className="text-[11px] uppercase tracking-[0.24em] text-muted-foreground flex items-center gap-2 mb-2">
+              <div className="text-eyebrow mb-2 flex items-center gap-2">
                 <Sparkles className="h-3 w-3 text-primary" /> Analytics{" "}
                 {todayStr ? `· ${todayStr}` : ""}
               </div>
-              <h1 className="font-display text-4xl tracking-tight md:text-5xl">Library Insights</h1>
-              <p className="mt-2 text-muted-foreground">
+              <h1 className="font-display text-2xl md:text-3xl font-semibold tracking-tight">
+                Library Insights
+              </h1>
+              <p className="text-muted-foreground mt-3 leading-relaxed">
                 You've spent {o.hoursSpent} hours immersed in different worlds.
               </p>
             </div>
@@ -368,7 +370,7 @@ export default function AnalyticsPage() {
             title="Activity Timeline"
             description="Daily engagement trends across all media types."
           >
-            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
+            <div className="p-6 md:p-8 rounded-[32px] glass-elevated">
               <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
                 {[
                   { l: "Monthly total", v: o.hoursSpent, s: "h" },
@@ -443,67 +445,75 @@ export default function AnalyticsPage() {
 
         {/* ============ Zone 4 — Media distribution ============ */}
         <Zone eyebrow="Zone 4" title="Media distribution" sub="The shape of your library.">
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
-              <div className="h-72">
-                <ErrorBoundary
-                  fallback={
-                    <div className="flex h-full items-center justify-center text-muted-foreground">
-                      Chart could not be loaded
-                    </div>
-                  }
-                >
-                  <ResponsiveContainer>
-                    <PieChart role="img" aria-label="Media distribution pie chart">
-                      <Pie
-                        data={mediaDistribution}
-                        dataKey="value"
-                        nameKey="name"
-                        innerRadius={70}
-                        outerRadius={110}
-                        paddingAngle={2}
-                        stroke="none"
-                        isAnimationActive={!reduced}
-                      >
-                        {mediaDistribution.map((d, i) => (
-                          <Cell key={i} fill={d.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip content={<GlassTooltip />} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </ErrorBoundary>
-              </div>
-            </div>
-            <div className="p-6 md:p-8 rounded-[32px] glass shadow-lg">
-              <div className="space-y-3">
-                {mediaDistribution.map((d) => {
-                  const total = mediaDistribution.reduce((a, b) => a + b.value, 0);
-                  const pct = total === 0 ? 0 : (d.value / total) * 100;
-                  return (
-                    <div key={d.name} className="group flex items-center gap-3">
-                      <span className="h-2.5 w-2.5 rounded-full" style={{ background: d.color }} />
-                      <span className="w-24 text-sm">{d.name}</span>
-                      <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
-                        <motion.div
-                          initial={{ width: 0 }}
-                          whileInView={{ width: `${pct}%` }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                          className="h-full rounded-full"
-                          style={{ background: d.color, boxShadow: `0 0 12px ${d.color}` }}
-                        />
+          <ChartStory
+            title="Format Breakdown"
+            description="Your cultural diet across different mediums, showing what forms of storytelling you gravitate towards most."
+          >
+            <div className="grid grid-cols-1 gap-6 xl:grid-cols-2">
+              <div className="p-6 md:p-8 rounded-[32px] glass-elevated">
+                <div className="h-72">
+                  <ErrorBoundary
+                    fallback={
+                      <div className="flex h-full items-center justify-center text-muted-foreground">
+                        Chart could not be loaded
                       </div>
-                      <span className="w-12 text-right text-xs text-muted-foreground tabular-nums">
-                        {pct.toFixed(1)}%
-                      </span>
-                      <span className="w-10 text-right text-xs tabular-nums">{d.value}</span>
-                    </div>
-                  );
-                })}
+                    }
+                  >
+                    <ResponsiveContainer>
+                      <PieChart role="img" aria-label="Media distribution pie chart">
+                        <Pie
+                          data={mediaDistribution}
+                          dataKey="value"
+                          nameKey="name"
+                          innerRadius={70}
+                          outerRadius={110}
+                          paddingAngle={2}
+                          stroke="none"
+                          isAnimationActive={!reduced}
+                        >
+                          {mediaDistribution.map((d, i) => (
+                            <Cell key={i} fill={d.color} />
+                          ))}
+                        </Pie>
+                        <Tooltip content={<GlassTooltip />} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </ErrorBoundary>
+                </div>
+              </div>
+              <div className="p-6 md:p-8 rounded-[32px] glass-elevated">
+                <div className="space-y-3">
+                  {mediaDistribution.map((d) => {
+                    const total = mediaDistribution.reduce((a, b) => a + b.value, 0);
+                    const pct = total === 0 ? 0 : (d.value / total) * 100;
+                    return (
+                      <div key={d.name} className="group flex items-center gap-3">
+                        <span
+                          className="h-2.5 w-2.5 rounded-full"
+                          style={{ background: d.color }}
+                        />
+                        <span className="w-24 text-sm">{d.name}</span>
+                        <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-white/[0.06]">
+                          <motion.div
+                            initial={{ width: 0 }}
+                            whileInView={{ width: `${pct}%` }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
+                            className="h-full rounded-full"
+                            style={{ background: d.color, boxShadow: `0 0 12px ${d.color}` }}
+                          />
+                        </div>
+                        <span className="w-12 text-right text-xs text-muted-foreground tabular-nums">
+                          {pct.toFixed(1)}%
+                        </span>
+                        <span className="w-10 text-right text-xs tabular-nums">{d.value}</span>
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
             </div>
-          </div>
+          </ChartStory>
         </Zone>
 
         {/* ============ Zone 5 — Completion insights ============ */}
@@ -664,7 +674,10 @@ export default function AnalyticsPage() {
                 accent: "oklch(0.72 0.16 160 / 0.6)",
               },
             ].map((r) => (
-              <div key={r.label} className="relative overflow-hidden p-5 rounded-2xl glass shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+              <div
+                key={r.label}
+                className="relative overflow-hidden p-5 rounded-2xl glass shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+              >
                 <div className="relative">
                   <div className="flex items-center gap-2 mb-3">
                     <Trophy className="h-4 w-4 text-muted-foreground" />
@@ -715,7 +728,16 @@ function Zone({
       transition={{ duration: reduced ? 0 : 0.8, ease: [0.22, 1, 0.36, 1] }}
       className="mt-16 md:mt-24"
     >
-      <ZoneHeading eyebrow={eyebrow} title={title} sub={sub} action={action} />
+      <div className="mb-6 flex items-end justify-between gap-4">
+        <div>
+          {eyebrow && <div className="text-eyebrow mb-2">{eyebrow}</div>}
+          <h2 className="font-display text-2xl md:text-3xl font-semibold tracking-tight">
+            {title}
+          </h2>
+          {sub && <p className="text-muted-foreground mt-3 leading-relaxed">{sub}</p>}
+        </div>
+        {action}
+      </div>
       {children}
     </motion.section>
   );

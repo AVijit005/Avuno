@@ -22,12 +22,12 @@ export function Sidebar({
     <motion.aside
       animate={{ width: collapsed ? 76 : 264 }}
       transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass border-r border-border/80 lg:flex"
+      className="fixed top-4 bottom-4 left-4 z-40 hidden flex-col overflow-hidden rounded-3xl glass-floating shadow-[0_0_0_1px_oklch(1_0_0_/_0.06),_0_24px_48px_-12px_oklch(0_0_0_/_0.5)] border-r border-border/80 lg:flex"
     >
       {/* Brand */}
       <div className="flex items-center gap-3 px-5 pt-5 pb-4">
-        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gradient-to-br from-primary to-secondary text-primary-foreground shadow-[0_0_16px_oklch(0.72_0.18_255/0.3)]">
-          <span className="font-display text-lg leading-none">A</span>
+        <div className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-primary text-primary-foreground shadow-[0_0_20px_oklch(0.6_0.2_270/0.4)]">
+          <span className="font-display text-lg font-semibold leading-none">A</span>
         </div>
         {!collapsed && (
           <div className="min-w-0">
@@ -42,18 +42,11 @@ export function Sidebar({
         onClick={onOpenSearch}
         aria-label="Search"
         className={cn(
-          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.04] px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors press-scale hover:bg-foreground/[0.07] hover:text-foreground",
+          "mx-3 mt-1 mb-3 flex items-center gap-3 rounded-2xl border border-foreground/[0.08] bg-foreground/[0.04] px-3 py-2.5 text-left text-sm text-muted-foreground transition-colors press-scale hover:bg-foreground/[0.07] hover:text-foreground focus-ring",
         )}
       >
         <Command className="h-4 w-4 shrink-0" />
-        {!collapsed && (
-          <>
-            <span className="flex-1 truncate">Spotlight…</span>
-            <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px] tracking-wider">
-              ⌘K
-            </kbd>
-          </>
-        )}
+        {!collapsed && <span className="flex-1 truncate">Search or press ⌘K</span>}
       </button>
 
       {/* Nav */}
@@ -87,7 +80,7 @@ export function Sidebar({
                           <motion.span
                             layoutId="nav-active"
                             aria-hidden="true"
-                            className="absolute inset-0 -z-10 rounded-xl bg-primary/[0.12] ring-1 ring-primary/[0.25] shadow-[0_2px_12px_-4px_oklch(0.72_0.18_255/0.2)]"
+                            className="absolute inset-0 -z-10 rounded-xl bg-primary/[0.1] before:absolute before:left-0 before:top-1/2 before:-translate-y-1/2 before:h-5 before:w-0.5 before:rounded-full before:bg-primary"
                             transition={{ type: "spring", stiffness: 400, damping: 32 }}
                           />
                         )}
@@ -107,7 +100,7 @@ export function Sidebar({
       <button
         onClick={onToggle}
         aria-label={collapsed ? "Expand sidebar" : "Collapse sidebar"}
-        className="mx-3 mb-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-foreground/[0.08] bg-foreground/[0.03] py-2 text-xs text-muted-foreground transition-colors press-scale hover:text-foreground"
+        className="mx-3 mb-3 flex min-h-[44px] items-center justify-center gap-2 rounded-xl border border-foreground/[0.08] bg-foreground/[0.03] py-2 text-xs text-muted-foreground transition-colors press-scale hover:text-foreground focus-ring"
       >
         {collapsed ? (
           <ChevronsRight className="h-4 w-4" />

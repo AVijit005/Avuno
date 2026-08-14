@@ -53,7 +53,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
       transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
       className="sticky top-0 z-30 px-4 pt-4 sm:px-6 lg:px-10"
     >
-      <div className="glass-subtle backdrop-blur-xl flex items-center justify-between gap-4 px-3 py-2.5 md:px-5 rounded-2xl">
+      <div className="glass-subtle backdrop-blur-xl flex items-center justify-between gap-4 px-3 py-2.5 md:px-5 rounded-2xl border border-foreground/[0.07] shadow-[0_1px_0_oklch(1_0_0_/_0.06)_inset,_0_2px_8px_-2px_oklch(0_0_0_/_0.15)]">
         <div className="flex min-w-0 items-center gap-4">
           {isHome ? (
             <div className="hidden flex-col leading-tight md:flex" suppressHydrationWarning>
@@ -88,7 +88,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <button
             onClick={onOpenSearch}
             aria-label="Search"
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer md:hidden"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer md:hidden focus-ring"
           >
             <Search className="h-4 w-4" />
           </button>
@@ -96,14 +96,14 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             onClick={openAdd}
             aria-label="Add to Avuno"
             title="Add (⌘N)"
-            className="hidden md:grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer"
+            className="hidden md:grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer focus-ring"
           >
             <Plus className="h-4 w-4" />
           </button>
           <Link
             to="/app/notifications"
             aria-label="Notifications"
-            className="relative grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer"
+            className="relative grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer focus-ring"
           >
             <Bell className="h-4 w-4" />
             {notifications?.unreadCount ? (
@@ -113,7 +113,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
           <Link
             to="/app/settings"
             aria-label="Quick settings"
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 place-items-center rounded-xl bg-foreground/[0.04] ring-1 ring-foreground/[0.06] transition-[background-color,color,transform] duration-[140ms] hover:bg-foreground/[0.08] hover:text-primary active:scale-[0.95] cursor-pointer focus-ring"
           >
             <Settings className="h-4 w-4" />
           </Link>
@@ -121,7 +121,7 @@ export function TopBar({ onOpenSearch }: { onOpenSearch: () => void }) {
             to="/app/profile"
             aria-label="Profile"
             style={{ viewTransitionName: "user-avatar" }}
-            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 sm:min-h-0 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-semibold text-primary-foreground ring-1 ring-foreground/20 transition-transform duration-[140ms] active:scale-[0.95]"
+            className="grid h-10 w-10 min-h-[44px] min-w-[44px] sm:h-9 sm:w-9 place-items-center rounded-xl bg-gradient-to-br from-primary/70 to-secondary/70 text-xs font-semibold text-primary-foreground ring-1 ring-foreground/20 transition-transform duration-[140ms] active:scale-[0.95] focus-ring"
           >
             {initials}
           </Link>

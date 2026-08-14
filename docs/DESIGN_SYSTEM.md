@@ -1,143 +1,50 @@
-# AVUNO DESIGN SYSTEM 2.0
+# AVUNO DESIGN SYSTEM 2.0 (v3 Product-Led Elevation)
 
 > Single source of truth for all visual, motion, and component decisions.
 
 ---
 
-## 1. Color System (Strict OKLCH)
+## 1. Brand & Voice
 
-Avuno uses a semantic color architecture mapped to raw OKLCH values in `src/styles.css`.
+- **Avuno** — "Your life in media, beautifully archived."
+- **Voice** = calm, editorial, truthful, second-person.
+- **Truthful content**: no fake stats, testimonials, or vapor features. Pricing/claims only reflect real product.
 
-### Tokens
+## 2. Color System & Tokens
 
-| Category | Token | Usage |
-|---|---|---|
-| Surfaces | `--color-bg`, `--color-surface-1`, `--color-surface-2` | Page layers |
-| Text | `--color-text-primary`, `--color-text-secondary`, `--color-text-muted` | Hierarchy |
-| Borders | `--color-border-subtle`, `--color-border-default` | Separation |
-| Accent | `--color-accent` (Electric Blue), `--color-accent-soft` | CTAs, active states |
-| Semantic | `--color-success`, `--color-warning`, `--color-error` | Feedback |
+- **Accent**: One accent only (`var(--primary)` = `#6d5fcc`, iris).
+- **Core Semantic Tokens**: `--primary`, `--primary-foreground`, `--background`, `--foreground`, `--muted`, `--muted-foreground`, `--border`, `--card`, `--accent`.
+- **Dark/light parity**: use theme tokens (`bg-background`, `text-foreground`, `text-muted-foreground`, `border-border`, `bg-muted`), never hardcoded hex.
 
-### Rules
+## 3. Typography System
 
-- ✅ Always use CSS variables (`var(--primary)`, `var(--foreground)`)
-- ✅ Use `oklch()` opacity syntax: `oklch(0.5 0 0 / 0.15)` for glass tints
-- ❌ Never hardcode raw hex or RGB values in components
-- ❌ Never use `accent` for large background areas
+- **Display**: `clamp(2.5rem, 6vw, 4.5rem)` Fraunces
+- **H2**: `clamp(1.75rem, 3vw, 2.5rem)` Fraunces
+- **Body**: `1rem/1.6` Geist
+- **Eyebrow**: `text-[11px] uppercase tracking-[0.22em] text-primary/80`
 
----
+## 4. Spacing Rhythm
 
-## 2. Typography System
-
-Dual-typeface editorial system.
-
-| Font | Token | Use For |
-|---|---|---|
-| Instrument Serif | `font-display` | Headings, hero moments, quotes |
-| Inter | `font-sans` | Body, buttons, metadata, forms |
-
-**Rules:**
-- Instrument Serif is display-only. Never use it for buttons or inputs.
-- Minimum body text: `16px`. Metadata may go to `14px` (min 4.5:1 contrast).
-
----
-
-## 3. Glass Material System (Phase 24C)
-
-Tiered backdrop-blur system for elevated surfaces.
-
-| Class | Blur | Saturation | Use For |
-|---|---|---|---|
-| `glass-subtle` | 8px | 110% | Sticky headers, sidebars, secondary panels |
-| `glass` | 12px | 120% | Floating menus, info cards, section containers |
-| `glass-floating` | 20px | 140% | Modals, auth panels, command palette |
-
-### Interaction Classes
-
-- `card-interactive` — adds `hover:-translate-y-[2px]` + shadow lift on hover
-- `hover:bg-foreground/[0.07]` — standard hover tint on glass surfaces
-
-### Rules
-
-- ✅ Use `glass-subtle` for containers, `glass-floating` for modals/auth
-- ❌ Never stack two glass elements directly on top of each other
-- ❌ Never use glass on primary content cards (media cards are grounded)
-- ❌ Keep blur under 24px for GPU performance
-
----
-
-## 4. Shadow & Elevation System
-
-| Token | Use For |
-|---|---|
-| `--shadow-sm` | Subtle interactive lift |
-| `--shadow-button` | Primary action buttons (resting) |
-| `--shadow-button-hover` | Primary action buttons (hovered) |
-| `--shadow-elevated` | Cards on hover |
-| `--shadow-floating` | Modals, dialogs |
-
-Shadows establish Z-axis depth. The further from background, the larger the shadow.
-
----
+- **Section padding**: `py-28 md:py-36`
+- **Max-width**: `max-w-6xl` or `max-w-7xl`
 
 ## 5. Motion System
 
-| Token | Duration | Use For |
-|---|---|---|
-| `--duration-fast` | 140ms | Micro-interactions, hover states |
-| `--duration-normal` | 240ms | State changes, reveals |
-| `--duration-slow` | 360ms | Route transitions |
+- **Stack**: Use `motion/react` only. NEVER use `react-bits` npm package.
+- **Effects**: Fade/blur-in (`filter: blur(10px)→0`), hover `scale-[1.02]`.
+- **Springs**: `stiffness: 400`, `damping: 32`.
+- **Easing**: `[0.22, 1, 0.36, 1]`.
+- **Reduced Motion**: EVERY animation wrapped in `useReducedMotion()` → static fallback.
 
-**Spring physics (Framer Motion defaults for components):**
-```
-stiffness: 400–500, damping: 28–35, mass: 0.6–0.8
-```
+## 6. Illustration Language
 
-**Rules:**
-- ❌ No continuous ambient animations
-- ✅ All animations must respect `prefers-reduced-motion`
+- **Source**: Recolorable CC0 (unDraw) inline SVGs.
+- **Color**: Single iris-tinted accent (`#6d5fcc`).
+- **Usage**: Rendered at `opacity-70` in empty states.
 
----
+## 7. Accessibility
 
-## 6. Spacing & Radius
-
-- **Spacing**: 4px base (`space-1` → `space-24`)
-- **Radius**: `rounded-xl` (12px) for buttons/inputs · `rounded-2xl` (16px) for cards · `rounded-3xl`/`rounded-[2rem]` for large panels
-
----
-
-## 7. Component Library
-
-### PremiumButton (`src/components/ui/PremiumButton.tsx`)
-Main CTA button. Variants: `primary`, `secondary`, `ghost`.
-Props: `loading`, `success`, `icon`, `disabled`.
-
-### EmptyState (`src/components/ui/EmptyState.tsx`)
-Standard empty state with icon, title, description, and optional CTA.
-Uses `card-interactive` + `glass-subtle` surface.
-
-### ShimmerSkeleton (`src/components/ui/ShimmerSkeleton.tsx`)
-Loading placeholder. Uses `bg-foreground/[0.05]` with shimmer animation.
-
----
-
-## 8. Input Standard
-
-All inputs must follow this pattern:
-
-```
-h-11 w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] px-4 text-sm
-transition-[border-color,box-shadow,background-color] duration-[140ms]
-hover:border-foreground/20 hover:bg-foreground/[0.05]
-focus:border-ring/50 focus:ring-2 focus:ring-ring/30
-```
-
----
-
-## 9. Rules for New Components
-
-Any new component must:
-1. Use only tokens from this document — no arbitrary pixel values
-2. Support both light and dark mode via CSS variables
-3. Include `focus-visible` ring for keyboard accessibility
-4. Respect `prefers-reduced-motion` for any animation
+- `focus-visible` rings on all interactive elements.
+- `44px` minimum tap targets.
+- `aria-hidden` on decorative elements.
+- `prefers-reduced-motion` respected globally.

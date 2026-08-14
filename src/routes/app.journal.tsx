@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { PageSkeleton } from "@/components/common/PageSkeleton";
-import { NotebookPen } from "lucide-react";
+import { JournalIllustration } from "@/components/ui/illustrations";
 
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { StatCardPremium } from "@/components/analytics/AnalyticsKit";
@@ -241,6 +241,7 @@ function JournalPage() {
           {entries.length === 0 && !isLoadingJournal && (
             <div className="col-span-full">
               <EmptyState
+                illustration={<JournalIllustration className="w-40 h-40 opacity-70" />}
                 title="Your journal is empty"
                 description="Write your first entry."
                 action={
@@ -274,10 +275,10 @@ function JournalPage() {
             <button
               key={r}
               onClick={() => setMoodRange(r as 7 | 30 | 90)}
-              className={`cursor-pointer hover:-translate-y-[1px] hover:shadow-md transition-all duration-[140ms] active:scale-[0.98] ${
+              className={`cursor-pointer transition-[transform,background-color,border-color,color] duration-[140ms] active:scale-[0.98] rounded-full px-3 py-1 text-xs font-medium border ${
                 moodRange === r
-                  ? "bg-primary/10 text-primary border border-primary/30 rounded-xl px-3 py-1.5 text-sm"
-                  : "text-muted-foreground border border-foreground/[0.08] rounded-xl px-3 py-1.5 text-sm hover:bg-foreground/[0.05] hover:text-foreground"
+                  ? "bg-primary/10 text-primary border-primary/30"
+                  : "glass-subtle border-foreground/[0.08] text-muted-foreground hover:bg-foreground/[0.05] hover:text-foreground"
               }`}
             >
               {r === 7 ? "Week" : r === 30 ? "Month" : "Quarter"}

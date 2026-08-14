@@ -50,7 +50,7 @@ function LibraryKind() {
         <EmptyState
           title={`No ${KIND_LABEL[kind].toLowerCase()} yet`}
           description="Add an item to see it here."
-          icon={<Search className="h-6 w-6 text-muted-foreground" />}
+          illustration={<Search className="h-6 w-6 text-muted-foreground" />}
           action={
             <button
               onClick={() =>

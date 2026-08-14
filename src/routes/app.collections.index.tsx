@@ -57,14 +57,11 @@ function CollectionsIndex() {
 
       {allCollections.length === 0 ? (
         <EmptyState
-          icon={<LibrarySquare />}
+          illustration={<LibrarySquare />}
           title="No collections yet"
           description="Create your first collection to start organizing your movies, shows, and books into intentional spaces."
           action={
-            <PremiumButton
-              onClick={() => setOpen(true)}
-              variant="primary"
-            >
+            <PremiumButton onClick={() => setOpen(true)} variant="primary">
               <Plus className="mr-2 h-4 w-4" />
               Create Collection
             </PremiumButton>

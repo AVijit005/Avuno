@@ -2,6 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 
+import { EmptyState } from "@/components/ui/EmptyState";
+
 export const Route = createFileRoute("/app/search")({ component: Page });
 
 function Page() {
@@ -16,20 +18,12 @@ function Page() {
 
   return (
     <div className="pt-2">
-      <div className="grid place-items-center rounded-[40px] p-16 text-center bg-background">
-        <div className="grid h-14 w-14 place-items-center rounded-2xl bg-foreground/[0.04]">
-          <Search className="h-6 w-6 text-primary" />
-        </div>
-        <h2 className="mt-5 font-display text-3xl">
-          Press{" "}
-          <kbd className="rounded-md border border-border/70 bg-background/60 px-2 py-1 text-base">
-            {isMac ? "⌘K" : "Ctrl+K"}
-          </kbd>
-        </h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Spotlight searches every corner of your Avuno.
-        </p>
-      </div>
+      <div className="text-eyebrow mb-2">Search</div>
+      <EmptyState
+        illustration={<Search className="h-6 w-6" />}
+        title={`Press ${isMac ? "⌘K" : "Ctrl+K"}`}
+        description="Spotlight searches every corner of your Avuno."
+      />
     </div>
   );
 }

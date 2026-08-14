@@ -44,15 +44,18 @@ function ForgotPasswordPage() {
   return (
     <div className="relative min-h-[100dvh] w-full flex flex-col justify-center items-center px-4 py-12 selection:bg-primary/30">
       <AtmosphereBackground showParticles={true} intensity="vivid" />
-      
+
       {/* Top Logo */}
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="absolute top-8 left-8 sm:left-12 flex items-center gap-2.5 z-20"
       >
-        <Link to="/" className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg">
+        <Link
+          to="/"
+          className="flex items-center gap-2.5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-lg"
+        >
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-primary-foreground shadow-[var(--shadow-button)]">
             <span className="font-display text-base font-bold leading-none">A</span>
           </div>
@@ -77,9 +80,7 @@ function ForgotPasswordPage() {
           </Link>
 
           <div className="flex flex-col mb-8">
-            <h1 className="font-display text-3xl font-medium tracking-tight">
-              Reset password
-            </h1>
+            <h1 className="font-display text-3xl font-medium tracking-tight">Reset password</h1>
             <p className="text-sm text-muted-foreground mt-2">
               Enter your email and we'll send a secure reset link.
             </p>
@@ -127,7 +128,7 @@ function ForgotPasswordPage() {
                       "absolute left-4 top-1/2 -translate-y-1/2 text-sm transition-all duration-[200ms] ease-out pointer-events-none",
                       email
                         ? "-translate-y-[28px] text-[11px] font-medium uppercase tracking-wider text-muted-foreground bg-background px-1 left-3"
-                        : "text-muted-foreground/70"
+                        : "text-muted-foreground/70",
                     )}
                   >
                     Email Address
@@ -159,15 +160,11 @@ function ForgotPasswordPage() {
                     <Check className="h-4 w-4" aria-hidden />
                   </div>
                   <div>
-                    <p className="text-[13.5px] font-medium text-primary">
-                      Check your inbox
-                    </p>
+                    <p className="text-[13.5px] font-medium text-primary">Check your inbox</p>
                     <p className="mt-1 text-[12.5px] leading-relaxed text-muted-foreground">
                       If an account exists for{" "}
-                      <span className="font-medium text-foreground">
-                        {email}
-                      </span>
-                      , we've sent a reset link. Check your inbox and spam folder.
+                      <span className="font-medium text-foreground">{email}</span>, we've sent a
+                      reset link. Check your inbox and spam folder.
                     </p>
                   </div>
                 </div>

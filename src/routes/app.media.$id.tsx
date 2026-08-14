@@ -79,7 +79,7 @@ function MediaDetailContent({ item }: { item: UIMediaItem }) {
 
       <Link
         to="/app/library"
-        className="glass-subtle mb-4 inline-flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-foreground/[0.08] active:scale-[0.95] transition-all"
+        className="glass mb-4 inline-flex min-h-[44px] items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-foreground/[0.07] active:scale-[0.95] transition-all focus-ring"
       >
         <ArrowLeft className="h-4 w-4" /> Back to your archive
       </Link>

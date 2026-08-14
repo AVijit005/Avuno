@@ -112,11 +112,11 @@ function MemoryDetail() {
   }
 
   return (
-    <div className="pt-8 pb-32 px-4 max-w-4xl mx-auto space-y-12">
+    <div className="pt-8 pb-32 px-4 max-w-5xl mx-auto space-y-12">
       <nav>
         <Link
           to="/app/memories"
-          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors text-sm px-4 py-2 glass hover:bg-foreground/[0.07] rounded-xl focus-ring"
         >
           <ArrowLeft className="w-4 h-4" />
           Back to Vault
@@ -125,7 +125,7 @@ function MemoryDetail() {
 
       {/* MEMORY HERO */}
       <header className="space-y-6 text-center">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-foreground tracking-tight leading-tight">
+        <h1 className="text-display font-display text-foreground tracking-tight leading-tight">
           {memory.title}
         </h1>
 
@@ -150,40 +150,55 @@ function MemoryDetail() {
         </div>
       </header>
 
-      {/* DESCRIPTION */}
-      {memory.description && (
-        <section className="prose prose-invert prose-lg max-w-none">
-          <p className="text-secondary-foreground font-light leading-relaxed">
-            {memory.description}
-          </p>
-        </section>
-      )}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-12">
+        <div className="md:col-span-8 space-y-8">
+          {/* DESCRIPTION */}
+          {memory.description && (
+            <section className="prose prose-invert prose-lg max-w-none">
+              <p className="text-secondary-foreground font-light leading-relaxed">
+                {memory.description}
+              </p>
+            </section>
+          )}
 
-      {/* EVIDENCE SECTION */}
-      <div className="space-y-8">
-        {/* JOURNAL EVIDENCE */}
-        {memory.journalId && <JournalEvidence journalId={memory.journalId} />}
+          {/* EVIDENCE SECTION */}
+          <div className="space-y-8">
+            {/* JOURNAL EVIDENCE */}
+            {memory.journalId && <JournalEvidence journalId={memory.journalId} />}
 
-        {/* QUOTE EVIDENCE */}
-        {memory.quoteId && <QuoteEvidence quoteId={memory.quoteId} />}
+            {/* QUOTE EVIDENCE */}
+            {memory.quoteId && <QuoteEvidence quoteId={memory.quoteId} />}
 
-        {/* MEDIA EVIDENCE */}
-        {memory.mediaIds && memory.mediaIds.length > 0 && (
-          <section className="space-y-4">
-            <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
-              Related Media
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {memory.mediaIds.map((mediaId) => (
-                <MediaEvidence key={mediaId} mediaId={mediaId} />
-              ))}
-            </div>
-          </section>
-        )}
+            {memory.mediaIds && memory.mediaIds.length > 0 && (
+              <section className="space-y-4 md:hidden">
+                <h3 className="text-eyebrow flex items-center gap-2">Related Media</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {memory.mediaIds.map((mediaId) => (
+                    <MediaEvidence key={mediaId} mediaId={mediaId} />
+                  ))}
+                </div>
+              </section>
+            )}
+          </div>
+        </div>
+
+        {/* RIGHT COLUMN: Metadata/Media */}
+        <div className="md:col-span-4 space-y-8">
+          {memory.mediaIds && memory.mediaIds.length > 0 && (
+            <section className="space-y-4 hidden md:block">
+              <h3 className="text-eyebrow flex items-center gap-2">Related Media</h3>
+              <div className="grid grid-cols-1 gap-4">
+                {memory.mediaIds.map((mediaId) => (
+                  <MediaEvidence key={mediaId} mediaId={mediaId} />
+                ))}
+              </div>
+            </section>
+          )}
+        </div>
       </div>
 
-      {/* ACTIONS */}
-      <footer className="pt-12 border-t border-border/40 flex items-center justify-end gap-4">
+      <div className="border-t border-foreground/[0.06] my-8" />
+      <footer className="flex items-center justify-end gap-4">
         <button
           onClick={handleOpenEdit}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-foreground/[0.05] text-foreground text-sm hover:bg-foreground/[0.1] transition-all duration-[140ms] active:scale-[0.98] hover:-translate-y-[1px]"
@@ -221,7 +236,7 @@ function MemoryDetail() {
                 value={editDescription}
                 onChange={(e) => setEditDescription(e.target.value)}
                 placeholder="Add some details..."
-                className="flex min-h-[100px] w-full rounded-xl border border-border/60 bg-foreground/[0.04] px-3 py-2 text-base shadow-none transition-[color,background-color,border-color,box-shadow] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:border-ring/30 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm"
+                className="flex min-h-[100px] w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] px-4 py-2 text-sm transition-[border-color,box-shadow] duration-[140ms] hover:border-foreground/20 focus:border-ring/50 focus:ring-2 focus:ring-ring/30 focus-visible:outline-none disabled:cursor-not-allowed disabled:opacity-50"
               />
             </div>
           </div>
@@ -281,7 +296,7 @@ function JournalEvidence({ journalId }: { journalId: string }) {
 
   return (
     <section className="space-y-4">
-      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+      <h3 className="text-eyebrow flex items-center gap-2">
         <BookOpen className="w-4 h-4" />
         From your journal
       </h3>
@@ -308,7 +323,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
   if (isError || !quote) {
     return (
       <section className="space-y-4">
-        <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+        <h3 className="text-eyebrow flex items-center gap-2">
           <Quote className="w-4 h-4" />
           Saved quote
         </h3>
@@ -325,7 +340,7 @@ function QuoteEvidence({ quoteId }: { quoteId: string }) {
 
   return (
     <section className="space-y-4">
-      <h3 className="text-sm font-medium text-muted-foreground uppercase tracking-widest flex items-center gap-2">
+      <h3 className="text-eyebrow flex items-center gap-2">
         <Quote className="w-4 h-4" />
         Saved quote
       </h3>

@@ -3,6 +3,7 @@ import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { motion } from "motion/react";
 import { ArrowLeft, CalendarDays, RefreshCcw, User, Share2, Heart, Pencil } from "lucide-react";
+import type { MediaItem } from "@/lib/types";
 import { useCollection } from "@/hooks/use-collections";
 import { adaptCollectionResponse } from "@/lib/adapters/collection";
 import { useArtworkAccent } from "@/lib/useArtworkAccent";
@@ -241,13 +242,7 @@ function CollectionDetailContent({ collection: c }: { collection: UICollection }
                   </div>
                 </Link>
               ) : (
-                <div key={m.id} className="glass rounded-2xl overflow-hidden">
-                  <img src={m.poster} alt={m.title} className="w-full aspect-[2/3] object-cover" />
-                  <div className="p-3">
-                    <div className="truncate text-sm">{m.title}</div>
-                    <div className="truncate text-xs text-muted-foreground">{m.kind}</div>
-                  </div>
-                </div>
+                <PosterCard key={m.id} item={m as MediaItem} size="fluid" />
               ),
             )}
           </motion.div>

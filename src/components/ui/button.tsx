@@ -16,12 +16,10 @@ const buttonVariants = cva(
         secondary:
           "glass text-foreground hover:bg-foreground/[0.08] hover:shadow-md hover:-translate-y-[1px]",
         tertiary: "glass-subtle text-foreground hover:bg-foreground/5 hover:-translate-y-[1px]",
-        ghost:
-          "hover:bg-foreground/[0.08] hover:text-foreground",
+        ghost: "hover:bg-foreground/[0.08] hover:text-foreground",
         destructive:
           "bg-destructive text-destructive-foreground shadow-[var(--shadow-button)] hover:bg-destructive/90 hover:-translate-y-[1px]",
-        outline:
-          "glass-subtle border-border/80 hover:bg-foreground/[0.05] hover:text-foreground",
+        outline: "glass-subtle border-border/80 hover:bg-foreground/[0.05] hover:text-foreground",
         icon: "glass-subtle hover:bg-foreground/5 hover:text-primary",
         floating:
           "glass-floating text-foreground shadow-[var(--shadow-elevated)] hover:-translate-y-[2px]",

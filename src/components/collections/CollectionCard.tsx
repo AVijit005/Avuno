@@ -1,8 +1,7 @@
-import { motion, useMotionValue, useTransform, useSpring } from "motion/react";
+import { motion, useMotionValue, useTransform, useSpring, useReducedMotion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import type { MouseEvent } from "react";
 import type { UICollection } from "@/lib/adapters/types";
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumImage } from "@/components/ui/PremiumImage";
 
 export function CollectionCard({
@@ -26,6 +25,7 @@ export function CollectionCard({
     x.set(0);
     y.set(0);
   };
+  const reduced = useReducedMotion();
 
   const aspect =
     size === "lg" ? "aspect-[16/10]" : size === "sm" ? "aspect-square" : "aspect-[4/5]";
@@ -40,15 +40,13 @@ export function CollectionCard({
 
   return (
     <motion.div
-      onMouseMove={onMove}
-      onMouseLeave={onLeave}
-      style={{ rotateX: rx, rotateY: ry, transformPerspective: 1400 }}
+      onMouseMove={reduced ? undefined : onMove}
+      onMouseLeave={reduced ? undefined : onLeave}
+      style={reduced ? undefined : { rotateX: rx, rotateY: ry, transformPerspective: 1400 }}
       className="group relative h-full"
     >
-      <PremiumGlass
-        interactive
-        glow={accent}
-        className={`relative block ${aspect} overflow-hidden rounded-3xl transition-shadow duration-300 group-hover:shadow-[0_20px_40px_-20px_oklch(0_0_0/0.5)]`}
+      <div
+        className={`glass card-interactive rounded-[24px] p-6 relative block ${aspect} overflow-hidden transition-shadow duration-[140ms] group-hover:shadow-[var(--shadow-elevated)]`}
       >
         <Link
           to="/app/collections/$id"
@@ -104,7 +102,7 @@ export function CollectionCard({
             </div>
           </div>
         </Link>
-      </PremiumGlass>
+      </div>
     </motion.div>
   );
 }

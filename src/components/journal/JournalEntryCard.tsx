@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { useReducedMotion, motion } from "motion/react";
 import { Clock, Lock, Globe } from "lucide-react";
 import { DropCap } from "@/components/editorial/DropCap";
 import { cascade } from "@/lib/motion";
@@ -10,22 +10,33 @@ interface Props {
   index: number;
 }
 
+const MOOD_COLORS: Record<string, string> = {
+  Happy: "bg-rose-400",
+  Inspired: "bg-amber-400",
+  Emotional: "bg-indigo-400",
+  Excited: "bg-orange-400",
+  Relaxed: "bg-emerald-400",
+  Thoughtful: "bg-blue-400",
+};
+
 export function JournalEntryCard({ entry, index }: Props) {
   const wordCount = countWords(entry.content);
   const readingTime = Math.max(1, Math.round(wordCount / 200));
+  const reduced = useReducedMotion();
+  const moodColor = entry.mood ? MOOD_COLORS[entry.mood] || "bg-primary" : "bg-primary";
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 16 }}
+      initial={reduced ? false : { opacity: 0, y: 8 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-10%" }}
-      transition={cascade(index, 0.05)}
-      className="group relative overflow-hidden rounded-[32px] p-6 md:p-8 bg-foreground/[0.03] border border-foreground/[0.08] shadow-sm transition-colors hover:bg-foreground/[0.05]"
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: index >= 0 ? index * 0.05 : 0 }}
+      className="group relative overflow-hidden rounded-2xl glass p-6 card-interactive border border-foreground/[0.08] transition-all duration-300 ease-out hover:-translate-y-1 hover:scale-[1.02] hover:shadow-elevated"
       style={{ viewTransitionName: `journal-card-${entry.id}` } as React.CSSProperties}
     >
       <div className="relative">
         <div className="flex flex-wrap items-center justify-between gap-2">
-          <div className="text-[10px] uppercase tracking-[0.22em] text-muted-foreground flex items-center gap-2">
+          <div className="text-eyebrow flex items-center gap-2">
             <span>
               {new Date(entry.createdAt).toLocaleDateString("en-US", {
                 weekday: "long",
@@ -34,10 +45,16 @@ export function JournalEntryCard({ entry, index }: Props) {
                 year: "numeric",
               })}
             </span>
-            {entry.mood && <span>· {entry.mood}</span>}
+            {entry.mood && (
+              <span className="flex items-center gap-1.5">
+                <span>·</span>
+                <span className={`h-1.5 w-1.5 rounded-full ${moodColor}`} aria-hidden="true" />
+                {entry.mood}
+              </span>
+            )}
           </div>
 
-          <div className="flex items-center gap-1.5 text-[10px] uppercase tracking-[0.18em]">
+          <div className="flex items-center gap-1.5 text-eyebrow">
             {entry.isPrivate ? (
               <span
                 className="flex items-center gap-1.5 text-muted-foreground"
@@ -59,27 +76,26 @@ export function JournalEntryCard({ entry, index }: Props) {
         </div>
 
         {entry.title && (
-          <h3 className="mt-4 font-display text-2xl tracking-tight text-foreground">
+          <h3 className="mt-4 font-display text-2xl md:text-3xl font-semibold tracking-tight text-foreground">
             {entry.title}
           </h3>
         )}
 
         {index === 0 ? (
-          <div className="mt-4">
+          <div className="mt-4 text-sm leading-relaxed text-foreground/80">
             <DropCap tone="warm">{entry.content}</DropCap>
           </div>
         ) : (
-          <p className="mt-4 text-[15px] leading-relaxed text-foreground/85 line-clamp-4">
+          <p className="mt-4 text-sm leading-relaxed text-foreground/80 line-clamp-4">
             {entry.content}
           </p>
         )}
 
-        <div className="mt-6 flex flex-wrap items-center gap-4 text-[10px] uppercase tracking-[0.18em] text-muted-foreground/70">
+        <div className="mt-6 flex flex-wrap items-center gap-4 text-eyebrow">
           <span className="flex items-center gap-1.5">
             <Clock className="h-3 w-3" /> {readingTime} min read
           </span>
           <span className="flex items-center gap-1.5">{wordCount} words</span>
-          {/* Phase 4C-3: Preserve as Memory action will go here */}
         </div>
       </div>
     </motion.div>

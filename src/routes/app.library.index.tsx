@@ -7,10 +7,12 @@ import { useLibrary, useLibraryStats } from "@/hooks/use-library";
 import { PremiumGlass } from "@/components/ui/PremiumGlass";
 import { PremiumButton } from "@/components/ui/PremiumButton";
 import { adaptLibraryItem } from "@/lib/adapters/media";
-import { MediaCard } from "@/components/media/MediaCard";
+import { MediaCard } from "@/components/ui/MediaCard";
 import { EmptyState } from "@/components/ui/EmptyState";
 import { ShimmerSkeleton } from "@/components/ui/ShimmerSkeleton";
 import { useMediaActions } from "@/lib/store/MediaActionsContext";
+import { useReducedMotion } from "motion/react";
+import { LibraryIllustration } from "@/components/ui/illustrations";
 
 import {
   DropdownMenu,
@@ -40,6 +42,7 @@ function LibraryIndex() {
   const [searchTerm, setSearchTerm] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const { openAdd } = useMediaActions();
+  const reduced = useReducedMotion();
 
   // Keyboard friendly interaction for search
   const searchInputRef = useRef<HTMLInputElement>(null);
@@ -127,8 +130,8 @@ function LibraryIndex() {
       </header>
 
       {/* TAXONOMY SEGMENTED CONTROL */}
-      <div className="-mx-4 sm:-mx-6 mb-8 overflow-x-auto px-4 sm:px-6 pb-2 scrollbar-none md:-mx-0 md:px-0">
-        <div className="flex w-max space-x-1 rounded-2xl glass p-1 shadow-sm">
+      <div className="-mx-4 sm:-mx-6 mb-8 overflow-x-auto px-4 sm:px-6 pb-2 scrollbar-none md:-mx-0 md:px-0 [mask-image:linear-gradient(to_right,black_90%,transparent_100%)]">
+        <div className="flex w-max space-x-1 rounded-2xl glass-subtle p-1 shadow-sm">
           {TAXONOMY.map((tab) => (
             <button
               key={tab.id}
@@ -249,7 +252,7 @@ function LibraryIndex() {
       {/* MASTER GRID */}
       {isError ? (
         <EmptyState
-          icon={<LayoutGrid />}
+          illustration={<LibraryIllustration className="w-40 h-40 opacity-70" />}
           title="Cannot load library"
           description="There was an error connecting to your archive."
           action={
@@ -270,7 +273,7 @@ function LibraryIndex() {
       ) : items.length === 0 ? (
         status !== "all" || mediaType !== "all" || favorite || debouncedSearch ? (
           <EmptyState
-            icon={<LayoutGrid />}
+            illustration={<LibraryIllustration className="w-40 h-40 opacity-70" />}
             title="No matches found"
             description="Try adjusting your filters or search query to see more results."
             action={
@@ -288,34 +291,16 @@ function LibraryIndex() {
             }
           />
         ) : (
-          <div className="flex justify-center mt-12 md:mt-24">
-            <div className="max-w-xl text-center md:text-left md:flex items-center gap-12 glass rounded-3xl p-8 md:p-12 shadow-lg ring-1 ring-white/5 relative overflow-hidden card-interactive">
-              {/* Subtle background glow for empty state */}
-              <div className="absolute -top-24 -right-24 w-48 h-48 bg-primary/10 rounded-full blur-3xl pointer-events-none" />
-              <div className="flex-1 space-y-6">
-                <h2 className="text-2xl font-medium tracking-tight">
-                  The foundation of your story
-                </h2>
-                <div className="text-muted-foreground text-sm space-y-4">
-                  <p>
-                    Your library is where everything begins. Once you add media, it becomes the
-                    engine for your:
-                  </p>
-                  <ul className="grid grid-cols-2 gap-y-2 gap-x-4 text-foreground/80 list-disc list-inside">
-                    <li>Timeline</li>
-                    <li>Journal</li>
-                    <li>Memories</li>
-                    <li>Analytics</li>
-                  </ul>
-                </div>
-                <div className="pt-4">
-                  <PremiumButton variant="primary" onClick={openAdd}>
-                    Add your first story
-                  </PremiumButton>
-                </div>
-              </div>
-            </div>
-          </div>
+          <EmptyState
+            illustration={<LibraryIllustration className="w-40 h-40 opacity-70" />}
+            title="The foundation of your story"
+            description="Your library is where everything begins. Once you add media, it becomes the engine for your Timeline, Journal, Memories, and Analytics."
+            action={
+              <PremiumButton variant="primary" onClick={openAdd}>
+                Add your first story
+              </PremiumButton>
+            }
+          />
         )
       ) : (
         <>
@@ -323,9 +308,15 @@ function LibraryIndex() {
             {items.map((item, index) => {
               const isLast = index === items.length - 1;
               return (
-                <div key={item.id} ref={isLast ? lastItemRef : null}>
+                <motion.div
+                  key={item.id}
+                  ref={isLast ? lastItemRef : null}
+                  initial={reduced ? false : { opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: index * 0.05 }}
+                >
                   <MediaCard item={item} />
-                </div>
+                </motion.div>
               );
             })}
           </div>

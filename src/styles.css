@@ -1,3 +1,8 @@
+@import "@fontsource/geist/400.css";
+@import "@fontsource/geist/500.css";
+@import "@fontsource/geist/600.css";
+@import "@fontsource/fraunces/600.css";
+@import "@fontsource/fraunces/700.css";
 @import "tailwindcss" source(none);
 @source "../src";
 @import "tw-animate-css";
@@ -46,8 +51,8 @@ select {
 }
 
 @theme inline {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Times New Roman", serif;
   --font-mono:
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
     monospace;
@@ -165,7 +170,7 @@ select {
 :root {
   /* Strict Phase 1 Design System Tokens */
   --color-bg: oklch(0.16 0.02 265);
-  --color-surface-1: oklch(0.20 0.025 265);
+  --color-surface-1: oklch(0.2 0.025 265);
   --color-surface-2: oklch(0.24 0.03 265);
   --color-surface-3: oklch(0.28 0.035 265);
 
@@ -178,8 +183,8 @@ select {
   --color-border-default: oklch(1 0 0 / 0.16);
   --color-border-strong: oklch(1 0 0 / 0.28);
 
-  --color-accent: oklch(0.72 0.18 255);
-  --color-accent-soft: oklch(0.72 0.18 255 / 0.15);
+  --color-accent: #6d5fcc;
+  --color-accent-soft: #6d5fcc26;
 
   --color-success: oklch(0.72 0.16 160);
   --color-warning: oklch(0.82 0.16 80);
@@ -358,28 +363,39 @@ select {
   background: color-mix(in oklab, var(--color-surface-1) 50%, transparent);
   backdrop-filter: blur(12px) saturate(120%);
   border: 1px solid var(--color-border-subtle);
-  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.2) inset;
+  box-shadow:
+    0 1px 0 var(--glass-highlight) inset,
+    0 -1px 0 oklch(0 0 0 / 0.2) inset;
 }
 
 @utility glass {
   background: color-mix(in oklab, var(--color-surface-2) 60%, transparent);
   backdrop-filter: blur(24px) saturate(140%);
   border: 1px solid var(--color-border-default);
-  box-shadow: 0 1px 0 var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.3) inset, var(--shadow-sm);
+  box-shadow:
+    0 1px 0 var(--glass-highlight) inset,
+    0 -1px 0 oklch(0 0 0 / 0.3) inset,
+    var(--shadow-sm);
 }
 
 @utility glass-elevated {
   background: color-mix(in oklab, var(--color-surface-3) 70%, transparent);
   backdrop-filter: blur(32px) saturate(150%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 0 1px 1px var(--glass-highlight) inset, 0 -1px 0 oklch(0 0 0 / 0.4) inset, var(--shadow-md);
+  box-shadow:
+    0 1px 1px var(--glass-highlight) inset,
+    0 -1px 0 oklch(0 0 0 / 0.4) inset,
+    var(--shadow-md);
 }
 
 @utility glass-floating {
   background: color-mix(in oklab, var(--color-surface-3) 80%, transparent);
   backdrop-filter: blur(48px) saturate(160%);
   border: 1px solid var(--color-border-strong);
-  box-shadow: 0 1px 2px var(--glass-highlight-strong) inset, 0 -1px 0 oklch(0 0 0 / 0.5) inset, var(--shadow-xl);
+  box-shadow:
+    0 1px 2px var(--glass-highlight-strong) inset,
+    0 -1px 0 oklch(0 0 0 / 0.5) inset,
+    var(--shadow-xl);
 }
 
 /* ============================================================
@@ -504,14 +520,15 @@ select {
 
 @utility text-h1 {
   font-family: var(--font-display);
-  font-size: 2.5rem;
+  font-size: clamp(2rem, 4vw + 1rem, 3.5rem);
+  font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
 @utility text-h2 {
   font-family: var(--font-sans);
-  font-size: 1.875rem;
+  font-size: clamp(1.5rem, 3vw + 0.5rem, 2.25rem);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -519,7 +536,7 @@ select {
 
 @utility text-h3 {
   font-family: var(--font-sans);
-  font-size: 1.5rem;
+  font-size: clamp(1.25rem, 2vw + 0.5rem, 1.75rem);
   font-weight: 500;
   letter-spacing: -0.01em;
   line-height: 1.3;
@@ -540,7 +557,8 @@ select {
 
 @utility text-display {
   font-family: var(--font-display);
-  font-size: 3rem;
+  font-size: clamp(3rem, 6vw + 1rem, 5rem);
+  font-weight: 700;
   letter-spacing: -0.025em;
   line-height: 1.05;
 }
@@ -681,6 +699,9 @@ select {
 @utility memory-pulse {
   animation: memory-pulse-kf 2s ease-in-out infinite;
 }
+@utility animate-aurora-drift {
+  animation: aurora-drift 22s ease-in-out infinite;
+}
 
 /* ============================================================
  * Premium focus ring — soft glow, brand colored, AA contrast.
@@ -818,7 +839,7 @@ select {
     scrollbar-color: oklch(0 0 0 / 0.12) transparent;
   }
   .light ::-webkit-scrollbar-thumb {
-    background: oklch(0 0 0 / 0.10);
+    background: oklch(0 0 0 / 0.1);
     border-radius: 999px;
     border: 2px solid transparent;
     background-clip: padding-box;

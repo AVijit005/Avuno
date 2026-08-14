@@ -1,4 +1,4 @@
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { getGreeting } from "@/lib/dashboardGreeting";
 import { useCurrentUser } from "@/hooks/use-auth";
 import { useDashboard, useStreaks, useOverview } from "@/hooks/use-analytics";
@@ -11,6 +11,7 @@ export function DashboardGreeting({ className }: { className?: string }) {
   const { data: streaks, isLoading: l3 } = useStreaks();
   const { data: overview, isLoading: l4 } = useOverview();
   const isLoading = l1 || l2 || l3 || l4;
+  const reduced = useReducedMotion();
 
   if (isLoading) {
     return (
@@ -31,19 +32,19 @@ export function DashboardGreeting({ className }: { className?: string }) {
   return (
     <section aria-label="Greeting" className={cn("space-y-1", className)}>
       <motion.h2
-        initial={{ opacity: 0, y: 12 }}
+        initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: dur.large, ease: ease.out }}
-        className="font-display text-2xl tracking-tight md:text-3xl"
+        transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+        className="font-display text-h2 tracking-tight"
       >
         {g.title}
       </motion.h2>
       {g.subtitle && (
         <motion.p
-          initial={{ opacity: 0, y: 8 }}
+          initial={reduced ? { opacity: 1, y: 0 } : { opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: dur.normal, ease: ease.out, delay: 0.1 }}
-          className="text-sm text-muted-foreground"
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
+          className="text-sm text-muted-foreground mt-2"
         >
           {g.subtitle}
         </motion.p>

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { MediaCard } from "@/components/media/MediaCard";
+import { PosterCard } from "@/components/ui/PosterCard";
 import { StatusPageShell } from "@/components/library/StatusPageShell";
 import { completed, metaOf } from "@/lib/library";
 import { cn } from "@/lib/utils";
@@ -57,14 +57,14 @@ function CompletedPage() {
     >
       {items.length === 0 ? (
         <EmptyState
-          icon={<CheckCircle2 className="h-8 w-8 text-primary" />}
+          illustration={<CheckCircle2 className="h-8 w-8 text-primary" />}
           title="No completed stories yet"
           description="When you finish a movie, book, game, or show, it will appear here."
         />
       ) : (
         <div className="grid grid-cols-2 gap-5 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6">
           {items.map((m) => (
-            <MediaCard key={m.id} item={m as unknown as UIMediaItem} />
+            <PosterCard key={m.id} item={m as unknown as UIMediaItem} />
           ))}
         </div>
       )}

@@ -255,12 +255,10 @@ export function ZoneHeading({
   return (
     <div className="mb-6 flex items-end justify-between gap-6">
       <div className="min-w-0">
-        {eyebrow && (
-          <div className="text-[11px] uppercase tracking-[0.22em] text-muted-foreground">
-            {eyebrow}
-          </div>
-        )}
-        <h2 className="mt-1 font-display text-3xl tracking-tight md:text-4xl">{title}</h2>
+        {eyebrow && <div className="text-eyebrow mb-2">{eyebrow}</div>}
+        <h2 className="mt-1 font-display text-2xl md:text-3xl font-semibold tracking-tight">
+          {title}
+        </h2>
         {sub && <p className="mt-1.5 text-sm text-muted-foreground">{sub}</p>}
       </div>
       {action}

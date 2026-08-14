@@ -1,11 +1,13 @@
 import type { UIMediaItem } from "@/lib/adapters/types";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { motion } from "motion/react";
-import { MediaCard } from "@/components/media/MediaCard";
+import { motion, useReducedMotion } from "motion/react";
+import { MediaCard } from "@/components/ui/MediaCard";
+import { PremiumButton } from "@/components/ui/PremiumButton";
 import { LibraryToolbar, type SortKey } from "@/components/library/LibraryToolbar";
 import { StatusBadge } from "@/components/library/StatusBadge";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { LibraryIllustration } from "@/components/ui/illustrations";
 import { metaOf, statusOf, type MediaStatus } from "@/lib/library";
 import { snapshotAllItems } from "@/lib/store/libraryStore";
 import type { MediaKind } from "@/lib/types";
@@ -26,6 +28,7 @@ function AllLibraryPage() {
   const [journaledOnly, setJournaledOnly] = useState(false);
   const [sort, setSort] = useState<SortKey>("Recently Added");
   const [view, setView] = useState<"grid" | "rows">("grid");
+  const reduced = useReducedMotion();
 
   const {
     data: libraryData,
@@ -150,11 +153,11 @@ function AllLibraryPage() {
 
   return (
     <div className="pt-2">
-      <div className="mb-2">
-        <div className="text-[11px] uppercase tracking-[0.22em] text-primary/90">
-          Master database
-        </div>
-        <h1 className="mt-2 font-display text-4xl tracking-tight md:text-5xl">All Library</h1>
+      <div className="mb-8">
+        <div className="text-eyebrow mb-1">Master database</div>
+        <h1 className="font-display text-2xl font-semibold tracking-tight md:text-3xl">
+          All Library
+        </h1>
         <p className="mt-2 max-w-xl text-sm text-muted-foreground">
           Every item — every status, every type, every collection.
         </p>
@@ -195,15 +198,13 @@ function AllLibraryPage() {
         {items.length === 0 ? (
           <div className="col-span-full">
             <EmptyState
+              illustration={<LibraryIllustration className="w-40 h-40 opacity-70" />}
               title="Nothing matches those filters"
               description="Try clearing a chip or changing the search."
               action={
-                <button
-                  onClick={clearFilters}
-                  className="press-scale rounded-full bg-gradient-to-r from-primary to-secondary px-4 py-2 text-sm font-medium text-primary-foreground"
-                >
+                <PremiumButton onClick={clearFilters} variant="primary">
                   Clear filters
-                </button>
+                </PremiumButton>
               }
             />
           </div>
@@ -211,10 +212,10 @@ function AllLibraryPage() {
           items.map((m, i) => (
             <motion.div
               key={m.id}
-              initial={{ opacity: 0, y: 14 }}
+              initial={reduced ? false : { opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={cascade(i)}
+              transition={reduced ? { duration: 0 } : cascade(i)}
             >
               <MediaCard item={m as UIMediaItem} />
             </motion.div>
@@ -223,10 +224,10 @@ function AllLibraryPage() {
           items.map((m, i) => (
             <motion.div
               key={m.id}
-              initial={{ opacity: 0, y: 14 }}
+              initial={reduced ? false : { opacity: 0, y: 14 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-40px" }}
-              transition={cascade(i)}
+              transition={reduced ? { duration: 0 } : cascade(i)}
             >
               <Link
                 to="/app/media/$id"

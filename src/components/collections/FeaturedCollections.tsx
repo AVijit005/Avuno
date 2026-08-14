@@ -1,5 +1,4 @@
-import { PremiumGlass } from "@/components/ui/PremiumGlass";
-import { motion } from "motion/react";
+import { motion, useReducedMotion } from "motion/react";
 import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { useCollections } from "@/hooks/use-collections";
@@ -11,6 +10,7 @@ export function FeaturedCollections() {
   // Use pinned collections as "featured", fallback to first 3
   const featured = allCollections.filter((c) => c.isPinned).slice(0, 3);
   const display = featured.length >= 3 ? featured : allCollections.slice(0, 3);
+  const reduced = useReducedMotion();
 
   if (display.length === 0) return null;
 
@@ -19,10 +19,12 @@ export function FeaturedCollections() {
       {display.map((c, i) => (
         <motion.div
           key={c.id}
-          initial={{ opacity: 0, y: 18 }}
+          initial={reduced ? false : { opacity: 0, y: 18 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
-          transition={{ duration: 0.7, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }}
+          transition={
+            reduced ? { duration: 0 } : { duration: 0.7, delay: i * 0.07, ease: [0.22, 1, 0.36, 1] }
+          }
         >
           <Link
             to="/app/collections/$id"
@@ -58,7 +60,7 @@ export function FeaturedCollections() {
               </div>
               <div className="mt-2 max-w-md text-sm text-white/75">{c.description}</div>
             </div>
-            <div className="absolute right-5 top-5 grid h-10 w-10 place-items-center rounded-xl bg-white/10 text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
+            <div className="absolute right-5 top-5 grid h-11 w-11 place-items-center rounded-xl bg-white/10 text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
               <ArrowUpRight className="h-4 w-4" />
             </div>
           </Link>

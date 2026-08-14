@@ -46,10 +46,7 @@ export function JournalHero({ isLoading, stats, entries, favoriteMood }: Props) 
               },
               { l: "Favorite mood", v: favoriteMood ?? "—" },
             ].map((s) => (
-              <motion.div
-                key={s.l}
-                className="rounded-xl glass-subtle card-interactive p-4"
-              >
+              <motion.div key={s.l} className="rounded-xl glass-subtle card-interactive p-4">
                 <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
                   {s.l}
                 </div>

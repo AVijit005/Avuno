@@ -9,7 +9,7 @@ import { imageReveal } from "@/lib/motion";
 
 interface Props {
   item: MediaItem;
-  size?: "sm" | "md" | "lg";
+  size?: "sm" | "md" | "lg" | "fluid";
   showMeta?: boolean;
   className?: string;
 }
@@ -17,6 +17,7 @@ const sizes = {
   sm: "w-32 md:w-36",
   md: "w-40 md:w-48",
   lg: "w-52 md:w-64",
+  fluid: "w-full",
 };
 
 export function PosterCard({ item, size = "md", showMeta = true, className = "" }: Props) {

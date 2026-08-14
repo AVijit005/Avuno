@@ -93,8 +93,7 @@ export function WriteOverlay({
                   if (journalText.length > 5 && !isSealing) onSeal();
                 }
               }}
-              className="w-full min-h-[250px] bg-transparent border-none outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-left leading-relaxed focus-visible:border-ring/40 focus-visible:ring-2 focus-visible:ring-ring/30 rounded-xl"
-              style={{ boxShadow: "none" }}
+              className="w-full min-h-[250px] p-6 rounded-xl border border-white/[0.08] bg-white/[0.04] outline-none resize-none text-2xl md:text-3xl font-serif text-white/95 placeholder:text-white/20 text-left leading-relaxed transition-[border-color,box-shadow] duration-[140ms] hover:border-white/20 focus-visible:border-primary/50 focus-visible:ring-2 focus-visible:ring-primary/30"
             />
 
             <AnimatePresence>

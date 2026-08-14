@@ -1,5 +1,6 @@
-import { AnimatePresence, motion } from "motion/react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 import {
   Search,
   ArrowRight,
@@ -19,6 +20,7 @@ import {
 import { SEARCHABLE_SETTINGS, type MediaItem, type MediaKind } from "@/lib/types";
 import { useNavigate } from "@tanstack/react-router";
 import { EmptyState } from "@/components/ui/EmptyState";
+import { SearchIllustration } from "@/components/ui/illustrations";
 import { PremiumImage } from "@/components/ui/PremiumImage";
 import { useSearch, useRecentSearches, useTrending } from "@/hooks/use-search";
 import { analytics } from "@/lib/analytics";
@@ -93,6 +95,7 @@ export function CommandPalette({
   open: boolean;
   onOpenChange: (v: boolean) => void;
 }) {
+  const reduced = useReducedMotion();
   const [q, setQ] = useState("");
   const [debouncedQ, setDebouncedQ] = useState("");
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
@@ -373,14 +376,14 @@ export function CommandPalette({
           <motion.div
             role="dialog"
             aria-label="Command Palette"
-            initial={{ y: -10, opacity: 0, scale: 0.96 }}
+            initial={reduced ? { opacity: 0 } : { y: 8, opacity: 0, scale: 0.96 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
-            exit={{ y: -10, opacity: 0, scale: 0.96 }}
-            transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            exit={reduced ? { opacity: 0 } : { y: 8, opacity: 0, scale: 0.96 }}
+            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
             onClick={(e) => e.stopPropagation()}
-            className="glass-floating relative mx-auto w-full max-w-2xl overflow-hidden rounded-3xl"
+            className="glass-floating relative mx-auto w-full max-w-2xl overflow-hidden rounded-2xl border border-foreground/[0.1]"
             style={{
-              boxShadow: "0 60px 140px -30px oklch(0 0 0 / 0.75), 0 0 0 1px oklch(1 0 0 / 0.04)",
+              boxShadow: "var(--shadow-floating)",
             }}
           >
             {/* top highlight */}
@@ -392,8 +395,8 @@ export function CommandPalette({
               }}
             />
 
-            <div className="flex items-center gap-3 border-b border-border/60 px-5 py-4">
-              <Search className="h-5 w-5 text-muted-foreground" aria-hidden="true" />
+            <div className="flex items-center gap-3 border-b border-foreground/[0.08] px-4 bg-transparent">
+              <Search className="h-5 w-5 shrink-0 text-muted-foreground" aria-hidden="true" />
               <input
                 ref={inputRef}
                 value={q}
@@ -405,7 +408,7 @@ export function CommandPalette({
                 aria-label="Search your library"
                 onChange={(e) => handleQ(e.target.value)}
                 placeholder="Search your Avuno…"
-                className="h-11 w-full rounded-xl border border-foreground/[0.08] bg-foreground/[0.04] px-4 py-2 text-sm placeholder:text-muted-foreground/60 hover:border-foreground/15 focus:border-ring/40 focus:outline-none focus:ring-2 focus:ring-ring/30 transition-[border-color,box-shadow,background-color] duration-[140ms]"
+                className="h-12 w-full bg-transparent text-sm placeholder:text-muted-foreground/60 focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 border-none px-0"
               />
               <kbd className="rounded-md border border-border/70 bg-background/60 px-1.5 py-0.5 text-[10px] tracking-wider text-muted-foreground ml-2">
                 ESC
@@ -424,7 +427,7 @@ export function CommandPalette({
             >
               {rows.length === 0 ? (
                 <EmptyState
-                  icon={<Search className="h-6 w-6" />}
+                  illustration={<SearchIllustration className="w-40 h-40 opacity-70" />}
                   title="Nothing matched"
                   description={`We couldn't find "${q}". Try a creator, year, mood or collection.`}
                 />
@@ -477,9 +480,7 @@ export function CommandPalette({
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div className="mb-2">
-      <div className="px-3 pb-1.5 pt-2 text-[10px] font-medium uppercase tracking-[0.2em] text-muted-foreground/70">
-        {title}
-      </div>
+      <div className="text-eyebrow px-3 py-2">{title}</div>
       <div className="space-y-0.5">{children}</div>
     </div>
   );
@@ -504,24 +505,15 @@ function RowView({
       role="option"
       aria-selected={focused}
       data-row={index}
+      data-selected={focused}
       onClick={onClick}
       onMouseEnter={onMouseEnter}
-      className="relative flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition focus:outline-none hover:bg-foreground/[0.06]"
-    >
-      {focused && (
-        <motion.span
-          layoutId="search-selection"
-          className="absolute inset-0 rounded-xl"
-          style={{
-            background:
-              "linear-gradient(120deg, oklch(0.72 0.18 255 / 0.18), oklch(0.65 0.22 295 / 0.12))",
-            boxShadow:
-              "inset 0 0 0 1px oklch(0.72 0.18 255 / 0.25), 0 0 30px oklch(0.72 0.18 255 / 0.18)",
-          }}
-          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-        />
+      className={cn(
+        "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm cursor-pointer transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        focused ? "bg-primary/[0.12] text-primary" : "text-foreground hover:bg-foreground/[0.06]",
       )}
-      <span className="relative flex w-full items-center gap-3">{children}</span>
+    >
+      {children}
     </button>
   );
 }

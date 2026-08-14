@@ -41,7 +41,7 @@ export const PremiumButton = forwardRef<HTMLButtonElement, Props>(
     const reduced = useReducedMotion();
     const stateKey = loading ? "loading" : success ? "success" : "icon";
     const base =
-      "group relative inline-flex shrink-0 select-none items-center justify-center gap-2 font-medium transition-[transform,box-shadow,filter,background] duration-[var(--dur-normal)] ease-[var(--ease-out)] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] active:translate-y-[1px] active:duration-[var(--dur-micro)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background overflow-hidden motion-reduce:transition-none motion-reduce:hover:translate-y-0";
+      "group relative inline-flex shrink-0 select-none items-center justify-center gap-2 font-medium transition-[transform,box-shadow,filter,background] duration-[var(--dur-normal)] ease-[var(--ease-out)] disabled:pointer-events-none disabled:opacity-50 active:scale-[0.98] active:translate-y-[1px] active:duration-[var(--dur-micro)] focus-ring overflow-hidden motion-reduce:transition-none motion-reduce:hover:translate-y-0";
 
     const variantClass: Record<Variant, string> = {
       primary:
